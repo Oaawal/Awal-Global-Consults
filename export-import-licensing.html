@@ -186,8 +186,11 @@
       </div>
 
       <div class="form-card">
-        <form name="export-import-request" method="POST" data-netlify="true" action="thank-you.html">
+        <form name="export-import-request" method="POST" netlify data-netlify="true" data-netlify-honeypot="bot-field" action="thank-you.html">
           <input type="hidden" name="form-name" value="export-import-request">
+          <p hidden>
+            <label>Don’t fill this out: <input name="bot-field"></label>
+          </p>
 
           <div class="form-grid">
 
