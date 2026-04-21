@@ -1,6 +1,4 @@
-/* =========================
-   RESET
-========================= */
+/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -14,8 +12,8 @@ html {
 body {
   font-family: Inter, Arial, sans-serif;
   line-height: 1.6;
-  color: #f5f7fa;
-  background: #071c18;
+  background: #F8F7F3;
+  color: #0F2747;
   overflow-x: hidden;
 }
 
@@ -24,31 +22,26 @@ img {
   display: block;
 }
 
-/* =========================
-   LAYOUT
-========================= */
 .container {
   width: min(92%, 1180px);
   margin: 0 auto;
 }
 
 .section {
-  padding: 84px 0;
+  padding: 80px 0;
 }
 
 .alt-bg {
-  background: #0a2420;
+  background: #f2f4f7;
 }
 
-/* =========================
-   HEADER
-========================= */
+/* HEADER */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(4, 16, 13, 0.94);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(248, 247, 243, 0.96);
+  border-bottom: 1px solid rgba(15, 39, 71, 0.08);
   backdrop-filter: blur(10px);
 }
 
@@ -68,25 +61,27 @@ img {
 }
 
 .logo {
-  width: 58px;
-  height: 58px;
+  width: 150px;
+  max-width: 100%;
+  height: auto;
   object-fit: contain;
-  background: #fff;
-  border-radius: 8px;
-  padding: 4px;
+  background: transparent !important;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .brand-title {
   display: block;
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #0F2747;
 }
 
 .brand-sub {
   display: block;
   font-size: 0.88rem;
-  color: #c8d3dc;
+  color: #5F6B7A;
 }
 
 .nav {
@@ -97,29 +92,25 @@ img {
 
 .nav a {
   text-decoration: none;
-  color: #eef3f7;
+  color: #0F2747;
   font-weight: 500;
   font-size: 0.96rem;
 }
 
 .nav a:hover {
-  color: #d4af45;
+  color: #C9A646;
 }
 
-/* =========================
-   HERO
-========================= */
+/* HERO */
 .hero,
 .service-hero {
-  background:
-    linear-gradient(135deg, rgba(5, 22, 18, 0.92), rgba(7, 34, 28, 0.9)),
-    #071c18;
+  background: linear-gradient(135deg, #F8F7F3, #f4f1ea);
   padding: 88px 0 72px;
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 420px);
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 380px);
   gap: 48px;
   align-items: center;
 }
@@ -131,25 +122,25 @@ img {
 
 .eyebrow {
   display: inline-block;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #d4af45;
+  color: #C9A646;
 }
 
 .hero h1 {
-  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  font-size: clamp(2.2rem, 5vw, 4rem);
   line-height: 1.1;
   font-weight: 800;
-  color: #ffffff;
+  color: #091A2F;
   margin-bottom: 20px;
 }
 
 .hero p {
-  font-size: 1.2rem;
-  color: #dde6ee;
+  font-size: 1.12rem;
+  color: #445264;
   max-width: 760px;
   margin-bottom: 28px;
 }
@@ -160,9 +151,7 @@ img {
   gap: 14px;
 }
 
-/* =========================
-   BUTTONS
-========================= */
+/* BUTTONS */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -176,40 +165,38 @@ img {
 }
 
 .btn-primary {
-  background: #d4af45;
-  color: #0b1c2e;
+  background: #C9A646;
+  color: #091A2F;
+  border: none;
 }
 
 .btn-primary:hover {
-  background: #e1bd58;
+  background: #E3C46B;
 }
 
 .btn-secondary {
-  border: 1px solid #d4af45;
-  color: #f5f7fa;
+  border: 1px solid #C9A646;
+  color: #0F2747;
   background: transparent;
 }
 
 .btn-secondary:hover {
-  background: rgba(212, 175, 69, 0.08);
+  background: rgba(201, 166, 70, 0.08);
 }
 
-/* =========================
-   HERO IMAGE CONTROL
-========================= */
-/* This is the key fix */
+/* HERO IMAGE */
 .hero-card,
 .hero-image-wrap,
 .founder-image-wrap,
 .hero-visual {
   width: 100%;
-  max-width: 420px;
+  max-width: 380px;
   margin-inline: auto;
 }
 
 .hero-card-inner {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid rgba(15, 39, 71, 0.08);
   border-radius: 18px;
   padding: 18px;
 }
@@ -219,46 +206,34 @@ img {
 .founder-image,
 .hero-image-wrap img,
 .founder-image-wrap img,
-.hero-visual img {
+.hero-visual img,
+.hero-grid > div:last-child img {
   width: 100%;
-  max-width: 420px;
+  max-width: 380px;
   height: auto;
-  max-height: 520px;
+  max-height: 460px;
   object-fit: cover;
   object-position: center top;
   border-radius: 18px;
   margin-inline: auto;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.10);
 }
 
-/* If image is plain inside hero without class */
-.hero-grid > div:last-child img {
-  width: 100%;
-  max-width: 420px;
-  height: auto;
-  max-height: 520px;
-  object-fit: cover;
-  border-radius: 18px;
-  margin-inline: auto;
-}
-
-/* =========================
-   CONTENT BLOCKS
-========================= */
+/* CONTENT */
 .section-head {
   margin-bottom: 28px;
 }
 
 .section-head h2 {
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
   line-height: 1.18;
-  color: #ffffff;
+  color: #091A2F;
   margin-top: 6px;
 }
 
 .section-head p {
   margin-top: 10px;
-  color: #d4dde6;
+  color: #5F6B7A;
   max-width: 760px;
 }
 
@@ -270,8 +245,8 @@ img {
 .testimonial-card,
 .faq-item,
 .cta-box {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid rgba(15, 39, 71, 0.08);
   border-radius: 18px;
 }
 
@@ -316,7 +291,7 @@ img {
 .feature-card h3,
 .process-card h3,
 .testimonial-card h3 {
-  color: #ffffff;
+  color: #0F2747;
   font-size: 1.15rem;
   margin-bottom: 10px;
 }
@@ -327,7 +302,7 @@ img {
 .testimonial-card p,
 .content-card p,
 .content-card li {
-  color: #d5dde5;
+  color: #5F6B7A;
 }
 
 .content-card ul {
@@ -338,13 +313,11 @@ img {
   display: inline-block;
   font-size: 1.6rem;
   font-weight: 800;
-  color: #d4af45;
+  color: #C9A646;
   margin-bottom: 10px;
 }
 
-/* =========================
-   FORMS
-========================= */
+/* FORMS */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -363,16 +336,16 @@ img {
 .form-group label {
   margin-bottom: 8px;
   font-weight: 600;
-  color: #ffffff;
+  color: #0F2747;
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
-  color: #ffffff;
+  border: 1px solid rgba(15, 39, 71, 0.12);
+  background: #ffffff;
+  color: #0F2747;
   border-radius: 12px;
   padding: 14px 15px;
   font: inherit;
@@ -380,7 +353,7 @@ img {
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #aeb8c2;
+  color: #8a96a3;
 }
 
 .form-actions,
@@ -391,9 +364,7 @@ img {
   margin-top: 20px;
 }
 
-/* =========================
-   FAQ
-========================= */
+/* FAQ */
 .faq-list {
   display: grid;
   gap: 14px;
@@ -406,17 +377,15 @@ img {
 .faq-item summary {
   cursor: pointer;
   font-weight: 700;
-  color: #ffffff;
+  color: #0F2747;
 }
 
 .faq-item p {
   margin-top: 12px;
-  color: #d5dde5;
+  color: #5F6B7A;
 }
 
-/* =========================
-   CTA
-========================= */
+/* CTA */
 .cta-section {
   padding: 76px 0;
   background: transparent;
@@ -430,17 +399,14 @@ img {
 }
 
 .cta-box h2 {
-  color: #ffffff;
+  color: #091A2F;
   margin: 8px 0;
 }
 
-/* =========================
-   FOOTER
-========================= */
+/* FOOTER */
 .site-footer {
-  background: #041611;
+  background: #091A2F;
   padding: 38px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .footer-wrap {
@@ -456,31 +422,11 @@ img {
 }
 
 .site-footer p {
-  color: #d1dae3;
+  color: #d7dce3;
   margin-bottom: 6px;
 }
 
-/* =========================
-   THANK YOU PAGE
-========================= */
-.thank-you-card {
-  max-width: 760px;
-  margin: 0 auto;
-}
-
-.thank-you-lead {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.contact-mini {
-  margin-top: 22px;
-}
-
-/* =========================
-   FLOATING WHATSAPP
-========================= */
+/* WHATSAPP */
 .whatsapp-float {
   position: fixed;
   right: 18px;
@@ -496,9 +442,7 @@ img {
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
 }
 
-/* =========================
-   TABLET
-========================= */
+/* TABLET */
 @media (max-width: 1100px) {
   .service-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -517,9 +461,7 @@ img {
   }
 }
 
-/* =========================
-   MOBILE
-========================= */
+/* MOBILE */
 @media (max-width: 860px) {
   .nav {
     display: none;
@@ -535,13 +477,8 @@ img {
     gap: 28px;
   }
 
-  .hero-text,
-  .hero-text-clean {
-    max-width: 100%;
-  }
-
   .hero h1 {
-    font-size: 2.35rem;
+    font-size: 2.25rem;
   }
 
   .hero p {
@@ -559,8 +496,8 @@ img {
   .founder-image-wrap img,
   .hero-visual img,
   .hero-grid > div:last-child img {
-    max-width: 320px;
-    max-height: 380px;
+    max-width: 300px;
+    max-height: 360px;
   }
 
   .form-grid,
@@ -581,13 +518,8 @@ img {
     width: 92%;
   }
 
-  .nav-wrap {
-    align-items: flex-start;
-  }
-
   .logo {
-    width: 46px;
-    height: 46px;
+    width: 120px;
   }
 
   .brand-title {
@@ -600,7 +532,7 @@ img {
   }
 
   .hero h1 {
-    font-size: 2rem;
+    font-size: 1.95rem;
   }
 
   .hero-actions,
@@ -621,8 +553,8 @@ img {
   .founder-image-wrap img,
   .hero-visual img,
   .hero-grid > div:last-child img {
-    max-width: 260px;
-    max-height: 320px;
+    max-width: 240px;
+    max-height: 300px;
   }
 
   .content-card,
@@ -637,7 +569,7 @@ img {
   }
 
   .section {
-    padding: 58px 0;
+    padding: 56px 0;
   }
 
   .whatsapp-float {
