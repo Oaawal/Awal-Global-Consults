@@ -1,6 +1,3 @@
-/* =========================
-   RESET
-========================= */
 * {
   margin: 0;
   padding: 0;
@@ -28,9 +25,6 @@ a {
   color: inherit;
 }
 
-/* =========================
-   BRAND TOKENS
-========================= */
 :root {
   --navy: #0f2747;
   --navy-dark: #091a2f;
@@ -46,9 +40,6 @@ a {
   --radius: 18px;
 }
 
-/* =========================
-   LAYOUT
-========================= */
 .container {
   width: min(92%, 1180px);
   margin: 0 auto;
@@ -62,9 +53,6 @@ a {
   background: var(--light-bg);
 }
 
-/* =========================
-   HEADER
-========================= */
 .site-header {
   position: sticky;
   top: 0;
@@ -94,7 +82,7 @@ a {
 }
 
 .logo {
-  width: 130px;
+  width: 120px;
   max-width: 100%;
   height: auto;
   object-fit: contain;
@@ -136,9 +124,6 @@ a {
   color: var(--gold);
 }
 
-/* =========================
-   HERO
-========================= */
 .hero,
 .service-hero {
   background: linear-gradient(135deg, #f8f7f3 0%, #f2ede2 100%);
@@ -201,12 +186,25 @@ a {
   gap: 14px;
 }
 
-/* =========================
-   HERO / FOUNDER IMAGE CONTROL
-========================= */
+.hero-image-wrap {
+  width: 100%;
+  max-width: 380px;
+  margin-inline: auto;
+}
+
+.founder-image {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  max-height: 460px;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-inline: auto;
+}
+
 .hero-card,
-.hero-image-wrap,
-.founder-image-wrap,
 .hero-visual {
   width: 100%;
   max-width: 380px;
@@ -235,27 +233,6 @@ a {
   margin-bottom: 8px;
 }
 
-.hero-card img,
-.hero-image,
-.founder-image,
-.hero-image-wrap img,
-.founder-image-wrap img,
-.hero-visual img,
-.hero-grid > div:last-child img {
-  width: 100%;
-  max-width: 380px;
-  height: auto;
-  max-height: 460px;
-  object-fit: cover;
-  object-position: center top;
-  border-radius: var(--radius);
-  margin-inline: auto;
-  box-shadow: var(--shadow);
-}
-
-/* =========================
-   BUTTONS
-========================= */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -305,9 +282,6 @@ a {
   background: rgba(201, 166, 70, 0.08);
 }
 
-/* =========================
-   SECTION HEADERS
-========================= */
 .section-head {
   margin-bottom: 28px;
 }
@@ -325,9 +299,6 @@ a {
   max-width: 760px;
 }
 
-/* =========================
-   CARDS / BLOCKS
-========================= */
 .content-card,
 .form-card,
 .service-card,
@@ -359,9 +330,6 @@ a {
   padding: 22px;
 }
 
-/* =========================
-   GRIDS
-========================= */
 .service-grid,
 .feature-grid,
 .process-grid,
@@ -439,9 +407,6 @@ a {
   font-size: 0.92rem;
 }
 
-/* =========================
-   FORMS
-========================= */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -485,9 +450,6 @@ a {
   background: transparent;
 }
 
-/* =========================
-   FAQ
-========================= */
 .faq-list {
   display: grid;
   gap: 14px;
@@ -508,9 +470,6 @@ a {
   color: var(--muted);
 }
 
-/* =========================
-   CTA
-========================= */
 .cta-section {
   padding: 76px 0;
 }
@@ -533,9 +492,6 @@ a {
   color: var(--muted);
 }
 
-/* =========================
-   CONTACT / THANK YOU
-========================= */
 .contact-mini {
   margin-top: 20px;
 }
@@ -551,9 +507,6 @@ a {
   color: var(--navy-dark);
 }
 
-/* =========================
-   FOOTER
-========================= */
 .site-footer {
   background: var(--navy-dark);
   padding: 40px 0;
@@ -570,9 +523,6 @@ a {
   margin-bottom: 6px;
 }
 
-/* =========================
-   WHATSAPP FLOAT
-========================= */
 .whatsapp-float {
   position: fixed;
   right: 18px;
@@ -588,9 +538,6 @@ a {
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
 }
 
-/* =========================
-   TABLET
-========================= */
 @media (max-width: 1100px) {
   .service-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -614,9 +561,6 @@ a {
   }
 }
 
-/* =========================
-   MOBILE
-========================= */
 @media (max-width: 860px) {
   .nav {
     display: none;
@@ -641,31 +585,22 @@ a {
     font-size: 1rem;
   }
 
-  .hero-card,
   .hero-image-wrap,
-  .founder-image-wrap,
-  .hero-visual,
-  .hero-card img,
-  .hero-image,
-  .founder-image,
-  .hero-image-wrap img,
-  .founder-image-wrap img,
-  .hero-visual img,
-  .hero-grid > div:last-child img {
+  .founder-image {
     max-width: 300px;
     max-height: 360px;
   }
 
   .form-grid,
   .footer-wrap,
-  .cta-box,
   .service-grid,
   .process-grid {
     grid-template-columns: 1fr;
   }
 
   .cta-box {
-    display: grid;
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
@@ -675,7 +610,7 @@ a {
   }
 
   .logo {
-    width: 110px;
+    width: 100px;
   }
 
   .brand-title {
@@ -698,17 +633,8 @@ a {
     align-items: stretch;
   }
 
-  .hero-card,
   .hero-image-wrap,
-  .founder-image-wrap,
-  .hero-visual,
-  .hero-card img,
-  .hero-image,
-  .founder-image,
-  .hero-image-wrap img,
-  .founder-image-wrap img,
-  .hero-visual img,
-  .hero-grid > div:last-child img {
+  .founder-image {
     max-width: 240px;
     max-height: 300px;
   }
