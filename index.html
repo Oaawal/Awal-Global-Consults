@@ -1,16 +1,16 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Awal Global Consults | CAC Registration, Trademark & Business Compliance</title>
-  <meta name="description" content="Register your business, protect your brand, and stay compliant with Awal Global Consults. CAC registration, trademark, legal documentation, advisory, and business support in Nigeria.">
+  <title>Awal Global Consults | CAC Registration, Trademark & Business Compliance Nigeria</title>
+  <meta name="description" content="Register your business, protect your brand, and stay compliant with Awal Global Consults. CAC registration, trademark, legal documentation, advisory, and business support in Nigeria. Starting from ₦15,000.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://awalglobal.name.ng/">
-
   <link rel="icon" type="image/png" href="assets/images/favicon.png">
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Open Graph -->
 
   <meta property="og:title" content="Awal Global Consults | CAC Registration, Trademark & Business Compliance">
   <meta property="og:description" content="Register your business, protect your brand, and stay compliant with Awal Global Consults in Nigeria.">
@@ -18,249 +18,1351 @@
   <meta property="og:url" content="https://awalglobal.name.ng/">
   <meta property="og:site_name" content="Awal Global Consults">
 
+  <!-- Twitter -->
+
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Awal Global Consults | CAC Registration, Trademark & Business Compliance">
   <meta name="twitter:description" content="Register your business, protect your brand, and stay compliant with Awal Global Consults in Nigeria.">
+
+  <!-- Google Fonts -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --navy: #0b1f3a;
+      --navy-mid: #1a3558;
+      --gold: #c9973a;
+      --gold-light: #e8b84b;
+      --gold-pale: #f9f0dc;
+      --offwhite: #faf9f6;
+      --white: #ffffff;
+      --text: #0b1f3a;
+      --muted: #516071;
+      --light-bg: #f2f4f8;
+      --border: rgba(11, 31, 58, 0.09);
+      --shadow: 0 12px 36px rgba(11, 31, 58, 0.09);
+      --shadow-lg: 0 24px 64px rgba(11, 31, 58, 0.13);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    body {
+      font-family: 'DM Sans', Arial, sans-serif;
+      background: var(--offwhite);
+      color: var(--text);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    .container { width: min(92%, 1160px); margin: 0 auto; }
+    .section { padding: 88px 0; }
+    .alt-bg { background: var(--light-bg); }
+
+    /* ─── HEADER ─── */
+    .site-header {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(250, 249, 246, 0.95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .nav-wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 20px; padding: 14px 0;
+    }
+    .brand-flex { display: flex; align-items: center; gap: 12px; }
+    .logo { width: 110px; height: auto; object-fit: contain; }
+    .brand-title { display: block; font-size: 1.05rem; font-weight: 700; color: var(--navy); }
+    .brand-sub { display: block; font-size: 0.8rem; color: var(--muted); }
+
+    .nav { display: flex; align-items: center; gap: 26px; }
+    .nav a { font-weight: 500; font-size: 0.93rem; color: var(--navy); transition: color 0.2s; }
+    .nav a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--gold); color: var(--navy) !important;
+      padding: 9px 18px; border-radius: 8px; font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--navy); border-radius: 2px;
+      transition: 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-nav {
+      display: none; flex-direction: column; gap: 0;
+      background: var(--white); border-top: 1px solid var(--border);
+      padding: 12px 0;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      padding: 13px 20px; font-weight: 500; color: var(--navy);
+      border-bottom: 1px solid var(--border); transition: background 0.2s;
+    }
+    .mobile-nav a:hover { background: var(--gold-pale); }
+    .mobile-nav a:last-child { border-bottom: none; }
+    .mobile-nav .mobile-cta {
+      background: var(--gold); color: var(--navy); font-weight: 700;
+      margin: 10px 16px; border-radius: 8px; text-align: center;
+      border: none;
+    }
+
+    /* ─── TRUST BAR ─── */
+    .trust-bar {
+      background: var(--navy); padding: 11px 0;
+      overflow: hidden;
+    }
+    .trust-bar-inner {
+      display: flex; gap: 40px; align-items: center;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 8px;
+      color: rgba(255,255,255,0.85); font-size: 0.82rem; font-weight: 500;
+      white-space: nowrap;
+    }
+    .trust-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: linear-gradient(140deg, #faf9f6 0%, #f3ede0 60%, #faf9f6 100%);
+      padding: 90px 0 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(201,151,58,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr minmax(280px, 380px);
+      gap: 56px; align-items: center;
+      position: relative;
+    }
+    .eyebrow {
+      display: inline-block; margin-bottom: 14px;
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .hero h1 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1.06; font-weight: 900;
+      color: var(--navy); margin-bottom: 20px;
+    }
+    .hero h1 em { font-style: italic; color: var(--gold); }
+    .hero-sub {
+      font-size: 1.08rem; color: var(--muted);
+      max-width: 520px; margin-bottom: 14px;
+    }
+    .founder-line {
+      font-size: 0.9rem; color: var(--muted);
+      margin-bottom: 32px; font-weight: 500;
+    }
+    .founder-line strong { color: var(--navy); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+
+    .stat-row {
+      display: flex; gap: 28px; margin-top: 36px;
+      flex-wrap: wrap;
+    }
+    .stat-item {}
+    .stat-num {
+      font-family: 'Fraunces', serif;
+      font-size: 1.9rem; font-weight: 900; color: var(--navy);
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+    .hero-image-wrap { position: relative; }
+    .founder-image {
+      width: 100%; max-width: 360px; height: auto; max-height: 440px;
+      object-fit: cover; object-position: center top;
+      border-radius: var(--radius); box-shadow: var(--shadow-lg);
+      margin-inline: auto;
+    }
+    .hero-badge {
+      position: absolute; bottom: 20px; left: -20px;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 16px;
+      box-shadow: var(--shadow);
+      font-size: 0.82rem; max-width: 200px;
+    }
+    .hero-badge-title { font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+    .hero-badge-sub { color: var(--muted); }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 50px; padding: 0 24px;
+      border-radius: 10px; font-weight: 700; font-size: 0.95rem;
+      transition: 0.2s ease; border: none; cursor: pointer;
+    }
+    .btn-primary { background: var(--gold); color: var(--navy); }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn-secondary {
+      border: 2px solid var(--gold); color: var(--navy);
+      background: transparent;
+    }
+    .btn-secondary:hover { background: var(--gold-pale); }
+    .btn-whatsapp {
+      background: #25d366; color: #fff;
+      display: inline-flex; align-items: center; gap: 9px;
+    }
+    .btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-1px); }
+    .btn-whatsapp::before {
+      content: '';
+      display: inline-block; width: 20px; height: 20px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z'/%3E%3C/svg%3E") no-repeat center/contain;
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    .how-section { padding: 84px 0; }
+    .section-head { margin-bottom: 48px; text-align: center; }
+    .section-head h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 800; color: var(--navy); margin-top: 8px;
+    }
+    .section-head p { color: var(--muted); margin-top: 10px; max-width: 560px; margin-inline: auto; }
+
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .step-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px 24px;
+      box-shadow: var(--shadow); position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .step-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .step-num {
+      font-family: 'Fraunces', serif;
+      font-size: 3rem; font-weight: 900; color: var(--gold-pale);
+      line-height: 1; margin-bottom: 12px;
+    }
+    .step-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .step-card p { color: var(--muted); font-size: 0.93rem; }
+    .step-connector {
+      position: absolute; top: 44px; right: -13px;
+      font-size: 1.4rem; color: var(--gold); z-index: 1;
+    }
+
+    /* ─── SERVICES ─── */
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .service-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex; flex-direction: column;
+    }
+    .service-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .service-icon {
+      width: 40px; height: 40px; background: var(--gold-pale);
+      border-radius: 10px; display: flex; align-items: center;
+      justify-content: center; margin-bottom: 14px;
+      font-size: 1.3rem;
+    }
+    .service-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .service-card p { color: var(--muted); font-size: 0.9rem; flex: 1; margin-bottom: 16px; }
+    .service-link {
+      display: inline-block; font-weight: 700; font-size: 0.87rem;
+      color: var(--navy); border: 1.5px solid var(--gold);
+      padding: 9px 16px; border-radius: 8px;
+      transition: 0.2s ease; text-align: center;
+      align-self: flex-start;
+    }
+    .service-link:hover { background: var(--gold-pale); }
+
+    /* ─── WHY CHOOSE US ─── */
+    .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .why-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 26px;
+      box-shadow: var(--shadow); display: flex; gap: 16px;
+    }
+    .why-icon {
+      font-size: 1.8rem; min-width: 48px; height: 48px;
+      background: var(--gold-pale); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .why-card h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .why-card p { color: var(--muted); font-size: 0.9rem; }
+
+    /* ─── PRICING ─── */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .pricing-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px 24px;
+      box-shadow: var(--shadow); display: flex; flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .pricing-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .pricing-card.featured {
+      background: #1a3a5c; border-color: #1a3a5c;
+    }
+    .pricing-card.featured h3 { color: var(--white); }
+    .pricing-card.featured .price { color: #f5c842; }
+    .pricing-card.featured .price-note { color: rgba(255,255,255,0.7); }
+    .pricing-card.featured li { color: rgba(255,255,255,0.88); border-bottom-color: rgba(255,255,255,0.12); }
+    .pricing-card.featured li::before { color: #f5c842; }
+    .pricing-badge {
+      display: inline-block; background: var(--gold);
+      color: var(--navy); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 20px; margin-bottom: 14px;
+    }
+    .pricing-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .price {
+      font-family: 'Fraunces', serif;
+      font-size: 2rem; font-weight: 900; color: var(--gold); margin: 8px 0 4px;
+    }
+    .price-note { font-size: 0.82rem; color: var(--muted); margin-bottom: 20px; }
+    .pricing-card ul { list-style: none; padding: 0; flex: 1; }
+    .pricing-card li {
+      color: var(--muted); font-size: 0.88rem;
+      padding: 6px 0; border-bottom: 1px solid var(--border);
+      display: flex; gap: 8px; align-items: flex-start;
+    }
+    .pricing-card li::before { content: '✓'; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+    .pricing-card .btn { margin-top: 22px; width: 100%; }
+
+    /* ─── PRICING TABS ─── */
+    .pricing-tabs {
+      display: flex; gap: 8px; margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .ptab {
+      padding: 10px 22px; border-radius: 8px; border: 1.5px solid var(--border);
+      background: var(--white); color: var(--navy); font: inherit;
+      font-weight: 600; font-size: 0.9rem; cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .ptab:hover { border-color: var(--gold); background: var(--gold-pale); }
+    .ptab.active { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+
+    .pricing-panel { display: block; }
+    .pricing-panel.hidden { display: none; }
+
+    .pricing-timeline-note {
+      background: var(--gold-pale); border: 1px solid rgba(201,151,58,0.25);
+      border-radius: 10px; padding: 12px 18px;
+      font-size: 0.9rem; color: var(--navy); margin-bottom: 20px;
+    }
+
+    .pkg-tag {
+      font-size: 0.75rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
+    }
+
+    .pricing-grid-2 {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .pricing-note-box {
+      background: var(--light-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 16px 20px;
+      margin-top: 24px; font-size: 0.9rem; color: var(--muted);
+    }
+
+    @media (max-width: 800px) {
+      .pricing-grid-2 { grid-template-columns: 1fr !important; }
+    }
+
+    /* ─── TESTIMONIALS ─── */
+    .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .testimonial-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .stars { color: var(--gold); font-size: 1.1rem; margin-bottom: 12px; letter-spacing: 2px; }
+    .testimonial-card blockquote {
+      font-size: 0.92rem; color: var(--muted);
+      line-height: 1.65; margin-bottom: 18px;
+      font-style: italic;
+    }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--gold-pale); display: flex; align-items: center;
+      justify-content: center; font-weight: 700; color: var(--gold);
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .author-name { font-weight: 700; font-size: 0.9rem; color: var(--navy); }
+    .author-role { font-size: 0.8rem; color: var(--muted); }
+
+    /* ─── ABOUT ─── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .about-content h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 800; color: var(--navy); margin-bottom: 20px;
+    }
+    .about-content p { color: var(--muted); margin-bottom: 14px; }
+    .about-values { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+    .about-value { display: flex; gap: 12px; align-items: flex-start; }
+    .about-value-dot {
+      width: 22px; height: 22px; background: var(--gold-pale);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; margin-top: 2px;
+    }
+    .about-value-dot::after { content: ''; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
+    .about-value-text strong { color: var(--navy); font-size: 0.9rem; }
+    .about-value-text p { color: var(--muted); font-size: 0.87rem; margin: 0; }
+    .about-stat-box {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 32px;
+      box-shadow: var(--shadow-lg);
+    }
+    .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .astat { text-align: center; padding: 16px; }
+    .astat-num {
+      font-family: 'Fraunces', serif;
+      font-size: 2.4rem; font-weight: 900; color: var(--gold); line-height: 1;
+    }
+    .astat-label { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
+    .rc-badge {
+      background: var(--navy); color: var(--white);
+      border-radius: 10px; padding: 14px 16px; margin-top: 20px;
+      font-size: 0.84rem;
+    }
+    .rc-badge strong { color: var(--gold); }
+
+    /* ─── FAQ ─── */
+    .faq-list { display: grid; gap: 12px; max-width: 780px; margin-inline: auto; }
+    .faq-item {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+    }
+    .faq-item summary {
+      cursor: pointer; font-weight: 700; color: var(--navy);
+      padding: 18px 20px; list-style: none;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .faq-item summary::after {
+      content: '+'; font-size: 1.3rem; color: var(--gold);
+      flex-shrink: 0; transition: transform 0.2s;
+    }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item p { padding: 0 20px 18px; color: var(--muted); font-size: 0.93rem; }
+
+    /* ─── CTA SECTION ─── */
+    .cta-section {
+      background: var(--navy);
+      padding: 80px 0;
+    }
+    .cta-inner { text-align: center; max-width: 640px; margin-inline: auto; }
+    .cta-section .eyebrow { color: var(--gold); }
+    .cta-section h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900; color: var(--white);
+      margin: 10px 0 16px;
+    }
+    .cta-section p { color: rgba(255,255,255,0.72); margin-bottom: 32px; }
+    .cta-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+    /* ─── CONTACT ─── */
+    .contact-grid-2 { display: grid; grid-template-columns: 1fr 1.4fr; gap: 40px; align-items: start; }
+    .contact-info { display: flex; flex-direction: column; gap: 16px; }
+    .contact-item {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 16px 18px;
+      display: flex; gap: 14px; align-items: flex-start;
+      box-shadow: var(--shadow);
+    }
+    .contact-item-icon {
+      font-size: 1.2rem; min-width: 38px; height: 38px;
+      background: var(--gold-pale); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .contact-item-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 2px; }
+    .contact-item-val { font-weight: 600; color: var(--navy); font-size: 0.92rem; }
+    .form-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow);
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-weight: 600; font-size: 0.87rem; color: var(--navy); margin-bottom: 6px; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%; padding: 13px 15px; font: inherit;
+      border: 1.5px solid rgba(11,31,58,0.12); border-radius: 10px;
+      background: var(--offwhite); color: var(--navy);
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { outline: none; border-color: var(--gold); }
+
+    /* ─── FOOTER ─── */
+    .site-footer { background: var(--navy); padding: 48px 0 24px; }
+    .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; margin-bottom: 36px; }
+    .footer-brand p { color: rgba(255,255,255,0.65); font-size: 0.88rem; margin-top: 10px; }
+    .footer-brand .rc { color: var(--gold); font-size: 0.82rem; margin-top: 12px; }
+    .footer-col h4 { color: var(--white); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px; }
+    .footer-col a, .footer-col p {
+      color: rgba(255,255,255,0.65); font-size: 0.88rem;
+      display: block; margin-bottom: 8px; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 10px;
+    }
+    .footer-bottom p { color: rgba(255,255,255,0.4); font-size: 0.82rem; }
+
+    /* ─── WHATSAPP FLOAT ─── */
+    .whatsapp-float {
+      position: fixed; right: 20px; bottom: 20px; z-index: 999;
+      background: #25d366; color: #fff;
+      font-weight: 700; font-size: 0.88rem;
+      padding: 13px 20px; border-radius: 999px;
+      box-shadow: 0 8px 28px rgba(37,211,102,0.4);
+      display: flex; align-items: center; gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .whatsapp-float:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(37,211,102,0.5); }
+    .whatsapp-float svg { width: 18px; height: 18px; fill: #fff; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1050px) {
+      .service-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 800px) {
+      .nav { display: none; }
+      .hamburger { display: flex; }
+      .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+      .hero h1 { font-size: 2.2rem; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .step-connector { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .contact-grid-2 { grid-template-columns: 1fr; }
+      .testimonial-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .service-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .trust-bar-inner { gap: 16px; }
+      .trust-item { font-size: 0.75rem; }
+      .hero { padding: 60px 0 48px; }
+      .hero h1 { font-size: 1.95rem; }
+      .hero-badge { display: none; }
+      .hero-actions { flex-direction: column; }
+      .stat-row { gap: 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .section { padding: 60px 0; }
+      .cta-btns { flex-direction: column; align-items: stretch; }
+      .why-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+
 </head>
 <body>
 
-  <a class="whatsapp-float" href="https://wa.me/2347038336596?text=Hello%20I%20need%20help%20with%20your%20services" target="_blank" rel="noopener">
+  <!-- WhatsApp Float -->
+
+  <a class="whatsapp-float" href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
     Chat on WhatsApp
   </a>
 
+  <!-- Header -->
+
   <header class="site-header">
     <div class="container nav-wrap">
-      <div class="brand">
-        <a href="index.html" class="brand-flex">
-          <img src="assets/images/logo.png" alt="Awal Global Consults logo" class="logo">
-          <div>
-            <span class="brand-title">Awal Global Consults</span>
-            <span class="brand-sub">Legal &amp; Business Solutions</span>
-          </div>
-        </a>
-      </div>
+      <a href="index.html" class="brand-flex">
+        <img src="assets/images/logo.png" alt="Awal Global Consults logo" class="logo">
+        <div>
+          <span class="brand-title">Awal Global Consults</span>
+          <span class="brand-sub">Legal &amp; Business Solutions</span>
+        </div>
+      </a>
 
-      <nav class="nav">
-        <a href="#services">Services</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
+```
+  <nav class="nav">
+    <a href="#services">Services</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#about">About</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="nav-cta" target="_blank" rel="noopener">Chat on WhatsApp</a>
+  </nav>
+
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#services" onclick="closeMobileNav()">Services</a>
+  <a href="#pricing" onclick="closeMobileNav()">Pricing</a>
+  <a href="#about" onclick="closeMobileNav()">About</a>
+  <a href="#faq" onclick="closeMobileNav()">FAQ</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+  <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="mobile-cta" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+</nav>
+```
+
   </header>
 
-  <section class="hero homepage-hero">
+  <!-- Trust Bar -->
+
+  <div class="trust-bar">
+    <div class="container trust-bar-inner">
+      <div class="trust-item"><span class="trust-dot"></span> RC-9282103 Registered Business</div>
+      <div class="trust-item"><span class="trust-dot"></span> 100+ Businesses Served</div>
+      <div class="trust-item"><span class="trust-dot"></span> CAC Accredited Process</div>
+      <div class="trust-item"><span class="trust-dot"></span> Business Name Ready in 24hrs</div>
+      <div class="trust-item"><span class="trust-dot"></span> Affordable Pricing</div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+
+  <section class="hero">
     <div class="container hero-grid">
-
       <div class="hero-text">
-        <span class="eyebrow">Business &amp; Legal Support</span>
-
-        <h1>Start and structure your business the right way</h1>
-
-        <p>
-          We help entrepreneurs, individuals, and businesses handle registration,
-          compliance, documentation, and business support with more clarity and confidence.
+        <span class="eyebrow">Business &amp; Legal Support — Nigeria</span>
+        <h1>Start and protect your business <em>the right way</em></h1>
+        <p class="hero-sub">
+          We handle CAC registration, trademark protection, legal documentation,
+          and compliance — so you can focus on building your business without confusion or stress.
         </p>
-
         <p class="founder-line">
-          Led by a trained legal professional with practical experience in business compliance.
+          Led by <strong>a trained legal professional</strong> with hands-on experience in business compliance and registration in Nigeria.
         </p>
-
         <div class="hero-actions">
-          <a href="#services" class="btn btn-primary">Get Started</a>
-          <a href="https://wa.me/2347038336596?text=Hello%20I%20need%20help%20with%20your%20services" class="btn btn-secondary" target="_blank" rel="noopener">Chat on WhatsApp</a>
+          <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20to%20register%20my%20business" class="btn btn-whatsapp" target="_blank" rel="noopener">
+            Get Started on WhatsApp
+          </a>
+          <a href="#services" class="btn btn-secondary">See Our Services</a>
+        </div>
+        <div class="stat-row">
+          <div class="stat-item">
+            <div class="stat-num">100+</div>
+            <div class="stat-label">Clients Served</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">10+</div>
+            <div class="stat-label">Services Offered</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">Fast</div>
+            <div class="stat-label">24–72hr Response</div>
+          </div>
         </div>
       </div>
 
-      <div class="hero-image-wrap">
-        <img src="assets/images/founder.png" alt="Founder of Awal Global Consults" class="founder-image">
-      </div>
+```
+  <div class="hero-image-wrap">
+    <img src="assets/images/founder.png" alt="Founder of Awal Global Consults" class="founder-image">
+    <div class="hero-badge">
+      <div class="hero-badge-title">✅ Registered &amp; Verified</div>
+      <div class="hero-badge-sub">RC-9282103 — Awal Global Consults Limited</div>
+    </div>
+  </div>
+</div>
+```
 
+  </section>
+
+  <!-- How It Works -->
+
+  <section class="how-section alt-bg">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Simple Process</span>
+        <h2>How it works</h2>
+        <p>We make the process simple, clear, and stress-free — from first message to final document.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3>Send us a message</h3>
+          <p>Tap the WhatsApp button and tell us what you need. No technical jargon — just plain conversation.</p>
+          <div class="step-connector">→</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3>We guide you clearly</h3>
+          <p>We explain exactly what's needed, what documents to provide, and how long it will take. No hidden surprises.</p>
+          <div class="step-connector">→</div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3>We handle everything</h3>
+          <p>We process your registration, filing, or documentation — and deliver your results promptly.</p>
+        </div>
+      </div>
     </div>
   </section>
+
+  <!-- Services -->
 
   <section class="section" id="services">
     <div class="container">
-
       <div class="section-head">
         <span class="eyebrow">Our Services</span>
         <h2>What we can help you with</h2>
-        <p>Choose a service and get started immediately.</p>
+        <p>From business registration to immigration support — we handle it all. Choose a service to get started.</p>
       </div>
-
       <div class="service-grid">
-
         <div class="service-card">
+          <div class="service-icon">🏢</div>
           <h3>CAC Registration</h3>
-          <p>Register your business or company properly with CAC.</p>
+          <p>Register your business name or limited company properly with the Corporate Affairs Commission.</p>
           <a href="cac-registration.html" class="service-link">Get Started</a>
         </div>
-
         <div class="service-card">
+          <div class="service-icon">™️</div>
           <h3>Trademark Registration</h3>
-          <p>Protect your brand name, logo, and identity legally.</p>
+          <p>Legally protect your brand name, logo, and identity so no one else can copy or use it.</p>
           <a href="trademark-ip.html" class="service-link">Get Started</a>
         </div>
-
         <div class="service-card">
+          <div class="service-icon">💼</div>
           <h3>Business Advisory</h3>
-          <p>Get clarity on structure, compliance, and growth direction.</p>
+          <p>Get expert clarity on business structure, compliance requirements, and growth direction.</p>
           <a href="business-advisory.html" class="service-link">Get Started</a>
         </div>
-
         <div class="service-card">
+          <div class="service-icon">📋</div>
           <h3>Corporate &amp; Regulatory</h3>
-          <p>Support for TIN, compliance, filings, and regulatory processes.</p>
+          <p>TIN registration, annual returns, compliance filings, and regulatory process support.</p>
           <a href="corporate-regulatory.html" class="service-link">Get Started</a>
         </div>
-
         <div class="service-card">
+          <div class="service-icon">📄</div>
           <h3>Legal Documentation</h3>
-          <p>Professional drafting of agreements, affidavits, and formal documents.</p>
+          <p>Professional drafting of agreements, affidavits, contracts, and formal legal documents.</p>
           <a href="legal-documentation.html" class="service-link">Get Started</a>
         </div>
-
         <div class="service-card">
+          <div class="service-icon">🪪</div>
           <h3>Identity &amp; Documentation</h3>
-          <p>Support for NIN registration, retrieval, correction, and related records.</p>
+          <p>NIN registration, retrieval, correction, and support with identity-related records.</p>
           <a href="identity-documentation.html" class="service-link">Get Started</a>
         </div>
-
         <div class="service-card">
+          <div class="service-icon">✈️</div>
           <h3>Expatriate &amp; Immigration</h3>
-          <p>Guidance on quota, permits, CERPAC, and related immigration matters.</p>
+          <p>Guidance on business quotas, permits, CERPAC, and related immigration matters.</p>
           <a href="immigration-expatriate.html" class="service-link">Get Started</a>
         </div>
-
         <div class="service-card">
+          <div class="service-icon">🎓</div>
           <h3>Student Visa Support</h3>
-          <p>Help with school application, student visa guidance, and relocation planning.</p>
+          <p>School application guidance, student visa processing, and relocation planning support.</p>
           <a href="student-visa.html" class="service-link">Get Started</a>
         </div>
-
         <div class="service-card">
+          <div class="service-icon">🚢</div>
           <h3>Export &amp; Import Licensing</h3>
-          <p>Support for trade licensing, documentation, and compliance guidance.</p>
+          <p>Trade licensing, import/export documentation, and regulatory compliance guidance.</p>
           <a href="export-import-licensing.html" class="service-link">Get Started</a>
         </div>
-
-        <div class="service-card">
-          <h3>Cybersecurity Support</h3>
-          <p>Practical guidance for safer online activity and digital risk awareness.</p>
-          <a href="cybersecurity-support.html" class="service-link">Get Started</a>
-        </div>
-
       </div>
-
     </div>
   </section>
 
-  <section class="section alt-bg" id="about">
+  <!-- Why Choose Us -->
+
+  <section class="section alt-bg">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow">About Us</span>
-        <h2>Simple, clear, and reliable support</h2>
+        <span class="eyebrow">Why Choose Us</span>
+        <h2>What makes Awal Global different</h2>
+        <p>We built this practice specifically for first-time business owners and everyday Nigerians — not big corporations.</p>
       </div>
-
-      <div class="content-card">
-        <p>
-          Awal Global Consults is focused on helping individuals and businesses
-          handle important legal and business processes with more clarity,
-          proper structure, and confidence.
-        </p>
-
-        <p>
-          We support clients with CAC registration, trademark protection,
-          documentation, regulatory processes, advisory, and other practical services
-          that help them operate more properly and grow with confidence.
-        </p>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">🤝</div>
+          <div>
+            <h3>We speak your language</h3>
+            <p>No confusing legal jargon. We explain everything in simple, clear terms so you always understand what's happening with your business.</p>
+          </div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">💰</div>
+          <div>
+            <h3>Genuinely affordable</h3>
+            <p>We believe every serious entrepreneur deserves proper legal support — regardless of their budget. Our pricing is transparent and fair.</p>
+          </div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">⚡</div>
+          <div>
+            <h3>Fast &amp; reliable process</h3>
+            <p>Once you send us your documents, we handle everything quickly. Most CAC registrations are processed within 3–7 working days.</p>
+          </div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🔒</div>
+          <div>
+            <h3>Your information is safe</h3>
+            <p>We handle all client documents with strict confidentiality. Your personal and business information is never shared with third parties.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- Pricing -->
+
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Transparent Pricing</span>
+        <h2>Simple, affordable packages</h2>
+        <p>No hidden fees. No surprises. Every package includes government fees. Choose the level that fits your needs.</p>
+      </div>
+
+```
+  <!-- Pricing Tabs -->
+  <div class="pricing-tabs">
+    <button class="ptab active" onclick="showPricing('bizname', this)">Business Name</button>
+    <button class="ptab" onclick="showPricing('company', this)">Limited Company</button>
+    <button class="ptab" onclick="showPricing('other', this)">Other Services</button>
+  </div>
+
+  <!-- Business Name Registration -->
+  <div class="pricing-panel" id="pricing-bizname">
+    <div class="pricing-timeline-note">⚡ Business name registration completed within <strong>24 hours</strong> of document submission</div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pkg-tag">Best for Starting Small</div>
+        <h3>Basic Starter</h3>
+        <div class="price">₦35,000</div>
+        <div class="price-note">All-inclusive · Government fees included</div>
+        <ul>
+          <li>Name Availability Check</li>
+          <li>CAC Certificate</li>
+          <li>Status Report</li>
+          <li>Tax Identification Number (TIN)</li>
+        </ul>
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Basic%20Starter%20business%20name%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pkg-tag" style="color:rgba(255,255,255,0.7);">More Professional</div>
+        <h3>Business Boost</h3>
+        <div class="price">₦65,000</div>
+        <div class="price-note">All-inclusive · Government fees included</div>
+        <ul>
+          <li>Everything in Basic Starter</li>
+          <li>TIN Validation</li>
+          <li>Branded Letterhead (5 copies)</li>
+          <li>Business ID Card (1 Proprietor)</li>
+          <li>Free Delivery</li>
+        </ul>
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Business%20Boost%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pkg-tag">Brand &amp; Grow</div>
+        <h3>Premium Presence</h3>
+        <div class="price">₦95,000</div>
+        <div class="price-note">All-inclusive · Government fees included</div>
+        <ul>
+          <li>Everything in Business Boost</li>
+          <li>Customized Business Logo</li>
+          <li>50 Professional Business Cards</li>
+          <li>Framed CAC Certificate</li>
+          <li>Basic Brand Guide</li>
+        </ul>
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Premium%20Presence%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Limited Company Registration -->
+  <div class="pricing-panel hidden" id="pricing-company">
+    <div class="pricing-timeline-note">📅 Limited company incorporation completed within <strong>3–7 business days</strong></div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pkg-tag">Proper Foundation</div>
+        <h3>Core Setup</h3>
+        <div class="price">₦75,000</div>
+        <div class="price-note">All-inclusive · Government fees included</div>
+        <ul>
+          <li>Name Availability Check</li>
+          <li>CAC Certificate</li>
+          <li>MEMART (Memorandum &amp; Articles of Association)</li>
+          <li>Status Report</li>
+          <li>Tax Identification Number (TIN)</li>
+          <li>TIN Validation</li>
+        </ul>
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Core%20Setup%20company%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pkg-tag" style="color:rgba(255,255,255,0.7);">More Structured</div>
+        <h3>Smart Pro</h3>
+        <div class="price">₦95,000</div>
+        <div class="price-note">All-inclusive · Government fees included</div>
+        <ul>
+          <li>Everything in Core Setup</li>
+          <li>Branded Letterhead (5 copies)</li>
+          <li>Company ID Card (1 Director)</li>
+          <li>Free Delivery</li>
+        </ul>
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Smart%20Pro%20company%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pkg-tag">Full Setup + Support</div>
+        <h3>Complete Brand Suite</h3>
+        <div class="price">₦125,000</div>
+        <div class="price-note">All-inclusive · Government fees included</div>
+        <ul>
+          <li>Everything in Smart Pro</li>
+          <li>Customized Business Logo</li>
+          <li>50 Professional Business Cards</li>
+          <li>Framed CAC Certificate</li>
+          <li>Business Branding Guide</li>
+          <li>Bank Account Support</li>
+        </ul>
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Complete%20Brand%20Suite" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Other Services -->
+  <div class="pricing-panel hidden" id="pricing-other">
+    <div class="pricing-grid pricing-grid-2">
+
+      <div class="pricing-card">
+        <div class="service-icon" style="margin-bottom:14px;">⛪</div>
+        <h3>Incorporated Trustees</h3>
+        <div class="price" style="font-size:1.4rem;">Custom Quote</div>
+        <div class="price-note">Timeline: 30–40 business days</div>
+        <ul>
+          <li>For NGOs, churches, associations &amp; foundations</li>
+          <li>Full CAC filing for incorporated trustees</li>
+          <li>Constitution drafting support</li>
+          <li>Certificate of Incorporation</li>
+        </ul>
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20Incorporated%20Trustees%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get a Quote</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="service-icon" style="margin-bottom:14px;">🔄</div>
+        <h3>Post-Incorporation Services</h3>
+        <div class="price" style="font-size:1.4rem;">From ₦15,000</div>
+        <div class="price-note">For already-registered businesses</div>
+        <ul>
+          <li>Annual Returns Filing</li>
+          <li>Change of Directors / Shareholders</li>
+          <li>Change of Registered Address</li>
+          <li>Share Capital Increase</li>
+          <li>Company Status Report</li>
+          <li>Certified True Copies (CTC)</li>
+        </ul>
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20post-incorporation%20services" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="service-icon" style="margin-bottom:14px;">™️</div>
+        <h3>Trademark Registration</h3>
+        <div class="price" style="font-size:1.4rem;">Custom Quote</div>
+        <div class="price-note">Per class · IPO government fees included</div>
+        <ul>
+          <li>Trademark search &amp; clearance</li>
+          <li>IPO application filing</li>
+          <li>Filing acknowledgment certificate</li>
+          <li>Prosecution support</li>
+        </ul>
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20to%20register%20a%20trademark" class="btn btn-primary" target="_blank" rel="noopener">Get a Quote</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="service-icon" style="margin-bottom:14px;">➕</div>
+        <h3>Add-On Services</h3>
+        <div class="price" style="font-size:1.4rem;">From ₦5,000</div>
+        <div class="price-note">Available with any package</div>
+        <ul>
+          <li>Company Seal</li>
+          <li>Additional Director ID Cards</li>
+          <li>SCUML Registration (where applicable)</li>
+          <li>Additional Business Cards</li>
+          <li>Bank Account Opening Support</li>
+          <li>Extra Letterhead Copies</li>
+          <li>Document Printing &amp; Nationwide Delivery</li>
+        </ul>
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20add-on%20services" class="btn btn-primary" target="_blank" rel="noopener">Inquire Now</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Add-ons note -->
+  <div class="pricing-note-box">
+    <strong>Need something customized?</strong> You can mix, remove, or add specific items from any package based on your needs and budget. We are flexible and ready to help.
+    <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20a%20custom%20package" target="_blank" rel="noopener" style="color:var(--gold); font-weight:700; margin-left:6px;">Chat with us →</a>
+  </div>
+
+</div>
+```
+
+  </section>
+
+  <!-- Testimonials -->
+
+  <section class="section alt-bg">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Client Testimonials</span>
+        <h2>What our clients say</h2>
+        <p>Real feedback from real business owners we've helped across Nigeria.</p>
+      </div>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>"I had no idea how to register my fashion business. Awal Global made the whole process so simple. They explained everything step by step and my CAC certificate was ready in less than a week."</blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">F.A</div>
+            <div>
+              <div class="author-name">Fatima A.</div>
+              <div class="author-role">Fashion Retailer, Lagos</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>"I was worried about the cost but their pricing was very fair. They registered my company name and helped me with TIN as well. Professional service and very responsive on WhatsApp."</blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">K.O</div>
+            <div>
+              <div class="author-name">Kingsley O.</div>
+              <div class="author-role">Logistics Business Owner, Abuja</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <blockquote>"They helped me protect my brand trademark quickly and affordably. I recommend Awal Global to every entrepreneur who wants to do things the proper way without spending a fortune."</blockquote>
+          <div class="testimonial-author">
+            <div class="author-avatar">A.M</div>
+            <div>
+              <div class="author-name">Amina M.</div>
+              <div class="author-role">Food Brand Founder, Kano</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+
+  <section class="section" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-content">
+          <span class="eyebrow">About Us</span>
+          <h2>Built for everyday Nigerian entrepreneurs</h2>
+          <p>
+            Awal Global Consults was founded with one clear purpose: to make legal and business
+            processes accessible and understandable for everyone — not just large corporations.
+          </p>
+          <p>
+            We work with first-time entrepreneurs, small business owners, and individuals
+            who need clear guidance and reliable support with registration, compliance, and documentation.
+          </p>
+          <div class="about-values">
+            <div class="about-value">
+              <div class="about-value-dot"></div>
+              <div class="about-value-text">
+                <strong>Simplicity first</strong>
+                <p>We translate complex legal processes into plain, easy-to-follow guidance.</p>
+              </div>
+            </div>
+            <div class="about-value">
+              <div class="about-value-dot"></div>
+              <div class="about-value-text">
+                <strong>Affordable access</strong>
+                <p>Every entrepreneur deserves proper legal support, regardless of budget.</p>
+              </div>
+            </div>
+            <div class="about-value">
+              <div class="about-value-dot"></div>
+              <div class="about-value-text">
+                <strong>Trustworthy service</strong>
+                <p>We handle your documents with care, confidentiality, and professionalism.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="about-stat-box">
+            <div class="about-stats">
+              <div class="astat">
+                <div class="astat-num">100+</div>
+                <div class="astat-label">Clients Served</div>
+              </div>
+              <div class="astat">
+                <div class="astat-num">10+</div>
+                <div class="astat-label">Service Categories</div>
+              </div>
+              <div class="astat">
+                <div class="astat-num">3–7</div>
+                <div class="astat-label">Days to Register</div>
+              </div>
+              <div class="astat">
+                <div class="astat-num">24hr</div>
+                <div class="astat-label">Response Time</div>
+              </div>
+            </div>
+            <div class="rc-badge">
+              <strong>RC-9282103</strong> — Officially registered as Awal Global Consults Limited with the Corporate Affairs Commission of Nigeria.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+
+  <section class="section alt-bg" id="faq">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Common Questions</span>
+        <h2>Frequently asked questions</h2>
+        <p>Answers to the questions we get asked most often.</p>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>How long does CAC business registration take?</summary>
+          <p>Business name registration typically takes 3–7 working days after we receive all required documents and payment. Limited company (RC) registration takes 7–14 working days. We'll keep you updated throughout the process.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What documents do I need to register my business?</summary>
+          <p>For business name registration, you'll need a valid government-issued ID (NIN slip, National ID, or International Passport), a proposed business name, your address, and nature of business. We'll guide you through everything once you contact us.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can I register my business from outside Lagos?</summary>
+          <p>Absolutely. We serve clients across all states in Nigeria. Everything is handled remotely — you send documents via WhatsApp or email, and we take care of the rest. No need to travel or visit any office.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Are your fees all-inclusive? Any hidden charges?</summary>
+          <p>Our pricing is transparent. The fees we quote include government fees, our service charge, and all processing costs. We will always tell you the exact total upfront before you proceed — no surprise charges.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is my personal and business information safe?</summary>
+          <p>Yes. We treat all client information with strict confidentiality. Your documents and personal details are never shared with third parties. We operate professionally and ethically in handling all client data.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Do I need a lawyer to work with you?</summary>
+          <p>No. You don't need to hire a separate lawyer for the services we provide. Our practice is led by a trained legal professional, and we handle everything on your behalf from start to finish.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
 
   <section class="cta-section">
     <div class="container">
-      <div class="cta-box">
-        <div class="cta-content">
-          <span class="eyebrow">Ready to Start?</span>
-          <h2>Speak with a consultant now on WhatsApp</h2>
-          <p>
-            Get clear guidance on CAC registration, trademark, compliance,
-            legal support, and business documentation without confusion.
-          </p>
-        </div>
-
-        <div class="cta-actions">
-          <a href="https://wa.me/2347038336596?text=Hello%20I%20need%20help%20with%20your%20services" class="btn btn-primary" target="_blank" rel="noopener">
-            Chat on WhatsApp
+      <div class="cta-inner">
+        <span class="eyebrow">Ready to Get Started?</span>
+        <h2>Let's register and protect your business today</h2>
+        <p>Send us a message on WhatsApp right now. We'll respond quickly, guide you clearly, and handle everything on your behalf.</p>
+        <div class="cta-btns">
+          <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20to%20register%20my%20business" class="btn btn-whatsapp" target="_blank" rel="noopener">
+            Start on WhatsApp
           </a>
+          <a href="#contact" class="btn btn-secondary" style="color:#fff; border-color:rgba(255,255,255,0.4);">Send a Message Instead</a>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Contact -->
 
   <section class="section" id="contact">
     <div class="container">
-
       <div class="section-head">
-        <span class="eyebrow">Quick Inquiry</span>
+        <span class="eyebrow">Contact Us</span>
         <h2>Send us a message</h2>
-        <p>Tell us what you need and we’ll get back to you.</p>
+        <p>Tell us what you need and we'll get back to you promptly.</p>
       </div>
-
-      <div class="form-card">
-        <form action="https://formsubmit.co/awalglobalconsults@gmail.com" method="POST" class="form-grid">
-          <input type="hidden" name="_subject" value="New Website Inquiry - Awal Global Consults">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_next" value="https://awalglobal.name.ng/thank-you.html">
-
-          <div class="form-group">
-            <label for="inq-name">Full Name</label>
-            <input type="text" id="inq-name" name="Full Name" required>
+      <div class="contact-grid-2">
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-item-icon">💬</div>
+            <div>
+              <div class="contact-item-label">WhatsApp (Fastest)</div>
+              <div class="contact-item-val">+234 703 833 6596</div>
+            </div>
           </div>
-
-          <div class="form-group">
-            <label for="inq-phone">Phone / WhatsApp</label>
-            <input type="tel" id="inq-phone" name="Phone Number" required>
+          <div class="contact-item">
+            <div class="contact-item-icon">📧</div>
+            <div>
+              <div class="contact-item-label">Email</div>
+              <div class="contact-item-val">awalglobalconsults@gmail.com</div>
+            </div>
           </div>
-
-          <div class="form-group full-width">
-            <label for="inq-service">Service Needed</label>
-            <input type="text" id="inq-service" name="Service Needed" placeholder="CAC Registration, Trademark, Legal Documentation, etc.">
+          <div class="contact-item">
+            <div class="contact-item-icon">📷</div>
+            <div>
+              <div class="contact-item-label">Instagram</div>
+              <div class="contact-item-val">@awalglobalconsults</div>
+            </div>
           </div>
-
-          <div class="form-group full-width">
-            <label for="inq-message">Message</label>
-            <textarea id="inq-message" name="Message" rows="4" required></textarea>
+          <div class="contact-item">
+            <div class="contact-item-icon">🌐</div>
+            <div>
+              <div class="contact-item-label">Website</div>
+              <div class="contact-item-val">awalglobal.name.ng</div>
+            </div>
           </div>
+          <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="btn btn-whatsapp" style="margin-top:8px;" target="_blank" rel="noopener">
+            Chat on WhatsApp Now
+          </a>
+        </div>
 
-          <div class="form-actions full-width">
-            <button type="submit" class="btn btn-primary">Send Message</button>
-          </div>
-        </form>
-      </div>
+```
+    <div class="form-card">
+      <form action="https://formsubmit.co/awalglobalconsults@gmail.com" method="POST" class="form-grid">
+        <input type="hidden" name="_subject" value="New Website Inquiry - Awal Global Consults">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://awalglobal.name.ng/thank-you.html">
 
+        <div class="form-group">
+          <label for="inq-name">Full Name</label>
+          <input type="text" id="inq-name" name="Full Name" placeholder="Your full name" required>
+        </div>
+        <div class="form-group">
+          <label for="inq-phone">Phone / WhatsApp</label>
+          <input type="tel" id="inq-phone" name="Phone Number" placeholder="+234..." required>
+        </div>
+        <div class="form-group full">
+          <label for="inq-service">Service Needed</label>
+          <select id="inq-service" name="Service Needed">
+            <option value="">Select a service…</option>
+            <option>CAC Business Name Registration</option>
+            <option>CAC Limited Company Registration</option>
+            <option>Trademark Registration</option>
+            <option>Business Advisory</option>
+            <option>Corporate &amp; Regulatory</option>
+            <option>Legal Documentation</option>
+            <option>Identity &amp; NIN Documentation</option>
+            <option>Expatriate &amp; Immigration</option>
+            <option>Student Visa Support</option>
+            <option>Export &amp; Import Licensing</option>
+            <option>Other / Not Sure</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label for="inq-message">Your Message</label>
+          <textarea id="inq-message" name="Message" rows="4" placeholder="Tell us a bit about what you need…" required></textarea>
+        </div>
+        <div class="full" style="grid-column:1/-1;">
+          <button type="submit" class="btn btn-primary" style="width:100%;">Send Message</button>
+        </div>
+      </form>
     </div>
+  </div>
+</div>
+```
+
   </section>
 
+  <!-- Footer -->
+
   <footer class="site-footer">
-    <div class="container footer-wrap">
-
-      <div>
-        <h3 class="footer-brand-title">Awal Global Consults</h3>
-        <p>Legal &amp; Business Solutions for individuals and businesses.</p>
-        <p><strong>Registered Business:</strong> Awal Global Consults Limited (RC-9282103)</p>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/images/logo.png" alt="Awal Global Consults" style="width:100px; filter:brightness(0) invert(1); margin-bottom:10px;">
+          <p>Legal &amp; Business Solutions for individuals and businesses across Nigeria.</p>
+          <p class="rc">RC-9282103 — Awal Global Consults Limited</p>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <a href="cac-registration.html">CAC Registration</a>
+          <a href="trademark-ip.html">Trademark Registration</a>
+          <a href="business-advisory.html">Business Advisory</a>
+          <a href="corporate-regulatory.html">Corporate &amp; Regulatory</a>
+          <a href="legal-documentation.html">Legal Documentation</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="https://wa.me/2347038336596" target="_blank" rel="noopener">WhatsApp: +234 703 833 6596</a>
+          <a href="mailto:awalglobalconsults@gmail.com">awalglobalconsults@gmail.com</a>
+          <a href="https://instagram.com/awalglobalconsults" target="_blank" rel="noopener">Instagram: @awalglobalconsults</a>
+          <a href="https://awalglobal.name.ng">awalglobal.name.ng</a>
+        </div>
       </div>
-
-      <div>
-        <p>Email: awalglobalconsults@gmail.com</p>
-        <p>Secondary Email: info@awalglobal.name.ng</p>
-        <p>Phone / WhatsApp: +2347038336596</p>
-        <p>Instagram: @awalglobalconsults</p>
-        <p>Website: awalglobal.name.ng</p>
+      <div class="footer-bottom">
+        <p>© 2025 Awal Global Consults Limited. All rights reserved.</p>
+        <p>RC-9282103 | CAC Registered Business</p>
       </div>
-
     </div>
   </footer>
+
+  <script>
+    const btn = document.getElementById('hamburger');
+    const nav = document.getElementById('mobileNav');
+    btn.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('open');
+      btn.classList.toggle('open', isOpen);
+      btn.setAttribute('aria-expanded', isOpen);
+    });
+    function closeMobileNav() {
+      nav.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded', false);
+    }
+
+    function showPricing(tab, el) {
+      document.querySelectorAll('.pricing-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+      document.getElementById('pricing-' + tab).classList.remove('hidden');
+      el.classList.add('active');
+    }
+  </script>
 
 </body>
 </html>
