@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -11,7 +10,6 @@
   <link rel="icon" type="image/png" href="assets/images/favicon.png">
 
   <!-- Open Graph -->
-
   <meta property="og:title" content="Awal Global Consults | CAC Registration, Trademark & Business Compliance">
   <meta property="og:description" content="Register your business, protect your brand, and stay compliant with Awal Global Consults in Nigeria.">
   <meta property="og:type" content="website">
@@ -19,13 +17,11 @@
   <meta property="og:site_name" content="Awal Global Consults">
 
   <!-- Twitter -->
-
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Awal Global Consults | CAC Registration, Trademark & Business Compliance">
   <meta name="twitter:description" content="Register your business, protect your brand, and stay compliant with Awal Global Consults in Nigeria.">
 
   <!-- Google Fonts -->
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -156,7 +152,7 @@
     }
     .hero-grid {
       display: grid;
-      grid-template-columns: 1fr minmax(280px, 380px);
+      grid-template-columns: minmax(0, 1.1fr) 360px;
       gap: 56px; align-items: center;
       position: relative;
     }
@@ -523,6 +519,53 @@
     .form-group textarea:focus,
     .form-group select:focus { outline: none; border-color: var(--gold); }
 
+    /* ─── FOOTER LOGO ─── */
+    .footer-logo-wrap { margin-bottom: 14px; }
+    .footer-logo { width: 110px; height: auto; filter: brightness(0) invert(1); }
+    .footer-logo-fallback { }
+    .footer-brand-name {
+      font-family: 'Fraunces', serif;
+      font-size: 1.2rem; font-weight: 800;
+      color: var(--white); letter-spacing: -0.01em;
+    }
+
+    /* ─── CREDENTIALS BAR ─── */
+    .credentials-bar {
+      background: var(--gold-pale);
+      border-top: 1px solid rgba(201,151,58,0.2);
+      border-bottom: 1px solid rgba(201,151,58,0.2);
+      padding: 16px 0;
+    }
+    .credentials-inner {
+      display: flex; gap: 32px; align-items: center;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .credential-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.82rem; font-weight: 600; color: var(--navy);
+    }
+    .credential-logo {
+      width: 36px; height: 36px; object-fit: contain;
+      border-radius: 6px; background: var(--white);
+      padding: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .credential-text { line-height: 1.3; }
+    .credential-text span { display: block; font-size: 0.72rem; color: var(--muted); font-weight: 400; }
+
+    /* ─── CONTACT GRID FIX ─── */
+    .contact-grid-2 {
+      display: grid !important;
+      grid-template-columns: 380px 1fr !important;
+      gap: 40px; align-items: start;
+    }
+
+    /* ─── PREMIUM: Page scroll indicator ─── */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      height: 3px; background: var(--gold);
+      width: 0%; transition: width 0.1s linear;
+    }
+
     /* ─── FOOTER ─── */
     .site-footer { background: var(--navy); padding: 48px 0 24px; }
     .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; margin-bottom: 36px; }
@@ -567,15 +610,16 @@
     @media (max-width: 800px) {
       .nav { display: none; }
       .hamburger { display: flex; }
-      .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+      .hero-grid { grid-template-columns: 1fr !important; gap: 32px; }
       .hero h1 { font-size: 2.2rem; }
       .steps-grid { grid-template-columns: 1fr; }
       .step-connector { display: none; }
       .about-grid { grid-template-columns: 1fr; }
-      .contact-grid-2 { grid-template-columns: 1fr; }
+      .contact-grid-2 { grid-template-columns: 1fr !important; }
       .testimonial-grid { grid-template-columns: 1fr; }
       .pricing-grid { grid-template-columns: 1fr; }
       .service-grid { grid-template-columns: 1fr; }
+      .credentials-inner { gap: 16px; }
     }
 
     @media (max-width: 560px) {
@@ -594,19 +638,19 @@
       .why-grid { grid-template-columns: 1fr; }
     }
   </style>
-
 </head>
 <body>
 
-  <!-- WhatsApp Float -->
+  <!-- Scroll Progress -->
+  <div class="scroll-progress" id="scrollProgress"></div>
 
+  <!-- WhatsApp Float -->
   <a class="whatsapp-float" href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
     Chat on WhatsApp
   </a>
 
   <!-- Header -->
-
   <header class="site-header">
     <div class="container nav-wrap">
       <a href="index.html" class="brand-flex">
@@ -617,34 +661,30 @@
         </div>
       </a>
 
-```
-  <nav class="nav">
-    <a href="#services">Services</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#about">About</a>
-    <a href="#faq">FAQ</a>
-    <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="nav-cta" target="_blank" rel="noopener">Chat on WhatsApp</a>
-  </nav>
+      <nav class="nav">
+        <a href="#services">Services</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#about">About</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="nav-cta" target="_blank" rel="noopener">Chat on WhatsApp</a>
+      </nav>
 
-  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-</div>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
 
-<nav class="mobile-nav" id="mobileNav">
-  <a href="#services" onclick="closeMobileNav()">Services</a>
-  <a href="#pricing" onclick="closeMobileNav()">Pricing</a>
-  <a href="#about" onclick="closeMobileNav()">About</a>
-  <a href="#faq" onclick="closeMobileNav()">FAQ</a>
-  <a href="#contact" onclick="closeMobileNav()">Contact</a>
-  <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="mobile-cta" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
-</nav>
-```
-
+    <nav class="mobile-nav" id="mobileNav">
+      <a href="#services" onclick="closeMobileNav()">Services</a>
+      <a href="#pricing" onclick="closeMobileNav()">Pricing</a>
+      <a href="#about" onclick="closeMobileNav()">About</a>
+      <a href="#faq" onclick="closeMobileNav()">FAQ</a>
+      <a href="#contact" onclick="closeMobileNav()">Contact</a>
+      <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="mobile-cta" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+    </nav>
   </header>
 
   <!-- Trust Bar -->
-
   <div class="trust-bar">
     <div class="container trust-bar-inner">
       <div class="trust-item"><span class="trust-dot"></span> RC-9282103 Registered Business</div>
@@ -655,8 +695,32 @@
     </div>
   </div>
 
-  <!-- Hero -->
+  <!-- Credentials Bar -->
+  <div class="credentials-bar">
+    <div class="container credentials-inner">
+      <div class="credential-item">
+        <div style="width:36px;height:36px;background:#1a3558;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;text-align:center;line-height:1.1;">CAC</div>
+        <div class="credential-text">Corporate Affairs Commission<span>CAC Registered &amp; Compliant</span></div>
+      </div>
+      <div class="credential-item" style="color:rgba(11,31,58,0.2);">|</div>
+      <div class="credential-item">
+        <div style="width:36px;height:36px;background:#1a7a3c;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;text-align:center;line-height:1.1;">NRS</div>
+        <div class="credential-text">Nigeria Revenue Service<span>TIN &amp; Tax Compliance</span></div>
+      </div>
+      <div class="credential-item" style="color:rgba(11,31,58,0.2);">|</div>
+      <div class="credential-item">
+        <div style="width:36px;height:36px;background:#8b0000;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.55rem;font-weight:800;color:#fff;text-align:center;line-height:1.1;padding:2px;">SCUML</div>
+        <div class="credential-text">SCUML Support<span>Where Applicable</span></div>
+      </div>
+      <div class="credential-item" style="color:rgba(11,31,58,0.2);">|</div>
+      <div class="credential-item">
+        <div style="width:36px;height:36px;background:var(--gold-pale);border:1.5px solid var(--gold);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:var(--navy);text-align:center;line-height:1.1;">RC</div>
+        <div class="credential-text">RC-9282103<span>Officially Registered Business</span></div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Hero -->
   <section class="hero">
     <div class="container hero-grid">
       <div class="hero-text">
@@ -691,21 +755,17 @@
         </div>
       </div>
 
-```
-  <div class="hero-image-wrap">
-    <img src="assets/images/founder.png" alt="Founder of Awal Global Consults" class="founder-image">
-    <div class="hero-badge">
-      <div class="hero-badge-title">✅ Registered &amp; Verified</div>
-      <div class="hero-badge-sub">RC-9282103 — Awal Global Consults Limited</div>
+      <div class="hero-image-wrap">
+        <img src="assets/images/founder.png" alt="Founder of Awal Global Consults" class="founder-image">
+        <div class="hero-badge">
+          <div class="hero-badge-title">✅ Registered &amp; Verified</div>
+          <div class="hero-badge-sub">RC-9282103 — Awal Global Consults Limited</div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-```
-
   </section>
 
   <!-- How It Works -->
-
   <section class="how-section alt-bg">
     <div class="container">
       <div class="section-head">
@@ -736,7 +796,6 @@
   </section>
 
   <!-- Services -->
-
   <section class="section" id="services">
     <div class="container">
       <div class="section-head">
@@ -804,7 +863,6 @@
   </section>
 
   <!-- Why Choose Us -->
-
   <section class="section alt-bg">
     <div class="container">
       <div class="section-head">
@@ -846,7 +904,6 @@
   </section>
 
   <!-- Pricing -->
-
   <section class="section" id="pricing">
     <div class="container">
       <div class="section-head">
@@ -855,199 +912,195 @@
         <p>No hidden fees. No surprises. Every package includes government fees. Choose the level that fits your needs.</p>
       </div>
 
-```
-  <!-- Pricing Tabs -->
-  <div class="pricing-tabs">
-    <button class="ptab active" onclick="showPricing('bizname', this)">Business Name</button>
-    <button class="ptab" onclick="showPricing('company', this)">Limited Company</button>
-    <button class="ptab" onclick="showPricing('other', this)">Other Services</button>
-  </div>
-
-  <!-- Business Name Registration -->
-  <div class="pricing-panel" id="pricing-bizname">
-    <div class="pricing-timeline-note">⚡ Business name registration completed within <strong>24 hours</strong> of document submission</div>
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="pkg-tag">Best for Starting Small</div>
-        <h3>Basic Starter</h3>
-        <div class="price">₦35,000</div>
-        <div class="price-note">All-inclusive · Government fees included</div>
-        <ul>
-          <li>Name Availability Check</li>
-          <li>CAC Certificate</li>
-          <li>Status Report</li>
-          <li>Tax Identification Number (TIN)</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Basic%20Starter%20business%20name%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      <!-- Pricing Tabs -->
+      <div class="pricing-tabs">
+        <button class="ptab active" onclick="showPricing('bizname', this)">Business Name</button>
+        <button class="ptab" onclick="showPricing('company', this)">Limited Company</button>
+        <button class="ptab" onclick="showPricing('other', this)">Other Services</button>
       </div>
 
-      <div class="pricing-card featured">
-        <div class="pricing-badge">Most Popular</div>
-        <div class="pkg-tag" style="color:rgba(255,255,255,0.7);">More Professional</div>
-        <h3>Business Boost</h3>
-        <div class="price">₦65,000</div>
-        <div class="price-note">All-inclusive · Government fees included</div>
-        <ul>
-          <li>Everything in Basic Starter</li>
-          <li>TIN Validation</li>
-          <li>Branded Letterhead (5 copies)</li>
-          <li>Business ID Card (1 Proprietor)</li>
-          <li>Free Delivery</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Business%20Boost%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      <!-- Business Name Registration -->
+      <div class="pricing-panel" id="pricing-bizname">
+        <div class="pricing-timeline-note">⚡ Business name registration completed within <strong>24 hours</strong> of document submission</div>
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div class="pkg-tag">Best for Starting Small</div>
+            <h3>Basic Starter</h3>
+            <div class="price">₦35,000</div>
+            <div class="price-note">All-inclusive · Government fees included</div>
+            <ul>
+              <li>Name Availability Check</li>
+              <li>CAC Certificate</li>
+              <li>Status Report</li>
+              <li>Tax Identification Number (TIN)</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Basic%20Starter%20business%20name%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="pricing-badge">Most Popular</div>
+            <div class="pkg-tag" style="color:rgba(255,255,255,0.7);">More Professional</div>
+            <h3>Business Boost</h3>
+            <div class="price">₦65,000</div>
+            <div class="price-note">All-inclusive · Government fees included</div>
+            <ul>
+              <li>Everything in Basic Starter</li>
+              <li>TIN Validation</li>
+              <li>Branded Letterhead (5 copies)</li>
+              <li>Business ID Card (1 Proprietor)</li>
+              <li>Free Delivery</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Business%20Boost%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="pkg-tag">Brand &amp; Grow</div>
+            <h3>Premium Presence</h3>
+            <div class="price">₦95,000</div>
+            <div class="price-note">All-inclusive · Government fees included</div>
+            <ul>
+              <li>Everything in Business Boost</li>
+              <li>Customized Business Logo</li>
+              <li>50 Professional Business Cards</li>
+              <li>Framed CAC Certificate</li>
+              <li>Basic Brand Guide</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Premium%20Presence%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+          </div>
+        </div>
       </div>
 
-      <div class="pricing-card">
-        <div class="pkg-tag">Brand &amp; Grow</div>
-        <h3>Premium Presence</h3>
-        <div class="price">₦95,000</div>
-        <div class="price-note">All-inclusive · Government fees included</div>
-        <ul>
-          <li>Everything in Business Boost</li>
-          <li>Customized Business Logo</li>
-          <li>50 Professional Business Cards</li>
-          <li>Framed CAC Certificate</li>
-          <li>Basic Brand Guide</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Premium%20Presence%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      <!-- Limited Company Registration -->
+      <div class="pricing-panel hidden" id="pricing-company">
+        <div class="pricing-timeline-note">📅 Limited company incorporation completed within <strong>3–7 business days</strong></div>
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div class="pkg-tag">Proper Foundation</div>
+            <h3>Core Setup</h3>
+            <div class="price">₦75,000</div>
+            <div class="price-note">All-inclusive · Government fees included</div>
+            <ul>
+              <li>Name Availability Check</li>
+              <li>CAC Certificate</li>
+              <li>MEMART (Memorandum &amp; Articles of Association)</li>
+              <li>Status Report</li>
+              <li>Tax Identification Number (TIN)</li>
+              <li>TIN Validation</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Core%20Setup%20company%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="pricing-badge">Most Popular</div>
+            <div class="pkg-tag" style="color:rgba(255,255,255,0.7);">More Structured</div>
+            <h3>Smart Pro</h3>
+            <div class="price">₦95,000</div>
+            <div class="price-note">All-inclusive · Government fees included</div>
+            <ul>
+              <li>Everything in Core Setup</li>
+              <li>Branded Letterhead (5 copies)</li>
+              <li>Company ID Card (1 Director)</li>
+              <li>Free Delivery</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Smart%20Pro%20company%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="pkg-tag">Full Setup + Support</div>
+            <h3>Complete Brand Suite</h3>
+            <div class="price">₦125,000</div>
+            <div class="price-note">All-inclusive · Government fees included</div>
+            <ul>
+              <li>Everything in Smart Pro</li>
+              <li>Customized Business Logo</li>
+              <li>50 Professional Business Cards</li>
+              <li>Framed CAC Certificate</li>
+              <li>Business Branding Guide</li>
+              <li>Bank Account Support</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Complete%20Brand%20Suite" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+          </div>
+        </div>
       </div>
+
+      <!-- Other Services -->
+      <div class="pricing-panel hidden" id="pricing-other">
+        <div class="pricing-grid pricing-grid-2">
+
+          <div class="pricing-card">
+            <div class="service-icon" style="margin-bottom:14px;">⛪</div>
+            <h3>Incorporated Trustees</h3>
+            <div class="price" style="font-size:1.4rem;">Custom Quote</div>
+            <div class="price-note">Timeline: 30–40 business days</div>
+            <ul>
+              <li>For NGOs, churches, associations &amp; foundations</li>
+              <li>Full CAC filing for incorporated trustees</li>
+              <li>Constitution drafting support</li>
+              <li>Certificate of Incorporation</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20Incorporated%20Trustees%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get a Quote</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="service-icon" style="margin-bottom:14px;">🔄</div>
+            <h3>Post-Incorporation Services</h3>
+            <div class="price" style="font-size:1.4rem;">From ₦15,000</div>
+            <div class="price-note">For already-registered businesses</div>
+            <ul>
+              <li>Annual Returns Filing</li>
+              <li>Change of Directors / Shareholders</li>
+              <li>Change of Registered Address</li>
+              <li>Share Capital Increase</li>
+              <li>Company Status Report</li>
+              <li>Certified True Copies (CTC)</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20post-incorporation%20services" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="service-icon" style="margin-bottom:14px;">™️</div>
+            <h3>Trademark Registration</h3>
+            <div class="price" style="font-size:1.4rem;">Custom Quote</div>
+            <div class="price-note">Per class · IPO government fees included</div>
+            <ul>
+              <li>Trademark search &amp; clearance</li>
+              <li>IPO application filing</li>
+              <li>Filing acknowledgment certificate</li>
+              <li>Prosecution support</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20to%20register%20a%20trademark" class="btn btn-primary" target="_blank" rel="noopener">Get a Quote</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="service-icon" style="margin-bottom:14px;">➕</div>
+            <h3>Add-On Services</h3>
+            <div class="price" style="font-size:1.4rem;">From ₦5,000</div>
+            <div class="price-note">Available with any package</div>
+            <ul>
+              <li>Company Seal</li>
+              <li>Additional Director ID Cards</li>
+              <li>SCUML Registration (where applicable)</li>
+              <li>Additional Business Cards</li>
+              <li>Bank Account Opening Support</li>
+              <li>Extra Letterhead Copies</li>
+              <li>Document Printing &amp; Nationwide Delivery</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20add-on%20services" class="btn btn-primary" target="_blank" rel="noopener">Inquire Now</a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Add-ons note -->
+      <div class="pricing-note-box">
+        <strong>Need something customized?</strong> You can mix, remove, or add specific items from any package based on your needs and budget. We are flexible and ready to help.
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20a%20custom%20package" target="_blank" rel="noopener" style="color:var(--gold); font-weight:700; margin-left:6px;">Chat with us →</a>
+      </div>
+
     </div>
-  </div>
-
-  <!-- Limited Company Registration -->
-  <div class="pricing-panel hidden" id="pricing-company">
-    <div class="pricing-timeline-note">📅 Limited company incorporation completed within <strong>3–7 business days</strong></div>
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="pkg-tag">Proper Foundation</div>
-        <h3>Core Setup</h3>
-        <div class="price">₦75,000</div>
-        <div class="price-note">All-inclusive · Government fees included</div>
-        <ul>
-          <li>Name Availability Check</li>
-          <li>CAC Certificate</li>
-          <li>MEMART (Memorandum &amp; Articles of Association)</li>
-          <li>Status Report</li>
-          <li>Tax Identification Number (TIN)</li>
-          <li>TIN Validation</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Core%20Setup%20company%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
-      </div>
-
-      <div class="pricing-card featured">
-        <div class="pricing-badge">Most Popular</div>
-        <div class="pkg-tag" style="color:rgba(255,255,255,0.7);">More Structured</div>
-        <h3>Smart Pro</h3>
-        <div class="price">₦95,000</div>
-        <div class="price-note">All-inclusive · Government fees included</div>
-        <ul>
-          <li>Everything in Core Setup</li>
-          <li>Branded Letterhead (5 copies)</li>
-          <li>Company ID Card (1 Director)</li>
-          <li>Free Delivery</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Smart%20Pro%20company%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
-      </div>
-
-      <div class="pricing-card">
-        <div class="pkg-tag">Full Setup + Support</div>
-        <h3>Complete Brand Suite</h3>
-        <div class="price">₦125,000</div>
-        <div class="price-note">All-inclusive · Government fees included</div>
-        <ul>
-          <li>Everything in Smart Pro</li>
-          <li>Customized Business Logo</li>
-          <li>50 Professional Business Cards</li>
-          <li>Framed CAC Certificate</li>
-          <li>Business Branding Guide</li>
-          <li>Bank Account Support</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Complete%20Brand%20Suite" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Other Services -->
-  <div class="pricing-panel hidden" id="pricing-other">
-    <div class="pricing-grid pricing-grid-2">
-
-      <div class="pricing-card">
-        <div class="service-icon" style="margin-bottom:14px;">⛪</div>
-        <h3>Incorporated Trustees</h3>
-        <div class="price" style="font-size:1.4rem;">Custom Quote</div>
-        <div class="price-note">Timeline: 30–40 business days</div>
-        <ul>
-          <li>For NGOs, churches, associations &amp; foundations</li>
-          <li>Full CAC filing for incorporated trustees</li>
-          <li>Constitution drafting support</li>
-          <li>Certificate of Incorporation</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20Incorporated%20Trustees%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get a Quote</a>
-      </div>
-
-      <div class="pricing-card">
-        <div class="service-icon" style="margin-bottom:14px;">🔄</div>
-        <h3>Post-Incorporation Services</h3>
-        <div class="price" style="font-size:1.4rem;">From ₦15,000</div>
-        <div class="price-note">For already-registered businesses</div>
-        <ul>
-          <li>Annual Returns Filing</li>
-          <li>Change of Directors / Shareholders</li>
-          <li>Change of Registered Address</li>
-          <li>Share Capital Increase</li>
-          <li>Company Status Report</li>
-          <li>Certified True Copies (CTC)</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20post-incorporation%20services" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
-      </div>
-
-      <div class="pricing-card">
-        <div class="service-icon" style="margin-bottom:14px;">™️</div>
-        <h3>Trademark Registration</h3>
-        <div class="price" style="font-size:1.4rem;">Custom Quote</div>
-        <div class="price-note">Per class · IPO government fees included</div>
-        <ul>
-          <li>Trademark search &amp; clearance</li>
-          <li>IPO application filing</li>
-          <li>Filing acknowledgment certificate</li>
-          <li>Prosecution support</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20to%20register%20a%20trademark" class="btn btn-primary" target="_blank" rel="noopener">Get a Quote</a>
-      </div>
-
-      <div class="pricing-card">
-        <div class="service-icon" style="margin-bottom:14px;">➕</div>
-        <h3>Add-On Services</h3>
-        <div class="price" style="font-size:1.4rem;">From ₦5,000</div>
-        <div class="price-note">Available with any package</div>
-        <ul>
-          <li>Company Seal</li>
-          <li>Additional Director ID Cards</li>
-          <li>SCUML Registration (where applicable)</li>
-          <li>Additional Business Cards</li>
-          <li>Bank Account Opening Support</li>
-          <li>Extra Letterhead Copies</li>
-          <li>Document Printing &amp; Nationwide Delivery</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20add-on%20services" class="btn btn-primary" target="_blank" rel="noopener">Inquire Now</a>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Add-ons note -->
-  <div class="pricing-note-box">
-    <strong>Need something customized?</strong> You can mix, remove, or add specific items from any package based on your needs and budget. We are flexible and ready to help.
-    <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20a%20custom%20package" target="_blank" rel="noopener" style="color:var(--gold); font-weight:700; margin-left:6px;">Chat with us →</a>
-  </div>
-
-</div>
-```
-
   </section>
 
   <!-- Testimonials -->
-
   <section class="section alt-bg">
     <div class="container">
       <div class="section-head">
@@ -1094,7 +1147,6 @@
   </section>
 
   <!-- About -->
-
   <section class="section" id="about">
     <div class="container">
       <div class="about-grid">
@@ -1163,7 +1215,6 @@
   </section>
 
   <!-- FAQ -->
-
   <section class="section alt-bg" id="faq">
     <div class="container">
       <div class="section-head">
@@ -1201,7 +1252,6 @@
   </section>
 
   <!-- CTA -->
-
   <section class="cta-section">
     <div class="container">
       <div class="cta-inner">
@@ -1219,7 +1269,6 @@
   </section>
 
   <!-- Contact -->
-
   <section class="section" id="contact">
     <div class="container">
       <div class="section-head">
@@ -1262,61 +1311,63 @@
           </a>
         </div>
 
-```
-    <div class="form-card">
-      <form action="https://formsubmit.co/awalglobalconsults@gmail.com" method="POST" class="form-grid">
-        <input type="hidden" name="_subject" value="New Website Inquiry - Awal Global Consults">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="https://awalglobal.name.ng/thank-you.html">
+        <div class="form-card">
+          <form action="https://formsubmit.co/awalglobalconsults@gmail.com" method="POST" class="form-grid">
+            <input type="hidden" name="_subject" value="New Website Inquiry - Awal Global Consults">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="https://awalglobal.name.ng/thank-you.html">
 
-        <div class="form-group">
-          <label for="inq-name">Full Name</label>
-          <input type="text" id="inq-name" name="Full Name" placeholder="Your full name" required>
+            <div class="form-group">
+              <label for="inq-name">Full Name</label>
+              <input type="text" id="inq-name" name="Full Name" placeholder="Your full name" required>
+            </div>
+            <div class="form-group">
+              <label for="inq-phone">Phone / WhatsApp</label>
+              <input type="tel" id="inq-phone" name="Phone Number" placeholder="+234..." required>
+            </div>
+            <div class="form-group full">
+              <label for="inq-service">Service Needed</label>
+              <select id="inq-service" name="Service Needed">
+                <option value="">Select a service…</option>
+                <option>CAC Business Name Registration</option>
+                <option>CAC Limited Company Registration</option>
+                <option>Trademark Registration</option>
+                <option>Business Advisory</option>
+                <option>Corporate &amp; Regulatory</option>
+                <option>Legal Documentation</option>
+                <option>Identity &amp; NIN Documentation</option>
+                <option>Expatriate &amp; Immigration</option>
+                <option>Student Visa Support</option>
+                <option>Export &amp; Import Licensing</option>
+                <option>Other / Not Sure</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label for="inq-message">Your Message</label>
+              <textarea id="inq-message" name="Message" rows="4" placeholder="Tell us a bit about what you need…" required></textarea>
+            </div>
+            <div class="full" style="grid-column:1/-1;">
+              <button type="submit" class="btn btn-primary" style="width:100%;">Send Message</button>
+            </div>
+          </form>
         </div>
-        <div class="form-group">
-          <label for="inq-phone">Phone / WhatsApp</label>
-          <input type="tel" id="inq-phone" name="Phone Number" placeholder="+234..." required>
-        </div>
-        <div class="form-group full">
-          <label for="inq-service">Service Needed</label>
-          <select id="inq-service" name="Service Needed">
-            <option value="">Select a service…</option>
-            <option>CAC Business Name Registration</option>
-            <option>CAC Limited Company Registration</option>
-            <option>Trademark Registration</option>
-            <option>Business Advisory</option>
-            <option>Corporate &amp; Regulatory</option>
-            <option>Legal Documentation</option>
-            <option>Identity &amp; NIN Documentation</option>
-            <option>Expatriate &amp; Immigration</option>
-            <option>Student Visa Support</option>
-            <option>Export &amp; Import Licensing</option>
-            <option>Other / Not Sure</option>
-          </select>
-        </div>
-        <div class="form-group full">
-          <label for="inq-message">Your Message</label>
-          <textarea id="inq-message" name="Message" rows="4" placeholder="Tell us a bit about what you need…" required></textarea>
-        </div>
-        <div class="full" style="grid-column:1/-1;">
-          <button type="submit" class="btn btn-primary" style="width:100%;">Send Message</button>
-        </div>
-      </form>
+      </div>
     </div>
-  </div>
-</div>
-```
-
   </section>
 
   <!-- Footer -->
-
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <img src="assets/images/logo.png" alt="Awal Global Consults" style="width:100px; filter:brightness(0) invert(1); margin-bottom:10px;">
+          <div class="footer-logo-wrap">
+            <img src="assets/images/logo.png" alt="Awal Global Consults" class="footer-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <div class="footer-logo-fallback" style="display:none;">
+              <span class="footer-brand-name">Awal Global Consults</span>
+            </div>
+          </div>
           <p>Legal &amp; Business Solutions for individuals and businesses across Nigeria.</p>
+          <p style="color:rgba(255,255,255,0.5); font-size:0.82rem; margin-top:4px;">📍 Lagos, Nigeria</p>
           <p class="rc">RC-9282103 — Awal Global Consults Limited</p>
         </div>
         <div class="footer-col">
@@ -1336,8 +1387,8 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2025 Awal Global Consults Limited. All rights reserved.</p>
-        <p>RC-9282103 | CAC Registered Business</p>
+        <p>© 2026 Awal Global Consults Limited. All rights reserved.</p>
+        <p>RC-9282103 | Lagos, Nigeria | CAC Registered Business</p>
       </div>
     </div>
   </footer>
@@ -1362,6 +1413,15 @@
       document.getElementById('pricing-' + tab).classList.remove('hidden');
       el.classList.add('active');
     }
+
+    // Scroll progress bar
+    window.addEventListener('scroll', () => {
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      const pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      document.getElementById('scrollProgress').style.width = pct + '%';
+    });
   </script>
 
 </body>
