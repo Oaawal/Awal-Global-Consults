@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -11,7 +10,6 @@
   <link rel="icon" type="image/png" href="assets/images/favicon.png">
 
   <!-- Open Graph -->
-
   <meta property="og:title" content="Awal Global Consults | CAC Registration, Trademark & Business Compliance">
   <meta property="og:description" content="Register your business, protect your brand, and stay compliant with Awal Global Consults in Nigeria.">
   <meta property="og:type" content="website">
@@ -19,13 +17,11 @@
   <meta property="og:site_name" content="Awal Global Consults">
 
   <!-- Twitter -->
-
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Awal Global Consults | CAC Registration, Trademark & Business Compliance">
   <meta name="twitter:description" content="Register your business, protect your brand, and stay compliant with Awal Global Consults in Nigeria.">
 
   <!-- Google Fonts -->
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -530,7 +526,38 @@
     .form-group textarea:focus,
     .form-group select:focus { outline: none; border-color: var(--gold); }
 
-    /* ─── FOOTER LOGO ─── */
+    /* ─── FOOTER SOCIAL ICONS WITH LABELS ─── */
+    .footer-socials { display: flex; flex-direction: column; gap: 10px; }
+    .social-icon-link {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .social-icon-link:hover { opacity: 0.8; }
+    .social-icon-circle {
+      width: 38px; height: 38px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .social-icon-circle svg { width: 18px; height: 18px; fill: #fff; }
+    .whatsapp-icon { background: #25d366; }
+    .email-icon { background: var(--gold); }
+    .instagram-icon { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .social-icon-label {
+      color: rgba(255,255,255,0.75); font-size: 0.86rem;
+      font-weight: 500; line-height: 1.3;
+    }
+
+    /* ─── PRICING ENHANCEMENTS ─── */
+    .pricing-for {
+      font-size: 0.8rem; color: var(--muted); font-style: italic;
+      margin: 10px 0 0; line-height: 1.4;
+    }
+    .pricing-divider {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 14px; margin-top: 14px; margin-bottom: 4px;
+    }
     .footer-logo-wrap { margin-bottom: 14px; }
     .footer-logo { width: 110px; height: auto; filter: brightness(0) invert(1); }
     .footer-logo-fallback { }
@@ -568,6 +595,45 @@
       justify-content: center; font-size: 0.8rem; font-weight: 800;
       flex-shrink: 0; letter-spacing: 0.04em;
     }
+
+    /* ─── CONTACT CHANNELS ─── */
+    .contact-intro { color: var(--muted); font-size: 0.92rem; margin-bottom: 8px; }
+    .contact-channel-link {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 14px 16px;
+      text-decoration: none; transition: box-shadow 0.2s, transform 0.2s;
+      box-shadow: var(--shadow);
+    }
+    .contact-channel-link:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .contact-channel-icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; overflow: hidden;
+    }
+    .contact-channel-icon svg {
+      width: 22px; height: 22px; fill: #fff;
+      display: block; flex-shrink: 0;
+    }
+    .contact-channel-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .contact-channel-label {
+      font-weight: 700; font-size: 0.88rem; color: var(--navy);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .contact-fastest {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; background: #25d366; color: #fff;
+      padding: 2px 7px; border-radius: 20px;
+    }
+    .contact-channel-val {
+      font-size: 0.84rem; color: var(--muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* ─── CONTACT CHANNELS — colour overrides ─── */
+    .contact-channel-icon.whatsapp-icon  { background: #25d366; }
+    .contact-channel-icon.email-icon     { background: var(--gold); }
+    .contact-channel-icon.instagram-icon { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
 
     /* ─── CONTACT GRID FIX ─── */
     .contact-grid-2 {
@@ -655,23 +721,19 @@
       .why-grid { grid-template-columns: 1fr; }
     }
   </style>
-
 </head>
 <body>
 
   <!-- Scroll Progress -->
-
   <div class="scroll-progress" id="scrollProgress"></div>
 
   <!-- WhatsApp Float -->
-
   <a class="whatsapp-float" href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
     Chat on WhatsApp
   </a>
 
   <!-- Header -->
-
   <header class="site-header">
     <div class="container nav-wrap">
       <a href="index.html" class="brand-flex">
@@ -682,34 +744,30 @@
         </div>
       </a>
 
-```
-  <nav class="nav">
-    <a href="#services">Services</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#about">About</a>
-    <a href="#faq">FAQ</a>
-    <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="nav-cta" target="_blank" rel="noopener">Chat on WhatsApp</a>
-  </nav>
+      <nav class="nav">
+        <a href="#services">Services</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#about">About</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="nav-cta" target="_blank" rel="noopener">Chat on WhatsApp</a>
+      </nav>
 
-  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-</div>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
 
-<nav class="mobile-nav" id="mobileNav">
-  <a href="#services" onclick="closeMobileNav()">Services</a>
-  <a href="#pricing" onclick="closeMobileNav()">Pricing</a>
-  <a href="#about" onclick="closeMobileNav()">About</a>
-  <a href="#faq" onclick="closeMobileNav()">FAQ</a>
-  <a href="#contact" onclick="closeMobileNav()">Contact</a>
-  <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="mobile-cta" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
-</nav>
-```
-
+    <nav class="mobile-nav" id="mobileNav">
+      <a href="#services" onclick="closeMobileNav()">Services</a>
+      <a href="#pricing" onclick="closeMobileNav()">Pricing</a>
+      <a href="#about" onclick="closeMobileNav()">About</a>
+      <a href="#faq" onclick="closeMobileNav()">FAQ</a>
+      <a href="#contact" onclick="closeMobileNav()">Contact</a>
+      <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="mobile-cta" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+    </nav>
   </header>
 
   <!-- Trust Bar -->
-
   <div class="trust-bar">
     <div class="container trust-bar-inner">
       <div class="trust-item"><span class="trust-dot"></span> RC-9282103 Registered Business</div>
@@ -721,7 +779,6 @@
   </div>
 
   <!-- Credentials Bar -->
-
   <div class="credentials-bar">
     <div class="container credentials-inner">
       <div class="credential-item">
@@ -747,7 +804,6 @@
   </div>
 
   <!-- Hero -->
-
   <section class="hero">
     <div class="container hero-grid">
       <div class="hero-text">
@@ -783,21 +839,17 @@
         </div>
       </div>
 
-```
-  <div class="hero-image-wrap">
-    <img src="assets/images/founder.png" alt="Founder of Awal Global Consults" class="founder-image">
-    <div class="hero-badge">
-      <div class="hero-badge-title">✅ Accredited &amp; Verified</div>
-      <div class="hero-badge-sub">RC-9282103 — Awal Global Consults Limited</div>
+      <div class="hero-image-wrap">
+        <img src="assets/images/founder.png" alt="Founder of Awal Global Consults" class="founder-image">
+        <div class="hero-badge">
+          <div class="hero-badge-title">✅ Accredited &amp; Verified</div>
+          <div class="hero-badge-sub">RC-9282103 — Awal Global Consults Limited</div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-```
-
   </section>
 
   <!-- How It Works -->
-
   <section class="how-section alt-bg">
     <div class="container">
       <div class="section-head">
@@ -828,7 +880,6 @@
   </section>
 
   <!-- Services -->
-
   <section class="section" id="services">
     <div class="container">
       <div class="section-head">
@@ -898,7 +949,6 @@
   </section>
 
   <!-- Why Choose Us -->
-
   <section class="section alt-bg">
     <div class="container">
       <div class="section-head">
@@ -940,7 +990,6 @@
   </section>
 
   <!-- Pricing -->
-
   <section class="section" id="pricing">
     <div class="container">
       <div class="section-head">
@@ -949,199 +998,210 @@
         <p>No hidden fees. No surprises. Every package includes government fees. Choose the level that fits your needs.</p>
       </div>
 
-```
-  <!-- Pricing Tabs -->
-  <div class="pricing-tabs">
-    <button class="ptab active" onclick="showPricing('bizname', this)">Business Name</button>
-    <button class="ptab" onclick="showPricing('company', this)">Limited Company</button>
-    <button class="ptab" onclick="showPricing('other', this)">Other Services</button>
-  </div>
-
-  <!-- Business Name Registration -->
-  <div class="pricing-panel" id="pricing-bizname">
-    <div class="pricing-timeline-note">⚡ Business name registration completed within <strong>24 hours</strong> of document submission</div>
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="pkg-tag">Best for Starting Small</div>
-        <h3>Basic Starter</h3>
-        <div class="price">₦35,000</div>
-        <div class="price-note">All-inclusive · Government fees included</div>
-        <ul>
-          <li>Name Availability Check</li>
-          <li>CAC Certificate</li>
-          <li>Status Report</li>
-          <li>Tax Identification Number (TIN)</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Basic%20Starter%20business%20name%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      <!-- Pricing Tabs -->
+      <div class="pricing-tabs">
+        <button class="ptab active" onclick="showPricing('bizname', this)">Business Name</button>
+        <button class="ptab" onclick="showPricing('company', this)">Limited Company</button>
+        <button class="ptab" onclick="showPricing('other', this)">Other Services</button>
       </div>
 
-      <div class="pricing-card featured">
-        <div class="pricing-badge">Most Popular</div>
-        <div class="pkg-tag" style="color:rgba(255,255,255,0.7);">More Professional</div>
-        <h3>Business Boost</h3>
-        <div class="price">₦65,000</div>
-        <div class="price-note">All-inclusive · Government fees included</div>
-        <ul>
-          <li>Everything in Basic Starter</li>
-          <li>TIN Validation</li>
-          <li>Branded Letterhead (5 copies)</li>
-          <li>Business ID Card (1 Proprietor)</li>
-          <li>Free Delivery</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Business%20Boost%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      <!-- Business Name Registration -->
+      <div class="pricing-panel" id="pricing-bizname">
+        <div class="pricing-timeline-note">⚡ Business name registration completed within <strong>24 hours</strong> of document submission &nbsp;·&nbsp; Nationwide delivery available &nbsp;·&nbsp; Government fees included in all packages</div>
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div class="pkg-tag">Best for Starting Small</div>
+            <h3>Basic Starter</h3>
+            <div class="price">₦35,000</div>
+            <div class="price-note">All-inclusive · Government fees included</div>
+            <div class="pricing-for">✦ Ideal for sole proprietors &amp; new entrepreneurs</div>
+            <div class="pricing-divider">What you get</div>
+            <ul>
+              <li>Name Availability Check</li>
+              <li>CAC Certificate of Registration</li>
+              <li>Status Report</li>
+              <li>Tax Identification Number (TIN)</li>
+              <li>Digital copies delivered via WhatsApp</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Basic%20Starter%20business%20name%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get Started →</a>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="pricing-badge">Most Popular</div>
+            <div class="pkg-tag" style="color:rgba(255,255,255,0.7);">More Professional</div>
+            <h3>Business Boost</h3>
+            <div class="price">₦65,000</div>
+            <div class="price-note">All-inclusive · Government fees included</div>
+            <div class="pricing-for" style="color:rgba(255,255,255,0.75);">✦ Ideal for entrepreneurs who want a complete, professional setup</div>
+            <div class="pricing-divider" style="color:rgba(255,255,255,0.5);border-color:rgba(255,255,255,0.12);">What you get</div>
+            <ul>
+              <li>Everything in Basic Starter</li>
+              <li>TIN Validation</li>
+              <li>Branded Letterhead (5 copies)</li>
+              <li>Business ID Card (1 Proprietor)</li>
+              <li>Free Nationwide Delivery</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Business%20Boost%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started →</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="pkg-tag">Brand &amp; Grow</div>
+            <h3>Premium Presence</h3>
+            <div class="price">₦95,000</div>
+            <div class="price-note">All-inclusive · Government fees included</div>
+            <div class="pricing-for">✦ Ideal for businesses ready to launch with a full brand identity</div>
+            <div class="pricing-divider">What you get</div>
+            <ul>
+              <li>Everything in Business Boost</li>
+              <li>Customized Business Logo Design</li>
+              <li>50 Professional Business Cards</li>
+              <li>Framed CAC Certificate</li>
+              <li>Basic Brand Guide</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Premium%20Presence%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started →</a>
+          </div>
+        </div>
       </div>
 
-      <div class="pricing-card">
-        <div class="pkg-tag">Brand &amp; Grow</div>
-        <h3>Premium Presence</h3>
-        <div class="price">₦95,000</div>
-        <div class="price-note">All-inclusive · Government fees included</div>
-        <ul>
-          <li>Everything in Business Boost</li>
-          <li>Customized Business Logo</li>
-          <li>50 Professional Business Cards</li>
-          <li>Framed CAC Certificate</li>
-          <li>Basic Brand Guide</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Premium%20Presence%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+      <!-- Limited Company Registration -->
+      <div class="pricing-panel hidden" id="pricing-company">
+        <div class="pricing-timeline-note">📅 Limited company incorporation completed within <strong>3–7 business days</strong> &nbsp;·&nbsp; Certificate + MEMART + TIN included &nbsp;·&nbsp; Nationwide delivery available</div>
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div class="pkg-tag">Proper Foundation</div>
+            <h3>Core Setup</h3>
+            <div class="price">₦75,000</div>
+            <div class="price-note">All-inclusive · Government fees included</div>
+            <div class="pricing-for">✦ Ideal for founders incorporating their first company</div>
+            <div class="pricing-divider">What you get</div>
+            <ul>
+              <li>Name Availability Check</li>
+              <li>CAC Certificate of Incorporation</li>
+              <li>MEMART (Memorandum &amp; Articles of Association)</li>
+              <li>Status Report</li>
+              <li>Tax Identification Number (TIN)</li>
+              <li>TIN Validation</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Core%20Setup%20company%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get Started →</a>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="pricing-badge">Most Popular</div>
+            <div class="pkg-tag" style="color:rgba(255,255,255,0.7);">More Structured</div>
+            <h3>Smart Pro</h3>
+            <div class="price">₦95,000</div>
+            <div class="price-note">All-inclusive · Government fees included</div>
+            <div class="pricing-for" style="color:rgba(255,255,255,0.75);">✦ Ideal for businesses wanting documentation &amp; branding from day one</div>
+            <div class="pricing-divider" style="color:rgba(255,255,255,0.5);border-color:rgba(255,255,255,0.12);">What you get</div>
+            <ul>
+              <li>Everything in Core Setup</li>
+              <li>Branded Letterhead (5 copies)</li>
+              <li>Company ID Card (1 Director)</li>
+              <li>Free Nationwide Delivery</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Smart%20Pro%20company%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started →</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="pkg-tag">Full Setup + Support</div>
+            <h3>Complete Brand Suite</h3>
+            <div class="price">₦125,000</div>
+            <div class="price-note">All-inclusive · Government fees included</div>
+            <div class="pricing-for">✦ Ideal for serious founders launching a fully professional company</div>
+            <div class="pricing-divider">What you get</div>
+            <ul>
+              <li>Everything in Smart Pro</li>
+              <li>Customized Business Logo Design</li>
+              <li>50 Professional Business Cards</li>
+              <li>Framed CAC Certificate</li>
+              <li>Business Branding Guide</li>
+              <li>Bank Account Opening Support</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Complete%20Brand%20Suite" class="btn btn-primary" target="_blank" rel="noopener">Get Started →</a>
+          </div>
+        </div>
       </div>
+
+      <!-- Other Services -->
+      <div class="pricing-panel hidden" id="pricing-other">
+        <div class="pricing-grid pricing-grid-2">
+
+          <div class="pricing-card">
+            <div class="service-icon" style="margin-bottom:14px;">⛪</div>
+            <h3>Incorporated Trustees</h3>
+            <div class="price" style="font-size:1.4rem;">Custom Quote</div>
+            <div class="price-note">Timeline: 25–30 business days · CAC fees included</div>
+            <ul>
+              <li>For NGOs, churches, clubs &amp; foundations</li>
+              <li>Three proposed organization names</li>
+              <li>Objectives &amp; constitution drafting support</li>
+              <li>Trustee declaration &amp; meeting minutes</li>
+              <li>Newspaper publication support</li>
+              <li>Certificate of Incorporation</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20Incorporated%20Trustees%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get a Quote</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="service-icon" style="margin-bottom:14px;">🔄</div>
+            <h3>Post-Incorporation Services</h3>
+            <div class="price" style="font-size:1.4rem;">From ₦15,000</div>
+            <div class="price-note">For already-registered businesses</div>
+            <ul>
+              <li>Annual Returns Filing</li>
+              <li>Change of Directors / Shareholders</li>
+              <li>Change of Registered Address</li>
+              <li>Share Capital Increase</li>
+              <li>Company Status Report</li>
+              <li>Certified True Copies (CTC)</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20post-incorporation%20services" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="service-icon" style="margin-bottom:14px;">™️</div>
+            <h3>Trademark Registration</h3>
+            <div class="price" style="font-size:1.4rem;">Custom Quote</div>
+            <div class="price-note">Per class · IPO government fees included</div>
+            <ul>
+              <li>Trademark search &amp; clearance</li>
+              <li>IPO application filing</li>
+              <li>Filing acknowledgment certificate</li>
+              <li>Prosecution support</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20to%20register%20a%20trademark" class="btn btn-primary" target="_blank" rel="noopener">Get a Quote</a>
+          </div>
+
+          <div class="pricing-card">
+            <div class="service-icon" style="margin-bottom:14px;">➕</div>
+            <h3>Add-On Services</h3>
+            <div class="price" style="font-size:1.4rem;">From ₦5,000</div>
+            <div class="price-note">Available with any package</div>
+            <ul>
+              <li>Company Seal</li>
+              <li>Additional Director ID Cards</li>
+              <li>SCUML Registration (where applicable)</li>
+              <li>Additional Business Cards</li>
+              <li>Bank Account Opening Support</li>
+              <li>Extra Letterhead Copies</li>
+              <li>Document Printing &amp; Nationwide Delivery</li>
+            </ul>
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20add-on%20services" class="btn btn-primary" target="_blank" rel="noopener">Inquire Now</a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Add-ons note -->
+      <div class="pricing-note-box">
+        <strong>Need something customized?</strong> You can mix, remove, or add specific items from any package based on your needs and budget. We are flexible and ready to help.
+        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20a%20custom%20package" target="_blank" rel="noopener" style="color:var(--gold); font-weight:700; margin-left:6px;">Chat with us →</a>
+      </div>
+
     </div>
-  </div>
-
-  <!-- Limited Company Registration -->
-  <div class="pricing-panel hidden" id="pricing-company">
-    <div class="pricing-timeline-note">📅 Limited company incorporation completed within <strong>3–7 business days</strong></div>
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="pkg-tag">Proper Foundation</div>
-        <h3>Core Setup</h3>
-        <div class="price">₦75,000</div>
-        <div class="price-note">All-inclusive · Government fees included</div>
-        <ul>
-          <li>Name Availability Check</li>
-          <li>CAC Certificate</li>
-          <li>MEMART (Memorandum &amp; Articles of Association)</li>
-          <li>Status Report</li>
-          <li>Tax Identification Number (TIN)</li>
-          <li>TIN Validation</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Core%20Setup%20company%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
-      </div>
-
-      <div class="pricing-card featured">
-        <div class="pricing-badge">Most Popular</div>
-        <div class="pkg-tag" style="color:rgba(255,255,255,0.7);">More Structured</div>
-        <h3>Smart Pro</h3>
-        <div class="price">₦95,000</div>
-        <div class="price-note">All-inclusive · Government fees included</div>
-        <ul>
-          <li>Everything in Core Setup</li>
-          <li>Branded Letterhead (5 copies)</li>
-          <li>Company ID Card (1 Director)</li>
-          <li>Free Delivery</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Smart%20Pro%20company%20package" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
-      </div>
-
-      <div class="pricing-card">
-        <div class="pkg-tag">Full Setup + Support</div>
-        <h3>Complete Brand Suite</h3>
-        <div class="price">₦125,000</div>
-        <div class="price-note">All-inclusive · Government fees included</div>
-        <ul>
-          <li>Everything in Smart Pro</li>
-          <li>Customized Business Logo</li>
-          <li>50 Professional Business Cards</li>
-          <li>Framed CAC Certificate</li>
-          <li>Business Branding Guide</li>
-          <li>Bank Account Support</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20the%20Complete%20Brand%20Suite" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Other Services -->
-  <div class="pricing-panel hidden" id="pricing-other">
-    <div class="pricing-grid pricing-grid-2">
-
-      <div class="pricing-card">
-        <div class="service-icon" style="margin-bottom:14px;">⛪</div>
-        <h3>Incorporated Trustees</h3>
-        <div class="price" style="font-size:1.4rem;">Custom Quote</div>
-        <div class="price-note">Timeline: 30–40 business days</div>
-        <ul>
-          <li>For NGOs, churches, associations &amp; foundations</li>
-          <li>Full CAC filing for incorporated trustees</li>
-          <li>Constitution drafting support</li>
-          <li>Certificate of Incorporation</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20Incorporated%20Trustees%20registration" class="btn btn-primary" target="_blank" rel="noopener">Get a Quote</a>
-      </div>
-
-      <div class="pricing-card">
-        <div class="service-icon" style="margin-bottom:14px;">🔄</div>
-        <h3>Post-Incorporation Services</h3>
-        <div class="price" style="font-size:1.4rem;">From ₦15,000</div>
-        <div class="price-note">For already-registered businesses</div>
-        <ul>
-          <li>Annual Returns Filing</li>
-          <li>Change of Directors / Shareholders</li>
-          <li>Change of Registered Address</li>
-          <li>Share Capital Increase</li>
-          <li>Company Status Report</li>
-          <li>Certified True Copies (CTC)</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20post-incorporation%20services" class="btn btn-primary" target="_blank" rel="noopener">Get Started</a>
-      </div>
-
-      <div class="pricing-card">
-        <div class="service-icon" style="margin-bottom:14px;">™️</div>
-        <h3>Trademark Registration</h3>
-        <div class="price" style="font-size:1.4rem;">Custom Quote</div>
-        <div class="price-note">Per class · IPO government fees included</div>
-        <ul>
-          <li>Trademark search &amp; clearance</li>
-          <li>IPO application filing</li>
-          <li>Filing acknowledgment certificate</li>
-          <li>Prosecution support</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20want%20to%20register%20a%20trademark" class="btn btn-primary" target="_blank" rel="noopener">Get a Quote</a>
-      </div>
-
-      <div class="pricing-card">
-        <div class="service-icon" style="margin-bottom:14px;">➕</div>
-        <h3>Add-On Services</h3>
-        <div class="price" style="font-size:1.4rem;">From ₦5,000</div>
-        <div class="price-note">Available with any package</div>
-        <ul>
-          <li>Company Seal</li>
-          <li>Additional Director ID Cards</li>
-          <li>SCUML Registration (where applicable)</li>
-          <li>Additional Business Cards</li>
-          <li>Bank Account Opening Support</li>
-          <li>Extra Letterhead Copies</li>
-          <li>Document Printing &amp; Nationwide Delivery</li>
-        </ul>
-        <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20add-on%20services" class="btn btn-primary" target="_blank" rel="noopener">Inquire Now</a>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Add-ons note -->
-  <div class="pricing-note-box">
-    <strong>Need something customized?</strong> You can mix, remove, or add specific items from any package based on your needs and budget. We are flexible and ready to help.
-    <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20a%20custom%20package" target="_blank" rel="noopener" style="color:var(--gold); font-weight:700; margin-left:6px;">Chat with us →</a>
-  </div>
-
-</div>
-```
-
   </section>
 
   <!-- Testimonials -->
-
   <section class="section alt-bg">
     <div class="container">
       <div class="section-head">
@@ -1188,7 +1248,6 @@
   </section>
 
   <!-- About -->
-
   <section class="section" id="about">
     <div class="container">
       <div class="about-grid">
@@ -1257,7 +1316,6 @@
   </section>
 
   <!-- FAQ -->
-
   <section class="section alt-bg" id="faq">
     <div class="container">
       <div class="section-head">
@@ -1268,7 +1326,7 @@
       <div class="faq-list">
         <details class="faq-item">
           <summary>How long does CAC business registration take?</summary>
-          <p>Business name registration is completed within <strong>24 hours</strong> of receiving your documents and payment. Limited company (RC) registration takes <strong>3–7 business days</strong>. Incorporated Trustees registration takes 30–40 business days. We keep you updated throughout.</p>
+          <p>Business name registration is completed within <strong>24 hours</strong> of receiving your documents and payment. Limited company (RC) registration takes <strong>3–7 business days</strong>. Incorporated Trustees registration takes 25–30 business days. We keep you updated throughout.</p>
         </details>
         <details class="faq-item">
           <summary>What documents do I need to register my business?</summary>
@@ -1295,7 +1353,6 @@
   </section>
 
   <!-- CTA -->
-
   <section class="cta-section">
     <div class="container">
       <div class="cta-inner">
@@ -1313,7 +1370,6 @@
   </section>
 
   <!-- Contact -->
-
   <section class="section" id="contact">
     <div class="container">
       <div class="section-head">
@@ -1323,88 +1379,81 @@
       </div>
       <div class="contact-grid-2">
         <div class="contact-info">
-          <div class="contact-item">
-            <div class="contact-item-icon">💬</div>
-            <div>
-              <div class="contact-item-label">WhatsApp (Fastest)</div>
-              <div class="contact-item-val">+234 703 833 6596</div>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-icon">📧</div>
-            <div>
-              <div class="contact-item-label">Email</div>
-              <div class="contact-item-val">info@awalglobal.name.ng</div>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-icon">📷</div>
-            <div>
-              <div class="contact-item-label">Instagram</div>
-              <div class="contact-item-val">@awalglobalconsults</div>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-icon">🌐</div>
-            <div>
-              <div class="contact-item-label">Website</div>
-              <div class="contact-item-val">awalglobal.name.ng</div>
-            </div>
-          </div>
-          <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="btn btn-whatsapp" style="margin-top:8px;" target="_blank" rel="noopener">
-            Chat on WhatsApp Now
+          <p class="contact-intro">Reach us directly through any of the channels below. WhatsApp is the fastest way to get a response.</p>
+          <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="contact-channel-link" target="_blank" rel="noopener">
+            <span class="contact-channel-icon whatsapp-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            </span>
+            <span class="contact-channel-text">
+              <span class="contact-channel-label">WhatsApp <span class="contact-fastest">Fastest</span></span>
+              <span class="contact-channel-val">+234 703 833 6596</span>
+            </span>
+          </a>
+          <a href="mailto:info@awalglobal.name.ng" class="contact-channel-link">
+            <span class="contact-channel-icon email-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </span>
+            <span class="contact-channel-text">
+              <span class="contact-channel-label">Email</span>
+              <span class="contact-channel-val">info@awalglobal.name.ng</span>
+            </span>
+          </a>
+          <a href="https://instagram.com/awalglobalconsults" class="contact-channel-link" target="_blank" rel="noopener">
+            <span class="contact-channel-icon instagram-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </span>
+            <span class="contact-channel-text">
+              <span class="contact-channel-label">Instagram</span>
+              <span class="contact-channel-val">@awalglobalconsults</span>
+            </span>
           </a>
         </div>
 
-```
-    <div class="form-card">
-      <form action="https://formsubmit.co/info@awalglobal.name.ng" method="POST" class="form-grid">
-        <input type="hidden" name="_subject" value="New Website Inquiry - Awal Global Consults">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="https://awalglobal.name.ng/thank-you.html">
+        <div class="form-card">
+          <form action="https://formsubmit.co/info@awalglobal.name.ng" method="POST" class="form-grid">
+            <input type="hidden" name="_subject" value="New Website Inquiry - Awal Global Consults">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="https://awalglobal.name.ng/thank-you.html">
 
-        <div class="form-group">
-          <label for="inq-name">Full Name</label>
-          <input type="text" id="inq-name" name="Full Name" placeholder="Your full name" required>
+            <div class="form-group">
+              <label for="inq-name">Full Name</label>
+              <input type="text" id="inq-name" name="Full Name" placeholder="Your full name" required>
+            </div>
+            <div class="form-group">
+              <label for="inq-phone">Phone / WhatsApp</label>
+              <input type="tel" id="inq-phone" name="Phone Number" placeholder="+234..." required>
+            </div>
+            <div class="form-group full">
+              <label for="inq-service">Service Needed</label>
+              <select id="inq-service" name="Service Needed">
+                <option value="">Select a service…</option>
+                <option>CAC Business Name Registration</option>
+                <option>CAC Limited Company Registration</option>
+                <option>Trademark Registration</option>
+                <option>Business Advisory</option>
+                <option>Corporate &amp; Regulatory</option>
+                <option>Legal Documentation</option>
+                <option>Identity &amp; NIN Documentation</option>
+                <option>Expatriate &amp; Immigration</option>
+                <option>Student Visa Support</option>
+                <option>Export &amp; Import Licensing</option>
+                <option>Other / Not Sure</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label for="inq-message">Your Message</label>
+              <textarea id="inq-message" name="Message" rows="4" placeholder="Tell us a bit about what you need…" required></textarea>
+            </div>
+            <div class="full" style="grid-column:1/-1;">
+              <button type="submit" class="btn btn-primary" style="width:100%;">Send Message</button>
+            </div>
+          </form>
         </div>
-        <div class="form-group">
-          <label for="inq-phone">Phone / WhatsApp</label>
-          <input type="tel" id="inq-phone" name="Phone Number" placeholder="+234..." required>
-        </div>
-        <div class="form-group full">
-          <label for="inq-service">Service Needed</label>
-          <select id="inq-service" name="Service Needed">
-            <option value="">Select a service…</option>
-            <option>CAC Business Name Registration</option>
-            <option>CAC Limited Company Registration</option>
-            <option>Trademark Registration</option>
-            <option>Business Advisory</option>
-            <option>Corporate &amp; Regulatory</option>
-            <option>Legal Documentation</option>
-            <option>Identity &amp; NIN Documentation</option>
-            <option>Expatriate &amp; Immigration</option>
-            <option>Student Visa Support</option>
-            <option>Export &amp; Import Licensing</option>
-            <option>Other / Not Sure</option>
-          </select>
-        </div>
-        <div class="form-group full">
-          <label for="inq-message">Your Message</label>
-          <textarea id="inq-message" name="Message" rows="4" placeholder="Tell us a bit about what you need…" required></textarea>
-        </div>
-        <div class="full" style="grid-column:1/-1;">
-          <button type="submit" class="btn btn-primary" style="width:100%;">Send Message</button>
-        </div>
-      </form>
+      </div>
     </div>
-  </div>
-</div>
-```
-
   </section>
 
   <!-- Footer -->
-
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
@@ -1428,11 +1477,27 @@
           <a href="legal-documentation.html">Legal Documentation</a>
         </div>
         <div class="footer-col">
-          <h4>Contact</h4>
-          <a href="https://wa.me/2347038336596" target="_blank" rel="noopener">WhatsApp: +234 703 833 6596</a>
-          <a href="mailto:info@awalglobal.name.ng">info@awalglobal.name.ng</a>
-          <a href="https://instagram.com/awalglobalconsults" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;"><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='rgba(255,255,255,0.65)'><path d='M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z'/></svg>@awalglobalconsults</a>
-          <a href="https://awalglobal.name.ng">awalglobal.name.ng</a>
+          <h4>Contact Us</h4>
+          <div class="footer-socials">
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="social-icon-link" target="_blank" rel="noopener" aria-label="WhatsApp">
+              <span class="social-icon-circle whatsapp-icon">
+                <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              </span>
+              <span class="social-icon-label">+234 703 833 6596</span>
+            </a>
+            <a href="mailto:info@awalglobal.name.ng" class="social-icon-link" aria-label="Email">
+              <span class="social-icon-circle email-icon">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              </span>
+              <span class="social-icon-label">info@awalglobal.name.ng</span>
+            </a>
+            <a href="https://instagram.com/awalglobalconsults" class="social-icon-link" target="_blank" rel="noopener" aria-label="Instagram">
+              <span class="social-icon-circle instagram-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              </span>
+              <span class="social-icon-label">@awalglobalconsults</span>
+            </a>
+          </div>
         </div>
       </div>
       <div class="footer-bottom">
