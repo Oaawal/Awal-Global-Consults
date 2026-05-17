@@ -1,32 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <url>
     <loc>https://awalglobal.name.ng/</loc>
   </url>
-
   <url>
     <loc>https://awalglobal.name.ng/cac-registration.html</loc>
   </url>
-
+  <url>
+    <loc>https://awalglobal.name.ng/cac-client-form.html</loc>
+  </url>
   <url>
     <loc>https://awalglobal.name.ng/trademark-ip.html</loc>
   </url>
-
   <url>
     <loc>https://awalglobal.name.ng/business-advisory.html</loc>
   </url>
-
   <url>
     <loc>https://awalglobal.name.ng/corporate-regulatory.html</loc>
   </url>
-
   <url>
     <loc>https://awalglobal.name.ng/legal-documentation.html</loc>
   </url>
-
   <url>
-    <loc>https://awalglobal.name.ng/contact.html</loc>
+    <loc>https://awalglobal.name.ng/identity-documentation.html</loc>
   </url>
-
+  <url>
+    <loc>https://awalglobal.name.ng/immigration-expatriate.html</loc>
+  </url>
+  <url>
+    <loc>https://awalglobal.name.ng/student-visa.html</loc>
+  </url>
+  <url>
+    <loc>https://awalglobal.name.ng/export-import-licensing.html</loc>
+  </url>
+  <url>
+    <loc>https://awalglobal.name.ng/cybersecurity-support.html</loc>
+  </url>
 </urlset>
