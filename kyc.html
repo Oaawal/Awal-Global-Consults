@@ -1487,7 +1487,7 @@
     const fields = {
       '_subject': `Client Intake — ${name} — ${services.substring(0,60)}`,
       '_captcha': 'false',
-      '_next': 'https://awalglobal.name.ng/kyc.html',
+      '_next': 'https://awalglobal.name.ng/thank-you.html',
       '_template': 'table',
       'Full Name': name,
       'Phone': phone,
@@ -1537,13 +1537,9 @@
 
     document.body.appendChild(form);
 
-    document.getElementById('step-7').classList.remove('active');
-    document.getElementById('pdot-7').classList.remove('active');
-    document.getElementById('pdot-7').classList.add('done');
-    document.getElementById('success-screen').style.display = 'block';
+    // Submit first, then show success
     document.getElementById('success-name').textContent = name;
     document.getElementById('success-services').textContent = services;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     form.submit();
   }
