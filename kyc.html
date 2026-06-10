@@ -1479,80 +1479,64 @@
     const ref = document.getElementById('ref').value || 'Not provided';
     const services = selectedServices.join(', ');
 
-    const body = `
-NEW CLIENT INTAKE — AWAL GLOBAL CONSULTS
-==========================================
-Name: ${name}
-Phone: ${phone}
-Email: ${email}
-Reference: ${ref}
-Services: ${services}
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://formsubmit.co/info@awalglobal.name.ng';
+    form.style.display = 'none';
 
-PERSONAL DETAILS
-----------------
-Full Name: ${document.getElementById('firstname').value} ${document.getElementById('middlename').value} ${document.getElementById('lastname').value}
-DOB: ${document.getElementById('dob').value} | Gender: ${document.getElementById('gender').value}
-Nationality: ${document.getElementById('nationality').value} | State: ${document.getElementById('stateoforigin').value}
-Occupation: ${document.getElementById('occupation').value}
-NIN: ${document.getElementById('nin').value}
-BVN: ${document.getElementById('bvn').value || 'Not provided'}
-TIN: ${document.getElementById('tin').value || 'Not provided'}
-Address: ${document.getElementById('address').value}
+    const fields = {
+      '_subject': `Client Intake — ${name} — ${services.substring(0,60)}`,
+      '_captcha': 'false',
+      '_next': 'https://awalglobal.name.ng/kyc.html',
+      '_template': 'table',
+      'Full Name': name,
+      'Phone': phone,
+      'Email': email,
+      'Reference': ref,
+      'Services Requested': services,
+      'First Name': document.getElementById('firstname').value,
+      'Middle Name': document.getElementById('middlename').value,
+      'Last Name': document.getElementById('lastname').value,
+      'Date of Birth': document.getElementById('dob').value,
+      'Gender': document.getElementById('gender').value,
+      'Nationality': document.getElementById('nationality').value,
+      'State of Origin': document.getElementById('stateoforigin').value,
+      'Occupation': document.getElementById('occupation').value,
+      'NIN': document.getElementById('nin').value,
+      'BVN': document.getElementById('bvn').value || 'Not provided',
+      'TIN': document.getElementById('tin').value || 'Not provided',
+      'Residential Address': document.getElementById('address').value,
+      'Business Name 1': document.getElementById('bn1').value || 'N/A',
+      'Business Name 2': document.getElementById('bn2').value || 'N/A',
+      'Nature of Business': document.getElementById('bnbiz').value || 'N/A',
+      'Business Address': document.getElementById('bnaddress').value || 'N/A',
+      'Existing RC/BN': document.getElementById('bnrc').value || 'N/A',
+      'Company Name 1': document.getElementById('ltd1').value || 'N/A',
+      'Company Name 2': document.getElementById('ltd2').value || 'N/A',
+      'Company Activities': document.getElementById('ltdbiz').value || 'N/A',
+      'Share Capital': document.getElementById('ltdshare').value || 'N/A',
+      'Company Address': document.getElementById('ltdaddr').value || 'N/A',
+      'Trademark Mark': document.getElementById('tmmark').value || 'N/A',
+      'Trademark Class': document.getElementById('tmclass').value || 'N/A',
+      'Trademark Applicant': document.getElementById('tmapplicant').value || 'N/A',
+      'Trademark Address': document.getElementById('tmaddr').value || 'N/A',
+      'Additional Director Name': `${document.getElementById('dir-first').value || ''} ${document.getElementById('dir-last').value || ''}`.trim() || 'N/A',
+      'Director Role': document.getElementById('dir-role').value || 'N/A',
+      'Director NIN': document.getElementById('dir-nin').value || 'N/A',
+      'Director Phone': document.getElementById('dir-phone').value || 'N/A',
+      'Documents': 'Submitted via Google Form upload'
+    };
 
-BUSINESS NAME
--------------
-Name 1: ${document.getElementById('bn1').value || 'N/A'}
-Name 2: ${document.getElementById('bn2').value || 'N/A'}
-Nature: ${document.getElementById('bnbiz').value || 'N/A'}
-Address: ${document.getElementById('bnaddress').value || 'N/A'}
-RC/BN: ${document.getElementById('bnrc').value || 'N/A'}
+    Object.entries(fields).forEach(([key, value]) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = value;
+      form.appendChild(input);
+    });
 
-LIMITED COMPANY
----------------
-Name 1: ${document.getElementById('ltd1').value || 'N/A'}
-Name 2: ${document.getElementById('ltd2').value || 'N/A'}
-Activities: ${document.getElementById('ltdbiz').value || 'N/A'}
-Share Capital: ${document.getElementById('ltdshare').value || 'N/A'} ${document.getElementById('ltdshareother').value || ''}
-Address: ${document.getElementById('ltdaddr').value || 'N/A'}
-RC: ${document.getElementById('ltdrc').value || 'N/A'}
+    document.body.appendChild(form);
 
-INCORPORATED TRUSTEES
----------------------
-Name 1: ${document.getElementById('it1').value || 'N/A'}
-Name 2: ${document.getElementById('it2').value || 'N/A'}
-Objects: ${document.getElementById('itobj').value || 'N/A'}
-
-TRADEMARK
----------
-Mark: ${document.getElementById('tmmark').value || 'N/A'}
-Class: ${document.getElementById('tmclass').value || 'N/A'}
-Applicant: ${document.getElementById('tmapplicant').value || 'N/A'}
-Phone: ${document.getElementById('tmphone').value || 'N/A'}
-Address: ${document.getElementById('tmaddr').value || 'N/A'}
-Future marks: ${document.getElementById('tmfuture').value || 'N/A'}
-
-COPYRIGHT
----------
-Work: ${document.getElementById('copywork').value || 'N/A'}
-Title: ${document.getElementById('copytitle').value || 'N/A'}
-Year: ${document.getElementById('copyyear').value || 'N/A'}
-
-ADDITIONAL DIRECTOR/SHAREHOLDER
----------------------------------
-Name: ${document.getElementById('dir-first').value || ''} ${document.getElementById('dir-last').value || ''}
-Role: ${document.getElementById('dir-role').value || 'N/A'}
-Shareholding: ${document.getElementById('dir-percent').value || 'N/A'}
-NIN: ${document.getElementById('dir-nin').value || 'N/A'}
-Phone: ${document.getElementById('dir-phone').value || 'N/A'}
-Address: ${document.getElementById('dir-address').value || 'N/A'}
-
-Documents: Submitted via Google Form upload
-    `.trim();
-
-    const subject = `Client Intake — ${name} — ${services.substring(0,60)}`;
-    const mailtoLink = `mailto:info@awalglobal.name.ng?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-    // Show success
     document.getElementById('step-7').classList.remove('active');
     document.getElementById('pdot-7').classList.remove('active');
     document.getElementById('pdot-7').classList.add('done');
@@ -1561,7 +1545,7 @@ Documents: Submitted via Google Form upload
     document.getElementById('success-services').textContent = services;
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    window.location.href = mailtoLink;
+    form.submit();
   }
 
   // Init
