@@ -1,24 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL7KZYEE7Q"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-JL7KZYEE7Q');
-  </script>
-
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JL7KZYEE7Q');</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Client Intake & KYC | Awal Global Consults</title>
+  <title>Client KYC & Intake | Awal Global Consults</title>
   <meta name="robots" content="noindex, nofollow"/>
-
   <link rel="icon" type="image/png" href="assets/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --navy: #0b1f3a;
@@ -32,1521 +23,1549 @@
       --muted: #666;
       --error: #c0392b;
       --success: #1e6b3c;
-      --radius: 8px;
+      --radius: 10px;
     }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* Header */
+    .site-header{background:var(--navy);padding:20px 24px;border-bottom:3px solid var(--gold);}
+    .header-inner{max-width:800px;margin:0 auto;display:flex;align-items:center;gap:14px;}
+    .header-logo{height:40px;filter:brightness(0) invert(1);flex-shrink:0;}
+    .header-logo[src="assets/images/logo.png"]{display:block;}
+    .header-text h1{font-family:'Fraunces',serif;color:var(--white);font-size:17px;font-weight:600;}
+    .header-text p{color:rgba(255,255,255,0.45);font-size:11px;margin-top:2px;}
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+    /* Progress */
+    .progress-bar-wrap{background:var(--navy);padding:0 24px 16px;border-bottom:3px solid var(--gold);}
+    .progress-bar-inner{max-width:800px;margin:0 auto;}
+    .progress-steps{display:flex;gap:0;position:relative;}
+    .p-step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;cursor:default;}
+    .p-step:not(:last-child)::after{content:'';position:absolute;top:11px;left:50%;width:100%;height:2px;background:rgba(255,255,255,0.12);z-index:0;}
+    .p-step.done:not(:last-child)::after{background:var(--gold);}
+    .p-dot{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:rgba(255,255,255,0.35);position:relative;z-index:1;transition:all 0.25s;}
+    .p-step.active .p-dot{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+    .p-step.done .p-dot{background:var(--gold);border-color:var(--gold);color:var(--navy);font-size:11px;}
+    .p-label{font-size:8px;color:rgba(255,255,255,0.25);margin-top:4px;text-transform:uppercase;letter-spacing:0.3px;font-weight:500;}
+    .p-step.active .p-label,.p-step.done .p-label{color:var(--gold-light);}
 
-    /* ── Header ── */
-    header {
-      background: var(--navy);
-      padding: 28px 24px 0;
-      border-bottom: 3px solid var(--gold);
-    }
-    .header-inner {
-      max-width: 760px;
-      margin: 0 auto;
-      text-align: center;
-      padding-bottom: 20px;
-    }
-    .header-logo {
-      height: 52px;
-      margin-bottom: 12px;
-      filter: brightness(0) invert(1);
-    }
-    header h1 {
-      font-family: 'Fraunces', serif;
-      color: var(--white);
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: 0.2px;
-    }
-    header p {
-      color: rgba(255,255,255,0.55);
-      font-size: 12px;
-      margin-top: 6px;
-      line-height: 1.6;
-      font-weight: 300;
-    }
+    /* Main */
+    main{max-width:800px;margin:28px auto 80px;padding:0 16px;}
 
-    /* ── Progress ── */
-    .progress-wrap {
-      background: var(--navy);
-      padding: 0 24px 20px;
-      border-bottom: 3px solid var(--gold);
-    }
-    .progress-steps {
-      display: flex;
-      justify-content: center;
-      max-width: 760px;
-      margin: 0 auto;
-      position: relative;
-    }
-    .step-dot {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 1;
-      position: relative;
-    }
-    .step-dot:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      top: 12px;
-      left: 50%;
-      width: 100%;
-      height: 2px;
-      background: rgba(255,255,255,0.15);
-      z-index: 0;
-    }
-    .step-dot.done:not(:last-child)::after { background: var(--gold); }
-    .dot-circle {
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.1);
-      border: 1.5px solid rgba(255,255,255,0.2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 600;
-      color: rgba(255,255,255,0.4);
-      position: relative; z-index: 1;
-      transition: all 0.25s;
-    }
-    .step-dot.active .dot-circle {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: var(--navy);
-      font-weight: 700;
-    }
-    .step-dot.done .dot-circle {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: var(--navy);
-    }
-    .dot-label {
-      font-size: 8px;
-      color: rgba(255,255,255,0.3);
-      margin-top: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-      font-weight: 500;
-    }
-    .step-dot.active .dot-label,
-    .step-dot.done .dot-label { color: var(--gold-light); }
+    /* Stage card */
+    .stage{display:none;animation:fadeUp 0.3s ease;}
+    .stage.active{display:block;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-    /* ── Main ── */
-    main {
-      max-width: 760px;
-      margin: 32px auto 80px;
-      padding: 0 16px;
-    }
+    .stage-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);box-shadow:0 2px 16px rgba(11,31,58,0.07);overflow:hidden;}
+    .stage-head{background:var(--navy);padding:16px 24px;display:flex;align-items:center;gap:12px;}
+    .stage-num{width:28px;height:28px;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .stage-title{color:var(--white);font-family:'Fraunces',serif;font-size:15px;font-weight:600;}
+    .stage-sub{color:rgba(255,255,255,0.45);font-size:11px;margin-top:2px;}
+    .stage-body{padding:24px;}
 
-    /* ── Card ── */
-    .section-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      overflow: hidden;
-      display: none;
-      box-shadow: 0 2px 12px rgba(11,31,58,0.06);
-    }
-    .section-card.active { display: block; }
+    /* Service selector */
+    .service-category{margin-bottom:18px;}
+    .cat-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;}
+    .service-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .svc-btn{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;background:var(--white);transition:all 0.2s;text-align:left;}
+    .svc-btn:hover{border-color:var(--gold);background:var(--gold-pale);}
+    .svc-btn.selected{border-color:var(--navy);background:#eef2f8;}
+    .svc-btn input{accent-color:var(--navy);width:15px;height:15px;flex-shrink:0;}
+    .svc-btn-text{font-size:13px;font-weight:500;color:var(--text);}
+    .svc-btn-sub{font-size:10px;color:var(--muted);margin-top:1px;}
 
-    .section-header {
-      background: var(--navy);
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .section-num {
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      background: var(--gold);
-      color: var(--navy);
-      font-weight: 700;
-      font-size: 13px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .section-title {
-      color: var(--white);
-      font-family: 'Fraunces', serif;
-      font-size: 16px;
-      font-weight: 600;
-    }
-    .section-subtitle {
-      color: rgba(255,255,255,0.5);
-      font-size: 11px;
-      margin-top: 2px;
-    }
+    /* Fields */
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+    .field-row.one{grid-template-columns:1fr;}
+    .field-row.three{grid-template-columns:1fr 1fr 1fr;}
+    .field{display:flex;flex-direction:column;}
+    .field label{font-size:11px;font-weight:600;color:var(--navy);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;}
+    .req{color:var(--gold);margin-left:2px;}
+    .opt{color:var(--muted);font-weight:400;font-size:10px;text-transform:none;margin-left:4px;letter-spacing:0;}
+    .field input,.field select,.field textarea{border:1.5px solid var(--border);border-radius:6px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--white);transition:border-color 0.2s;outline:none;}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--navy);}
+    .field input.err,.field select.err,.field textarea.err{border-color:var(--error);}
+    .field textarea{resize:vertical;min-height:88px;}
+    .field-hint{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.4;}
+    .err-msg{font-size:10.5px;color:var(--error);margin-top:3px;display:none;}
+    .field.has-err .err-msg{display:block;}
 
-    .section-body { padding: 24px; }
+    /* Section divider */
+    .sec-divider{border:none;border-top:1px solid var(--border);margin:22px 0;}
+    .sec-label{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--gold-pale);}
 
-    /* ── Fields ── */
-    .field-group {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    .field-group.single { grid-template-columns: 1fr; }
-    .field-group.triple { grid-template-columns: 1fr 1fr 1fr; }
+    /* Notice */
+    .notice{border-radius:0 6px 6px 0;padding:11px 14px;font-size:12px;line-height:1.55;margin-bottom:16px;}
+    .notice.blue{background:#eef2f8;border-left:3px solid var(--navy);color:var(--navy);}
+    .notice.gold{background:var(--gold-pale);border-left:3px solid var(--gold);color:#5a3e00;}
+    .notice.green{background:#edf7f1;border-left:3px solid var(--success);color:#1e4a30;}
 
-    .field { display: flex; flex-direction: column; }
-    .field label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--navy);
-      margin-bottom: 5px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .req { color: var(--gold); margin-left: 2px; }
-    .opt { color: var(--muted); font-weight: 400; font-size: 10px; text-transform: none; margin-left: 4px; letter-spacing: 0; }
+    /* Upload zone */
+    .upload-zone{border:2px dashed var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;background:var(--bg);}
+    .upload-zone:hover{border-color:var(--gold);background:var(--gold-pale);}
+    .upload-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+    .upload-icon{font-size:24px;margin-bottom:6px;}
+    .upload-zone p{font-size:12px;color:var(--muted);}
+    .upload-zone strong{color:var(--navy);}
+    .file-name{margin-top:6px;font-size:11.5px;color:var(--success);font-weight:500;min-height:16px;}
 
-    .field input,
-    .field select,
-    .field textarea {
-      border: 1.5px solid var(--border);
-      border-radius: 6px;
-      padding: 10px 12px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      color: var(--text);
-      background: var(--white);
-      transition: border-color 0.2s;
-      outline: none;
-    }
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus { border-color: var(--navy); }
-    .field input.error,
-    .field select.error,
-    .field textarea.error { border-color: var(--error); }
-    .field textarea { resize: vertical; min-height: 88px; }
+    /* Radio */
+    .radio-group{display:flex;gap:8px;flex-wrap:wrap;}
+    .radio-opt{display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;transition:all 0.2s;}
+    .radio-opt input{accent-color:var(--navy);}
+    .radio-opt:has(input:checked){border-color:var(--navy);background:#eef2f8;font-weight:500;}
 
-    .field-hint { font-size: 10.5px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
-    .error-msg { font-size: 10.5px; color: var(--error); margin-top: 3px; display: none; }
-    .field.has-error .error-msg { display: block; }
+    /* Checkbox */
+    .chk-field{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;}
+    .chk-field input{width:16px;height:16px;margin-top:3px;accent-color:var(--navy);flex-shrink:0;cursor:pointer;}
+    .chk-field label{font-size:13px;color:var(--text);line-height:1.55;cursor:pointer;}
 
-    /* ── Section label ── */
-    .field-section-label {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 14px;
-      padding-bottom: 6px;
-      border-bottom: 2px solid var(--gold-pale);
-    }
-    .field-divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 22px 0;
-    }
+    /* Conditional */
+    .cond{display:none;background:#f8f6f0;border:1px solid var(--gold-light);border-radius:8px;padding:20px;margin-top:12px;}
+    .cond.show{display:block;}
 
-    /* ── Info notice ── */
-    .info-notice {
-      background: #eef2f8;
-      border-left: 3px solid var(--navy);
-      border-radius: 0 6px 6px 0;
-      padding: 11px 14px;
-      font-size: 12px;
-      color: var(--navy);
-      margin-bottom: 18px;
-      line-height: 1.55;
-    }
-    .info-notice.gold {
-      background: var(--gold-pale);
-      border-left-color: var(--gold);
-      color: #5a3e00;
-    }
+    /* Nav */
+    .nav-bar{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-top:1px solid var(--border);background:var(--bg);}
+    .btn{padding:10px 26px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;letter-spacing:0.1px;}
+    .btn-back{background:transparent;color:var(--navy);border:1.5px solid var(--border);}
+    .btn-back:hover{border-color:var(--navy);}
+    .btn-next{background:var(--navy);color:var(--white);}
+    .btn-next:hover{background:#152e56;}
+    .btn-submit{background:var(--gold);color:var(--navy);}
+    .btn-submit:hover{background:#b0811e;}
+    .step-counter{font-size:12px;color:var(--muted);font-weight:500;}
 
-    /* ── Services checkboxes ── */
-    .services-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    .service-check {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-      transition: all 0.2s;
-      background: var(--white);
-    }
-    .service-check:hover { border-color: var(--gold); background: var(--gold-pale); }
-    .service-check input[type="checkbox"] {
-      accent-color: var(--navy);
-      width: 15px; height: 15px;
-      flex-shrink: 0;
-    }
-    .service-check.checked {
-      border-color: var(--navy);
-      background: #eef2f8;
-      font-weight: 500;
-    }
-    .service-group-label {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin: 14px 0 8px;
-    }
+    /* Trademark type chips */
+    .tm-type-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;}
+    .tm-chip{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;text-align:center;transition:all 0.2s;}
+    .tm-chip:hover{border-color:var(--gold);background:var(--gold-pale);}
+    .tm-chip.selected{border-color:var(--navy);background:#eef2f8;}
+    .tm-chip input{display:none;}
+    .tm-chip-icon{font-size:22px;}
+    .tm-chip-label{font-size:12px;font-weight:600;color:var(--navy);}
+    .tm-chip-sub{font-size:10px;color:var(--muted);}
 
-    /* ── Radio ── */
-    .radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
-    .radio-option {
-      display: flex; align-items: center; gap: 6px;
-      padding: 8px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-      transition: all 0.2s;
-    }
-    .radio-option input { accent-color: var(--navy); }
-    .radio-option:has(input:checked) {
-      border-color: var(--navy);
-      background: #eef2f8;
-      font-weight: 500;
-    }
+    /* SCUML category */
+    .scuml-cats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+    .scuml-cat{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-size:12.5px;transition:all 0.2s;}
+    .scuml-cat:hover{border-color:var(--gold);background:var(--gold-pale);}
+    .scuml-cat input{accent-color:var(--navy);width:14px;height:14px;flex-shrink:0;}
+    .scuml-cat:has(input:checked){border-color:var(--navy);background:#eef2f8;font-weight:500;}
 
-    /* ── Checkbox declaration ── */
-    .checkbox-field {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-    .checkbox-field input[type="checkbox"] {
-      width: 17px; height: 17px;
-      margin-top: 2px;
-      accent-color: var(--navy);
-      flex-shrink: 0;
-      cursor: pointer;
-    }
-    .checkbox-field label {
-      font-size: 13px;
-      color: var(--text);
-      line-height: 1.55;
-      cursor: pointer;
-    }
+    /* Success */
+    #success-screen{display:none;text-align:center;padding:56px 28px;background:var(--white);border-radius:var(--radius);border:1px solid var(--border);box-shadow:0 2px 16px rgba(11,31,58,0.07);}
+    .success-icon{width:64px;height:64px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:26px;color:white;}
+    #success-screen h2{font-family:'Fraunces',serif;color:var(--navy);font-size:22px;margin-bottom:10px;}
+    #success-screen p{color:var(--muted);font-size:13.5px;line-height:1.7;max-width:420px;margin:0 auto 10px;}
+    .ref-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px 20px;margin:16px auto;max-width:340px;font-size:12.5px;color:var(--navy);}
+    .ref-box strong{display:block;font-size:16px;margin-top:4px;}
 
-    /* ── Conditional block ── */
-    .conditional-block {
-      background: #f8f6f0;
-      border: 1px solid var(--gold-light);
-      border-radius: 8px;
-      padding: 20px;
-      margin-top: 14px;
-      display: none;
+    /* Responsive */
+    @media(max-width:600px){
+      .field-row{grid-template-columns:1fr;}
+      .field-row.three{grid-template-columns:1fr;}
+      .service-grid{grid-template-columns:1fr;}
+      .tm-type-grid{grid-template-columns:1fr 1fr;}
+      .scuml-cats{grid-template-columns:1fr;}
+      .stage-body{padding:18px 14px;}
+      .nav-bar{padding:14px 14px;}
+      .p-label{display:none;}
     }
-    .conditional-block.visible { display: block; }
-
-    /* ── Document upload link ── */
-    .doc-upload-box {
-      background: var(--gold-pale);
-      border: 2px dashed var(--gold);
-      border-radius: 8px;
-      padding: 24px;
-      text-align: center;
-    }
-    .doc-upload-box .upload-icon { font-size: 32px; margin-bottom: 10px; }
-    .doc-upload-box h3 {
-      font-family: 'Fraunces', serif;
-      color: var(--navy);
-      font-size: 16px;
-      margin-bottom: 6px;
-    }
-    .doc-upload-box p {
-      font-size: 12.5px;
-      color: var(--muted);
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-    .doc-upload-box ul {
-      text-align: left;
-      font-size: 12.5px;
-      color: var(--navy);
-      margin: 0 auto 16px;
-      max-width: 380px;
-      padding-left: 18px;
-      line-height: 1.8;
-    }
-    .btn-upload-link {
-      display: inline-block;
-      background: var(--navy);
-      color: var(--white);
-      padding: 11px 28px;
-      border-radius: 6px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13.5px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-    .btn-upload-link:hover { background: #152e56; }
-    .doc-note {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 10px;
-    }
-
-    /* ── Nav buttons ── */
-    .nav-buttons {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 24px;
-      border-top: 1px solid var(--border);
-      background: var(--bg);
-    }
-    .btn {
-      padding: 10px 26px;
-      border-radius: 6px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-    }
-    .btn-back {
-      background: transparent;
-      color: var(--navy);
-      border: 1.5px solid var(--border);
-    }
-    .btn-back:hover { border-color: var(--navy); }
-    .btn-next {
-      background: var(--navy);
-      color: var(--white);
-    }
-    .btn-next:hover { background: #152e56; }
-    .btn-submit {
-      background: var(--gold);
-      color: var(--navy);
-    }
-    .btn-submit:hover { background: #b0811e; }
-    .step-counter { font-size: 12px; color: var(--muted); font-weight: 500; }
-
-    /* ── Success ── */
-    #success-screen {
-      display: none;
-      text-align: center;
-      padding: 56px 28px;
-      background: var(--white);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      box-shadow: 0 2px 12px rgba(11,31,58,0.06);
-    }
-    .success-icon {
-      width: 68px; height: 68px;
-      background: var(--success);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 20px;
-      font-size: 28px;
-      color: white;
-    }
-    #success-screen h2 {
-      font-family: 'Fraunces', serif;
-      color: var(--navy);
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-    #success-screen p {
-      color: var(--muted);
-      font-size: 13.5px;
-      line-height: 1.7;
-      max-width: 440px;
-      margin: 0 auto 10px;
-    }
-    .ref-box {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 20px;
-      margin: 18px auto;
-      max-width: 340px;
-      font-size: 12.5px;
-      color: var(--navy);
-    }
-    .ref-box strong { display: block; font-size: 17px; letter-spacing: 1px; margin-top: 4px; }
-    .success-doc-reminder {
-      background: var(--gold-pale);
-      border: 1px solid var(--gold-light);
-      border-radius: 8px;
-      padding: 16px 20px;
-      margin: 16px auto;
-      max-width: 480px;
-      font-size: 13px;
-      color: #5a3e00;
-      line-height: 1.6;
-    }
-    .success-doc-reminder a {
-      color: var(--navy);
-      font-weight: 700;
-      text-decoration: underline;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 600px) {
-      .field-group { grid-template-columns: 1fr; }
-      .field-group.triple { grid-template-columns: 1fr; }
-      .services-grid { grid-template-columns: 1fr; }
-      .section-body { padding: 18px 16px; }
-      .nav-buttons { padding: 14px 16px; }
-      header { padding: 20px 16px 0; }
-      .progress-wrap { padding: 0 8px 16px; }
-      .dot-label { display: none; }
-    }
-
-    /* ── Step visibility ── */
-    .step-hidden { display: none !important; }
   </style>
 </head>
 <body>
 
-<header>
+<header class="site-header">
   <div class="header-inner">
     <img src="assets/images/logo.png" alt="Awal Global Consults" class="header-logo"
       onerror="this.style.display='none'">
-    <h1>Client Intake & KYC Submission</h1>
-    <p>All information submitted is handled with strict confidentiality and used solely for your engagement with Awal Global Consults Limited.</p>
+    <div class="header-text">
+      <h1>Client Intake & KYC</h1>
+      <p>Awal Global Consults Limited — secure & confidential</p>
+    </div>
   </div>
 </header>
 
-<div class="progress-wrap">
-  <div class="progress-steps" id="progress-steps">
-    <div class="step-dot active" id="pdot-1"><div class="dot-circle">1</div><div class="dot-label">Engagement</div></div>
-    <div class="step-dot" id="pdot-2"><div class="dot-circle">2</div><div class="dot-label">Personal</div></div>
-    <div class="step-dot" id="pdot-3"><div class="dot-circle">3</div><div class="dot-label">Documents</div></div>
-    <div class="step-dot" id="pdot-4"><div class="dot-circle">4</div><div class="dot-label">Business</div></div>
-    <div class="step-dot" id="pdot-5"><div class="dot-circle">5</div><div class="dot-label">Trademark</div></div>
-    <div class="step-dot" id="pdot-6"><div class="dot-circle">6</div><div class="dot-label">Directors</div></div>
-    <div class="step-dot" id="pdot-7"><div class="dot-circle">7</div><div class="dot-label">Declaration</div></div>
+<div class="progress-bar-wrap">
+  <div class="progress-bar-inner">
+    <div class="progress-steps" id="prog"></div>
   </div>
 </div>
 
 <main>
+  <form id="kyc-form" method="POST" action="https://formsubmit.co/info@awalglobal.name.ng" enctype="multipart/form-data">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="https://awalglobal.name.ng/thank-you.html">
+    <input type="hidden" name="_subject" id="h-subject" value="New Client KYC Submission">
+    <input type="hidden" name="Services_Requested" id="h-services" value="">
 
-<!-- ═══════════════════════════════════════
-     STEP 1 — Engagement & Services
-═══════════════════════════════════════ -->
-<div class="section-card active" id="step-1">
-  <div class="section-header">
-    <div class="section-num">1</div>
-    <div>
-      <div class="section-title">Engagement Details</div>
-      <div class="section-subtitle">Your contact information and the services you need</div>
+  <!-- ═══ STAGE: SERVICE SELECTION ═══ -->
+  <div class="stage active" id="stage-services">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num">1</div>
+        <div>
+          <div class="stage-title">What do you need help with?</div>
+          <div class="stage-sub">Select all services that apply to your engagement</div>
+        </div>
+      </div>
+      <div class="stage-body">
+
+        <div class="service-category">
+          <div class="cat-label">CAC Registration & Compliance</div>
+          <div class="service-grid">
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Business Name Registration">
+              <div><div class="svc-btn-text">Business Name Registration</div><div class="svc-btn-sub">Sole proprietorship — 24 hrs</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Limited Company Registration">
+              <div><div class="svc-btn-text">Limited Company Registration</div><div class="svc-btn-sub">RC company — 3–7 business days</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Incorporated Trustees / NGO">
+              <div><div class="svc-btn-text">Incorporated Trustees / NGO</div><div class="svc-btn-sub">25–30 business days</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Business Name Renewal">
+              <div><div class="svc-btn-text">Business Name Renewal</div><div class="svc-btn-sub">Existing BN renewal</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Post-incorporation Changes">
+              <div><div class="svc-btn-text">Post-incorporation Changes</div><div class="svc-btn-sub">Director/address/name changes</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="CAC Annual Returns">
+              <div><div class="svc-btn-text">CAC Annual Returns</div><div class="svc-btn-sub">Yearly compliance filing</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="service-category">
+          <div class="cat-label">Tax & Regulatory</div>
+          <div class="service-grid">
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="TIN Registration">
+              <div><div class="svc-btn-text">TIN Registration</div><div class="svc-btn-sub">New TIN — NRS</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="TIN Validation">
+              <div><div class="svc-btn-text">TIN Validation</div><div class="svc-btn-sub">Verify existing TIN — NRS</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="SCUML Registration">
+              <div><div class="svc-btn-text">SCUML Registration</div><div class="svc-btn-sub">Anti-money laundering compliance</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Corporate & Regulatory Compliance">
+              <div><div class="svc-btn-text">Corporate & Regulatory</div><div class="svc-btn-sub">General compliance support</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="service-category">
+          <div class="cat-label">Intellectual Property & Legal</div>
+          <div class="service-grid">
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Trademark Registration">
+              <div><div class="svc-btn-text">Trademark Registration</div><div class="svc-btn-sub">Word, logo, or combined mark</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Copyright Registration">
+              <div><div class="svc-btn-text">Copyright Registration</div><div class="svc-btn-sub">Literary, artistic, musical works</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Legal Documentation">
+              <div><div class="svc-btn-text">Legal Documentation</div><div class="svc-btn-sub">Affidavits, agreements, letters</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="service-category">
+          <div class="cat-label">Identity, Immigration & Other</div>
+          <div class="service-grid">
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="NIN Registration / Retrieval">
+              <div><div class="svc-btn-text">NIN Registration / Retrieval</div><div class="svc-btn-sub">New NIN or retrieve existing</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Data Correction">
+              <div><div class="svc-btn-text">Data Correction</div><div class="svc-btn-sub">NIN / identity record update</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Export / Import Licensing">
+              <div><div class="svc-btn-text">Export / Import Licensing</div><div class="svc-btn-sub">Trade documentation</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Expatriate / Immigration Support">
+              <div><div class="svc-btn-text">Expatriate / Immigration</div><div class="svc-btn-sub">CERPAC, quota, permits</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Student Visa & Relocation">
+              <div><div class="svc-btn-text">Student Visa & Relocation</div><div class="svc-btn-sub">Application & profile support</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Business Advisory">
+              <div><div class="svc-btn-text">Business Advisory</div><div class="svc-btn-sub">Structure & compliance guidance</div></div>
+            </label>
+            <label class="svc-btn" onclick="toggleSvc(this)">
+              <input type="checkbox" name="svc" value="Cybersecurity Support">
+              <div><div class="svc-btn-text">Cybersecurity Support</div><div class="svc-btn-sub">Digital safety guidance</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div id="svc-error" style="display:none;font-size:11.5px;color:var(--error);margin-top:4px;">Please select at least one service to continue.</div>
+
+      </div>
+      <div class="nav-bar">
+        <span class="step-counter" id="svc-counter">Step 1</span>
+        <button type="button" class="btn btn-next" onclick="startForm()">Continue →</button>
+      </div>
     </div>
   </div>
-  <div class="section-body">
 
-    <div class="field-group">
-      <div class="field" id="f-fullname">
-        <label>Full Name <span class="req">*</span></label>
-        <input type="text" id="fullname" placeholder="Your full name"/>
-        <span class="error-msg">Please enter your full name</span>
-      </div>
-      <div class="field" id="f-phone">
-        <label>Phone / WhatsApp <span class="req">*</span></label>
-        <input type="tel" id="phone" placeholder="+234 800 000 0000" maxlength="14"/>
-        <span class="error-msg">Please enter a valid Nigerian phone number</span>
-      </div>
-    </div>
-
-    <div class="field-group">
-      <div class="field" id="f-email">
-        <label>Email Address <span class="req">*</span></label>
-        <input type="email" id="email" placeholder="your@email.com"/>
-        <span class="error-msg">Please enter a valid email address</span>
-      </div>
-      <div class="field">
-        <label>Invoice / Reference Number <span class="opt">(if you have one)</span></label>
-        <input type="text" id="ref" placeholder="e.g. INV-2026-001"/>
-        <span class="field-hint">Leave blank if you don't have one yet.</span>
-      </div>
-    </div>
-
-    <hr class="field-divider"/>
-
-    <div class="field-section-label">Services Requested — select all that apply</div>
-
-    <div class="service-group-label">CAC Registration & Compliance</div>
-    <div class="services-grid">
-      <label class="service-check" id="sc-bn"><input type="checkbox" value="Business Name Registration" onchange="updateServiceChecks()"> Business Name Registration</label>
-      <label class="service-check" id="sc-ltd"><input type="checkbox" value="Limited Company Registration" onchange="updateServiceChecks()"> Limited Company Registration</label>
-      <label class="service-check" id="sc-it"><input type="checkbox" value="Incorporated Trustees / NGO" onchange="updateServiceChecks()"> Incorporated Trustees / NGO</label>
-      <label class="service-check" id="sc-bnr"><input type="checkbox" value="Business Name Renewal" onchange="updateServiceChecks()"> Business Name Renewal</label>
-      <label class="service-check" id="sc-post"><input type="checkbox" value="Post-incorporation Changes" onchange="updateServiceChecks()"> Post-incorporation Changes</label>
-      <label class="service-check" id="sc-returns"><input type="checkbox" value="CAC Annual Returns" onchange="updateServiceChecks()"> CAC Annual Returns</label>
-    </div>
-
-    <div class="service-group-label">Tax & Regulatory</div>
-    <div class="services-grid">
-      <label class="service-check" id="sc-tin"><input type="checkbox" value="TIN Registration" onchange="updateServiceChecks()"> TIN Registration</label>
-      <label class="service-check" id="sc-tinv"><input type="checkbox" value="TIN Validation" onchange="updateServiceChecks()"> TIN Validation</label>
-      <label class="service-check" id="sc-scuml"><input type="checkbox" value="SCUML Registration" onchange="updateServiceChecks()"> SCUML Registration</label>
-      <label class="service-check" id="sc-corp"><input type="checkbox" value="Corporate & Regulatory Compliance" onchange="updateServiceChecks()"> Corporate & Regulatory Compliance</label>
-    </div>
-
-    <div class="service-group-label">Intellectual Property & Legal</div>
-    <div class="services-grid">
-      <label class="service-check" id="sc-tm"><input type="checkbox" value="Trademark Registration" onchange="updateServiceChecks()"> Trademark Registration</label>
-      <label class="service-check" id="sc-copy"><input type="checkbox" value="Copyright Registration" onchange="updateServiceChecks()"> Copyright Registration</label>
-      <label class="service-check" id="sc-legal"><input type="checkbox" value="Legal Documentation" onchange="updateServiceChecks()"> Legal Documentation</label>
-    </div>
-
-    <div class="service-group-label">Identity & Other</div>
-    <div class="services-grid">
-      <label class="service-check" id="sc-nin"><input type="checkbox" value="NIN Registration / Retrieval" onchange="updateServiceChecks()"> NIN Registration / Retrieval</label>
-      <label class="service-check" id="sc-data"><input type="checkbox" value="Data Correction" onchange="updateServiceChecks()"> Data Correction</label>
-      <label class="service-check" id="sc-exp"><input type="checkbox" value="Export / Import Licensing" onchange="updateServiceChecks()"> Export / Import Licensing</label>
-      <label class="service-check" id="sc-imm"><input type="checkbox" value="Expatriate / Immigration Support" onchange="updateServiceChecks()"> Expatriate / Immigration Support</label>
-      <label class="service-check" id="sc-visa"><input type="checkbox" value="Student Visa & Relocation" onchange="updateServiceChecks()"> Student Visa & Relocation</label>
-      <label class="service-check" id="sc-adv"><input type="checkbox" value="Business Advisory" onchange="updateServiceChecks()"> Business Advisory</label>
-      <label class="service-check" id="sc-cyber"><input type="checkbox" value="Cybersecurity Support" onchange="updateServiceChecks()"> Cybersecurity Support</label>
-    </div>
-
-    <div id="service-error" style="display:none; font-size:11px; color:var(--error); margin-top:8px;">Please select at least one service.</div>
-
-  </div>
-  <div class="nav-buttons">
-    <span class="step-counter">Step 1 of 7</span>
-    <button class="btn btn-next" onclick="nextStep(1)">Continue →</button>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════
-     STEP 2 — Personal Details
-═══════════════════════════════════════ -->
-<div class="section-card" id="step-2">
-  <div class="section-header">
-    <div class="section-num">2</div>
-    <div>
-      <div class="section-title">Personal Details</div>
-      <div class="section-subtitle">Enter exactly as they appear on your NIN record</div>
-    </div>
-  </div>
-  <div class="section-body">
-
-    <div class="info-notice">⚠ Enter these details exactly as they appear on your NIN record to avoid CAC filing errors.</div>
-
-    <div class="field-group triple">
-      <div class="field" id="f-firstname">
-        <label>First Name <span class="req">*</span></label>
-        <input type="text" id="firstname" placeholder="First name"/>
-        <span class="error-msg">Required</span>
-      </div>
-      <div class="field">
-        <label>Middle Name <span class="opt">(optional)</span></label>
-        <input type="text" id="middlename" placeholder="Middle name"/>
-      </div>
-      <div class="field" id="f-lastname">
-        <label>Surname <span class="req">*</span></label>
-        <input type="text" id="lastname" placeholder="Surname"/>
-        <span class="error-msg">Required</span>
-      </div>
-    </div>
-
-    <div class="field-group triple">
-      <div class="field" id="f-dob">
-        <label>Date of Birth <span class="req">*</span></label>
-        <input type="date" id="dob"/>
-        <span class="error-msg">Required</span>
-      </div>
-      <div class="field" id="f-gender">
-        <label>Gender <span class="req">*</span></label>
-        <select id="gender">
-          <option value="">Select…</option>
-          <option>Male</option>
-          <option>Female</option>
-        </select>
-        <span class="error-msg">Required</span>
-      </div>
-      <div class="field" id="f-nationality">
-        <label>Nationality <span class="req">*</span></label>
-        <input type="text" id="nationality" value="Nigerian" placeholder="e.g. Nigerian"/>
-        <span class="error-msg">Required</span>
-      </div>
-    </div>
-
-    <div class="field-group">
-      <div class="field" id="f-stateoforigin">
-        <label>State of Origin <span class="req">*</span></label>
-        <select id="stateoforigin">
-          <option value="">Select state…</option>
-          <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option>
-          <option>Anambra</option><option>Bauchi</option><option>Bayelsa</option>
-          <option>Benue</option><option>Borno</option><option>Cross River</option>
-          <option>Delta</option><option>Ebonyi</option><option>Edo</option>
-          <option>Ekiti</option><option>Enugu</option><option>FCT — Abuja</option>
-          <option>Gombe</option><option>Imo</option><option>Jigawa</option>
-          <option>Kaduna</option><option>Kano</option><option>Katsina</option>
-          <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
-          <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
-          <option>Ogun</option><option>Ondo</option><option>Osun</option>
-          <option>Oyo</option><option>Plateau</option><option>Rivers</option>
-          <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
-          <option>Zamfara</option>
-        </select>
-        <span class="error-msg">Required</span>
-      </div>
-      <div class="field" id="f-occupation">
-        <label>Occupation <span class="req">*</span></label>
-        <input type="text" id="occupation" placeholder="e.g. Entrepreneur, Engineer"/>
-        <span class="error-msg">Required</span>
-      </div>
-    </div>
-
-    <div class="field-group single">
-      <div class="field" id="f-address">
-        <label>Residential Address <span class="req">*</span></label>
-        <textarea id="address" placeholder="Full residential address — not a P.O. Box"></textarea>
-        <span class="error-msg">Required</span>
-      </div>
-    </div>
-
-    <div class="field-group">
-      <div class="field" id="f-nin">
-        <label>NIN Number <span class="req">*</span></label>
-        <input type="text" id="nin" placeholder="11-digit NIN" maxlength="11" pattern="\d{11}"/>
-        <span class="field-hint">11 digits. We can assist with retrieval if needed.</span>
-        <span class="error-msg">Required — must be 11 digits</span>
-      </div>
-      <div class="field">
-        <label>BVN <span class="opt">(if required for your service)</span></label>
-        <input type="text" id="bvn" placeholder="11-digit BVN" maxlength="11" pattern="\d{11}"/>
-        <span class="field-hint">11 digits. Only provide if relevant to your service.</span>
-      </div>
-    </div>
-
-    <!-- TIN — shown only if TIN service selected -->
-    <div id="tin-block" style="display:none;">
-      <div class="field-group">
-        <div class="field">
-          <label>Existing TIN (NRS) <span class="opt">(if already registered)</span></label>
-          <input type="text" id="tin" placeholder="Your Tax Identification Number"/>
-          <span class="field-hint">Issued by the Nigerian Revenue Service (NRS).</span>
-        </div>
-        <div class="field">
-          <label>Tax Office / State <span class="opt">(optional)</span></label>
-          <input type="text" id="taxoffice" placeholder="e.g. Lagos State IRS"/>
+  <!-- ═══ STAGE: CONTACT ═══ -->
+  <div class="stage" id="stage-contact">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-contact">2</div>
+        <div>
+          <div class="stage-title">Your Contact Details</div>
+          <div class="stage-sub">Basic information so we can reach you</div>
         </div>
       </div>
-    </div>
-
-    <!-- SCUML — shown only if SCUML selected -->
-    <div id="scuml-block" style="display:none;">
-      <div class="field-group single">
-        <div class="field">
-          <label>Existing SCUML Number <span class="opt">(if already registered)</span></label>
-          <input type="text" id="scumlno" placeholder="Your SCUML registration number"/>
-          <span class="field-hint">Special Control Unit Against Money Laundering registration.</span>
+      <div class="stage-body">
+        <div class="field-row">
+          <div class="field" id="fw-fullname">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" name="Full_Name" id="fullname" placeholder="Your full name"/>
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field" id="fw-phone">
+            <label>Phone / WhatsApp <span class="req">*</span></label>
+            <input type="tel" name="Phone" id="phone" placeholder="+234 800 000 0000" maxlength="14"/>
+            <span class="err-msg">Enter a valid Nigerian number</span>
+          </div>
         </div>
-      </div>
-    </div>
-
-  </div>
-  <div class="nav-buttons">
-    <button class="btn btn-back" onclick="prevStep(2)">← Back</button>
-    <span class="step-counter">Step 2 of 7</span>
-    <button class="btn btn-next" onclick="nextStep(2)">Continue →</button>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════
-     STEP 3 — Documents
-═══════════════════════════════════════ -->
-<div class="section-card" id="step-3">
-  <div class="section-header">
-    <div class="section-num">3</div>
-    <div>
-      <div class="section-title">Document Upload</div>
-      <div class="section-subtitle">Submit your required identity documents via the secure upload form</div>
-    </div>
-  </div>
-  <div class="section-body">
-
-    <div class="info-notice gold">
-      📎 Document uploads are handled separately via a secure Google Form to keep your files safe and organized. Click the button below to open it — it will open in a new tab so you can return here to continue.
-    </div>
-
-    <div class="doc-upload-box">
-      <div class="upload-icon">📂</div>
-      <h3>Upload Your Documents</h3>
-      <p>Please have the following ready before clicking:</p>
-      <ul>
-        <li>Valid ID — Passport, NIN card, or Driver's Licence</li>
-        <li>Passport photograph (clear, white/plain background)</li>
-        <li>Signature (signed on white paper, photographed or scanned)</li>
-        <li>Any additional documents relevant to your service</li>
-        <li>If adding a director/shareholder — their ID, photo & signature</li>
-      </ul>
-      <a href="https://forms.gle/NABsPerbWMifSTTA9" target="_blank" class="btn-upload-link">Open Document Upload Form ↗</a>
-      <p class="doc-note">After uploading, return to this tab and click Continue below.</p>
-    </div>
-
-    <div class="field-group single" style="margin-top:20px;">
-      <div class="field">
-        <label>Upload Confirmation <span class="opt">(optional)</span></label>
-        <input type="text" id="uploadconfirm" placeholder="e.g. Uploaded — 3 files submitted"/>
-        <span class="field-hint">You can note here that you've completed the upload, or leave blank.</span>
-      </div>
-    </div>
-
-  </div>
-  <div class="nav-buttons">
-    <button class="btn btn-back" onclick="prevStep(3)">← Back</button>
-    <span class="step-counter">Step 3 of 7</span>
-    <button class="btn btn-next" onclick="nextStep(3)">Continue →</button>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════
-     STEP 4 — Business Details
-═══════════════════════════════════════ -->
-<div class="section-card" id="step-4">
-  <div class="section-header">
-    <div class="section-num">4</div>
-    <div>
-      <div class="section-title">Business Details</div>
-      <div class="section-subtitle">Details for the business or company being registered</div>
-    </div>
-  </div>
-  <div class="section-body">
-
-    <!-- Business Name section — shown for BN, Renewal, Post-inc -->
-    <div id="bn-section">
-      <div class="field-section-label">Business Name Details</div>
-      <div class="info-notice">CAC checks name availability. Provide at least 2 options in order of preference.</div>
-      <div class="field-group">
-        <div class="field" id="f-bn1">
-          <label>Preferred Name — 1st Choice <span class="req">*</span></label>
-          <input type="text" id="bn1" placeholder="Your preferred business name"/>
-          <span class="error-msg">Required</span>
-        </div>
-        <div class="field">
-          <label>Preferred Name — 2nd Choice <span class="opt">(backup)</span></label>
-          <input type="text" id="bn2" placeholder="Alternative name"/>
-        </div>
-      </div>
-      <div class="field-group single">
-        <div class="field" id="f-bnbiz">
-          <label>Nature of Business <span class="req">*</span></label>
-          <textarea id="bnbiz" placeholder="Describe what the business does"></textarea>
-          <span class="error-msg">Required</span>
-        </div>
-      </div>
-      <div class="field-group">
-        <div class="field" id="f-bnaddress">
-          <label>Business Address <span class="req">*</span></label>
-          <input type="text" id="bnaddress" placeholder="Physical business address in Nigeria"/>
-          <span class="error-msg">Required</span>
-        </div>
-        <div class="field">
-          <label>Existing RC / BN Number <span class="opt">(for renewals/changes)</span></label>
-          <input type="text" id="bnrc" placeholder="e.g. BN 1234567"/>
-          <span class="field-hint">Only if this is a renewal or post-registration change.</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Limited Company section -->
-    <div id="ltd-section" style="display:none;">
-      <hr class="field-divider"/>
-      <div class="field-section-label">Limited Company Details</div>
-      <div class="field-group">
-        <div class="field" id="f-ltd1">
-          <label>Preferred Company Name — 1st Choice <span class="req">*</span></label>
-          <input type="text" id="ltd1" placeholder="e.g. Your Company Limited"/>
-          <span class="error-msg">Required</span>
-        </div>
-        <div class="field">
-          <label>Preferred Company Name — 2nd Choice <span class="opt">(backup)</span></label>
-          <input type="text" id="ltd2" placeholder="Alternative name"/>
-        </div>
-      </div>
-      <div class="field-group single">
-        <div class="field" id="f-ltdbiz">
-          <label>Nature of Business / Principal Activities <span class="req">*</span></label>
-          <textarea id="ltdbiz" placeholder="Describe what the company does and its main activities"></textarea>
-          <span class="error-msg">Required</span>
-        </div>
-      </div>
-      <div class="field-group">
-        <div class="field" id="f-ltdshare">
-          <label>Share Capital <span class="req">*</span></label>
-          <select id="ltdshare">
-            <option value="">Select…</option>
-            <option>₦1,000,000</option>
-            <option>₦5,000,000</option>
-            <option>₦10,000,000</option>
-            <option>₦100,000,000</option>
-            <option>Other — specify in next field</option>
-          </select>
-          <span class="error-msg">Required</span>
-        </div>
-        <div class="field">
-          <label>Custom Share Capital <span class="opt">(if Other selected)</span></label>
-          <input type="text" id="ltdshareother" placeholder="e.g. ₦50,000,000"/>
-        </div>
-      </div>
-      <div class="field-group">
-        <div class="field">
-          <label>Registered Office Address <span class="opt">(if known)</span></label>
-          <input type="text" id="ltdaddr" placeholder="Physical address in Nigeria"/>
-        </div>
-        <div class="field">
-          <label>Existing RC Number <span class="opt">(for post-incorporation changes)</span></label>
-          <input type="text" id="ltdrc" placeholder="e.g. RC 1234567"/>
-        </div>
-      </div>
-    </div>
-
-    <!-- Incorporated Trustees -->
-    <div id="it-section" style="display:none;">
-      <hr class="field-divider"/>
-      <div class="field-section-label">Incorporated Trustees / NGO Details</div>
-      <div class="field-group">
-        <div class="field" id="f-it1">
-          <label>Organisation Name — 1st Choice <span class="req">*</span></label>
-          <input type="text" id="it1" placeholder="e.g. Hope Foundation"/>
-          <span class="error-msg">Required</span>
-        </div>
-        <div class="field">
-          <label>Organisation Name — 2nd Choice <span class="opt">(backup)</span></label>
-          <input type="text" id="it2" placeholder="Alternative name"/>
-        </div>
-      </div>
-      <div class="field-group single">
-        <div class="field" id="f-itobj">
-          <label>Objects / Purpose of Organisation <span class="req">*</span></label>
-          <textarea id="itobj" placeholder="State the aims and objectives of the organisation"></textarea>
-          <span class="error-msg">Required</span>
-        </div>
-      </div>
-      <div class="field-group">
-        <div class="field">
-          <label>Organisation Address</label>
-          <input type="text" id="itaddr" placeholder="Physical address in Nigeria"/>
-        </div>
-        <div class="field">
-          <label>Number of Trustees</label>
-          <input type="number" id="ittrustees" placeholder="e.g. 3" min="2"/>
-          <span class="field-hint">Minimum 2 trustees required by CAC.</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- No business step needed notice -->
-    <div id="no-biz-notice" style="display:none;">
-      <div class="info-notice">No company or business registration service was selected. This step does not apply to your selected services. Click Continue to proceed.</div>
-    </div>
-
-  </div>
-  <div class="nav-buttons">
-    <button class="btn btn-back" onclick="prevStep(4)">← Back</button>
-    <span class="step-counter">Step 4 of 7</span>
-    <button class="btn btn-next" onclick="nextStep(4)">Continue →</button>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════
-     STEP 5 — Trademark
-═══════════════════════════════════════ -->
-<div class="section-card" id="step-5">
-  <div class="section-header">
-    <div class="section-num">5</div>
-    <div>
-      <div class="section-title">Trademark / IP Information</div>
-      <div class="section-subtitle">Details for your trademark or copyright application</div>
-    </div>
-  </div>
-  <div class="section-body">
-
-    <div id="tm-section">
-      <div class="field-section-label">Trademark Application</div>
-      <div class="field-group">
-        <div class="field" id="f-tmmark">
-          <label>Word / Mark to be Filed <span class="req">*</span></label>
-          <input type="text" id="tmmark" placeholder="e.g. BRANDNAME"/>
-          <span class="error-msg">Required</span>
-        </div>
-        <div class="field" id="f-tmclass">
-          <label>Trademark Class <span class="req">*</span></label>
-          <input type="text" id="tmclass" placeholder="e.g. Class 35, Class 42"/>
-          <span class="field-hint">Not sure? We will advise on the correct class.</span>
-          <span class="error-msg">Required</span>
-        </div>
-      </div>
-      <div class="field-group">
-        <div class="field" id="f-tmapplicant">
-          <label>Applicant Name <span class="req">*</span></label>
-          <input type="text" id="tmapplicant" placeholder="Individual or company name as on certificate"/>
-          <span class="error-msg">Required</span>
-        </div>
-        <div class="field" id="f-tmphone">
-          <label>Applicant Phone <span class="req">*</span></label>
-          <input type="tel" id="tmphone" placeholder="+234 800 000 0000"/>
-          <span class="error-msg">Required</span>
-        </div>
-      </div>
-      <div class="field-group single">
-        <div class="field" id="f-tmaddr">
-          <label>Applicant Address <span class="req">*</span></label>
-          <textarea id="tmaddr" placeholder="Full address for trademark registration record"></textarea>
-          <span class="error-msg">Required</span>
-        </div>
-      </div>
-      <div class="field-group single">
-        <div class="field">
-          <label>Additional / Future Marks <span class="opt">(optional — for planning only)</span></label>
-          <textarea id="tmfuture" placeholder="List any other marks you may want to register in future, with intended class if known"></textarea>
-        </div>
-      </div>
-    </div>
-
-    <div id="copy-section" style="display:none;">
-      <hr class="field-divider"/>
-      <div class="field-section-label">Copyright Registration</div>
-      <div class="field-group single">
-        <div class="field">
-          <label>Work to be Registered</label>
-          <textarea id="copywork" placeholder="Describe the work — e.g. literary work, musical composition, artistic work, software"></textarea>
-        </div>
-      </div>
-      <div class="field-group">
-        <div class="field">
-          <label>Title of Work</label>
-          <input type="text" id="copytitle" placeholder="Title of the work"/>
-        </div>
-        <div class="field">
-          <label>Year of Creation</label>
-          <input type="text" id="copyyear" placeholder="e.g. 2025"/>
-        </div>
-      </div>
-    </div>
-
-    <div id="no-ip-notice" style="display:none;">
-      <div class="info-notice">No trademark or IP service was selected. This step does not apply. Click Continue to proceed.</div>
-    </div>
-
-  </div>
-  <div class="nav-buttons">
-    <button class="btn btn-back" onclick="prevStep(5)">← Back</button>
-    <span class="step-counter">Step 5 of 7</span>
-    <button class="btn btn-next" onclick="nextStep(5)">Continue →</button>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════
-     STEP 6 — Directors / Shareholders / Proprietor
-═══════════════════════════════════════ -->
-<div class="section-card" id="step-6">
-  <div class="section-header">
-    <div class="section-num">6</div>
-    <div>
-      <div class="section-title" id="step6-title">Directors & Shareholders</div>
-      <div class="section-subtitle" id="step6-sub">Only complete if adding someone other than yourself</div>
-    </div>
-  </div>
-  <div class="section-body">
-
-    <!-- For Limited Company / Incorporated Trustees -->
-    <div id="director-section">
-      <div class="field-group single">
-        <div class="field">
-          <label>Are you adding any additional director or shareholder? <span class="req">*</span></label>
-          <div class="radio-group">
-            <label class="radio-option"><input type="radio" name="adddir" value="No" checked onchange="toggleDirector(this)"/> No — proceed with me only</label>
-            <label class="radio-option"><input type="radio" name="adddir" value="Yes" onchange="toggleDirector(this)"/> Yes — add another person</label>
+        <div class="field-row">
+          <div class="field" id="fw-email">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="Email" id="email" placeholder="your@email.com"/>
+            <span class="err-msg">Enter a valid email address</span>
+          </div>
+          <div class="field">
+            <label>Invoice / Reference <span class="opt">(if you have one)</span></label>
+            <input type="text" name="Invoice_Reference" id="ref" placeholder="e.g. INV-2026-001"/>
+            <span class="field-hint">Leave blank if not yet assigned.</span>
           </div>
         </div>
       </div>
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-contact"></span>
+        <button type="button" class="btn btn-next" onclick="goNext('contact')">Continue →</button>
+      </div>
+    </div>
+  </div>
 
-      <div class="conditional-block" id="director-block">
-        <div class="field-section-label">Additional Director / Shareholder</div>
-        <div class="field-group triple">
-          <div class="field">
-            <label>First Name</label>
-            <input type="text" id="dir-first" placeholder="First name"/>
+  <!-- ═══ STAGE: PERSONAL ═══ -->
+  <div class="stage" id="stage-personal">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-personal">3</div>
+        <div>
+          <div class="stage-title">Personal Details</div>
+          <div class="stage-sub">Enter exactly as they appear on your NIN record</div>
+        </div>
+      </div>
+      <div class="stage-body">
+        <div class="notice blue">⚠ These details must match your NIN record exactly to avoid CAC filing errors.</div>
+        <div class="field-row three">
+          <div class="field" id="fw-firstname">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" name="First_Name" id="firstname" placeholder="First name"/>
+            <span class="err-msg">Required</span>
           </div>
           <div class="field">
             <label>Middle Name <span class="opt">(optional)</span></label>
-            <input type="text" id="dir-mid" placeholder="Middle name"/>
+            <input type="text" name="Middle_Name" id="middlename" placeholder="Middle name"/>
           </div>
-          <div class="field">
-            <label>Surname</label>
-            <input type="text" id="dir-last" placeholder="Surname"/>
+          <div class="field" id="fw-lastname">
+            <label>Surname <span class="req">*</span></label>
+            <input type="text" name="Surname" id="lastname" placeholder="Surname"/>
+            <span class="err-msg">Required</span>
           </div>
         </div>
-        <div class="field-group">
-          <div class="field">
-            <label>Role</label>
-            <select id="dir-role">
+        <div class="field-row three">
+          <div class="field" id="fw-dob">
+            <label>Date of Birth <span class="req">*</span></label>
+            <input type="date" name="Date_of_Birth" id="dob"/>
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field" id="fw-gender">
+            <label>Gender <span class="req">*</span></label>
+            <select name="Gender" id="gender">
               <option value="">Select…</option>
-              <option>Shareholder only</option>
-              <option>Director only</option>
-              <option>Shareholder and Director</option>
+              <option>Male</option><option>Female</option>
+            </select>
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field" id="fw-stateoforigin">
+            <label>State of Origin <span class="req">*</span></label>
+            <select name="State_of_Origin" id="stateoforigin">
+              <option value="">Select state…</option>
+              <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option><option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option><option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option><option>Ekiti</option><option>Enugu</option><option>FCT — Abuja</option><option>Gombe</option><option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option><option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option><option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option><option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option><option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option><option>Zamfara</option>
+            </select>
+            <span class="err-msg">Required</span>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field" id="fw-nationality">
+            <label>Nationality <span class="req">*</span></label>
+            <input type="text" name="Nationality" id="nationality" value="Nigerian" placeholder="e.g. Nigerian"/>
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field" id="fw-occupation">
+            <label>Occupation <span class="req">*</span></label>
+            <input type="text" name="Occupation" id="occupation" placeholder="e.g. Entrepreneur"/>
+            <span class="err-msg">Required</span>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div class="field" id="fw-address">
+            <label>Residential Address <span class="req">*</span></label>
+            <textarea name="Residential_Address" id="address" placeholder="Full address — not a P.O. Box"></textarea>
+            <span class="err-msg">Required</span>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field" id="fw-nin">
+            <label>NIN Number <span class="req">*</span></label>
+            <input type="text" name="NIN" id="nin" placeholder="11-digit NIN" maxlength="11" pattern="\d{11}"/>
+            <span class="field-hint">11 digits. We can assist with retrieval if needed.</span>
+            <span class="err-msg">Must be exactly 11 digits</span>
+          </div>
+          <div class="field">
+            <label>BVN <span class="opt">(if applicable)</span></label>
+            <input type="text" name="BVN" id="bvn" placeholder="11-digit BVN" maxlength="11"/>
+            <span class="field-hint">Only if relevant to your service.</span>
+          </div>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-personal"></span>
+        <button type="button" class="btn btn-next" onclick="goNext('personal')">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STAGE: BUSINESS NAME ═══ -->
+  <div class="stage" id="stage-bn">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-bn">4</div>
+        <div>
+          <div class="stage-title">Business Name Details</div>
+          <div class="stage-sub">Details for your business name registration</div>
+        </div>
+      </div>
+      <div class="stage-body">
+        <div class="notice blue">CAC checks name availability. Provide 2 options in order of preference.</div>
+        <div class="field-row">
+          <div class="field" id="fw-bn1">
+            <label>Preferred Name — 1st Choice <span class="req">*</span></label>
+            <input type="text" name="BN_Name_1st" id="bn1" placeholder="Your preferred business name"/>
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field">
+            <label>Preferred Name — 2nd Choice <span class="opt">(backup)</span></label>
+            <input type="text" name="BN_Name_2nd" id="bn2" placeholder="Alternative name"/>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div class="field" id="fw-bnbiz">
+            <label>Nature of Business <span class="req">*</span></label>
+            <textarea name="BN_Nature_of_Business" id="bnbiz" placeholder="Describe what the business does"></textarea>
+            <span class="err-msg">Required</span>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field" id="fw-bnaddress">
+            <label>Business Address <span class="req">*</span></label>
+            <input type="text" name="BN_Business_Address" id="bnaddress" placeholder="Physical address in Nigeria"/>
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field">
+            <label>Existing BN Number <span class="opt">(for renewals / changes)</span></label>
+            <input type="text" name="BN_Existing_Number" id="bnrc" placeholder="e.g. BN 1234567"/>
+            <span class="field-hint">Leave blank if this is a new registration.</span>
+          </div>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-bn"></span>
+        <button type="button" class="btn btn-next" onclick="goNext('bn')">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STAGE: LIMITED COMPANY ═══ -->
+  <div class="stage" id="stage-ltd">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-ltd">5</div>
+        <div>
+          <div class="stage-title">Limited Company Details</div>
+          <div class="stage-sub">Details for your RC company registration</div>
+        </div>
+      </div>
+      <div class="stage-body">
+        <div class="notice blue">CAC checks name availability. Provide 2 options in order of preference.</div>
+        <div class="field-row">
+          <div class="field" id="fw-ltd1">
+            <label>Company Name — 1st Choice <span class="req">*</span></label>
+            <input type="text" name="Ltd_Name_1st" id="ltd1" placeholder="e.g. Your Company Limited"/>
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field">
+            <label>Company Name — 2nd Choice <span class="opt">(backup)</span></label>
+            <input type="text" name="Ltd_Name_2nd" id="ltd2" placeholder="Alternative name"/>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div class="field" id="fw-ltdbiz">
+            <label>Principal Activities / Nature of Business <span class="req">*</span></label>
+            <textarea name="Ltd_Activities" id="ltdbiz" placeholder="Describe what the company does and its main activities"></textarea>
+            <span class="err-msg">Required</span>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field" id="fw-ltdshare">
+            <label>Share Capital <span class="req">*</span></label>
+            <select name="Ltd_Share_Capital" id="ltdshare">
+              <option value="">Select…</option>
+              <option>₦1,000,000</option>
+              <option>₦5,000,000</option>
+              <option>₦10,000,000</option>
+              <option>₦100,000,000</option>
+              <option>Other — specify below</option>
+            </select>
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field">
+            <label>Custom Share Capital <span class="opt">(if Other above)</span></label>
+            <input type="text" name="Ltd_Share_Capital_Custom" id="ltdshareother" placeholder="e.g. ₦50,000,000"/>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Registered Office Address <span class="opt">(if known)</span></label>
+            <input type="text" name="Ltd_Office_Address" id="ltdaddr" placeholder="Physical address in Nigeria"/>
+          </div>
+          <div class="field">
+            <label>Existing RC Number <span class="opt">(for changes only)</span></label>
+            <input type="text" name="Ltd_RC_Number" id="ltdrc" placeholder="e.g. RC 1234567"/>
+            <span class="field-hint">Only if this is a post-registration change.</span>
+          </div>
+        </div>
+
+        <hr class="sec-divider"/>
+        <div class="sec-label">Directors & Shareholders</div>
+        <div class="field-row one">
+          <div class="field">
+            <label>Are you adding any additional director or shareholder?</label>
+            <div class="radio-group" style="margin-top:6px;">
+              <label class="radio-opt"><input type="radio" name="add_director" value="No" checked onchange="toggleCond('director-cond',this)"/> No — me only</label>
+              <label class="radio-opt"><input type="radio" name="add_director" value="Yes" onchange="toggleCond('director-cond',this)"/> Yes — add another person</label>
+            </div>
+          </div>
+        </div>
+        <div class="cond" id="director-cond">
+          <div class="sec-label">Additional Director / Shareholder</div>
+          <div class="field-row three">
+            <div class="field"><label>First Name</label><input type="text" name="Dir_First_Name" id="dir-first" placeholder="First name"/></div>
+            <div class="field"><label>Middle Name <span class="opt">(opt)</span></label><input type="text" name="Dir_Middle_Name" placeholder="Middle name"/></div>
+            <div class="field"><label>Surname</label><input type="text" name="Dir_Surname" id="dir-last" placeholder="Surname"/></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Role</label>
+              <select name="Dir_Role" id="dir-role">
+                <option value="">Select…</option>
+                <option>Shareholder only</option>
+                <option>Director only</option>
+                <option>Shareholder and Director</option>
+              </select>
+            </div>
+            <div class="field"><label>Shareholding %</label><input type="text" name="Dir_Shareholding" id="dir-percent" placeholder="e.g. 30%"/></div>
+          </div>
+          <div class="field-row three">
+            <div class="field"><label>Date of Birth</label><input type="date" name="Dir_DOB" id="dir-dob"/></div>
+            <div class="field"><label>Phone</label><input type="tel" name="Dir_Phone" id="dir-phone" placeholder="+234…"/></div>
+            <div class="field"><label>NIN</label><input type="text" name="Dir_NIN" id="dir-nin" placeholder="11-digit NIN" maxlength="11"/></div>
+          </div>
+          <div class="field-row one">
+            <div class="field"><label>Residential Address</label><textarea name="Dir_Address" id="dir-address" placeholder="Full address — not a P.O. Box"></textarea></div>
+          </div>
+          <div class="notice blue" style="margin-top:4px;">Their ID, passport photo, and signature should be uploaded in the Documents step.</div>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-ltd"></span>
+        <button type="button" class="btn btn-next" onclick="goNext('ltd')">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STAGE: INCORPORATED TRUSTEES ═══ -->
+  <div class="stage" id="stage-it">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-it">6</div>
+        <div>
+          <div class="stage-title">Incorporated Trustees / NGO</div>
+          <div class="stage-sub">Organisation registration details</div>
+        </div>
+      </div>
+      <div class="stage-body">
+        <div class="field-row">
+          <div class="field" id="fw-it1">
+            <label>Organisation Name — 1st Choice <span class="req">*</span></label>
+            <input type="text" name="IT_Name_1st" id="it1" placeholder="e.g. Hope Foundation"/>
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field">
+            <label>Organisation Name — 2nd Choice <span class="opt">(backup)</span></label>
+            <input type="text" name="IT_Name_2nd" id="it2" placeholder="Alternative name"/>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div class="field" id="fw-itobj">
+            <label>Objects / Purpose of Organisation <span class="req">*</span></label>
+            <textarea name="IT_Objects" id="itobj" placeholder="State the aims and objectives of the organisation"></textarea>
+            <span class="err-msg">Required</span>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Organisation Address</label>
+            <input type="text" name="IT_Address" placeholder="Physical address in Nigeria"/>
+          </div>
+          <div class="field">
+            <label>Number of Trustees</label>
+            <input type="number" name="IT_Trustees_Count" placeholder="e.g. 3" min="2"/>
+            <span class="field-hint">Minimum 2 trustees required by CAC.</span>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div class="field">
+            <label>List of Trustees</label>
+            <textarea name="IT_Trustees_List" rows="5" placeholder="Trustee 1: Full name, phone, email&#10;Trustee 2: Full name, phone, email&#10;(continue for each trustee)"></textarea>
+            <span class="field-hint">List each trustee on a new line with their contact details.</span>
+          </div>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-it"></span>
+        <button type="button" class="btn btn-next" onclick="goNext('it')">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STAGE: TIN ═══ -->
+  <div class="stage" id="stage-tin">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-tin">7</div>
+        <div>
+          <div class="stage-title">TIN Details</div>
+          <div class="stage-sub">Tax Identification Number — Nigerian Revenue Service (NRS)</div>
+        </div>
+      </div>
+      <div class="stage-body">
+        <div class="field-row one">
+          <div class="field">
+            <label>TIN Service Required</label>
+            <div class="radio-group" style="margin-top:6px;">
+              <label class="radio-opt"><input type="radio" name="tin_type" value="New TIN Registration" checked/> New TIN Registration</label>
+              <label class="radio-opt"><input type="radio" name="tin_type" value="TIN Validation"/> TIN Validation</label>
+              <label class="radio-opt"><input type="radio" name="tin_type" value="Both"/> Both</label>
+            </div>
+          </div>
+        </div>
+        <hr class="sec-divider"/>
+        <div class="sec-label">Personal / Individual TIN Details</div>
+        <div class="field-row">
+          <div class="field">
+            <label>Existing TIN <span class="opt">(if validation)</span></label>
+            <input type="text" name="TIN_Number" id="tin" placeholder="Your Tax Identification Number (NRS)"/>
+            <span class="field-hint">Leave blank if applying for a new TIN.</span>
+          </div>
+          <div class="field">
+            <label>Tax Office / State</label>
+            <input type="text" name="TIN_Tax_Office" placeholder="e.g. Lagos State IRS / FIRS Ikeja"/>
+          </div>
+        </div>
+        <hr class="sec-divider"/>
+        <div class="sec-label">CAC / Business Details (if business TIN)</div>
+        <div class="notice gold">Only complete this section if the TIN is for a registered business or company.</div>
+        <div class="field-row">
+          <div class="field">
+            <label>Business / Company Name</label>
+            <input type="text" name="TIN_Business_Name" placeholder="Registered business or company name"/>
+          </div>
+          <div class="field">
+            <label>RC / BN Number</label>
+            <input type="text" name="TIN_RC_Number" placeholder="e.g. RC 1234567 or BN 1234567"/>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Registration Type</label>
+            <select name="TIN_Registration_Type">
+              <option value="">Select…</option>
+              <option>Business Name (BN)</option>
+              <option>Limited Company (RC)</option>
+              <option>Incorporated Trustees</option>
+              <option>Partnership</option>
             </select>
           </div>
           <div class="field">
-            <label>Shareholding %</label>
-            <input type="text" id="dir-percent" placeholder="e.g. 30%"/>
+            <label>Business Address</label>
+            <input type="text" name="TIN_Business_Address" placeholder="Registered business address"/>
           </div>
         </div>
-        <div class="field-group triple">
+        <div class="field-row one">
           <div class="field">
-            <label>Date of Birth</label>
-            <input type="date" id="dir-dob"/>
+            <label>Nature of Business</label>
+            <input type="text" name="TIN_Nature_of_Business" placeholder="e.g. Retail trade, technology services"/>
           </div>
-          <div class="field">
-            <label>Phone Number</label>
-            <input type="tel" id="dir-phone" placeholder="+234 800 000 0000"/>
-          </div>
-          <div class="field">
-            <label>NIN</label>
-            <input type="text" id="dir-nin" placeholder="11-digit NIN" maxlength="11"/>
-          </div>
-        </div>
-        <div class="field-group single">
-          <div class="field">
-            <label>Residential Address</label>
-            <textarea id="dir-address" placeholder="Full residential address — not a P.O. Box"></textarea>
-          </div>
-        </div>
-        <div class="info-notice" style="margin-top:0;">
-          📎 Upload this person's ID, passport photo, and signature via the Document Upload form (Step 3). Reference their name when uploading.
         </div>
       </div>
-    </div>
-
-    <!-- For Business Name — Proprietor only -->
-    <div id="proprietor-section" style="display:none;">
-      <div class="info-notice">
-        A Business Name is a sole proprietorship — only one proprietor is registered. Your personal details from Step 2 will be used as the proprietor information. No additional directors or shareholders are required.
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-tin"></span>
+        <button type="button" class="btn btn-next" onclick="goNext('tin')">Continue →</button>
       </div>
-      <div class="field-group single">
-        <div class="field">
-          <label>Any Additional Notes <span class="opt">(optional)</span></label>
-          <textarea id="prop-notes" placeholder="Any other details relevant to the proprietorship"></textarea>
+    </div>
+  </div>
+
+  <!-- ═══ STAGE: SCUML ═══ -->
+  <div class="stage" id="stage-scuml">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-scuml">8</div>
+        <div>
+          <div class="stage-title">SCUML Registration</div>
+          <div class="stage-sub">Special Control Unit Against Money Laundering</div>
         </div>
       </div>
-    </div>
+      <div class="stage-body">
+        <div class="notice blue">SCUML registration is required for Designated Non-Financial Businesses and Professions (DNFBPs) in Nigeria.</div>
 
-    <!-- For IT/NGO — Trustees -->
-    <div id="trustee-section" style="display:none;">
-      <div class="info-notice">List the names and contact details of all trustees. Minimum 2 required.</div>
-      <div class="field-group single">
-        <div class="field">
-          <label>Trustee Names & Contact Details</label>
-          <textarea id="trustees" rows="5" placeholder="Trustee 1: Full name, phone, email&#10;Trustee 2: Full name, phone, email&#10;Trustee 3: Full name, phone, email (etc.)"></textarea>
-          <span class="field-hint">Please list each trustee on a new line.</span>
+        <div class="sec-label">Business Category (select your category)</div>
+        <div class="scuml-cats">
+          <label class="scuml-cat"><input type="radio" name="scuml_category" value="Estate Agents / Real Estate"/> Estate Agents / Real Estate</label>
+          <label class="scuml-cat"><input type="radio" name="scuml_category" value="Lawyers / Legal Practitioners"/> Lawyers / Legal Practitioners</label>
+          <label class="scuml-cat"><input type="radio" name="scuml_category" value="Accountants / Auditors"/> Accountants / Auditors</label>
+          <label class="scuml-cat"><input type="radio" name="scuml_category" value="Dealers in Precious Metals & Stones"/> Dealers in Precious Metals & Stones</label>
+          <label class="scuml-cat"><input type="radio" name="scuml_category" value="Dealers in Luxury Goods"/> Dealers in Luxury Goods</label>
+          <label class="scuml-cat"><input type="radio" name="scuml_category" value="Notaries / Trust & Company Service Providers"/> Notaries / Trust & Company Service Providers</label>
+          <label class="scuml-cat"><input type="radio" name="scuml_category" value="Construction / Real Estate Development"/> Construction / Real Estate Development</label>
+          <label class="scuml-cat"><input type="radio" name="scuml_category" value="Car Dealers (High Value)"/> Car Dealers (High Value)</label>
+          <label class="scuml-cat"><input type="radio" name="scuml_category" value="Other DNFBP"/> Other DNFBP — specify below</label>
+        </div>
+        <div class="field-row one">
+          <div class="field">
+            <label>If Other — specify category</label>
+            <input type="text" name="SCUML_Category_Other" placeholder="Describe your business category"/>
+          </div>
+        </div>
+
+        <hr class="sec-divider"/>
+        <div class="sec-label">CAC / Business Details</div>
+        <div class="field-row">
+          <div class="field" id="fw-scumlbn">
+            <label>Business / Company Name <span class="req">*</span></label>
+            <input type="text" name="SCUML_Business_Name" id="scumlbn" placeholder="Registered name as on CAC certificate"/>
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field" id="fw-scumlrc">
+            <label>RC / BN Number <span class="req">*</span></label>
+            <input type="text" name="SCUML_RC_Number" id="scumlrc" placeholder="e.g. RC 1234567 or BN 1234567"/>
+            <span class="err-msg">Required</span>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Registration Type</label>
+            <select name="SCUML_Registration_Type">
+              <option value="">Select…</option>
+              <option>Business Name (BN)</option>
+              <option>Limited Company (RC)</option>
+              <option>Incorporated Trustees</option>
+              <option>Partnership</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Date of CAC Registration</label>
+            <input type="date" name="SCUML_CAC_Date"/>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div class="field">
+            <label>Business Address</label>
+            <input type="text" name="SCUML_Business_Address" placeholder="Registered business address"/>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div class="field">
+            <label>Nature of Transactions / Services Offered</label>
+            <textarea name="SCUML_Nature_of_Transactions" placeholder="Describe the transactions or services your business handles that require SCUML registration"></textarea>
+          </div>
+        </div>
+
+        <hr class="sec-divider"/>
+        <div class="sec-label">Compliance Officer Details</div>
+        <div class="notice gold">SCUML requires a designated compliance officer for the business.</div>
+        <div class="field-row">
+          <div class="field">
+            <label>Compliance Officer Name</label>
+            <input type="text" name="SCUML_Compliance_Officer" placeholder="Full name of compliance officer"/>
+            <span class="field-hint">Can be the business owner.</span>
+          </div>
+          <div class="field">
+            <label>Compliance Officer Phone</label>
+            <input type="tel" name="SCUML_Compliance_Phone" placeholder="+234 800 000 0000"/>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div class="field">
+            <label>Existing SCUML Number <span class="opt">(if already registered)</span></label>
+            <input type="text" name="SCUML_Existing_Number" placeholder="Your existing SCUML number"/>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div id="no-director-notice" style="display:none;">
-      <div class="info-notice">This step does not apply to your selected services. Click Continue to proceed.</div>
-    </div>
-
-  </div>
-  <div class="nav-buttons">
-    <button class="btn btn-back" onclick="prevStep(6)">← Back</button>
-    <span class="step-counter">Step 6 of 7</span>
-    <button class="btn btn-next" onclick="nextStep(6)">Continue →</button>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════
-     STEP 7 — Declaration
-═══════════════════════════════════════ -->
-<div class="section-card" id="step-7">
-  <div class="section-header">
-    <div class="section-num">7</div>
-    <div>
-      <div class="section-title">Declaration & Submission</div>
-      <div class="section-subtitle">Review and confirm before submitting</div>
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-scuml"></span>
+        <button type="button" class="btn btn-next" onclick="goNext('scuml')">Continue →</button>
+      </div>
     </div>
   </div>
-  <div class="section-body">
 
-    <div class="info-notice">
-      By submitting this form, you confirm that all information provided is accurate and complete. Awal Global Consults Limited will use this information solely for the purpose of your engagement.
-    </div>
+  <!-- ═══ STAGE: TRADEMARK ═══ -->
+  <div class="stage" id="stage-tm">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-tm">9</div>
+        <div>
+          <div class="stage-title">Trademark Registration</div>
+          <div class="stage-sub">Details for your trademark application</div>
+        </div>
+      </div>
+      <div class="stage-body">
 
-    <div class="checkbox-field" id="f-dec1">
-      <input type="checkbox" id="dec1"/>
-      <label for="dec1">I confirm that all information submitted in this form is accurate and complete to the best of my knowledge. I understand that incorrect information may delay or invalidate my registration.</label>
-    </div>
-    <div class="checkbox-field" id="f-dec2">
-      <input type="checkbox" id="dec2"/>
-      <label for="dec2">I consent to Awal Global Consults Limited processing and using this information and my submitted documents solely for the purpose of the services I have selected.</label>
-    </div>
-    <div class="checkbox-field" id="f-dec3">
-      <input type="checkbox" id="dec3"/>
-      <label for="dec3">I confirm that no additional shareholders, directors, nominees, or trustees should be added unless I expressly confirm this in a separate written instruction to Awal Global Consults Limited.</label>
-    </div>
+        <div class="sec-label">Type of Mark</div>
+        <div class="tm-type-grid" id="tm-type-grid">
+          <label class="tm-chip" onclick="toggleTmType(this)">
+            <input type="checkbox" name="TM_Type" value="Word Mark">
+            <div class="tm-chip-icon">🅰</div>
+            <div class="tm-chip-label">Word Mark</div>
+            <div class="tm-chip-sub">Name or slogan in text</div>
+          </label>
+          <label class="tm-chip" onclick="toggleTmType(this)">
+            <input type="checkbox" name="TM_Type" value="Logo / Device Mark">
+            <div class="tm-chip-icon">🖼</div>
+            <div class="tm-chip-label">Logo / Device</div>
+            <div class="tm-chip-sub">Graphic or symbol</div>
+          </label>
+          <label class="tm-chip" onclick="toggleTmType(this)">
+            <input type="checkbox" name="TM_Type" value="Combined Mark (Word + Logo)">
+            <div class="tm-chip-icon">🔤</div>
+            <div class="tm-chip-label">Combined</div>
+            <div class="tm-chip-sub">Word + logo together</div>
+          </label>
+          <label class="tm-chip" onclick="toggleTmType(this)">
+            <input type="checkbox" name="TM_Type" value="Slogan / Tagline">
+            <div class="tm-chip-icon">💬</div>
+            <div class="tm-chip-label">Slogan / Tagline</div>
+            <div class="tm-chip-sub">Phrase or motto</div>
+          </label>
+          <label class="tm-chip" onclick="toggleTmType(this)">
+            <input type="checkbox" name="TM_Type" value="Series Mark">
+            <div class="tm-chip-icon">📚</div>
+            <div class="tm-chip-label">Series Mark</div>
+            <div class="tm-chip-sub">Multiple related marks</div>
+          </label>
+          <label class="tm-chip" onclick="toggleTmType(this)">
+            <input type="checkbox" name="TM_Type" value="Shape / 3D Mark">
+            <div class="tm-chip-icon">📦</div>
+            <div class="tm-chip-label">Shape / 3D</div>
+            <div class="tm-chip-sub">Product shape or packaging</div>
+          </label>
+        </div>
+        <div id="tm-type-error" style="display:none;font-size:11px;color:var(--error);margin-bottom:12px;">Please select at least one mark type.</div>
 
-    <div id="submit-error" style="display:none; background:#fdf0f0; border:1px solid #e8c0c0; border-radius:6px; padding:12px 16px; margin-top:14px; font-size:12.5px; color:var(--error);">
-      Please tick all three declarations before submitting.
-    </div>
+        <div class="field-row" id="tm-word-row">
+          <div class="field" id="fw-tmmark">
+            <label>Word / Mark to be Filed <span class="req">*</span></label>
+            <input type="text" name="TM_Word_Mark" id="tmmark" placeholder="e.g. BRANDNAME"/>
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field" id="fw-tmclass">
+            <label>Trademark Class <span class="req">*</span></label>
+            <input type="text" name="TM_Class" id="tmclass" placeholder="e.g. Class 35, Class 42"/>
+            <span class="field-hint">Not sure? We will advise on the correct class.</span>
+            <span class="err-msg">Required</span>
+          </div>
+        </div>
 
+        <!-- Logo upload — shown when logo type selected -->
+        <div class="field-row one" id="tm-logo-row" style="display:none;">
+          <div class="field">
+            <label>Upload Logo / Mark Image</label>
+            <div class="upload-zone">
+              <input type="file" name="TM_Logo_File" accept=".jpg,.jpeg,.png,.pdf,.ai,.svg" onchange="showFile(this,'tm-logo-name')"/>
+              <div class="upload-icon">🖼</div>
+              <p><strong>Click to upload</strong> your logo or mark</p>
+              <p>JPG, PNG, PDF, AI, or SVG — max 5MB</p>
+              <div class="file-name" id="tm-logo-name"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field" id="fw-tmapplicant">
+            <label>Applicant Name <span class="req">*</span></label>
+            <input type="text" name="TM_Applicant_Name" id="tmapplicant" placeholder="Individual or company name as on certificate"/>
+            <span class="err-msg">Required</span>
+          </div>
+          <div class="field" id="fw-tmphone">
+            <label>Applicant Phone <span class="req">*</span></label>
+            <input type="tel" name="TM_Applicant_Phone" id="tmphone" placeholder="+234 800 000 0000"/>
+            <span class="err-msg">Required</span>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div class="field" id="fw-tmaddr">
+            <label>Applicant Address <span class="req">*</span></label>
+            <textarea name="TM_Applicant_Address" id="tmaddr" placeholder="Full address for trademark registration record"></textarea>
+            <span class="err-msg">Required</span>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div class="field">
+            <label>Additional / Future Marks <span class="opt">(planning only — no filing made)</span></label>
+            <textarea name="TM_Future_Marks" placeholder="List any other marks you may want to register in future, with intended class if known"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-tm"></span>
+        <button type="button" class="btn btn-next" onclick="goNext('tm')">Continue →</button>
+      </div>
+    </div>
   </div>
-  <div class="nav-buttons">
-    <button class="btn btn-back" onclick="prevStep(7)">← Back</button>
-    <span class="step-counter">Step 7 of 7</span>
-    <button class="btn btn-submit" onclick="submitForm()">Submit Application ✓</button>
-  </div>
-</div>
 
-<!-- ═══════════════════════════════════════
-     SUCCESS
-═══════════════════════════════════════ -->
-<div id="success-screen">
-  <div class="success-icon">✓</div>
-  <h2>Submission Received</h2>
-  <p>Thank you. Your client intake form has been successfully submitted to Awal Global Consults Limited.</p>
-  <div class="ref-box">
-    Submitted by: <strong id="success-name">—</strong>
-    Services: <span id="success-services" style="font-size:12px; color:var(--muted);"></span>
+  <!-- ═══ STAGE: COPYRIGHT ═══ -->
+  <div class="stage" id="stage-copy">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-copy">10</div>
+        <div>
+          <div class="stage-title">Copyright Registration</div>
+          <div class="stage-sub">Details for your copyright application</div>
+        </div>
+      </div>
+      <div class="stage-body">
+        <div class="field-row">
+          <div class="field">
+            <label>Title of Work</label>
+            <input type="text" name="Copy_Title" placeholder="Title of the work"/>
+          </div>
+          <div class="field">
+            <label>Year of Creation</label>
+            <input type="text" name="Copy_Year" placeholder="e.g. 2025"/>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Type of Work</label>
+            <select name="Copy_Type">
+              <option value="">Select…</option>
+              <option>Literary Work (book, article, script)</option>
+              <option>Musical Work</option>
+              <option>Artistic Work (painting, drawing, photograph)</option>
+              <option>Software / Computer Program</option>
+              <option>Film / Audiovisual Work</option>
+              <option>Sound Recording</option>
+              <option>Broadcast</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Author / Creator Name</label>
+            <input type="text" name="Copy_Author" placeholder="Full name of author/creator"/>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div class="field">
+            <label>Description of the Work</label>
+            <textarea name="Copy_Description" placeholder="Briefly describe the work and its content"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-copy"></span>
+        <button type="button" class="btn btn-next" onclick="goNext('copy')">Continue →</button>
+      </div>
+    </div>
   </div>
 
-  <div class="success-doc-reminder">
-    📎 <strong>Haven't uploaded your documents yet?</strong><br/>
-    Please complete the document upload via the Google Form:
-    <a href="https://forms.gle/NABsPerbWMifSTTA9" target="_blank">Open Document Upload Form ↗</a><br/>
-    <span style="font-size:11px;">Include your full name so we can match your documents to this submission.</span>
+  <!-- ═══ STAGE: LEGAL DOC ═══ -->
+  <div class="stage" id="stage-legal">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-legal">11</div>
+        <div>
+          <div class="stage-title">Legal Documentation</div>
+          <div class="stage-sub">Details for the document you need prepared</div>
+        </div>
+      </div>
+      <div class="stage-body">
+        <div class="field-row">
+          <div class="field">
+            <label>Type of Document</label>
+            <select name="Legal_Doc_Type">
+              <option value="">Select…</option>
+              <option>Affidavit</option>
+              <option>Legal Letter</option>
+              <option>Basic Agreement / Contract</option>
+              <option>Memorandum of Understanding (MOU)</option>
+              <option>Power of Attorney</option>
+              <option>Business Documentation</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Urgency</label>
+            <select name="Legal_Urgency">
+              <option value="">Select…</option>
+              <option>Standard</option>
+              <option>Urgent (within 48 hours)</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row one">
+          <div class="field">
+            <label>Details / Purpose of Document</label>
+            <textarea name="Legal_Details" placeholder="Explain what the document is for and any important details we should know"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-legal"></span>
+        <button type="button" class="btn btn-next" onclick="goNext('legal')">Continue →</button>
+      </div>
+    </div>
   </div>
 
-  <p>We will review your details and contact you within <strong>1 working day</strong> to confirm receipt and advise on next steps.</p>
-  <p style="margin-top:14px;">For urgent queries, reach us on WhatsApp: <strong>+234 703 833 6596</strong></p>
-</div>
+  <!-- ═══ STAGE: OTHER SERVICES ═══ -->
+  <div class="stage" id="stage-other">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-other">12</div>
+        <div>
+          <div class="stage-title" id="other-title">Additional Service Details</div>
+          <div class="stage-sub" id="other-sub">Brief information for your other requested services</div>
+        </div>
+      </div>
+      <div class="stage-body" id="other-body">
+        <!-- dynamically populated -->
+      </div>
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-other"></span>
+        <button type="button" class="btn btn-next" onclick="goNext('other')">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STAGE: DOCUMENTS ═══ -->
+  <div class="stage" id="stage-docs">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-docs">13</div>
+        <div>
+          <div class="stage-title">Identity Documents</div>
+          <div class="stage-sub">Upload clear, legible copies of required documents</div>
+        </div>
+      </div>
+      <div class="stage-body">
+        <div class="notice gold">📎 All files are sent securely with your submission. Max 5MB per file. JPG, PNG, or PDF accepted.</div>
+
+        <div class="field-row">
+          <div class="field" id="fw-idupload">
+            <label>Valid ID — Passport / NIN Card / Driver's Licence <span class="req">*</span></label>
+            <div class="upload-zone">
+              <input type="file" name="ID_Document" id="idupload" accept=".pdf,.jpg,.jpeg,.png" onchange="showFile(this,'id-fname')"/>
+              <div class="upload-icon">🪪</div>
+              <p><strong>Click to upload</strong> your valid ID</p>
+              <p>PDF, JPG, or PNG</p>
+              <div class="file-name" id="id-fname"></div>
+            </div>
+            <span class="err-msg">Please upload your ID</span>
+          </div>
+          <div class="field" id="fw-photoupload">
+            <label>Passport Photograph <span class="req">*</span></label>
+            <div class="upload-zone">
+              <input type="file" name="Passport_Photo" id="photoupload" accept=".jpg,.jpeg,.png" onchange="showFile(this,'photo-fname')"/>
+              <div class="upload-icon">📷</div>
+              <p><strong>Click to upload</strong> passport photo</p>
+              <p>Clear, recent, plain background — JPG or PNG</p>
+              <div class="file-name" id="photo-fname"></div>
+            </div>
+            <span class="err-msg">Please upload your photo</span>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field" id="fw-sigupload">
+            <label>Signature <span class="req">*</span></label>
+            <div class="upload-zone">
+              <input type="file" name="Signature" id="sigupload" accept=".jpg,.jpeg,.png,.pdf" onchange="showFile(this,'sig-fname')"/>
+              <div class="upload-icon">✍️</div>
+              <p><strong>Click to upload</strong> your signature</p>
+              <p>Sign on white paper, photograph or scan</p>
+              <div class="file-name" id="sig-fname"></div>
+            </div>
+            <span class="err-msg">Please upload your signature</span>
+          </div>
+          <div class="field">
+            <label>Additional Documents <span class="opt">(optional)</span></label>
+            <div class="upload-zone">
+              <input type="file" name="Additional_Docs" accept=".pdf,.jpg,.jpeg,.png" onchange="showFile(this,'extra-fname')"/>
+              <div class="upload-icon">📎</div>
+              <p><strong>Click to upload</strong> any additional files</p>
+              <p>e.g. existing certificates, supporting documents</p>
+              <div class="file-name" id="extra-fname"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Director docs — only if director added -->
+        <div id="dir-docs-section" style="display:none;">
+          <hr class="sec-divider"/>
+          <div class="sec-label">Additional Director / Shareholder Documents</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Their Valid ID</label>
+              <div class="upload-zone">
+                <input type="file" name="Director_ID" accept=".pdf,.jpg,.jpeg,.png" onchange="showFile(this,'dir-id-fname')"/>
+                <div class="upload-icon">🪪</div>
+                <p><strong>Click to upload</strong> their ID</p>
+                <div class="file-name" id="dir-id-fname"></div>
+              </div>
+            </div>
+            <div class="field">
+              <label>Their Passport Photo</label>
+              <div class="upload-zone">
+                <input type="file" name="Director_Photo" accept=".jpg,.jpeg,.png" onchange="showFile(this,'dir-photo-fname')"/>
+                <div class="upload-icon">📷</div>
+                <p><strong>Click to upload</strong> their photo</p>
+                <div class="file-name" id="dir-photo-fname"></div>
+              </div>
+            </div>
+          </div>
+          <div class="field-row one">
+            <div class="field">
+              <label>Their Signature</label>
+              <div class="upload-zone">
+                <input type="file" name="Director_Signature" accept=".jpg,.jpeg,.png,.pdf" onchange="showFile(this,'dir-sig-fname')"/>
+                <div class="upload-icon">✍️</div>
+                <p><strong>Click to upload</strong> their signature</p>
+                <div class="file-name" id="dir-sig-fname"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-docs"></span>
+        <button type="button" class="btn btn-next" onclick="goNext('docs')">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STAGE: DECLARATION ═══ -->
+  <div class="stage" id="stage-decl">
+    <div class="stage-card">
+      <div class="stage-head">
+        <div class="stage-num" id="n-decl">14</div>
+        <div>
+          <div class="stage-title">Declaration & Submission</div>
+          <div class="stage-sub">Review and confirm before submitting</div>
+        </div>
+      </div>
+      <div class="stage-body">
+        <div class="notice blue">By submitting, you confirm that all information is accurate. Awal Global Consults Limited will use this information solely for your engagement.</div>
+
+        <div class="chk-field" id="fw-dec1">
+          <input type="checkbox" id="dec1"/>
+          <label for="dec1">I confirm that all information submitted is accurate and complete. I understand that incorrect information may delay or invalidate my registration.</label>
+        </div>
+        <div class="chk-field" id="fw-dec2">
+          <input type="checkbox" id="dec2"/>
+          <label for="dec2">I consent to Awal Global Consults Limited processing this information and my submitted documents solely for the services I have selected.</label>
+        </div>
+        <div class="chk-field" id="fw-dec3">
+          <input type="checkbox" id="dec3"/>
+          <label for="dec3">I confirm that no additional shareholders, directors, nominees, or trustees should be added unless I expressly confirm this in a separate written instruction.</label>
+        </div>
+
+        <div id="decl-error" style="display:none;background:#fdf0f0;border:1px solid #e8c0c0;border-radius:6px;padding:11px 14px;margin-top:12px;font-size:12.5px;color:var(--error);">
+          Please tick all three declarations before submitting.
+        </div>
+      </div>
+      <div class="nav-bar">
+        <button type="button" class="btn btn-back" onclick="goBack()">← Back</button>
+        <span class="step-counter" id="cnt-decl"></span>
+        <button type="button" class="btn btn-submit" onclick="submitKYC()">Submit Application ✓</button>
+      </div>
+    </div>
+  </div>
+
+  </form><!-- end form -->
+
+  <!-- SUCCESS -->
+  <div id="success-screen">
+    <div class="success-icon">✓</div>
+    <h2>Submission Received</h2>
+    <p>Your client intake form has been successfully submitted to Awal Global Consults Limited.</p>
+    <div class="ref-box">
+      Submitted by: <strong id="s-name">—</strong>
+      <span id="s-services" style="font-size:11px;color:var(--muted);display:block;margin-top:4px;"></span>
+    </div>
+    <p>We will review your details and contact you within <strong>1 working day</strong> to confirm receipt and advise on next steps.</p>
+    <p style="margin-top:12px;">For urgent queries: <strong>+234 703 833 6596</strong> (WhatsApp)</p>
+  </div>
 
 </main>
 
 <script>
-  let currentStep = 1;
-  const totalSteps = 7;
-  let selectedServices = [];
+// ═══ SERVICE STATE ═══
+let selectedServices = [];
 
-  // ── Service selection ──
-  function updateServiceChecks() {
-    selectedServices = [];
-    document.querySelectorAll('.service-check input[type="checkbox"]').forEach(cb => {
-      const label = cb.closest('.service-check');
-      if (cb.checked) {
-        selectedServices.push(cb.value);
-        label.classList.add('checked');
-      } else {
-        label.classList.remove('checked');
-      }
-    });
-    updateConditionalSteps();
-  }
-
-  function hasService(...keys) {
-    return keys.some(k => selectedServices.some(s => s.toLowerCase().includes(k.toLowerCase())));
-  }
-
-  function updateConditionalSteps() {
-    // Step 2 — TIN / SCUML blocks
-    document.getElementById('tin-block').style.display =
-      hasService('TIN') ? 'block' : 'none';
-    document.getElementById('scuml-block').style.display =
-      hasService('SCUML') ? 'block' : 'none';
-
-    // Step 4 — Business sections
-    const hasBN = hasService('Business Name');
-    const hasLtd = hasService('Limited Company');
-    const hasIT = hasService('Incorporated Trustees');
-    const hasBizStep = hasBN || hasLtd || hasIT ||
-      hasService('Renewal', 'Post-incorporation', 'Annual Returns', 'Corporate');
-
-    document.getElementById('bn-section').style.display = hasBN ? 'block' : 'none';
-    document.getElementById('ltd-section').style.display = hasLtd ? 'block' : 'none';
-    document.getElementById('it-section').style.display = hasIT ? 'block' : 'none';
-    document.getElementById('no-biz-notice').style.display = hasBizStep ? 'none' : 'block';
-
-    // Step 5 — IP sections
-    const hasTM = hasService('Trademark');
-    const hasCopy = hasService('Copyright');
-    document.getElementById('tm-section').style.display = hasTM ? 'block' : 'none';
-    document.getElementById('copy-section').style.display = hasCopy ? 'block' : 'none';
-    document.getElementById('no-ip-notice').style.display = (hasTM || hasCopy) ? 'none' : 'block';
-
-    // Step 6 — Director sections
-    const hasBNonly = hasBN && !hasLtd && !hasIT;
-    const hasLtdOrIT = hasLtd || hasIT;
-    document.getElementById('director-section').style.display = hasLtdOrIT ? 'block' : 'none';
-    document.getElementById('proprietor-section').style.display = hasBNonly ? 'block' : 'none';
-    document.getElementById('trustee-section').style.display = hasIT ? 'block' : 'none';
-    document.getElementById('no-director-notice').style.display =
-      (!hasBN && !hasLtdOrIT) ? 'block' : 'none';
-
-    // Update step 6 title
-    if (hasBNonly) {
-      document.getElementById('step6-title').textContent = 'Proprietor Details';
-      document.getElementById('step6-sub').textContent = 'Business Name — sole proprietor registration';
-    } else if (hasIT) {
-      document.getElementById('step6-title').textContent = 'Trustees';
-      document.getElementById('step6-sub').textContent = 'List all trustees for your organisation';
+function toggleSvc(label) {
+  const cb = label.querySelector('input');
+  // toggle is handled by browser, just sync state
+  setTimeout(() => {
+    if (cb.checked) {
+      label.classList.add('selected');
     } else {
-      document.getElementById('step6-title').textContent = 'Directors & Shareholders';
-      document.getElementById('step6-sub').textContent = 'Only complete if adding someone other than yourself';
+      label.classList.remove('selected');
     }
+  }, 0);
+}
+
+function getSelectedServices() {
+  selectedServices = [];
+  document.querySelectorAll('input[name="svc"]:checked').forEach(cb => {
+    selectedServices.push(cb.value);
+  });
+  return selectedServices;
+}
+
+function has(keyword) {
+  return selectedServices.some(s => s.toLowerCase().includes(keyword.toLowerCase()));
+}
+
+// ═══ STAGE FLOW ═══
+// All possible stages in order
+const ALL_STAGES = [
+  'services','contact','personal',
+  'bn','ltd','it',
+  'tin','scuml',
+  'tm','copy','legal','other',
+  'docs','decl'
+];
+
+let stageFlow = []; // computed stages based on selected services
+let currentIdx = 0;
+
+function buildFlow() {
+  stageFlow = ['services','contact','personal'];
+
+  if (has('Business Name')) stageFlow.push('bn');
+  if (has('Limited Company')) stageFlow.push('ltd');
+  if (has('Incorporated Trustees')) stageFlow.push('it');
+  if (has('TIN')) stageFlow.push('tin');
+  if (has('SCUML')) stageFlow.push('scuml');
+  if (has('Trademark')) stageFlow.push('tm');
+  if (has('Copyright')) stageFlow.push('copy');
+  if (has('Legal Documentation')) stageFlow.push('legal');
+
+  // Other services that just need brief details
+  const otherSvcs = selectedServices.filter(s =>
+    !['Business Name Registration','Limited Company Registration','Incorporated Trustees / NGO',
+      'Business Name Renewal','Post-incorporation Changes','CAC Annual Returns',
+      'TIN Registration','TIN Validation','SCUML Registration',
+      'Corporate & Regulatory Compliance','Trademark Registration',
+      'Copyright Registration','Legal Documentation'].includes(s)
+  );
+  if (otherSvcs.length > 0) {
+    buildOtherStage(otherSvcs);
+    stageFlow.push('other');
   }
 
-  // ── Toggle director block ──
-  function toggleDirector(radio) {
-    document.getElementById('director-block').classList.toggle('visible', radio.value === 'Yes');
+  stageFlow.push('docs','decl');
+  buildProgressBar();
+}
+
+function buildOtherStage(svcs) {
+  const body = document.getElementById('other-body');
+  body.innerHTML = '';
+  svcs.forEach(svc => {
+    const label = document.createElement('div');
+    label.className = 'sec-label';
+    label.style.marginTop = '8px';
+    label.textContent = svc;
+    const field = document.createElement('div');
+    field.className = 'field-row one';
+    field.innerHTML = `<div class="field">
+      <label>Details / Information for this service</label>
+      <textarea name="Other_${svc.replace(/[^a-zA-Z0-9]/g,'_')}" placeholder="Provide any relevant details for: ${svc}"></textarea>
+    </div>`;
+    body.appendChild(label);
+    body.appendChild(field);
+  });
+}
+
+// ═══ PROGRESS BAR ═══
+const stageLabels = {
+  services:'Services', contact:'Contact', personal:'Personal',
+  bn:'Biz Name', ltd:'Company', it:'NGO',
+  tin:'TIN', scuml:'SCUML',
+  tm:'Trademark', copy:'Copyright', legal:'Legal', other:'Other',
+  docs:'Documents', decl:'Declaration'
+};
+
+function buildProgressBar() {
+  const prog = document.getElementById('prog');
+  prog.innerHTML = '';
+  stageFlow.forEach((s,i) => {
+    const div = document.createElement('div');
+    div.className = 'p-step' + (i === 0 ? ' active' : '');
+    div.id = 'pdot-' + s;
+    div.innerHTML = `<div class="p-dot">${i+1}</div><div class="p-label">${stageLabels[s]||s}</div>`;
+    prog.appendChild(div);
+  });
+}
+
+function updateProgress() {
+  stageFlow.forEach((s,i) => {
+    const dot = document.getElementById('pdot-' + s);
+    if (!dot) return;
+    dot.classList.remove('active','done');
+    if (i < currentIdx) dot.classList.add('done');
+    else if (i === currentIdx) dot.classList.add('active');
+  });
+}
+
+function updateCounter(stageId) {
+  const i = stageFlow.indexOf(stageId);
+  const total = stageFlow.length;
+  const el = document.getElementById('cnt-' + stageId);
+  if (el) el.textContent = `Step ${i+1} of ${total}`;
+}
+
+// ═══ NAVIGATION ═══
+function startForm() {
+  getSelectedServices();
+  if (selectedServices.length === 0) {
+    document.getElementById('svc-error').style.display = 'block';
+    return;
   }
+  document.getElementById('svc-error').style.display = 'none';
+  document.getElementById('h-services').value = selectedServices.join(', ');
+  document.getElementById('h-subject').value = `Client KYC — ${selectedServices.slice(0,2).join(', ')}`;
 
-  // ── Navigation ──
-  function goToStep(n) {
-    document.getElementById('step-' + currentStep).classList.remove('active');
-    const curDot = document.getElementById('pdot-' + currentStep);
+  buildFlow();
+  currentIdx = 1; // skip to 'contact'
+  showStage(stageFlow[currentIdx]);
+}
 
-    if (n > currentStep) {
-      curDot.classList.remove('active');
-      curDot.classList.add('done');
-    } else {
-      for (let i = n; i <= currentStep; i++) {
-        const d = document.getElementById('pdot-' + i);
-        d.classList.remove('done', 'active');
-      }
-      document.getElementById('pdot-' + n).classList.add('active');
-    }
+function showStage(stageId) {
+  ALL_STAGES.forEach(s => {
+    document.getElementById('stage-' + s).classList.remove('active');
+  });
+  document.getElementById('stage-' + stageId).classList.add('active');
+  updateProgress();
+  updateCounter(stageId);
+  window.scrollTo({top:0,behavior:'smooth'});
 
-    currentStep = n;
-    document.getElementById('step-' + currentStep).classList.add('active');
-    document.getElementById('pdot-' + currentStep).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Show director docs section if director added
+  const addDir = document.querySelector('input[name="add_director"]:checked');
+  if (document.getElementById('dir-docs-section')) {
+    document.getElementById('dir-docs-section').style.display =
+      (addDir && addDir.value === 'Yes') ? 'block' : 'none';
   }
+}
 
-  // ── Validation ──
-  function validate(step) {
-    let valid = true;
-    const rules = {
-      1: () => {
-        // Name, phone, email
-        ['fullname','phone','email'].forEach(id => {
-          const el = document.getElementById(id);
-          const wrap = document.getElementById('f-' + id);
-          if (!el.value.trim()) {
-            valid = false;
-            el.classList.add('error');
-            if (wrap) wrap.classList.add('has-error');
-          } else {
-            el.classList.remove('error');
-            if (wrap) wrap.classList.remove('has-error');
-          }
-        });
-        // At least one service
-        const noService = selectedServices.length === 0;
-        document.getElementById('service-error').style.display = noService ? 'block' : 'none';
-        if (noService) valid = false;
-      },
-      2: () => {
-        ['firstname','lastname','dob','gender','nationality','stateoforigin','occupation','address','nin'].forEach(id => {
-          const el = document.getElementById(id);
-          const wrap = document.getElementById('f-' + id);
-          if (!el || !el.value.trim()) {
-            valid = false;
-            if (el) el.classList.add('error');
-            if (wrap) wrap.classList.add('has-error');
-          } else {
-            el.classList.remove('error');
-            if (wrap) wrap.classList.remove('has-error');
-          }
-        });
-        // NIN must be 11 digits
-        const nin = document.getElementById('nin');
-        if (nin.value.trim() && !/^\d{11}$/.test(nin.value.trim())) {
-          valid = false;
-          nin.classList.add('error');
-          document.getElementById('f-nin').classList.add('has-error');
-        }
-      },
-      4: () => {
-        if (hasService('Business Name') || hasService('Renewal')) {
-          ['bn1','bnbiz','bnaddress'].forEach(id => {
-            const el = document.getElementById(id);
-            const wrap = document.getElementById('f-' + id);
-            if (!el.value.trim()) {
-              valid = false;
-              el.classList.add('error');
-              if (wrap) wrap.classList.add('has-error');
-            } else {
-              el.classList.remove('error');
-              if (wrap) wrap.classList.remove('has-error');
-            }
-          });
-        }
-        if (hasService('Limited Company')) {
-          ['ltd1','ltdbiz','ltdshare'].forEach(id => {
-            const el = document.getElementById(id);
-            const wrap = document.getElementById('f-' + id);
-            if (!el.value.trim()) {
-              valid = false;
-              el.classList.add('error');
-              if (wrap) wrap.classList.add('has-error');
-            } else {
-              el.classList.remove('error');
-              if (wrap) wrap.classList.remove('has-error');
-            }
-          });
-        }
-        if (hasService('Incorporated Trustees')) {
-          ['it1','itobj'].forEach(id => {
-            const el = document.getElementById(id);
-            const wrap = document.getElementById('f-' + id);
-            if (!el.value.trim()) {
-              valid = false;
-              el.classList.add('error');
-              if (wrap) wrap.classList.add('has-error');
-            } else {
-              el.classList.remove('error');
-              if (wrap) wrap.classList.remove('has-error');
-            }
-          });
-        }
-      },
-      5: () => {
-        if (hasService('Trademark')) {
-          ['tmmark','tmclass','tmapplicant','tmphone','tmaddr'].forEach(id => {
-            const el = document.getElementById(id);
-            const wrap = document.getElementById('f-' + id);
-            if (!el.value.trim()) {
-              valid = false;
-              el.classList.add('error');
-              if (wrap) wrap.classList.add('has-error');
-            } else {
-              el.classList.remove('error');
-              if (wrap) wrap.classList.remove('has-error');
-            }
-          });
-        }
-      }
-    };
-    if (rules[step]) rules[step]();
-    return valid;
+function goNext(stageId) {
+  if (!validateStage(stageId)) return;
+  const i = stageFlow.indexOf(stageId);
+  if (i < stageFlow.length - 1) {
+    currentIdx = i + 1;
+    showStage(stageFlow[currentIdx]);
   }
+}
 
-  function nextStep(step) {
-    if (!validate(step)) return;
-    if (step < totalSteps) goToStep(step + 1);
+function goBack() {
+  if (currentIdx > 0) {
+    currentIdx--;
+    showStage(stageFlow[currentIdx]);
   }
+}
 
-  function prevStep(step) {
-    if (step > 1) goToStep(step - 1);
+// ═══ VALIDATION ═══
+function req(id, wrapId) {
+  const el = document.getElementById(id);
+  const wrap = document.getElementById(wrapId || ('fw-' + id));
+  if (!el) return true;
+  const val = el.type === 'file' ? el.files && el.files.length > 0 : el.value.trim();
+  if (!val) {
+    el.classList.add('err');
+    if (wrap) wrap.classList.add('has-err');
+    return false;
   }
+  el.classList.remove('err');
+  if (wrap) wrap.classList.remove('has-err');
+  return true;
+}
 
-  // ── Submit ──
-  function submitForm() {
-    const d1 = document.getElementById('dec1').checked;
-    const d2 = document.getElementById('dec2').checked;
-    const d3 = document.getElementById('dec3').checked;
-    const errEl = document.getElementById('submit-error');
-
-    if (!d1 || !d2 || !d3) {
-      errEl.style.display = 'block';
-      return;
-    }
-    errEl.style.display = 'none';
-
-    const name = document.getElementById('fullname').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-    const ref = document.getElementById('ref').value || 'Not provided';
-    const services = selectedServices.join(', ');
-
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'https://formsubmit.co/info@awalglobal.name.ng';
-    form.style.display = 'none';
-
-    const fields = {
-      '_subject': `Client Intake — ${name} — ${services.substring(0,60)}`,
-      '_captcha': 'false',
-      '_next': 'https://awalglobal.name.ng/thank-you.html',
-      '_template': 'table',
-      'Full Name': name,
-      'Phone': phone,
-      'Email': email,
-      'Reference': ref,
-      'Services Requested': services,
-      'First Name': document.getElementById('firstname').value,
-      'Middle Name': document.getElementById('middlename').value,
-      'Last Name': document.getElementById('lastname').value,
-      'Date of Birth': document.getElementById('dob').value,
-      'Gender': document.getElementById('gender').value,
-      'Nationality': document.getElementById('nationality').value,
-      'State of Origin': document.getElementById('stateoforigin').value,
-      'Occupation': document.getElementById('occupation').value,
-      'NIN': document.getElementById('nin').value,
-      'BVN': document.getElementById('bvn').value || 'Not provided',
-      'TIN': document.getElementById('tin').value || 'Not provided',
-      'Residential Address': document.getElementById('address').value,
-      'Business Name 1': document.getElementById('bn1').value || 'N/A',
-      'Business Name 2': document.getElementById('bn2').value || 'N/A',
-      'Nature of Business': document.getElementById('bnbiz').value || 'N/A',
-      'Business Address': document.getElementById('bnaddress').value || 'N/A',
-      'Existing RC/BN': document.getElementById('bnrc').value || 'N/A',
-      'Company Name 1': document.getElementById('ltd1').value || 'N/A',
-      'Company Name 2': document.getElementById('ltd2').value || 'N/A',
-      'Company Activities': document.getElementById('ltdbiz').value || 'N/A',
-      'Share Capital': document.getElementById('ltdshare').value || 'N/A',
-      'Company Address': document.getElementById('ltdaddr').value || 'N/A',
-      'Trademark Mark': document.getElementById('tmmark').value || 'N/A',
-      'Trademark Class': document.getElementById('tmclass').value || 'N/A',
-      'Trademark Applicant': document.getElementById('tmapplicant').value || 'N/A',
-      'Trademark Address': document.getElementById('tmaddr').value || 'N/A',
-      'Additional Director Name': `${document.getElementById('dir-first').value || ''} ${document.getElementById('dir-last').value || ''}`.trim() || 'N/A',
-      'Director Role': document.getElementById('dir-role').value || 'N/A',
-      'Director NIN': document.getElementById('dir-nin').value || 'N/A',
-      'Director Phone': document.getElementById('dir-phone').value || 'N/A',
-      'Documents': 'Submitted via Google Form upload'
-    };
-
-    Object.entries(fields).forEach(([key, value]) => {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = key;
-      input.value = value;
-      form.appendChild(input);
+function validateStage(stageId) {
+  let ok = true;
+  if (stageId === 'contact') {
+    if (!req('fullname')) ok = false;
+    if (!req('phone')) ok = false;
+    if (!req('email')) ok = false;
+  }
+  if (stageId === 'personal') {
+    ['firstname','lastname','dob','gender','stateoforigin','nationality','occupation','address'].forEach(id => {
+      if (!req(id)) ok = false;
     });
-
-    document.body.appendChild(form);
-
-    // Submit first, then show success
-    document.getElementById('success-name').textContent = name;
-    document.getElementById('success-services').textContent = services;
-
-    form.submit();
+    const nin = document.getElementById('nin');
+    if (!nin.value.trim() || !/^\d{11}$/.test(nin.value.trim())) {
+      nin.classList.add('err');
+      document.getElementById('fw-nin').classList.add('has-err');
+      ok = false;
+    } else {
+      nin.classList.remove('err');
+      document.getElementById('fw-nin').classList.remove('has-err');
+    }
   }
+  if (stageId === 'bn') {
+    if (!req('bn1')) ok = false;
+    if (!req('bnbiz')) ok = false;
+    if (!req('bnaddress')) ok = false;
+  }
+  if (stageId === 'ltd') {
+    if (!req('ltd1')) ok = false;
+    if (!req('ltdbiz')) ok = false;
+    if (!req('ltdshare')) ok = false;
+  }
+  if (stageId === 'it') {
+    if (!req('it1')) ok = false;
+    if (!req('itobj')) ok = false;
+  }
+  if (stageId === 'scuml') {
+    if (!req('scumlbn')) ok = false;
+    if (!req('scumlrc')) ok = false;
+  }
+  if (stageId === 'tm') {
+    const types = document.querySelectorAll('input[name="TM_Type"]:checked');
+    if (types.length === 0) {
+      document.getElementById('tm-type-error').style.display = 'block';
+      ok = false;
+    } else {
+      document.getElementById('tm-type-error').style.display = 'none';
+    }
+    if (!req('tmmark')) ok = false;
+    if (!req('tmclass')) ok = false;
+    if (!req('tmapplicant')) ok = false;
+    if (!req('tmphone')) ok = false;
+    if (!req('tmaddr')) ok = false;
+  }
+  if (stageId === 'docs') {
+    if (!req('idupload','fw-idupload')) ok = false;
+    if (!req('photoupload','fw-photoupload')) ok = false;
+    if (!req('sigupload','fw-sigupload')) ok = false;
+  }
+  return ok;
+}
 
-  // Init
-  updateConditionalSteps();
+// ═══ HELPERS ═══
+function showFile(input, targetId) {
+  const target = document.getElementById(targetId);
+  if (target && input.files && input.files.length > 0) {
+    target.textContent = '✓ ' + Array.from(input.files).map(f => f.name).join(', ');
+  }
+}
+
+function toggleCond(id, radio) {
+  document.getElementById(id).classList.toggle('show', radio.value === 'Yes');
+}
+
+function toggleTmType(chip) {
+  setTimeout(() => {
+    const cb = chip.querySelector('input');
+    chip.classList.toggle('selected', cb.checked);
+    // Show logo upload if logo/device or combined selected
+    const logoTypes = ['Logo / Device Mark','Combined Mark (Word + Logo)'];
+    const needLogo = Array.from(document.querySelectorAll('input[name="TM_Type"]:checked'))
+      .some(c => logoTypes.includes(c.value));
+    document.getElementById('tm-logo-row').style.display = needLogo ? 'block' : 'none';
+  }, 0);
+}
+
+// ═══ SUBMIT ═══
+function submitKYC() {
+  const d1 = document.getElementById('dec1').checked;
+  const d2 = document.getElementById('dec2').checked;
+  const d3 = document.getElementById('dec3').checked;
+  if (!d1 || !d2 || !d3) {
+    document.getElementById('decl-error').style.display = 'block';
+    return;
+  }
+  document.getElementById('decl-error').style.display = 'none';
+
+  const name = document.getElementById('fullname').value;
+  document.getElementById('s-name').textContent = name;
+  document.getElementById('s-services').textContent = selectedServices.join(', ');
+  document.getElementById('h-subject').value = `Client KYC — ${name} — ${selectedServices.slice(0,2).join(', ')}`;
+
+  document.getElementById('success-screen').style.display = 'block';
+  document.getElementById('stage-decl').classList.remove('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  document.getElementById('kyc-form').submit();
+}
+
+// Init
+buildProgressBar();
 </script>
-
 </body>
 </html>
