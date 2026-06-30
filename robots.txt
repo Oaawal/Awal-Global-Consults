@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://awalglobal.name.ng/sitemap.xml
+Sitemap: https://awalglobal.com.ng/sitemap.xml
