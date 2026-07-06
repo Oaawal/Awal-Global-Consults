@@ -1,0 +1,38 @@
+<!-- ── Config (load first) ── -->
+<script src="config/services.js"></script>
+<script src="config/payment.js"></script>
+
+<!-- ── Engine (load second, strict order) ── -->
+<script src="engine/storage.js"></script>
+<script src="engine/validator.js"></script>
+<script src="engine/renderer.js"></script>
+<script src="engine/router.js"></script>
+
+<!-- ── Core modules (load third) ── -->
+<script src="modules/welcome.js"></script>
+<script src="modules/resume.js"></script>
+<script src="modules/service-select.js"></script>
+<script src="modules/personal.js"></script>
+
+<!-- ── Service modules ── -->
+<script src="modules/services/bn.js"></script>
+<script src="modules/services/ltd.js"></script>
+<script src="modules/services/it.js"></script>
+<script src="modules/services/trademark.js"></script>
+<script src="modules/services/tin.js"></script>
+<script src="modules/services/tin_validation.js"></script>
+<script src="modules/services/scuml.js"></script>
+<script src="modules/services/remaining.js"></script>
+
+<!-- ── End screens (load last before init) ── -->
+<script src="modules/docs.js"></script>
+<script src="modules/payment.js"></script>
+<script src="modules/declaration.js"></script>
+<script src="modules/success.js"></script>
+
+<!-- ── Init (always last) ── -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    AGC_Router.init();
+  });
+</script>
