@@ -144,7 +144,7 @@
     },
 
     onMount() {
-      directorCount = 1;
+      directorCount = AGC_Router.getPersonCount('ltd-dir') || 1;
     }
   });
 

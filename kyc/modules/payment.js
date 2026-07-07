@@ -103,32 +103,42 @@
               ${hasQuote ? `<div class="agc-deposit-note">Items marked "Quote required" will be confirmed by our team within 1 working day.</div>` : ''}
             </div>
 
-            <!-- Payment options -->
-            <div class="agc-sec-label" style="margin-top:20px;">How to Pay</div>
-            <div class="agc-payment-grid">
+            <!-- Payment options — only shown when there is a fixed price -->
+            ${grandTotal > 0 ? `
+              <div class="agc-sec-label" style="margin-top:20px;">How to Pay</div>
+              <div class="agc-payment-grid">
 
-              <div class="agc-payment-card">
-                <div class="agc-payment-title">🏦 Bank Transfer</div>
-                <div class="agc-payment-body">
-                  <strong>${PAY.bank ? PAY.bank.name : 'Awal Global Consults Limited'}</strong><br>
-                  ${PAY.bank ? PAY.bank.bank : 'KudaBank'}<br>
-                  <div class="agc-payment-acct">${PAY.bank ? PAY.bank.account : '3003466189'}</div>
-                  <span style="font-size:11px;color:var(--muted);">Use your full name as narration</span>
+                <div class="agc-payment-card">
+                  <div class="agc-payment-title">🏦 Bank Transfer</div>
+                  <div class="agc-payment-body">
+                    <strong>${PAY.bank ? PAY.bank.name : 'Awal Global Consults Limited'}</strong><br>
+                    ${PAY.bank ? PAY.bank.bank : 'KudaBank'}<br>
+                    <div class="agc-payment-acct">${PAY.bank ? PAY.bank.account : '3003466189'}</div>
+                    <span style="font-size:11px;color:var(--muted);">Use your full name as narration</span>
+                  </div>
+                </div>
+
+                <div class="agc-payment-card agc-payment-online">
+                  <div class="agc-payment-title">💳 Pay Online</div>
+                  <a href="${PAY.paystack ? PAY.paystack.link : 'https://paystack.shop/pay/awalglobal'}"
+                    target="_blank" rel="noopener" class="agc-paystack-btn">
+                    Pay with Paystack ↗
+                  </a>
+                  <span style="font-size:11px;color:var(--muted);margin-top:4px;">Card, bank transfer, USSD</span>
+                </div>
+
+              </div>
+              ${R.notice(`✅ After payment, send your proof of payment to <strong>${PAY.whatsapp || '+234 703 833 6596'}</strong> on WhatsApp with your full name and the service you paid for.`, 'green')}
+            ` : `
+              ${R.notice('💬 Our team will contact you within <strong>1 working day</strong> with a custom quote for your selected services. Payment details will be shared once your quote is confirmed.', 'blue')}
+              <div style="background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:var(--radius-md);padding:var(--space-md);margin-top:var(--space-md);">
+                <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px;">Reach us directly</div>
+                <div style="font-size:13px;color:var(--text);line-height:1.7;">
+                  📱 WhatsApp: <strong>${PAY.whatsapp || '+234 703 833 6596'}</strong><br>
+                  ✉ Email: <strong>info@awalglobal.com.ng</strong>
                 </div>
               </div>
-
-              <div class="agc-payment-card agc-payment-online">
-                <div class="agc-payment-title">💳 Pay Online</div>
-                <a href="${PAY.paystack ? PAY.paystack.link : 'https://paystack.shop/pay/awalglobal'}"
-                  target="_blank" rel="noopener" class="agc-paystack-btn">
-                  Pay with Paystack ↗
-                </a>
-                <span style="font-size:11px;color:var(--muted);margin-top:4px;">Card, bank transfer, USSD</span>
-              </div>
-
-            </div>
-
-            ${R.notice(`✅ After payment, send your proof of payment to <strong>${PAY.whatsapp || '+234 703 833 6596'}</strong> on WhatsApp with your full name and the service you paid for.`, 'green')}
+            `}
 
             <div class="agc-field-row one" style="margin-top:16px;">
               <div class="agc-field">
