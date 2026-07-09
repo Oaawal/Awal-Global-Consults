@@ -1,38 +1,1180 @@
-<!-- ── Config (load first) ── -->
-<script src="config/services.js"></script>
-<script src="config/payment.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL7KZYEE7Q"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JL7KZYEE7Q');</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Client KYC & Intake | Awal Global Consults</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0b1f3a;
+      --gold: #c9973a;
+      --gold-pale: #f9f0dc;
+      --gold-light: #e8d5a3;
+      --bg: #faf9f6;
+      --white: #ffffff;
+      --border: #e0ddd6;
+      --text: #1a1a1a;
+      --muted: #666;
+      --error: #c0392b;
+      --success: #1e6b3c;
+      --radius: 10px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-<!-- ── Engine (load second, strict order) ── -->
-<script src="engine/storage.js"></script>
-<script src="engine/validator.js"></script>
-<script src="engine/renderer.js"></script>
-<script src="engine/router.js"></script>
+    .site-header{background:var(--navy);padding:20px 24px;border-bottom:3px solid var(--gold);}
+    .header-inner{max-width:800px;margin:0 auto;display:flex;align-items:center;gap:14px;}
+    .header-logo{height:40px;filter:brightness(0) invert(1);flex-shrink:0;}
+    .header-text h1{font-family:'Fraunces',serif;color:var(--white);font-size:17px;font-weight:600;}
+    .header-text p{color:rgba(255,255,255,0.45);font-size:11px;margin-top:2px;}
 
-<!-- ── Core modules (load third) ── -->
-<script src="modules/welcome.js"></script>
-<script src="modules/resume.js"></script>
-<script src="modules/service-select.js"></script>
-<script src="modules/personal.js"></script>
+    .progress-bar-wrap{background:var(--navy);padding:0 24px 16px;border-bottom:3px solid var(--gold);}
+    .progress-bar-inner{max-width:800px;margin:0 auto;}
+    .progress-steps{display:flex;gap:0;position:relative;}
+    .p-step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;}
+    .p-step:not(:last-child)::after{content:'';position:absolute;top:11px;left:50%;width:100%;height:2px;background:rgba(255,255,255,0.12);z-index:0;}
+    .p-step.done:not(:last-child)::after{background:var(--gold);}
+    .p-dot{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:rgba(255,255,255,0.35);position:relative;z-index:1;transition:all 0.25s;}
+    .p-step.active .p-dot{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+    .p-step.done .p-dot{background:var(--gold);border-color:var(--gold);color:var(--navy);font-size:11px;}
+    .p-label{font-size:8px;color:rgba(255,255,255,0.25);margin-top:4px;text-transform:uppercase;letter-spacing:0.3px;font-weight:500;}
+    .p-step.active .p-label,.p-step.done .p-label{color:var(--gold-light);}
 
-<!-- ── Service modules ── -->
-<script src="modules/services/bn.js"></script>
-<script src="modules/services/ltd.js"></script>
-<script src="modules/services/it.js"></script>
-<script src="modules/services/trademark.js"></script>
-<script src="modules/services/tin.js"></script>
-<script src="modules/services/tin_validation.js"></script>
-<script src="modules/services/scuml.js"></script>
-<script src="modules/services/remaining.js"></script>
+    main{max-width:800px;margin:28px auto 80px;padding:0 16px;}
 
-<!-- ── End screens (load last before init) ── -->
-<script src="modules/docs.js"></script>
-<script src="modules/payment.js"></script>
-<script src="modules/declaration.js"></script>
-<script src="modules/success.js"></script>
+    .stage{display:none;animation:fadeUp 0.3s ease;}
+    .stage.active{display:block;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-<!-- ── Init (always last) ── -->
+    .stage-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);box-shadow:0 2px 16px rgba(11,31,58,0.07);overflow:hidden;}
+    .stage-head{background:var(--navy);padding:16px 24px;display:flex;align-items:center;gap:12px;}
+    .stage-num{width:28px;height:28px;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .stage-title{color:var(--white);font-family:'Fraunces',serif;font-size:15px;font-weight:600;}
+    .stage-sub{color:rgba(255,255,255,0.45);font-size:11px;margin-top:2px;}
+    .stage-body{padding:24px;}
+
+    .service-category{margin-bottom:18px;}
+    .cat-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;}
+    .service-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .svc-btn{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;background:var(--white);transition:all 0.2s;text-align:left;width:100%;}
+    .svc-btn:hover{border-color:var(--gold);background:var(--gold-pale);}
+    .svc-btn.selected{border-color:var(--navy);background:#eef2f8;}
+    .svc-btn input{accent-color:var(--navy);width:15px;height:15px;flex-shrink:0;}
+    .svc-btn-text{font-size:13px;font-weight:500;color:var(--text);}
+    .svc-btn-sub{font-size:10px;color:var(--muted);margin-top:1px;}
+
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+    .field-row.one{grid-template-columns:1fr;}
+    .field-row.three{grid-template-columns:1fr 1fr 1fr;}
+    .field{display:flex;flex-direction:column;}
+    .field label{font-size:11px;font-weight:600;color:var(--navy);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;}
+    .req{color:var(--gold);margin-left:2px;}
+    .opt{color:var(--muted);font-weight:400;font-size:10px;text-transform:none;margin-left:4px;letter-spacing:0;}
+    .field input,.field select,.field textarea{border:1.5px solid var(--border);border-radius:6px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--white);transition:border-color 0.2s;outline:none;}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--navy);}
+    .field input.err,.field select.err,.field textarea.err{border-color:var(--error);}
+    .field textarea{resize:vertical;min-height:88px;}
+    .field-hint{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.4;}
+    .err-msg{font-size:10.5px;color:var(--error);margin-top:3px;display:none;}
+    .field.has-err .err-msg{display:block;}
+
+    .sec-divider{border:none;border-top:1px solid var(--border);margin:22px 0;}
+    .sec-label{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--gold-pale);}
+
+    .notice{border-radius:0 6px 6px 0;padding:11px 14px;font-size:12px;line-height:1.55;margin-bottom:16px;}
+    .notice.blue{background:#eef2f8;border-left:3px solid var(--navy);color:var(--navy);}
+    .notice.gold{background:var(--gold-pale);border-left:3px solid var(--gold);color:#5a3e00;}
+    .notice.green{background:#edf7f1;border-left:3px solid var(--success);color:#1e4a30;}
+
+    .upload-zone{border:2px dashed var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;background:var(--bg);}
+    .upload-zone:hover{border-color:var(--gold);background:var(--gold-pale);}
+    .upload-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+    .upload-icon{font-size:24px;margin-bottom:6px;}
+    .upload-zone p{font-size:12px;color:var(--muted);}
+    .upload-zone strong{color:var(--navy);}
+    .file-name{margin-top:6px;font-size:11.5px;color:var(--success);font-weight:500;min-height:16px;}
+
+    .radio-group{display:flex;gap:8px;flex-wrap:wrap;}
+    .radio-opt{display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;transition:all 0.2s;}
+    .radio-opt input{accent-color:var(--navy);}
+    .radio-opt:has(input:checked){border-color:var(--navy);background:#eef2f8;font-weight:500;}
+
+    .chk-field{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;}
+    .chk-field input{width:16px;height:16px;margin-top:3px;accent-color:var(--navy);flex-shrink:0;cursor:pointer;}
+    .chk-field label{font-size:13px;color:var(--text);line-height:1.55;cursor:pointer;}
+
+    .cond{display:none;background:#f8f6f0;border:1px solid var(--gold-light);border-radius:8px;padding:20px;margin-top:12px;}
+    .cond.show{display:block;}
+
+    .nav-bar{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-top:1px solid var(--border);background:var(--bg);gap:10px;flex-wrap:wrap;}
+    .btn{padding:10px 22px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;}
+    .btn-back{background:transparent;color:var(--navy);border:1.5px solid var(--border);}
+    .btn-back:hover{border-color:var(--navy);}
+    .btn-next{background:var(--navy);color:var(--white);}
+    .btn-next:hover{background:#152e56;}
+    .btn-submit{background:var(--gold);color:var(--navy);}
+    .btn-submit:hover{background:#b0811e;}
+    .btn-save{background:transparent;color:var(--gold);border:1.5px solid var(--gold);font-size:12px;padding:8px 16px;}
+    .btn-save:hover{background:var(--gold-pale);}
+    .step-counter{font-size:12px;color:var(--muted);font-weight:500;}
+
+    .tm-type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+    .tm-chip{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;text-align:center;transition:all 0.2s;}
+    .tm-chip:hover{border-color:var(--gold);background:var(--gold-pale);}
+    .tm-chip.selected{border-color:var(--navy);background:#eef2f8;}
+    .tm-chip input{display:none;}
+    .tm-chip-icon{font-size:22px;}
+    .tm-chip-label{font-size:12px;font-weight:600;color:var(--navy);}
+    .tm-chip-sub{font-size:10px;color:var(--muted);}
+
+    .scuml-cats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+    .scuml-cat{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-size:12.5px;transition:all 0.2s;}
+    .scuml-cat:hover{border-color:var(--gold);background:var(--gold-pale);}
+    .scuml-cat input{accent-color:var(--navy);width:14px;height:14px;flex-shrink:0;}
+    .scuml-cat:has(input:checked){border-color:var(--navy);background:#eef2f8;font-weight:500;}
+
+    /* Pricing summary */
+    .price-summary-card{background:var(--navy);border-radius:8px;padding:18px 20px;margin-bottom:16px;color:var(--white);}
+    .price-summary-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--gold-light);margin-bottom:10px;}
+    .price-line{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.08);}
+    .price-line:last-of-type{border-bottom:none;}
+    .price-line .svc-name{color:rgba(255,255,255,0.75);}
+    .price-line .svc-amt{color:var(--gold);font-weight:600;}
+    .price-total-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:2px solid var(--gold);font-size:15px;font-weight:700;}
+    .price-total-row .total-label{color:var(--white);}
+    .price-total-row .total-amt{color:var(--gold);font-size:18px;}
+    .partial-note{font-size:11px;color:rgba(255,255,255,0.5);margin-top:8px;line-height:1.5;}
+
+    /* Payment section */
+    .payment-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+    .payment-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:16px;}
+    .payment-card-title{font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+    .payment-card-body{font-size:13px;color:var(--text);line-height:1.7;}
+    .payment-card-body strong{color:var(--navy);}
+    .pay-online-card{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;}
+    .btn-paystack{display:inline-block;background:var(--gold);color:var(--navy);padding:11px 28px;border-radius:6px;font-weight:700;font-size:13.5px;text-decoration:none;transition:background 0.2s;}
+    .btn-paystack:hover{background:#b0811e;}
+
+    /* Resume / Save */
+    .save-bar{display:flex;align-items:center;gap:10px;background:var(--gold-pale);border:1px solid var(--gold-light);border-radius:8px;padding:12px 16px;margin-bottom:18px;flex-wrap:wrap;}
+    .save-bar-text{font-size:12px;color:#5a3e00;flex:1;line-height:1.5;}
+    .resume-id-display{font-family:monospace;font-size:13px;font-weight:700;color:var(--navy);background:var(--white);border:1px solid var(--border);border-radius:4px;padding:4px 10px;}
+
+    /* Resume screen */
+    #resume-screen{display:none;}
+    .resume-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);box-shadow:0 2px 16px rgba(11,31,58,0.07);padding:32px;text-align:center;max-width:420px;margin:0 auto;}
+    .resume-card h2{font-family:'Fraunces',serif;color:var(--navy);font-size:20px;margin-bottom:8px;}
+    .resume-card p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px;}
+    .resume-input-row{display:flex;gap:8px;margin-bottom:10px;}
+    .resume-input-row input{flex:1;border:1.5px solid var(--border);border-radius:6px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;}
+    .resume-input-row input:focus{border-color:var(--navy);}
+    .resume-error{font-size:11.5px;color:var(--error);margin-top:4px;display:none;}
+    .divider-or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:16px 0;}
+    .divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    /* Saved confirmation toast */
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:var(--white);padding:12px 24px;border-radius:8px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;}
+    .toast.show{opacity:1;}
+
+    #success-screen{display:none;text-align:center;padding:56px 28px;background:var(--white);border-radius:var(--radius);border:1px solid var(--border);box-shadow:0 2px 16px rgba(11,31,58,0.07);}
+    .success-icon{width:64px;height:64px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:26px;color:white;}
+    #success-screen h2{font-family:'Fraunces',serif;color:var(--navy);font-size:22px;margin-bottom:10px;}
+    #success-screen p{color:var(--muted);font-size:13.5px;line-height:1.7;max-width:420px;margin:0 auto 10px;}
+    .ref-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px 20px;margin:16px auto;max-width:380px;font-size:12.5px;color:var(--navy);}
+    .ref-box strong{display:block;font-size:15px;margin-top:4px;letter-spacing:0.5px;}
+
+    @media(max-width:600px){
+      .field-row,.field-row.three{grid-template-columns:1fr;}
+      .service-grid,.scuml-cats,.payment-grid{grid-template-columns:1fr;}
+      .tm-type-grid{grid-template-columns:1fr 1fr;}
+      .stage-body{padding:16px 14px;}
+      .nav-bar{padding:12px 14px;}
+      .p-label{display:none;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <img src="assets/images/logo.png" alt="Awal Global Consults" class="header-logo" onerror="this.style.display='none'">
+    <div class="header-text">
+      <h1>Client Intake & KYC</h1>
+      <p>Awal Global Consults Limited — secure & confidential</p>
+    </div>
+  </div>
+</header>
+
+<div class="progress-bar-wrap">
+  <div class="progress-bar-inner">
+    <div class="progress-steps" id="prog"></div>
+  </div>
+</div>
+
+<main>
+
+<!-- RESUME SCREEN -->
+<div id="resume-screen">
+  <div class="resume-card">
+    <h2>Welcome Back</h2>
+    <p>Enter your Resume ID to continue where you left off, or start a fresh application below.</p>
+    <div class="resume-input-row">
+      <input type="text" id="resume-id-input" placeholder="e.g. AGC-2026-7X4K" style="text-transform:uppercase;"/>
+      <button class="btn btn-next" onclick="resumeForm()">Resume</button>
+    </div>
+    <div class="resume-error" id="resume-error">Resume ID not found or expired. Please start a new application.</div>
+    <div class="divider-or">or</div>
+    <button class="btn btn-next" style="width:100%;" onclick="startFresh()">Start New Application</button>
+  </div>
+</div>
+
+<!-- MAIN FORM -->
+<div id="form-wrapper">
+<form id="kyc-form" method="POST" action="https://formsubmit.co/info@awalglobal.com.ng" enctype="multipart/form-data">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_next" value="https://awalglobal.com.ng/thank-you.html">
+  <input type="hidden" name="_subject" id="h-subject" value="New Client KYC Submission">
+  <input type="hidden" name="Services_Requested" id="h-services" value="">
+  <input type="hidden" name="Estimated_Total" id="h-total" value="">
+  <input type="hidden" name="Resume_ID" id="h-resume-id" value="">
+
+<!-- ═══ SERVICE SELECTION ═══ -->
+<div class="stage active" id="stage-services">
+  <div class="stage-card">
+    <div class="stage-head">
+      <div class="stage-num">1</div>
+      <div>
+        <div class="stage-title">What do you need help with?</div>
+        <div class="stage-sub">Select all services that apply</div>
+      </div>
+    </div>
+    <div class="stage-body">
+
+      <div class="service-category">
+        <div class="cat-label">CAC Registration & Compliance</div>
+        <div class="service-grid">
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Business Name Registration" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Business Name Registration</div><div class="svc-btn-sub">Sole proprietorship — 24 hrs</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Limited Company Registration" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Limited Company Registration</div><div class="svc-btn-sub">RC company — 3–7 business days</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Incorporated Trustees / NGO" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Incorporated Trustees / NGO</div><div class="svc-btn-sub">25–30 business days</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Business Name Renewal" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Business Name Renewal</div><div class="svc-btn-sub">Existing BN renewal</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Post-incorporation Changes" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Post-incorporation Changes</div><div class="svc-btn-sub">Directors, address, name changes</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="CAC Annual Returns" onchange="onSvcChange(this)"><div><div class="svc-btn-text">CAC Annual Returns</div><div class="svc-btn-sub">Yearly compliance filing</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Share Transfer / Allotment" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Share Transfer / Allotment</div><div class="svc-btn-sub">Transfer or allot shares</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Increase of Share Capital" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Increase of Share Capital</div><div class="svc-btn-sub">CAC filing required</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Company Secretary Services" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Company Secretary Services</div><div class="svc-btn-sub">Statutory compliance support</div></div></label>
+        </div>
+      </div>
+
+      <div class="service-category">
+        <div class="cat-label">Tax & Revenue Compliance</div>
+        <div class="service-grid">
+          <label class="svc-btn"><input type="checkbox" name="svc" value="TIN Registration" onchange="onSvcChange(this)"><div><div class="svc-btn-text">TIN Registration</div><div class="svc-btn-sub">New TIN — NRS</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="TIN Validation" onchange="onSvcChange(this)"><div><div class="svc-btn-text">TIN Validation</div><div class="svc-btn-sub">Verify existing TIN — NRS</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Tax Clearance Certificate" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Tax Clearance Certificate</div><div class="svc-btn-sub">FIRS/NRS clearance</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="VAT Registration & Filing" onchange="onSvcChange(this)"><div><div class="svc-btn-text">VAT Registration & Filing</div><div class="svc-btn-sub">Value Added Tax</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="PAYE Setup & Filing" onchange="onSvcChange(this)"><div><div class="svc-btn-text">PAYE Setup & Filing</div><div class="svc-btn-sub">Pay As You Earn</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Payroll Processing" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Payroll Processing</div><div class="svc-btn-sub">Monthly payroll management</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Accounting Support" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Accounting Support</div><div class="svc-btn-sub">Books, records, reports</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="SCUML Registration" onchange="onSvcChange(this)"><div><div class="svc-btn-text">SCUML Registration</div><div class="svc-btn-sub">Anti-money laundering compliance</div></div></label>
+        </div>
+      </div>
+
+      <div class="service-category">
+        <div class="cat-label">Regulatory & Licensing</div>
+        <div class="service-grid">
+          <label class="svc-btn"><input type="checkbox" name="svc" value="NIPC Registration" onchange="onSvcChange(this)"><div><div class="svc-btn-text">NIPC Registration</div><div class="svc-btn-sub">Foreign investors</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Business Permits" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Business Permits</div><div class="svc-btn-sub">Operational permits</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Expatriate Quota / CERPAC" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Expatriate Quota / CERPAC</div><div class="svc-btn-sub">Foreign staff compliance</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="SON Registration" onchange="onSvcChange(this)"><div><div class="svc-btn-text">SON Registration</div><div class="svc-btn-sub">Standards Organisation of Nigeria</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="NAFDAC Registration" onchange="onSvcChange(this)"><div><div class="svc-btn-text">NAFDAC Registration</div><div class="svc-btn-sub">Food, drugs & cosmetics</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="NDPR / Data Protection" onchange="onSvcChange(this)"><div><div class="svc-btn-text">NDPR / Data Protection</div><div class="svc-btn-sub">Compliance & audit</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="ISO Certification Support" onchange="onSvcChange(this)"><div><div class="svc-btn-text">ISO Certification Support</div><div class="svc-btn-sub">Standards & quality</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Corporate & Regulatory Compliance" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Corporate & Regulatory</div><div class="svc-btn-sub">General compliance support</div></div></label>
+        </div>
+      </div>
+
+      <div class="service-category">
+        <div class="cat-label">Intellectual Property & Legal</div>
+        <div class="service-grid">
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Trademark Registration" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Trademark Registration</div><div class="svc-btn-sub">Word, logo, or combined mark</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Copyright Registration" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Copyright Registration</div><div class="svc-btn-sub">Literary, artistic, musical works</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Legal Advisory" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Legal Advisory</div><div class="svc-btn-sub">General legal guidance</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Affidavit" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Affidavit</div><div class="svc-btn-sub">Sworn declarations</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Agreement / Contract" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Agreement / Contract</div><div class="svc-btn-sub">Business agreements</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="MOU" onchange="onSvcChange(this)"><div><div class="svc-btn-text">MOU</div><div class="svc-btn-sub">Memorandum of Understanding</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Employment Contract" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Employment Contract</div><div class="svc-btn-sub">Staff agreements</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Privacy Policy / Website Terms" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Privacy Policy / Website Terms</div><div class="svc-btn-sub">Legal web documents</div></div></label>
+        </div>
+      </div>
+
+      <div class="service-category">
+        <div class="cat-label">Identity, Immigration & Digital</div>
+        <div class="service-grid">
+          <label class="svc-btn"><input type="checkbox" name="svc" value="NIN Registration / Retrieval" onchange="onSvcChange(this)"><div><div class="svc-btn-text">NIN Registration / Retrieval</div><div class="svc-btn-sub">New NIN or retrieve existing</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Data Correction" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Data Correction</div><div class="svc-btn-sub">NIN / identity record update</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Export / Import Licensing" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Export / Import Licensing</div><div class="svc-btn-sub">Trade documentation</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Student Visa & Relocation" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Student Visa & Relocation</div><div class="svc-btn-sub">Application & profile support</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Business Advisory" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Business Advisory</div><div class="svc-btn-sub">Structure & compliance guidance</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Cybersecurity Support" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Cybersecurity Support</div><div class="svc-btn-sub">Digital safety guidance</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Virtual Office" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Virtual Office</div><div class="svc-btn-sub">Business address & mail</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Domain Registration" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Domain Registration</div><div class="svc-btn-sub">.com.ng and other extensions</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="Website Development" onchange="onSvcChange(this)"><div><div class="svc-btn-text">Website Development</div><div class="svc-btn-sub">Professional business websites</div></div></label>
+        </div>
+      </div>
+
+      <!-- Tier selector — shown for tiered services -->
+      <div id="tier-block" style="display:none;">
+        <hr class="sec-divider"/>
+        <div class="sec-label">Choose Your Package</div>
+        <div id="tier-content"></div>
+      </div>
+
+      <div id="svc-error" style="display:none;font-size:11.5px;color:var(--error);margin-top:8px;">Please select at least one service to continue.</div>
+    </div>
+    <div class="nav-bar">
+      <span class="step-counter" id="cnt-services">Step 1</span>
+      <button type="button" class="btn btn-next" onclick="startForm()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONTACT ═══ -->
+<div class="stage" id="stage-contact">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num" id="n-contact">2</div><div><div class="stage-title">Your Contact Details</div><div class="stage-sub">Basic information so we can reach you</div></div></div>
+    <div class="stage-body">
+      <div class="save-bar"><span class="save-bar-text">You can save your progress at any time and return later using your Resume ID.</span><button type="button" class="btn btn-save" onclick="saveProgress()">💾 Save Progress</button><span class="resume-id-display" id="current-resume-id" style="display:none;"></span></div>
+      <div class="field-row">
+        <div class="field" id="fw-fullname"><label>Full Name <span class="req">*</span></label><input type="text" name="Full_Name" id="fullname" placeholder="Your full name"/><span class="err-msg">Required</span></div>
+        <div class="field" id="fw-phone"><label>Phone / WhatsApp <span class="req">*</span></label><input type="tel" name="Phone" id="phone" placeholder="+234 800 000 0000" maxlength="14"/><span class="err-msg">Enter a valid Nigerian number</span></div>
+      </div>
+      <div class="field-row">
+        <div class="field" id="fw-email"><label>Email Address <span class="req">*</span></label><input type="email" name="Email" id="email" placeholder="your@email.com"/><span class="err-msg">Enter a valid email</span></div>
+        <div class="field"><label>Invoice / Reference <span class="opt">(if you have one)</span></label><input type="text" name="Invoice_Reference" id="ref" placeholder="e.g. INV-2026-001"/><span class="field-hint">Leave blank if not yet assigned.</span></div>
+      </div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-contact"></span><button type="button" class="btn btn-next" onclick="goNext('contact')">Continue →</button></div>
+  </div>
+</div>
+
+<!-- ═══ PERSONAL ═══ -->
+<div class="stage" id="stage-personal">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num" id="n-personal">3</div><div><div class="stage-title">Personal Details</div><div class="stage-sub">Enter exactly as they appear on your NIN record</div></div></div>
+    <div class="stage-body">
+      <div class="notice blue">⚠ These details must match your NIN record exactly to avoid CAC filing errors.</div>
+      <div class="field-row three">
+        <div class="field" id="fw-firstname"><label>First Name <span class="req">*</span></label><input type="text" name="First_Name" id="firstname" placeholder="First name"/><span class="err-msg">Required</span></div>
+        <div class="field"><label>Middle Name <span class="opt">(optional)</span></label><input type="text" name="Middle_Name" id="middlename" placeholder="Middle name"/></div>
+        <div class="field" id="fw-lastname"><label>Surname <span class="req">*</span></label><input type="text" name="Surname" id="lastname" placeholder="Surname"/><span class="err-msg">Required</span></div>
+      </div>
+      <div class="field-row three">
+        <div class="field" id="fw-dob"><label>Date of Birth <span class="req">*</span></label><input type="date" name="Date_of_Birth" id="dob"/><span class="err-msg">Required</span></div>
+        <div class="field" id="fw-gender"><label>Gender <span class="req">*</span></label><select name="Gender" id="gender"><option value="">Select…</option><option>Male</option><option>Female</option></select><span class="err-msg">Required</span></div>
+        <div class="field" id="fw-stateoforigin"><label>State of Origin <span class="req">*</span></label>
+          <select name="State_of_Origin" id="stateoforigin">
+            <option value="">Select state…</option>
+            <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option><option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option><option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option><option>Ekiti</option><option>Enugu</option><option>FCT — Abuja</option><option>Gombe</option><option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option><option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option><option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option><option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option><option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option><option>Zamfara</option>
+          </select>
+          <span class="err-msg">Required</span>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field" id="fw-nationality"><label>Nationality <span class="req">*</span></label><input type="text" name="Nationality" id="nationality" value="Nigerian" placeholder="e.g. Nigerian"/><span class="err-msg">Required</span></div>
+        <div class="field" id="fw-occupation"><label>Occupation <span class="req">*</span></label><input type="text" name="Occupation" id="occupation" placeholder="e.g. Entrepreneur"/><span class="err-msg">Required</span></div>
+      </div>
+      <div class="field-row one">
+        <div class="field" id="fw-address"><label>Residential Address <span class="req">*</span></label><textarea name="Residential_Address" id="address" placeholder="Full address — not a P.O. Box"></textarea><span class="err-msg">Required</span></div>
+      </div>
+      <div class="field-row">
+        <div class="field" id="fw-nin"><label>NIN Number <span class="req">*</span></label><input type="text" name="NIN" id="nin" placeholder="11-digit NIN" maxlength="11" pattern="\d{11}"/><span class="field-hint">11 digits. We can assist with retrieval.</span><span class="err-msg">Must be exactly 11 digits</span></div>
+        <div class="field"><label>BVN <span class="opt">(if applicable)</span></label><input type="text" name="BVN" id="bvn" placeholder="11-digit BVN" maxlength="11"/><span class="field-hint">Only if relevant to your service.</span></div>
+      </div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-personal"></span><button type="button" class="btn btn-next" onclick="goNext('personal')">Continue →</button></div>
+  </div>
+</div>
+
+<!-- ═══ BUSINESS NAME ═══ -->
+<div class="stage" id="stage-bn">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num" id="n-bn">4</div><div><div class="stage-title">Business Name Details</div><div class="stage-sub">Sole proprietorship registration</div></div></div>
+    <div class="stage-body">
+      <div class="notice blue">CAC checks name availability. Provide 2 options in order of preference.</div>
+      <div class="field-row">
+        <div class="field" id="fw-bn1"><label>Preferred Name — 1st Choice <span class="req">*</span></label><input type="text" name="BN_Name_1st" id="bn1" placeholder="Your preferred business name"/><span class="err-msg">Required</span></div>
+        <div class="field"><label>Preferred Name — 2nd Choice <span class="opt">(backup)</span></label><input type="text" name="BN_Name_2nd" id="bn2" placeholder="Alternative name"/></div>
+      </div>
+      <div class="field-row one">
+        <div class="field" id="fw-bnbiz"><label>Nature of Business <span class="req">*</span></label><textarea name="BN_Nature_of_Business" id="bnbiz" placeholder="Describe what the business does"></textarea><span class="err-msg">Required</span></div>
+      </div>
+      <div class="field-row">
+        <div class="field" id="fw-bnaddress"><label>Business Address <span class="req">*</span></label><input type="text" name="BN_Business_Address" id="bnaddress" placeholder="Physical address in Nigeria"/><span class="err-msg">Required</span></div>
+        <div class="field"><label>Existing BN Number <span class="opt">(for renewals / changes)</span></label><input type="text" name="BN_Existing_Number" id="bnrc" placeholder="e.g. BN 1234567"/><span class="field-hint">Leave blank for new registration.</span></div>
+      </div>
+      <div class="notice blue" style="margin-top:4px;">A Business Name is a sole proprietorship — your personal details from the previous step will be used as the proprietor information.</div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-bn"></span><button type="button" class="btn btn-next" onclick="goNext('bn')">Continue →</button></div>
+  </div>
+</div>
+
+<!-- ═══ LIMITED COMPANY ═══ -->
+<div class="stage" id="stage-ltd">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num" id="n-ltd">5</div><div><div class="stage-title">Limited Company Details</div><div class="stage-sub">RC company registration</div></div></div>
+    <div class="stage-body">
+      <div class="notice blue">CAC checks name availability. Provide 2 options in order of preference.</div>
+      <div class="field-row">
+        <div class="field" id="fw-ltd1"><label>Company Name — 1st Choice <span class="req">*</span></label><input type="text" name="Ltd_Name_1st" id="ltd1" placeholder="e.g. Your Company Limited"/><span class="err-msg">Required</span></div>
+        <div class="field"><label>Company Name — 2nd Choice <span class="opt">(backup)</span></label><input type="text" name="Ltd_Name_2nd" id="ltd2" placeholder="Alternative name"/></div>
+      </div>
+      <div class="field-row one">
+        <div class="field" id="fw-ltdbiz"><label>Principal Activities / Nature of Business <span class="req">*</span></label><textarea name="Ltd_Activities" id="ltdbiz" placeholder="Describe what the company does and its main activities"></textarea><span class="err-msg">Required</span></div>
+      </div>
+      <div class="field-row">
+        <div class="field" id="fw-ltdshare"><label>Share Capital <span class="req">*</span></label>
+          <select name="Ltd_Share_Capital" id="ltdshare">
+            <option value="">Select…</option>
+            <option>₦1,000,000</option><option>₦5,000,000</option><option>₦10,000,000</option><option>₦100,000,000</option><option>Other — specify below</option>
+          </select>
+          <span class="err-msg">Required</span>
+        </div>
+        <div class="field"><label>Custom Share Capital <span class="opt">(if Other above)</span></label><input type="text" name="Ltd_Share_Capital_Custom" placeholder="e.g. ₦50,000,000"/></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Registered Office Address <span class="opt">(if known)</span></label><input type="text" name="Ltd_Office_Address" placeholder="Physical address in Nigeria"/></div>
+        <div class="field"><label>Existing RC Number <span class="opt">(for changes only)</span></label><input type="text" name="Ltd_RC_Number" placeholder="e.g. RC 1234567"/></div>
+      </div>
+      <hr class="sec-divider"/>
+      <div class="sec-label">Directors & Shareholders</div>
+      <div class="field-row one">
+        <div class="field">
+          <label>Are you adding any additional director or shareholder?</label>
+          <div class="radio-group" style="margin-top:6px;">
+            <label class="radio-opt"><input type="radio" name="add_director" value="No" checked onchange="toggleCond('director-cond',this)"/> No — me only</label>
+            <label class="radio-opt"><input type="radio" name="add_director" value="Yes" onchange="toggleCond('director-cond',this)"/> Yes — add another person</label>
+          </div>
+        </div>
+      </div>
+      <div class="cond" id="director-cond">
+        <div class="sec-label">Additional Director / Shareholder</div>
+        <div class="field-row three">
+          <div class="field"><label>First Name</label><input type="text" name="Dir_First_Name" placeholder="First name"/></div>
+          <div class="field"><label>Middle Name <span class="opt">(opt)</span></label><input type="text" name="Dir_Middle_Name" placeholder="Middle name"/></div>
+          <div class="field"><label>Surname</label><input type="text" name="Dir_Surname" placeholder="Surname"/></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Role</label><select name="Dir_Role"><option value="">Select…</option><option>Shareholder only</option><option>Director only</option><option>Shareholder and Director</option></select></div>
+          <div class="field"><label>Shareholding %</label><input type="text" name="Dir_Shareholding" placeholder="e.g. 30%"/></div>
+        </div>
+        <div class="field-row three">
+          <div class="field"><label>Date of Birth</label><input type="date" name="Dir_DOB"/></div>
+          <div class="field"><label>Phone</label><input type="tel" name="Dir_Phone" placeholder="+234…"/></div>
+          <div class="field"><label>NIN</label><input type="text" name="Dir_NIN" placeholder="11-digit NIN" maxlength="11"/></div>
+        </div>
+        <div class="field-row one">
+          <div class="field"><label>Residential Address</label><textarea name="Dir_Address" placeholder="Full address — not a P.O. Box"></textarea></div>
+        </div>
+        <div class="notice blue" style="margin-top:4px;">Their ID, passport photo, and signature should be uploaded in the Documents step.</div>
+      </div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-ltd"></span><button type="button" class="btn btn-next" onclick="goNext('ltd')">Continue →</button></div>
+  </div>
+</div>
+
+<!-- ═══ INCORPORATED TRUSTEES ═══ -->
+<div class="stage" id="stage-it">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num" id="n-it">6</div><div><div class="stage-title">Incorporated Trustees / NGO</div><div class="stage-sub">Organisation registration details</div></div></div>
+    <div class="stage-body">
+      <div class="field-row">
+        <div class="field" id="fw-it1"><label>Organisation Name — 1st Choice <span class="req">*</span></label><input type="text" name="IT_Name_1st" id="it1" placeholder="e.g. Hope Foundation"/><span class="err-msg">Required</span></div>
+        <div class="field"><label>Organisation Name — 2nd Choice <span class="opt">(backup)</span></label><input type="text" name="IT_Name_2nd" placeholder="Alternative name"/></div>
+      </div>
+      <div class="field-row one">
+        <div class="field" id="fw-itobj"><label>Objects / Purpose <span class="req">*</span></label><textarea name="IT_Objects" id="itobj" placeholder="State the aims and objectives of the organisation"></textarea><span class="err-msg">Required</span></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Organisation Address</label><input type="text" name="IT_Address" placeholder="Physical address in Nigeria"/></div>
+        <div class="field"><label>Number of Trustees</label><input type="number" name="IT_Trustees_Count" placeholder="e.g. 3" min="2"/><span class="field-hint">Minimum 2 trustees required by CAC.</span></div>
+      </div>
+      <div class="field-row one">
+        <div class="field"><label>List of Trustees</label><textarea name="IT_Trustees_List" rows="5" placeholder="Trustee 1: Full name, phone, email&#10;Trustee 2: Full name, phone, email&#10;(continue for each trustee)"></textarea></div>
+      </div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-it"></span><button type="button" class="btn btn-next" onclick="goNext('it')">Continue →</button></div>
+  </div>
+</div>
+
+<!-- ═══ TIN ═══ -->
+<div class="stage" id="stage-tin">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num" id="n-tin">7</div><div><div class="stage-title">TIN Details</div><div class="stage-sub">Tax Identification Number — Nigerian Revenue Service (NRS)</div></div></div>
+    <div class="stage-body">
+      <div class="field-row one">
+        <div class="field"><label>TIN Service Required</label>
+          <div class="radio-group" style="margin-top:6px;">
+            <label class="radio-opt"><input type="radio" name="tin_type" value="New TIN Registration" checked/> New TIN Registration</label>
+            <label class="radio-opt"><input type="radio" name="tin_type" value="TIN Validation"/> TIN Validation</label>
+            <label class="radio-opt"><input type="radio" name="tin_type" value="Both"/> Both</label>
+          </div>
+        </div>
+      </div>
+      <hr class="sec-divider"/>
+      <div class="sec-label">Personal TIN Details</div>
+      <div class="field-row">
+        <div class="field"><label>Existing TIN <span class="opt">(if validation)</span></label><input type="text" name="TIN_Number" placeholder="Your TIN — NRS"/><span class="field-hint">Leave blank if applying for a new TIN.</span></div>
+        <div class="field"><label>Tax Office / State</label><input type="text" name="TIN_Tax_Office" placeholder="e.g. Lagos State IRS"/></div>
+      </div>
+      <hr class="sec-divider"/>
+      <div class="sec-label">Business TIN Details <span style="font-weight:400;color:var(--muted);text-transform:none;font-size:10px;">(only if TIN is for a registered business)</span></div>
+      <div class="field-row">
+        <div class="field"><label>Business / Company Name</label><input type="text" name="TIN_Business_Name" placeholder="Registered name"/></div>
+        <div class="field"><label>RC / BN Number</label><input type="text" name="TIN_RC_Number" placeholder="e.g. RC 1234567 or BN 1234567"/></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Registration Type</label><select name="TIN_Reg_Type"><option value="">Select…</option><option>Business Name (BN)</option><option>Limited Company (RC)</option><option>Incorporated Trustees</option><option>Partnership</option></select></div>
+        <div class="field"><label>Business Address</label><input type="text" name="TIN_Business_Address" placeholder="Registered business address"/></div>
+      </div>
+      <div class="field-row one">
+        <div class="field"><label>Nature of Business</label><input type="text" name="TIN_Nature_of_Business" placeholder="e.g. Retail trade, technology services"/></div>
+      </div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-tin"></span><button type="button" class="btn btn-next" onclick="goNext('tin')">Continue →</button></div>
+  </div>
+</div>
+
+<!-- ═══ SCUML ═══ -->
+<div class="stage" id="stage-scuml">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num" id="n-scuml">8</div><div><div class="stage-title">SCUML Registration</div><div class="stage-sub">Special Control Unit Against Money Laundering</div></div></div>
+    <div class="stage-body">
+      <div class="notice blue">SCUML registration is required for Designated Non-Financial Businesses and Professions (DNFBPs) in Nigeria.</div>
+      <div class="sec-label">Business Category</div>
+      <div class="scuml-cats">
+        <label class="scuml-cat"><input type="radio" name="scuml_category" value="Estate Agents / Real Estate"/> Estate Agents / Real Estate</label>
+        <label class="scuml-cat"><input type="radio" name="scuml_category" value="Lawyers / Legal Practitioners"/> Lawyers / Legal Practitioners</label>
+        <label class="scuml-cat"><input type="radio" name="scuml_category" value="Accountants / Auditors"/> Accountants / Auditors</label>
+        <label class="scuml-cat"><input type="radio" name="scuml_category" value="Dealers in Precious Metals & Stones"/> Dealers in Precious Metals & Stones</label>
+        <label class="scuml-cat"><input type="radio" name="scuml_category" value="Dealers in Luxury Goods"/> Dealers in Luxury Goods</label>
+        <label class="scuml-cat"><input type="radio" name="scuml_category" value="Notaries / Trust & Company Service Providers"/> Notaries / Trust & Company Service Providers</label>
+        <label class="scuml-cat"><input type="radio" name="scuml_category" value="Construction / Real Estate Development"/> Construction / Real Estate Development</label>
+        <label class="scuml-cat"><input type="radio" name="scuml_category" value="Car Dealers (High Value)"/> Car Dealers (High Value)</label>
+        <label class="scuml-cat"><input type="radio" name="scuml_category" value="Other DNFBP"/> Other DNFBP — specify below</label>
+      </div>
+      <div class="field-row one"><div class="field"><label>If Other — specify</label><input type="text" name="SCUML_Category_Other" placeholder="Describe your business category"/></div></div>
+      <hr class="sec-divider"/>
+      <div class="sec-label">CAC / Business Details</div>
+      <div class="field-row">
+        <div class="field" id="fw-scumlbn"><label>Business / Company Name <span class="req">*</span></label><input type="text" name="SCUML_Business_Name" id="scumlbn" placeholder="Registered name as on CAC certificate"/><span class="err-msg">Required</span></div>
+        <div class="field" id="fw-scumlrc"><label>RC / BN Number <span class="req">*</span></label><input type="text" name="SCUML_RC_Number" id="scumlrc" placeholder="e.g. RC 1234567 or BN 1234567"/><span class="err-msg">Required</span></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Registration Type</label><select name="SCUML_Reg_Type"><option value="">Select…</option><option>Business Name (BN)</option><option>Limited Company (RC)</option><option>Incorporated Trustees</option><option>Partnership</option></select></div>
+        <div class="field"><label>Date of CAC Registration</label><input type="date" name="SCUML_CAC_Date"/></div>
+      </div>
+      <div class="field-row one"><div class="field"><label>Business Address</label><input type="text" name="SCUML_Business_Address" placeholder="Registered business address"/></div></div>
+      <div class="field-row one"><div class="field"><label>Nature of Transactions / Services</label><textarea name="SCUML_Transactions" placeholder="Describe the transactions/services that require SCUML registration"></textarea></div></div>
+      <hr class="sec-divider"/>
+      <div class="sec-label">Compliance Officer</div>
+      <div class="notice gold">SCUML requires a designated compliance officer. This can be the business owner.</div>
+      <div class="field-row">
+        <div class="field"><label>Compliance Officer Name</label><input type="text" name="SCUML_Officer_Name" placeholder="Full name"/></div>
+        <div class="field"><label>Compliance Officer Phone</label><input type="tel" name="SCUML_Officer_Phone" placeholder="+234 800 000 0000"/></div>
+      </div>
+      <div class="field-row one"><div class="field"><label>Existing SCUML Number <span class="opt">(if already registered)</span></label><input type="text" name="SCUML_Existing" placeholder="Your existing SCUML number"/></div></div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-scuml"></span><button type="button" class="btn btn-next" onclick="goNext('scuml')">Continue →</button></div>
+  </div>
+</div>
+
+<!-- ═══ TRADEMARK ═══ -->
+<div class="stage" id="stage-tm">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num" id="n-tm">9</div><div><div class="stage-title">Trademark Registration</div><div class="stage-sub">Details for your trademark application</div></div></div>
+    <div class="stage-body">
+      <div class="sec-label">Type of Mark — select all that apply</div>
+      <div class="tm-type-grid">
+        <label class="tm-chip" onclick="toggleTmChip(this)"><input type="checkbox" name="TM_Type" value="Word Mark"><div class="tm-chip-icon">🅰</div><div class="tm-chip-label">Word Mark</div><div class="tm-chip-sub">Name or slogan in text</div></label>
+        <label class="tm-chip" onclick="toggleTmChip(this)"><input type="checkbox" name="TM_Type" value="Logo / Device Mark" onchange="toggleTmLogo()"><div class="tm-chip-icon">🖼</div><div class="tm-chip-label">Logo / Device</div><div class="tm-chip-sub">Graphic or symbol</div></label>
+        <label class="tm-chip" onclick="toggleTmChip(this)"><input type="checkbox" name="TM_Type" value="Combined Mark" onchange="toggleTmLogo()"><div class="tm-chip-icon">🔤</div><div class="tm-chip-label">Combined</div><div class="tm-chip-sub">Word + logo together</div></label>
+        <label class="tm-chip" onclick="toggleTmChip(this)"><input type="checkbox" name="TM_Type" value="Slogan / Tagline"><div class="tm-chip-icon">💬</div><div class="tm-chip-label">Slogan / Tagline</div><div class="tm-chip-sub">Phrase or motto</div></label>
+        <label class="tm-chip" onclick="toggleTmChip(this)"><input type="checkbox" name="TM_Type" value="Series Mark"><div class="tm-chip-icon">📚</div><div class="tm-chip-label">Series Mark</div><div class="tm-chip-sub">Multiple related marks</div></label>
+        <label class="tm-chip" onclick="toggleTmChip(this)"><input type="checkbox" name="TM_Type" value="Shape / 3D Mark"><div class="tm-chip-icon">📦</div><div class="tm-chip-label">Shape / 3D</div><div class="tm-chip-sub">Product shape or packaging</div></label>
+      </div>
+      <div id="tm-type-error" style="display:none;font-size:11px;color:var(--error);margin-bottom:12px;">Please select at least one mark type.</div>
+      <div class="field-row">
+        <div class="field" id="fw-tmmark"><label>Word / Mark to be Filed <span class="req">*</span></label><input type="text" name="TM_Word_Mark" id="tmmark" placeholder="e.g. BRANDNAME"/><span class="err-msg">Required</span></div>
+        <div class="field" id="fw-tmclass"><label>Trademark Class <span class="req">*</span></label><input type="text" name="TM_Class" id="tmclass" placeholder="e.g. Class 35, Class 42"/><span class="field-hint">Not sure? We will advise on the correct class.</span><span class="err-msg">Required</span></div>
+      </div>
+      <div id="tm-logo-row" style="display:none;" class="field-row one">
+        <div class="field"><label>Upload Logo / Mark Image</label>
+          <div class="upload-zone"><input type="file" name="TM_Logo_File" accept=".jpg,.jpeg,.png,.pdf,.svg" onchange="showFile(this,'tm-logo-name')"/><div class="upload-icon">🖼</div><p><strong>Click to upload</strong> your logo or mark</p><p>JPG, PNG, PDF, or SVG — max 5MB</p><div class="file-name" id="tm-logo-name"></div></div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field" id="fw-tmapplicant"><label>Applicant Name <span class="req">*</span></label><input type="text" name="TM_Applicant_Name" id="tmapplicant" placeholder="Individual or company name"/><span class="err-msg">Required</span></div>
+        <div class="field" id="fw-tmphone"><label>Applicant Phone <span class="req">*</span></label><input type="tel" name="TM_Applicant_Phone" id="tmphone" placeholder="+234 800 000 0000"/><span class="err-msg">Required</span></div>
+      </div>
+      <div class="field-row one">
+        <div class="field" id="fw-tmaddr"><label>Applicant Address <span class="req">*</span></label><textarea name="TM_Applicant_Address" id="tmaddr" placeholder="Full address for trademark registration record"></textarea><span class="err-msg">Required</span></div>
+      </div>
+      <div class="field-row one">
+        <div class="field"><label>Additional / Future Marks <span class="opt">(planning only)</span></label><textarea name="TM_Future_Marks" placeholder="List any other marks you may want to register in future"></textarea></div>
+      </div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-tm"></span><button type="button" class="btn btn-next" onclick="goNext('tm')">Continue →</button></div>
+  </div>
+</div>
+
+<!-- ═══ COPYRIGHT ═══ -->
+<div class="stage" id="stage-copy">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num" id="n-copy">10</div><div><div class="stage-title">Copyright Registration</div><div class="stage-sub">Details for your copyright application</div></div></div>
+    <div class="stage-body">
+      <div class="field-row">
+        <div class="field"><label>Title of Work</label><input type="text" name="Copy_Title" placeholder="Title of the work"/></div>
+        <div class="field"><label>Year of Creation</label><input type="text" name="Copy_Year" placeholder="e.g. 2025"/></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Type of Work</label>
+          <select name="Copy_Type"><option value="">Select…</option><option>Literary Work</option><option>Musical Work</option><option>Artistic Work</option><option>Software / Computer Program</option><option>Film / Audiovisual Work</option><option>Sound Recording</option><option>Broadcast</option><option>Other</option></select>
+        </div>
+        <div class="field"><label>Author / Creator Name</label><input type="text" name="Copy_Author" placeholder="Full name of author/creator"/></div>
+      </div>
+      <div class="field-row one"><div class="field"><label>Description of the Work</label><textarea name="Copy_Description" placeholder="Briefly describe the work and its content"></textarea></div></div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-copy"></span><button type="button" class="btn btn-next" onclick="goNext('copy')">Continue →</button></div>
+  </div>
+</div>
+
+<!-- ═══ OTHER SERVICES ═══ -->
+<div class="stage" id="stage-other">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num" id="n-other">11</div><div><div class="stage-title">Additional Service Details</div><div class="stage-sub">Information for your other requested services</div></div></div>
+    <div class="stage-body" id="other-body"></div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-other"></span><button type="button" class="btn btn-next" onclick="goNext('other')">Continue →</button></div>
+  </div>
+</div>
+
+<!-- ═══ DOCUMENTS ═══ -->
+<div class="stage" id="stage-docs">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num" id="n-docs">12</div><div><div class="stage-title">Identity Documents</div><div class="stage-sub">Upload clear, legible copies</div></div></div>
+    <div class="stage-body">
+      <div class="notice gold">📎 All files are sent securely with your submission. Max 5MB per file. JPG, PNG, or PDF accepted.</div>
+      <div class="field-row">
+        <div class="field" id="fw-idupload"><label>Valid ID — Passport / NIN Card / Driver's Licence <span class="req">*</span></label>
+          <div class="upload-zone"><input type="file" name="ID_Document" id="idupload" accept=".pdf,.jpg,.jpeg,.png" onchange="showFile(this,'id-fname')"/><div class="upload-icon">🪪</div><p><strong>Click to upload</strong> your valid ID</p><p>PDF, JPG, or PNG</p><div class="file-name" id="id-fname"></div></div>
+          <span class="err-msg">Please upload your ID</span>
+        </div>
+        <div class="field" id="fw-photoupload"><label>Passport Photograph <span class="req">*</span></label>
+          <div class="upload-zone"><input type="file" name="Passport_Photo" id="photoupload" accept=".jpg,.jpeg,.png" onchange="showFile(this,'photo-fname')"/><div class="upload-icon">📷</div><p><strong>Click to upload</strong> passport photo</p><p>Clear, recent, plain background</p><div class="file-name" id="photo-fname"></div></div>
+          <span class="err-msg">Please upload your photo</span>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field" id="fw-sigupload"><label>Signature <span class="req">*</span></label>
+          <div class="upload-zone"><input type="file" name="Signature" id="sigupload" accept=".jpg,.jpeg,.png,.pdf" onchange="showFile(this,'sig-fname')"/><div class="upload-icon">✍️</div><p><strong>Click to upload</strong> your signature</p><p>Sign on white paper, photograph or scan</p><div class="file-name" id="sig-fname"></div></div>
+          <span class="err-msg">Please upload your signature</span>
+        </div>
+        <div class="field"><label>Additional Documents <span class="opt">(optional)</span></label>
+          <div class="upload-zone"><input type="file" name="Additional_Docs" accept=".pdf,.jpg,.jpeg,.png" onchange="showFile(this,'extra-fname')"/><div class="upload-icon">📎</div><p><strong>Click to upload</strong> any extra files</p><p>e.g. existing certificates</p><div class="file-name" id="extra-fname"></div></div>
+        </div>
+      </div>
+      <div id="dir-docs-section" style="display:none;">
+        <hr class="sec-divider"/>
+        <div class="sec-label">Additional Director / Shareholder Documents</div>
+        <div class="field-row">
+          <div class="field"><label>Their Valid ID</label><div class="upload-zone"><input type="file" name="Director_ID" accept=".pdf,.jpg,.jpeg,.png" onchange="showFile(this,'dir-id-fname')"/><div class="upload-icon">🪪</div><p><strong>Click to upload</strong> their ID</p><div class="file-name" id="dir-id-fname"></div></div></div>
+          <div class="field"><label>Their Passport Photo</label><div class="upload-zone"><input type="file" name="Director_Photo" accept=".jpg,.jpeg,.png" onchange="showFile(this,'dir-photo-fname')"/><div class="upload-icon">📷</div><p><strong>Click to upload</strong> their photo</p><div class="file-name" id="dir-photo-fname"></div></div></div>
+        </div>
+        <div class="field-row one"><div class="field"><label>Their Signature</label><div class="upload-zone"><input type="file" name="Director_Signature" accept=".jpg,.jpeg,.png,.pdf" onchange="showFile(this,'dir-sig-fname')"/><div class="upload-icon">✍️</div><p><strong>Click to upload</strong> their signature</p><div class="file-name" id="dir-sig-fname"></div></div></div></div>
+      </div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-docs"></span><button type="button" class="btn btn-next" onclick="goNext('docs')">Continue →</button></div>
+  </div>
+</div>
+
+<!-- ═══ DECLARATION & PAYMENT ═══ -->
+<div class="stage" id="stage-decl">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num" id="n-decl">13</div><div><div class="stage-title">Summary, Payment & Declaration</div><div class="stage-sub">Review your services, pay, and confirm</div></div></div>
+    <div class="stage-body">
+
+      <!-- Price summary -->
+      <div class="price-summary-card">
+        <div class="price-summary-title">Services & Estimated Total</div>
+        <div id="price-lines"></div>
+        <div class="price-total-row">
+          <span class="total-label">Estimated Total</span>
+          <span class="total-amt" id="price-total">₦0</span>
+        </div>
+        <div class="partial-note" id="partial-note">Partial payment accepted — minimum 50% required to begin processing. Pay the balance once your registration is in progress.</div>
+      </div>
+
+      <!-- Payment options -->
+      <div class="sec-label" style="margin-top:18px;">Payment Options</div>
+      <div class="payment-grid">
+        <div class="payment-card">
+          <div class="payment-card-title">🏦 Bank Transfer</div>
+          <div class="payment-card-body">
+            <strong>Awal Global Consults Limited</strong><br>
+            KudaBank<br>
+            <strong style="font-size:16px;letter-spacing:1px;">3003466189</strong><br>
+            <span style="font-size:11px;color:var(--muted);">Use your full name as narration</span>
+          </div>
+        </div>
+        <div class="payment-card pay-online-card">
+          <div class="payment-card-title">💳 Pay Online</div>
+          <a href="https://paystack.shop/pay/awalglobal" target="_blank" rel="noopener" class="btn-paystack">Pay with Paystack ↗</a>
+          <span style="font-size:11px;color:var(--muted);margin-top:4px;">Card, bank transfer, USSD</span>
+        </div>
+      </div>
+
+      <div class="notice green" style="margin-top:14px;">✅ After payment, send your proof of payment to <strong>+234 703 833 6596</strong> on WhatsApp with your full name.</div>
+
+      <hr class="sec-divider"/>
+      <div class="sec-label">Declaration</div>
+      <div class="notice blue">By submitting, you confirm that all information is accurate. Awal Global Consults Limited will use this information solely for your engagement.</div>
+
+      <div class="chk-field" id="fw-dec1">
+        <input type="checkbox" id="dec1"/>
+        <label for="dec1">I confirm that all information submitted is accurate and complete. I understand that incorrect information may delay or invalidate my registration.</label>
+      </div>
+      <div class="chk-field" id="fw-dec2">
+        <input type="checkbox" id="dec2"/>
+        <label for="dec2">I consent to Awal Global Consults Limited processing this information and my submitted documents solely for the services I have selected.</label>
+      </div>
+      <div class="chk-field" id="fw-dec3">
+        <input type="checkbox" id="dec3"/>
+        <label for="dec3">I confirm that no additional shareholders, directors, nominees, or trustees should be added unless I expressly confirm this in a separate written instruction.</label>
+      </div>
+
+      <div id="decl-error" style="display:none;background:#fdf0f0;border:1px solid #e8c0c0;border-radius:6px;padding:11px 14px;margin-top:12px;font-size:12.5px;color:var(--error);">Please tick all three declarations before submitting.</div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-decl"></span><button type="button" class="btn btn-submit" onclick="submitKYC()">Submit Application ✓</button></div>
+  </div>
+</div>
+
+</form>
+</div><!-- end form-wrapper -->
+
+<!-- SUCCESS -->
+<div id="success-screen">
+  <div class="success-icon">✓</div>
+  <h2>Submission Received</h2>
+  <p>Your client intake form has been successfully submitted to Awal Global Consults Limited.</p>
+  <div class="ref-box">
+    Submitted by: <strong id="s-name">—</strong>
+    <span id="s-services" style="font-size:11px;color:var(--muted);display:block;margin-top:4px;"></span>
+    <span id="s-total" style="font-size:13px;font-weight:700;color:var(--gold);display:block;margin-top:6px;"></span>
+  </div>
+  <div class="notice green" style="max-width:440px;margin:14px auto;text-align:left;">
+    ✅ Send proof of payment to <strong>+234 703 833 6596</strong> on WhatsApp with your full name to begin processing.
+  </div>
+  <p>We will contact you within <strong>1 working day</strong> to confirm receipt and advise on next steps.</p>
+  <p style="margin-top:12px;">WhatsApp: <strong>+234 703 833 6596</strong></p>
+</div>
+
+</main>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    AGC_Router.init();
+// ═══ PRICING ═══
+const PRICES = {
+  "Business Name Registration": { type:"tiered", options:[{label:"Basic Starter",price:35000},{label:"Business Boost",price:65000},{label:"Premium Presence",price:95000}]},
+  "Limited Company Registration": { type:"tiered", options:[{label:"Core Setup",price:75000},{label:"Smart Pro",price:95000},{label:"Complete Brand Suite",price:125000}]},
+  "Business Name Renewal": { type:"fixed", price:15000 },
+  "TIN Registration": { type:"fixed", price:10000 },
+  "TIN Validation": { type:"fixed", price:5000 },
+  "NIN Registration / Retrieval": { type:"fixed", price:5000 },
+  "Data Correction": { type:"fixed", price:5000 },
+  "Business Advisory": { type:"fixed", price:15000 },
+};
+// Everything not in PRICES = quote required
+
+let selectedServices = [];
+let selectedTiers = {};
+
+function getPrice(svc) {
+  const info = PRICES[svc];
+  if (!info) return null; // quote
+  if (info.type === "fixed") return { amount: info.price, label: `₦${info.price.toLocaleString()}` };
+  if (info.type === "tiered") {
+    const tier = selectedTiers[svc] || info.options[0];
+    return { amount: tier.price, label: `₦${tier.price.toLocaleString()} (${tier.label})` };
+  }
+  return null;
+}
+
+function calculateAndRender() {
+  let total = 0;
+  let hasQuote = false;
+  const lines = document.getElementById('price-lines');
+  const totalEl = document.getElementById('price-total');
+  if (!lines) return;
+  lines.innerHTML = '';
+  selectedServices.forEach(svc => {
+    const p = getPrice(svc);
+    const div = document.createElement('div');
+    div.className = 'price-line';
+    if (p) {
+      total += p.amount;
+      div.innerHTML = `<span class="svc-name">${svc}</span><span class="svc-amt">${p.label}</span>`;
+    } else {
+      hasQuote = true;
+      div.innerHTML = `<span class="svc-name">${svc}</span><span class="svc-amt" style="color:rgba(255,255,255,0.5);font-size:11px;">Quote required</span>`;
+    }
+    lines.appendChild(div);
   });
+  if (hasQuote && total === 0) {
+    totalEl.textContent = 'To be quoted';
+  } else if (hasQuote) {
+    totalEl.textContent = `₦${total.toLocaleString()} + items to quote`;
+  } else {
+    totalEl.textContent = `₦${total.toLocaleString()}`;
+  }
+  document.getElementById('h-total').value = totalEl.textContent + ' — ' + selectedServices.join(', ');
+}
+
+function showTierSelector() {
+  const tiered = selectedServices.filter(s => PRICES[s] && PRICES[s].type === "tiered");
+  const block = document.getElementById('tier-block');
+  const content = document.getElementById('tier-content');
+  if (!block) return;
+  if (tiered.length === 0) { block.style.display = 'none'; return; }
+  block.style.display = 'block';
+  content.innerHTML = '';
+  tiered.forEach(svc => {
+    const info = PRICES[svc];
+    if (!selectedTiers[svc]) selectedTiers[svc] = info.options[0];
+    const wrap = document.createElement('div');
+    wrap.style.marginBottom = '14px';
+    wrap.innerHTML = `<div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:6px;">${svc}</div>
+    <div class="radio-group">${info.options.map((opt,i) =>
+      `<label class="radio-opt"><input type="radio" name="tier_${svc.replace(/\W/g,'_')}" value="${i}" ${i===0?'checked':''} onchange="selectedTiers['${svc}']=PRICES['${svc}'].options[${i}];calculateAndRender()"> ${opt.label} — ₦${opt.price.toLocaleString()}</label>`
+    ).join('')}</div>`;
+    content.appendChild(wrap);
+  });
+}
+
+// ═══ SERVICE TOGGLE ═══
+function onSvcChange(cb) {
+  const label = cb.closest('.svc-btn');
+  label.classList.toggle('selected', cb.checked);
+  selectedServices = Array.from(document.querySelectorAll('input[name="svc"]:checked')).map(c => c.value);
+  showTierSelector();
+}
+
+// ═══ FLOW ═══
+const ALL_STAGES = ['services','contact','personal','bn','ltd','it','tin','scuml','tm','copy','other','docs','decl'];
+const STAGE_LABELS = {services:'Services',contact:'Contact',personal:'Personal',bn:'Biz Name',ltd:'Company',it:'NGO',tin:'TIN',scuml:'SCUML',tm:'Trademark',copy:'Copyright',other:'Other',docs:'Documents',decl:'Declaration'};
+
+let stageFlow = [];
+let currentIdx = 0;
+
+function buildFlow() {
+  stageFlow = ['services','contact','personal'];
+  if (selectedServices.some(s => s.includes('Business Name'))) stageFlow.push('bn');
+  if (selectedServices.includes('Limited Company Registration') || selectedServices.some(s => ['Share Transfer / Allotment','Increase of Share Capital','Company Secretary Services','Post-incorporation Changes','CAC Annual Returns'].includes(s))) stageFlow.push('ltd');
+  if (selectedServices.includes('Incorporated Trustees / NGO')) stageFlow.push('it');
+  if (selectedServices.some(s => s.includes('TIN'))) stageFlow.push('tin');
+  if (selectedServices.includes('SCUML Registration')) stageFlow.push('scuml');
+  if (selectedServices.includes('Trademark Registration')) stageFlow.push('tm');
+  if (selectedServices.includes('Copyright Registration')) stageFlow.push('copy');
+
+  const otherSvcs = selectedServices.filter(s => !['Business Name Registration','Business Name Renewal','Limited Company Registration','Incorporated Trustees / NGO','TIN Registration','TIN Validation','SCUML Registration','Trademark Registration','Copyright Registration','Post-incorporation Changes','CAC Annual Returns','Share Transfer / Allotment','Increase of Share Capital','Company Secretary Services'].includes(s));
+  if (otherSvcs.length > 0) { buildOtherStage(otherSvcs); stageFlow.push('other'); }
+
+  stageFlow.push('docs','decl');
+  buildProgressBar();
+}
+
+function buildOtherStage(svcs) {
+  const body = document.getElementById('other-body');
+  body.innerHTML = '';
+  svcs.forEach(svc => {
+    const lbl = document.createElement('div');
+    lbl.className = 'sec-label';
+    lbl.style.marginTop = '8px';
+    lbl.textContent = svc;
+    const row = document.createElement('div');
+    row.className = 'field-row one';
+    row.innerHTML = `<div class="field"><label>Details / Information</label><textarea name="Other_${svc.replace(/\W/g,'_')}" placeholder="Provide any relevant details for: ${svc}"></textarea></div>`;
+    body.appendChild(lbl);
+    body.appendChild(row);
+  });
+}
+
+function buildProgressBar() {
+  const prog = document.getElementById('prog');
+  prog.innerHTML = '';
+  stageFlow.forEach((s,i) => {
+    const div = document.createElement('div');
+    div.className = 'p-step' + (i===0?' active':'');
+    div.id = 'pdot-' + s;
+    div.innerHTML = `<div class="p-dot">${i===0?'✓':i+1}</div><div class="p-label">${STAGE_LABELS[s]||s}</div>`;
+    prog.appendChild(div);
+  });
+}
+
+function updateProgress() {
+  stageFlow.forEach((s,i) => {
+    const dot = document.getElementById('pdot-' + s);
+    if (!dot) return;
+    dot.classList.remove('active','done');
+    if (i < currentIdx) { dot.classList.add('done'); dot.querySelector('.p-dot').textContent = '✓'; }
+    else if (i === currentIdx) { dot.classList.add('active'); dot.querySelector('.p-dot').textContent = i+1; }
+    else { dot.querySelector('.p-dot').textContent = i+1; }
+  });
+}
+
+function updateCounter(stageId) {
+  const i = stageFlow.indexOf(stageId);
+  const el = document.getElementById('cnt-' + stageId);
+  if (el) el.textContent = `Step ${i+1} of ${stageFlow.length}`;
+}
+
+function showStage(stageId) {
+  ALL_STAGES.forEach(s => document.getElementById('stage-' + s).classList.remove('active'));
+  document.getElementById('stage-' + stageId).classList.add('active');
+  updateProgress();
+  updateCounter(stageId);
+  if (stageId === 'decl') calculateAndRender();
+  const addDir = document.querySelector('input[name="add_director"]:checked');
+  const dirDocs = document.getElementById('dir-docs-section');
+  if (dirDocs) dirDocs.style.display = (addDir && addDir.value === 'Yes') ? 'block' : 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+  autoSave();
+}
+
+function startForm() {
+  selectedServices = Array.from(document.querySelectorAll('input[name="svc"]:checked')).map(c => c.value);
+  if (selectedServices.length === 0) { document.getElementById('svc-error').style.display = 'block'; return; }
+  document.getElementById('svc-error').style.display = 'none';
+  document.getElementById('h-services').value = selectedServices.join(', ');
+  document.getElementById('h-subject').value = `Client KYC — ${selectedServices.slice(0,2).join(', ')}`;
+  buildFlow();
+  currentIdx = 1;
+  showStage(stageFlow[currentIdx]);
+}
+
+function goNext(stageId) {
+  if (!validateStage(stageId)) return;
+  const i = stageFlow.indexOf(stageId);
+  if (i < stageFlow.length - 1) { currentIdx = i + 1; showStage(stageFlow[currentIdx]); }
+}
+
+function goBack() {
+  if (currentIdx > 0) { currentIdx--; showStage(stageFlow[currentIdx]); }
+}
+
+// ═══ VALIDATION ═══
+function reqField(id, wrapId) {
+  const el = document.getElementById(id);
+  const wrap = document.getElementById(wrapId || ('fw-' + id));
+  if (!el) return true;
+  const val = el.type === 'file' ? (el.files && el.files.length > 0) : el.value.trim();
+  el.classList.toggle('err', !val);
+  if (wrap) wrap.classList.toggle('has-err', !val);
+  return !!val;
+}
+
+function validateStage(stageId) {
+  let ok = true;
+  const checks = {
+    contact: () => ['fullname','phone','email'].every(id => reqField(id)),
+    personal: () => {
+      const fields = ['firstname','lastname','dob','gender','stateoforigin','nationality','occupation','address'];
+      let v = fields.every(id => reqField(id));
+      const nin = document.getElementById('nin');
+      if (!nin.value.trim() || !/^\d{11}$/.test(nin.value.trim())) {
+        nin.classList.add('err');
+        const w = document.getElementById('fw-nin'); if(w) w.classList.add('has-err');
+        v = false;
+      } else { nin.classList.remove('err'); const w = document.getElementById('fw-nin'); if(w) w.classList.remove('has-err'); }
+      return v;
+    },
+    bn: () => ['bn1','bnbiz','bnaddress'].every(id => reqField(id)),
+    ltd: () => ['ltd1','ltdbiz','ltdshare'].every(id => reqField(id)),
+    it: () => ['it1','itobj'].every(id => reqField(id)),
+    scuml: () => ['scumlbn','scumlrc'].every(id => reqField(id)),
+    tm: () => {
+      const types = document.querySelectorAll('input[name="TM_Type"]:checked');
+      const te = document.getElementById('tm-type-error');
+      if (types.length === 0) { te.style.display = 'block'; return false; }
+      te.style.display = 'none';
+      return ['tmmark','tmclass','tmapplicant','tmphone','tmaddr'].every(id => reqField(id));
+    },
+    docs: () => ['idupload','photoupload','sigupload'].every(id => reqField(id, 'fw-' + id))
+  };
+  if (checks[stageId]) ok = checks[stageId]();
+  return ok;
+}
+
+// ═══ HELPERS ═══
+function showFile(input, targetId) {
+  const t = document.getElementById(targetId);
+  if (t && input.files && input.files.length > 0) t.textContent = '✓ ' + input.files[0].name;
+}
+
+function toggleCond(id, radio) {
+  document.getElementById(id).classList.toggle('show', radio.value === 'Yes');
+}
+
+function toggleTmChip(chip) {
+  setTimeout(() => {
+    const cb = chip.querySelector('input');
+    chip.classList.toggle('selected', cb.checked);
+    const logoNeeded = Array.from(document.querySelectorAll('input[name="TM_Type"]:checked')).some(c => ['Logo / Device Mark','Combined Mark'].includes(c.value));
+    document.getElementById('tm-logo-row').style.display = logoNeeded ? 'block' : 'none';
+  }, 0);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ═══ SAVE / RESUME ═══
+function generateResumeId() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let id = 'AGC-' + new Date().getFullYear() + '-';
+  for (let i = 0; i < 4; i++) id += chars[Math.floor(Math.random() * chars.length)];
+  return id;
+}
+
+function getFormData() {
+  const data = { services: selectedServices, tiers: selectedTiers, step: currentIdx, flow: stageFlow };
+  document.querySelectorAll('#kyc-form input:not([type="file"]):not([type="checkbox"]):not([type="radio"]):not([name="svc"]), #kyc-form select, #kyc-form textarea').forEach(el => {
+    if (el.name) data[el.name] = el.value;
+  });
+  document.querySelectorAll('#kyc-form input[type="radio"]:checked').forEach(el => {
+    if (el.name) data['radio_' + el.name] = el.value;
+  });
+  return data;
+}
+
+function restoreFormData(data) {
+  if (data.services) {
+    selectedServices = data.services;
+    document.querySelectorAll('input[name="svc"]').forEach(cb => {
+      cb.checked = selectedServices.includes(cb.value);
+      cb.closest('.svc-btn').classList.toggle('selected', cb.checked);
+    });
+  }
+  if (data.tiers) selectedTiers = data.tiers;
+  Object.entries(data).forEach(([key, val]) => {
+    if (['services','tiers','step','flow'].includes(key)) return;
+    if (key.startsWith('radio_')) {
+      const name = key.replace('radio_','');
+      const radio = document.querySelector(`input[name="${name}"][value="${val}"]`);
+      if (radio) { radio.checked = true; if (name === 'add_director') toggleCond('director-cond', radio); }
+      return;
+    }
+    const el = document.querySelector(`[name="${key}"]`);
+    if (el && el.type !== 'file') el.value = val;
+  });
+}
+
+function saveProgress() {
+  let resumeId = localStorage.getItem('agc_resume_id');
+  if (!resumeId) { resumeId = generateResumeId(); localStorage.setItem('agc_resume_id', resumeId); }
+  const data = getFormData();
+  localStorage.setItem('agc_form_' + resumeId, JSON.stringify(data));
+  localStorage.setItem('agc_saved_at', new Date().toISOString());
+  document.getElementById('h-resume-id').value = resumeId;
+  const display = document.getElementById('current-resume-id');
+  display.textContent = resumeId;
+  display.style.display = 'inline-block';
+  showToast(`✓ Progress saved — Resume ID: ${resumeId}`);
+}
+
+function autoSave() {
+  const resumeId = localStorage.getItem('agc_resume_id');
+  if (!resumeId) return;
+  const data = getFormData();
+  localStorage.setItem('agc_form_' + resumeId, JSON.stringify(data));
+}
+
+function resumeForm() {
+  const input = document.getElementById('resume-id-input').value.trim().toUpperCase();
+  const errEl = document.getElementById('resume-error');
+  const saved = localStorage.getItem('agc_form_' + input);
+  if (!saved) { errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+  const data = JSON.parse(saved);
+  localStorage.setItem('agc_resume_id', input);
+  document.getElementById('h-resume-id').value = input;
+  const display = document.getElementById('current-resume-id');
+  display.textContent = input;
+  display.style.display = 'inline-block';
+  restoreFormData(data);
+  if (data.flow && data.flow.length > 0) stageFlow = data.flow;
+  else buildFlow();
+  buildProgressBar();
+  showTierSelector();
+  currentIdx = data.step || 1;
+  document.getElementById('resume-screen').style.display = 'none';
+  document.getElementById('form-wrapper').style.display = 'block';
+  showStage(stageFlow[currentIdx]);
+  showToast('✓ Progress restored successfully');
+}
+
+function startFresh() {
+  document.getElementById('resume-screen').style.display = 'none';
+  document.getElementById('form-wrapper').style.display = 'block';
+  buildProgressBar();
+}
+
+// ═══ SUBMIT ═══
+function submitKYC() {
+  if (!document.getElementById('dec1').checked || !document.getElementById('dec2').checked || !document.getElementById('dec3').checked) {
+    document.getElementById('decl-error').style.display = 'block';
+    return;
+  }
+  document.getElementById('decl-error').style.display = 'none';
+  const name = document.getElementById('fullname').value;
+  const total = document.getElementById('price-total').textContent;
+  document.getElementById('h-subject').value = `Client KYC — ${name} — ${selectedServices.slice(0,2).join(', ')}`;
+  document.getElementById('h-total').value = total + ' — ' + selectedServices.join(', ');
+  // Clear saved data on successful submit
+  const resumeId = localStorage.getItem('agc_resume_id');
+  if (resumeId) { localStorage.removeItem('agc_form_' + resumeId); localStorage.removeItem('agc_resume_id'); }
+  document.getElementById('s-name').textContent = name;
+  document.getElementById('s-services').textContent = selectedServices.join(', ');
+  document.getElementById('s-total').textContent = 'Estimated Total: ' + total;
+  document.getElementById('form-wrapper').style.display = 'none';
+  document.getElementById('success-screen').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('kyc-form').submit();
+}
+
+// ═══ INIT ═══
+(function init() {
+  // Check if returning with a resume
+  const saved = localStorage.getItem('agc_resume_id');
+  if (saved && localStorage.getItem('agc_form_' + saved)) {
+    document.getElementById('form-wrapper').style.display = 'none';
+    document.getElementById('resume-screen').style.display = 'block';
+    document.getElementById('resume-id-input').value = saved;
+  } else {
+    document.getElementById('resume-screen').style.display = 'none';
+    document.getElementById('form-wrapper').style.display = 'block';
+    buildProgressBar();
+  }
+})();
 </script>
+</body>
+</html>
