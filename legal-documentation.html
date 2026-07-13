@@ -296,10 +296,8 @@
       </div>
 
       <div class="form-card">
-        <form action="https://formsubmit.co/info@awalglobal.com.ng" method="POST" class="form-grid">
-          <input type="hidden" name="_subject" value="New Legal Documentation Inquiry - Awal Global Consults">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_next" value="https://awalglobal.com.ng/thank-you.html">
+        <form id="agc-contact-form" method="POST" class="form-grid">
+          <input type="hidden" name="Service" value="Legal Documentation">
 
           <div class="form-group">
             <label for="full-name">Full Name</label>
@@ -440,6 +438,8 @@
       document.getElementById('scrollProgress').style.width = pct + '%';
     });
   </script>
+
+<script src="/assets/js/contact-submit.js" defer></script>
 
 </body>
 </html>

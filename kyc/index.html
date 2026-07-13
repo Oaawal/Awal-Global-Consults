@@ -238,13 +238,11 @@
 
 <!-- MAIN FORM -->
 <div id="form-wrapper">
-<form id="kyc-form" method="POST" action="https://formsubmit.co/info@awalglobal.com.ng" enctype="multipart/form-data">
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_next" value="https://awalglobal.com.ng/thank-you.html">
-  <input type="hidden" name="_subject" id="h-subject" value="New Client KYC Submission">
+<form id="kyc-form" method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="Subject" id="h-subject" value="New Client KYC Submission">
   <input type="hidden" name="Services_Requested" id="h-services" value="">
   <input type="hidden" name="Estimated_Total" id="h-total" value="">
+  <input type="hidden" name="Has_Fixed_Price" id="h-has-fixed" value="false">
   <input type="hidden" name="Resume_ID" id="h-resume-id" value="">
 
 <!-- ═══ SERVICE SELECTION ═══ -->
@@ -761,6 +759,7 @@
       </div>
 
       <div id="decl-error" style="display:none;background:#fdf0f0;border:1px solid #e8c0c0;border-radius:6px;padding:11px 14px;margin-top:12px;font-size:12.5px;color:var(--error);">Please tick all three declarations before submitting.</div>
+      <div id="submit-error" style="display:none;background:#fdf0f0;border:1px solid #e8c0c0;border-radius:6px;padding:11px 14px;margin-top:12px;font-size:12.5px;color:var(--error);"></div>
     </div>
     <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter" id="cnt-decl"></span><button type="button" class="btn btn-submit" onclick="submitKYC()">Submit Application ✓</button></div>
   </div>
@@ -844,6 +843,7 @@ function calculateAndRender() {
     totalEl.textContent = `₦${total.toLocaleString()}`;
   }
   document.getElementById('h-total').value = totalEl.textContent + ' — ' + selectedServices.join(', ');
+  document.getElementById('h-has-fixed').value = total > 0 ? 'true' : 'false';
 }
 
 function showTierSelector() {
@@ -1139,7 +1139,7 @@ function startFresh() {
 }
 
 // ═══ SUBMIT ═══
-function submitKYC() {
+async function submitKYC() {
   if (!document.getElementById('dec1').checked || !document.getElementById('dec2').checked || !document.getElementById('dec3').checked) {
     document.getElementById('decl-error').style.display = 'block';
     return;
@@ -1149,16 +1149,35 @@ function submitKYC() {
   const total = document.getElementById('price-total').textContent;
   document.getElementById('h-subject').value = `Client KYC — ${name} — ${selectedServices.slice(0,2).join(', ')}`;
   document.getElementById('h-total').value = total + ' — ' + selectedServices.join(', ');
-  // Clear saved data on successful submit
-  const resumeId = localStorage.getItem('agc_resume_id');
-  if (resumeId) { localStorage.removeItem('agc_form_' + resumeId); localStorage.removeItem('agc_resume_id'); }
-  document.getElementById('s-name').textContent = name;
-  document.getElementById('s-services').textContent = selectedServices.join(', ');
-  document.getElementById('s-total').textContent = 'Estimated Total: ' + total;
-  document.getElementById('form-wrapper').style.display = 'none';
-  document.getElementById('success-screen').style.display = 'block';
-  window.scrollTo({top:0,behavior:'smooth'});
-  document.getElementById('kyc-form').submit();
+
+  const btn = document.querySelector('#stage-decl .btn-submit');
+  const submitErr = document.getElementById('submit-error');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+  if (submitErr) submitErr.style.display = 'none';
+
+  try {
+    const form = document.getElementById('kyc-form');
+    const fd = new FormData(form);
+    const res = await fetch('/submit-kyc', { method: 'POST', body: fd });
+    if (!res.ok) throw new Error('Submission failed');
+
+    // Clear saved data on successful submit
+    const resumeId = localStorage.getItem('agc_resume_id');
+    if (resumeId) { localStorage.removeItem('agc_form_' + resumeId); localStorage.removeItem('agc_resume_id'); }
+    document.getElementById('s-name').textContent = name;
+    document.getElementById('s-services').textContent = selectedServices.join(', ');
+    document.getElementById('s-total').textContent = 'Estimated Total: ' + total;
+    document.getElementById('form-wrapper').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Submit Application ✓'; }
+    if (submitErr) {
+      submitErr.textContent = 'We could not submit your application. Please check your connection and try again, or send your details directly on WhatsApp: +234 703 833 6596.';
+      submitErr.style.display = 'block';
+    }
+    window.scrollTo({top:document.getElementById('stage-decl').offsetTop - 20, behavior:'smooth'});
+  }
 }
 
 // ═══ INIT ═══

@@ -207,10 +207,8 @@
       </div>
 
       <div class="form-card">
-        <form action="https://formsubmit.co/info@awalglobal.com.ng" method="POST" class="form-grid">
-          <input type="hidden" name="_subject" value="New CAC Registration Request - Awal Global Consults">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_next" value="https://awalglobal.com.ng/thank-you.html">
+        <form id="agc-contact-form" method="POST" class="form-grid">
+          <input type="hidden" name="Service" value="CAC Registration">
 
           <div class="form-group">
             <label for="full-name">Full Name</label>
@@ -404,6 +402,8 @@
       document.getElementById('scrollProgress').style.width = pct + '%';
     });
   </script>
+
+<script src="/assets/js/contact-submit.js" defer></script>
 
 </body>
 </html>
