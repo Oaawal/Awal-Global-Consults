@@ -1,0 +1,172 @@
+/* Blog styles — layered on top of /style.css.
+   Reuses the site's existing CSS variables (--navy, --gold, --offwhite,
+   --muted, --border, --shadow, --radius) so the blog matches the rest
+   of the site automatically if the palette ever changes. */
+
+.blog-index-hero {
+  padding: 64px 0 40px;
+  text-align: center;
+}
+.blog-index-hero h1 {
+  margin: 12px 0 16px;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+}
+.blog-index-hero p {
+  max-width: 620px;
+  margin: 0 auto;
+  color: var(--muted);
+}
+
+.blog-category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+.blog-category-filters a {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background .2s ease, color .2s ease;
+}
+.blog-category-filters a:hover,
+.blog-category-filters a.active {
+  background: var(--navy);
+  color: var(--white);
+}
+
+.blog-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+}
+.blog-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform .2s ease;
+}
+.blog-card:hover { transform: translateY(-4px); }
+.blog-card .blog-card-category {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.blog-card h3 { font-size: 1.2rem; line-height: 1.35; }
+.blog-card h3 a { text-decoration: none; }
+.blog-card p { color: var(--muted); font-size: 0.95rem; }
+.blog-card .blog-card-meta {
+  margin-top: auto;
+  font-size: 0.82rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.blog-post-hero {
+  padding: 48px 0 8px;
+}
+.blog-breadcrumb {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.blog-breadcrumb a { text-decoration: none; }
+.blog-breadcrumb a:hover { color: var(--navy); }
+.blog-post-hero h1 {
+  font-size: clamp(1.9rem, 4vw, 2.5rem);
+  margin: 10px 0;
+}
+.blog-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.blog-post-grid {
+  display: block;
+}
+
+.blog-toc {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 32px;
+}
+.blog-toc h2 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.blog-toc ul { list-style: none; padding: 0; margin: 0; }
+.blog-toc li { margin-bottom: 6px; }
+.blog-toc a { text-decoration: none; font-size: 0.95rem; }
+.blog-toc a:hover { color: var(--gold); }
+
+.blog-article {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 40px clamp(20px, 5vw, 56px);
+  line-height: 1.75;
+}
+.blog-article h2 {
+  font-size: 1.5rem;
+  margin: 36px 0 14px;
+  color: var(--navy);
+}
+.blog-article h3 {
+  font-size: 1.2rem;
+  margin: 28px 0 10px;
+}
+.blog-article p { margin-bottom: 16px; }
+.blog-article ul, .blog-article ol {
+  margin: 0 0 16px 1.4rem;
+}
+.blog-article li { margin-bottom: 6px; }
+.blog-article blockquote {
+  border-left: 3px solid var(--gold);
+  padding: 4px 20px;
+  margin: 20px 0;
+  color: var(--muted);
+  font-style: italic;
+}
+.blog-article code {
+  background: var(--light-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.blog-article hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+.blog-article a { color: var(--navy); text-decoration: underline; }
+
+.blog-cta-box {
+  margin-top: 32px;
+  background: var(--navy);
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: 32px clamp(20px, 5vw, 40px);
+  text-align: center;
+}
+.blog-cta-box h3 { margin-bottom: 8px; }
+.blog-cta-box p { color: rgba(255,255,255,0.75); margin-bottom: 18px; }
+
+@media (max-width: 640px) {
+  .blog-article { padding: 28px 18px; }
+}
