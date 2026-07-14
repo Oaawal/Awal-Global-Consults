@@ -45,6 +45,7 @@
         </div>
         <div class="agc-field"><label>Shareholding %</label>
           <input type="text" name="Dir_${i}_Shareholding" placeholder="e.g. 50%"/>
+          <span class="agc-field-hint">25%+ triggers Persons with Significant Control (PSC) disclosure to CAC.</span>
         </div>
       </div>
       <div class="agc-field-row one">

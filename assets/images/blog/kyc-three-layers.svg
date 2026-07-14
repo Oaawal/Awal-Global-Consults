@@ -1,0 +1,25 @@
+<svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect x="0" y="0" width="900" height="340" fill="#ffffff"/>
+
+  <!-- Layer 3 top: Ongoing Monitoring -->
+  <rect x="300" y="30" width="300" height="70" rx="12" fill="#c9a646"/>
+  <text x="450" y="60" text-anchor="middle" fill="#0f2747" font-size="16" font-weight="700">Ongoing Monitoring</text>
+  <text x="450" y="82" text-anchor="middle" fill="#0f2747" font-size="12">Periodic re-verification over time</text>
+
+  <!-- connector -->
+  <polygon points="450,100 480,125 420,125" fill="#e3c46b"/>
+
+  <!-- Layer 2 middle: Risk Assessment -->
+  <rect x="200" y="130" width="500" height="70" rx="12" fill="#1c3a63"/>
+  <text x="450" y="160" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">Risk Assessment</text>
+  <text x="450" y="182" text-anchor="middle" fill="#c9d3de" font-size="12">PEP &amp; sanctions screening, risk rating (low / medium / high)</text>
+
+  <!-- connector -->
+  <polygon points="450,200 480,225 420,225" fill="#0f2747"/>
+
+  <!-- Layer 1 bottom: Documents -->
+  <rect x="100" y="230" width="700" height="80" rx="12" fill="#0f2747"/>
+  <text x="450" y="262" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">Documentation</text>
+  <text x="450" y="285" text-anchor="middle" fill="#c9d3de" font-size="12">ID, proof of address, CAC certificate, PSC disclosure, board resolution</text>
+  <text x="450" y="302" text-anchor="middle" fill="#8a97a8" font-size="11">— the foundation every layer above depends on</text>
+</svg>

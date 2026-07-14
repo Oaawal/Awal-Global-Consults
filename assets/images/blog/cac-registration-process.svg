@@ -1,0 +1,44 @@
+<svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect x="0" y="0" width="900" height="260" fill="#ffffff"/>
+  <line x1="70" y1="70" x2="830" y2="70" stroke="#e3c46b" stroke-width="3"/>
+
+  <!-- Step 1 -->
+  <circle cx="70" cy="70" r="26" fill="#0f2747"/>
+  <text x="70" y="78" text-anchor="middle" fill="#ffffff" font-size="22" font-weight="700">1</text>
+  <text x="70" y="122" text-anchor="middle" fill="#0f2747" font-size="15" font-weight="700">Name Search</text>
+  <text x="70" y="142" text-anchor="middle" fill="#5f6b7a" font-size="12">Availability check</text>
+
+  <!-- Step 2 -->
+  <circle cx="222" cy="70" r="26" fill="#0f2747"/>
+  <text x="222" y="78" text-anchor="middle" fill="#ffffff" font-size="22" font-weight="700">2</text>
+  <text x="222" y="122" text-anchor="middle" fill="#0f2747" font-size="15" font-weight="700">Documents</text>
+  <text x="222" y="142" text-anchor="middle" fill="#5f6b7a" font-size="12">ID &amp; details</text>
+
+  <!-- Step 3 -->
+  <circle cx="374" cy="70" r="26" fill="#0f2747"/>
+  <text x="374" y="78" text-anchor="middle" fill="#ffffff" font-size="22" font-weight="700">3</text>
+  <text x="374" y="122" text-anchor="middle" fill="#0f2747" font-size="15" font-weight="700">Online Filing</text>
+  <text x="374" y="142" text-anchor="middle" fill="#5f6b7a" font-size="12">CAC portal</text>
+
+  <!-- Step 4 -->
+  <circle cx="526" cy="70" r="26" fill="#0f2747"/>
+  <text x="526" y="78" text-anchor="middle" fill="#ffffff" font-size="22" font-weight="700">4</text>
+  <text x="526" y="122" text-anchor="middle" fill="#0f2747" font-size="15" font-weight="700">Fee Payment</text>
+  <text x="526" y="142" text-anchor="middle" fill="#5f6b7a" font-size="12">Statutory fees</text>
+
+  <!-- Step 5 -->
+  <circle cx="678" cy="70" r="26" fill="#0f2747"/>
+  <text x="678" y="78" text-anchor="middle" fill="#ffffff" font-size="22" font-weight="700">5</text>
+  <text x="678" y="122" text-anchor="middle" fill="#0f2747" font-size="15" font-weight="700">CAC Review</text>
+  <text x="678" y="142" text-anchor="middle" fill="#5f6b7a" font-size="12">Approval stage</text>
+
+  <!-- Step 6 -->
+  <circle cx="830" cy="70" r="26" fill="#c9a646"/>
+  <text x="830" y="78" text-anchor="middle" fill="#ffffff" font-size="22" font-weight="700">6</text>
+  <text x="830" y="122" text-anchor="middle" fill="#0f2747" font-size="15" font-weight="700">Certificate</text>
+  <text x="830" y="142" text-anchor="middle" fill="#5f6b7a" font-size="12">RC/BN issued</text>
+
+  <rect x="20" y="180" width="860" height="60" rx="10" fill="#f2f4f7"/>
+  <text x="450" y="205" text-anchor="middle" fill="#0f2747" font-size="13" font-weight="700">Business names are typically faster than company registrations</text>
+  <text x="450" y="224" text-anchor="middle" fill="#5f6b7a" font-size="12">Delays are almost always caused by name conflicts or incomplete director/shareholder documents</text>
+</svg>

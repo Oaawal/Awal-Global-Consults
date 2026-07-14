@@ -82,6 +82,21 @@
             </div>
 
             ${R.divider()}
+            <div class="agc-sec-label">Customer Due Diligence</div>
+            ${R.notice('This information supports the risk assessment SCUML expects DNFBPs to carry out on their own clients and transactions.', 'blue')}
+            <div class="agc-field-row one">
+              ${R.textarea({ id:'scuml_sof', label:'Typical Source of Funds for Transactions', name:'SCUML_Source_Of_Funds', placeholder:'e.g. business revenue, client payments, investment capital', optional:true })}
+            </div>
+            <div class="agc-chk-field" id="fw-scuml_pep">
+              <input type="checkbox" id="scuml_pep" name="SCUML_PEP_Declaration" value="Yes"/>
+              <label for="scuml_pep">
+                The business owner, a director, or a beneficial owner is a Politically Exposed
+                Person (PEP) — currently or formerly holding a prominent public position, or a
+                close associate/family member of someone who does.
+              </label>
+            </div>
+
+            ${R.divider()}
             <div class="agc-sec-label">Documents</div>
             <div class="agc-field-row">
               ${R.upload({ id:'scuml_cac', label:'CAC Certificate', name:'SCUML_CAC_Cert', icon:'📄', description:'RC or BN certificate', required:true })}

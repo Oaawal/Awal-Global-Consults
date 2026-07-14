@@ -46,6 +46,11 @@
             <div class="agc-field-row">
               ${R.upload({ id:'doc_sig', label:'Signature', name:'Doc_Signature',
                 icon:'✍️', description:'Sign on white paper, photograph or scan clearly', required:true })}
+              ${R.upload({ id:'doc_poa', label:'Proof of Address', name:'Doc_Proof_Of_Address',
+                icon:'🏠', description:'Utility bill, bank statement, or tenancy agreement — dated within the last 3 months', optional:true,
+                hint:'Not required for every service, but speeds up processing and is needed for most regulatory and financial filings.' })}
+            </div>
+            <div class="agc-field-row">
               ${R.upload({ id:'doc_extra', label:'Additional Documents', name:'Doc_Extra',
                 icon:'📎', description:'Any other supporting documents', optional:true })}
             </div>
