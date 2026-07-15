@@ -238,6 +238,19 @@
       .p-label { display: none; }
     }
 
+    .back-to-top {
+      position: fixed; left: 20px; bottom: 20px; z-index: 999;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--navy); color: var(--gold-light);
+      border: 1.5px solid rgba(201,166,70,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; cursor: pointer;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+      opacity: 0; visibility: hidden; transform: translateY(8px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    }
+    .back-to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+
   </style>
 </head>
 <body>
@@ -1236,6 +1249,13 @@ async function submitKYC() {
     buildProgressBar();
   }
 })();
+</script>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('backToTop').classList.toggle('show', (document.documentElement.scrollTop || document.body.scrollTop) > 500);
+  });
 </script>
 </body>
 </html>

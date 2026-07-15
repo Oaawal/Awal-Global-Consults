@@ -903,8 +903,11 @@
       const scrollHeight = doc.scrollHeight - doc.clientHeight;
       const pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
       document.getElementById('scrollProgress').style.width = pct + '%';
+      document.getElementById('backToTop').classList.toggle('show', scrollTop > 500);
     });
   </script>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script src="assets/js/contact-submit.js" defer></script>
 

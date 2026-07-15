@@ -156,9 +156,9 @@ ${post.toc.map(t => `          <li><a href="#${t.id}">${t.text}</a></li>`).join(
 
 const indexTemplate = readTemplate('index.html');
 
-const cardsHtml = posts.map(post => `        <div class="blog-card">
+const cardsHtml = posts.map(post => `        <div class="blog-card" data-category="${post.categorySlug}">
           <span class="blog-card-category">${post.category.label}</span>
-          <h3><a href="/blog/${post.slug}/">${post.title}</a></h3>
+          <h3><a href="${post.slug}/">${post.title}</a></h3>
           <p>${post.excerpt || post.description}</p>
           <div class="blog-card-meta">${post.dateDisplay} · ${post.readingTime} min read</div>
         </div>`).join('\n');
@@ -166,7 +166,7 @@ const cardsHtml = posts.map(post => `        <div class="blog-card">
 const usedCategories = [...new Set(posts.map(p => p.categorySlug))];
 const filtersHtml = usedCategories.map(slug => {
   const cat = categories[slug];
-  return `        <a href="/blog/category/${slug}.html">${cat ? cat.label : slug}</a>`;
+  return `        <button type="button" class="cat-filter-btn" data-filter="${slug}">${cat ? cat.label : slug}</button>`;
 }).join('\n');
 
 const indexRendered = fill(indexTemplate, {

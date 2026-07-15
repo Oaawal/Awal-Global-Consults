@@ -44,7 +44,7 @@ If your business has foreign shareholders or investment coming in, a Limited Com
 
 ## The registration process, step by step
 
-![CAC registration process: six steps from name search to certificate](/assets/images/blog/cac-registration-process.svg)
+![CAC registration process: six steps from name search to certificate](../../assets/images/blog/cac-registration-process.svg)
 caption: The typical path from name reservation to certificate, whichever structure you choose.
 
 1. **Name availability search and reservation.** You propose a name, usually with one or two backups, and the CAC checks it isn't already taken or confusingly close to an existing one. Once it clears, the name is held for you while you complete the rest of the filing.

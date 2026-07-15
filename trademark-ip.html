@@ -375,6 +375,8 @@
     </div>
   </footer>
 
+  <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
   <script>
     const btn = document.getElementById('hamburger');
     const nav = document.getElementById('mobileNav');
@@ -394,6 +396,7 @@
       const scrollHeight = doc.scrollHeight - doc.clientHeight;
       const pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
       document.getElementById('scrollProgress').style.width = pct + '%';
+      document.getElementById('backToTop').classList.toggle('show', scrollTop > 500);
     });
   </script>
 

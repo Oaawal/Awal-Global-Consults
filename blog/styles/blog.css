@@ -3,6 +3,20 @@
    --muted, --border, --shadow, --radius) so the blog matches the rest
    of the site automatically if the palette ever changes. */
 
+/* Compatibility aliases: blog.css was written against an earlier token
+   set. Map those names onto the current navy/gold system in one place
+   rather than rewriting every rule below. */
+:root {
+  --navy: var(--navy-900);
+  --gold: var(--gold-500);
+  --gold-soft: var(--gold-200);
+  --offwhite: var(--paper);
+  --light-bg: var(--paper-deep);
+  --border: var(--line);
+  --text: var(--ink);
+  --shadow: var(--shadow-sm);
+}
+
 /* ---------- Listing page ---------- */
 
 .blog-index-hero {
@@ -30,20 +44,31 @@
   justify-content: center;
   margin-bottom: 44px;
 }
-.blog-category-filters a {
+.cat-filter-btn {
   padding: 9px 20px;
   border-radius: 999px;
   border: 1px solid var(--border);
   background: var(--white);
+  font-family: var(--body);
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--navy);
-  transition: background .2s ease, color .2s ease, transform .15s ease;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, transform .15s ease, border-color .2s ease;
 }
-.blog-category-filters a:hover {
-  background: var(--navy);
-  color: var(--white);
+.cat-filter-btn:hover {
+  border-color: var(--gold);
   transform: translateY(-1px);
+}
+.cat-filter-btn.active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--white);
+}
+.blog-no-results {
+  text-align: center;
+  color: var(--muted);
+  padding: 40px 0;
 }
 
 .blog-card-grid {
