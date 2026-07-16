@@ -114,6 +114,28 @@ function parseMarkdown(md) {
       continue;
     }
 
+    // raw HTML block passthrough: a line starting with a block-level
+    // HTML tag (used for the <div class="blog-faq"> pattern) is passed
+    // through verbatim, unescaped, until its tags balance back to zero.
+    const rawTagMatch = line.trim().match(/^<(div|table|section)\b/i);
+    if (rawTagMatch) {
+      flushParagraph(paraBuf);
+      const tag = rawTagMatch[1].toLowerCase();
+      const openRe = new RegExp(`<${tag}\\b`, 'gi');
+      const closeRe = new RegExp(`</${tag}>`, 'gi');
+      const buf = [];
+      let depth = 0;
+      do {
+        const l = lines[i];
+        buf.push(l);
+        depth += (l.match(openRe) || []).length;
+        depth -= (l.match(closeRe) || []).length;
+        i++;
+      } while (i < lines.length && depth > 0);
+      html.push(buf.join('\n'));
+      continue;
+    }
+
     // fenced custom blocks: ::: callout / ::: quote / ::: stat
     const fenceMatch = line.trim().match(/^:::\s*(callout|quote|stat)\s*$/i);
     if (fenceMatch) {
