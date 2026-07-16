@@ -73,6 +73,9 @@
 }
   </script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../blog/styles/blog.css">
 
@@ -92,47 +95,39 @@
   <meta name="twitter:title" content="KYC Documentation in Nigeria: What Banks and Regulators Actually Ask For | Awal Global Consults">
   <meta name="twitter:description" content="A practical checklist of what KYC documentation Nigerian businesses need to collect from individuals, companies, and trustees, and the pieces most onboarding processes quietly miss.">
   <meta name="twitter:image" content="https://awalglobal.com.ng/assets/images/og-image.jpg">
-
-  <style>
-    .hamburger {
-      display: none; flex-direction: column; gap: 5px;
-      background: none; border: none; cursor: pointer; padding: 4px;
-    }
-    .hamburger span {
-      display: block; width: 22px; height: 2px; background: var(--navy);
-      transition: transform .2s ease, opacity .2s ease;
-    }
-    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-  </style>
 </head>
 <body>
 
   <div class="scroll-progress" id="scrollProgress"></div>
 
   <a class="whatsapp-float" href="https://wa.me/2347038336596?text=Hello%20I%20have%20a%20question%20about%20KYC%20onboarding" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;fill:#fff;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
     Chat on WhatsApp
   </a>
 
+  <div class="trust-bar">
+    <div class="container trust-bar-inner">
+      <span class="trust-item"><span class="trust-dot"></span>RC-9282103 — CAC Registered</span>
+      <span class="trust-item"><span class="trust-dot"></span>Lagos, Nigeria — Serving all 36 states</span>
+      <span class="trust-item"><span class="trust-dot"></span>KYC onboarding open — apply online</span>
+    </div>
+  </div>
+
   <header class="site-header">
     <div class="container nav-wrap">
-      <div class="brand">
-        <a href="../../index.html" class="brand-flex">
-          <img src="../../assets/images/logo.png" alt="Awal Global Consults logo" class="logo">
-          <div>
-            <span class="brand-title">Awal Global Consults</span>
-            <span class="brand-sub">Governance | Risk | Compliance</span>
-          </div>
-        </a>
-      </div>
+      <a href="../../index.html" class="brand-flex">
+        <img src="../../assets/images/logo.png" alt="Awal Global Consults logo" class="logo">
+        <div>
+          <span class="brand-title">Awal Global Consults</span>
+          <span class="brand-sub">Governance | Risk | Compliance</span>
+        </div>
+      </a>
 
       <nav class="nav">
         <a href="../../index.html">Home</a>
         <a href="../../services.html">Services</a>
         <a href="../../about.html">About</a>
-        <a href="../index.html">Blog</a>
+        <a href="../../blog/">Blog</a>
         <a href="../../contact.html">Contact</a>
         <a href="../../kyc/" class="nav-cta">Start KYC Application →</a>
       </nav>
@@ -146,25 +141,25 @@
       <a href="../../index.html" onclick="closeMobileNav()">Home</a>
       <a href="../../services.html" onclick="closeMobileNav()">Services</a>
       <a href="../../about.html" onclick="closeMobileNav()">About</a>
-      <a href="../index.html" onclick="closeMobileNav()">Blog</a>
+      <a href="../../blog/" onclick="closeMobileNav()">Blog</a>
       <a href="../../contact.html" onclick="closeMobileNav()">Contact</a>
       <a href="../../kyc/" class="mobile-cta">Start KYC Application →</a>
     </nav>
   </header>
 
-  <section class="section blog-post-hero">
-    <div class="container" style="max-width: 780px;">
+  <section class="section-sm blog-post-hero">
+    <div class="container" style="max-width: 760px;">
       <nav class="blog-breadcrumb" aria-label="Breadcrumb">
-        <a href="../../index.html">Home</a> / <a href="../index.html">Blog</a> / <a href="../index.html">KYC & Compliance</a>
+        <a href="../../index.html">Home</a> / <a href="../../blog/">Blog</a> / <span>KYC & Compliance</span>
       </nav>
-      <span class="eyebrow">KYC & Compliance</span>
+      <span class="eyebrow"><span class="seal-mark"></span>KYC & Compliance</span>
       <h1>KYC Documentation in Nigeria: What Banks and Regulators Actually Ask For</h1>
-      <p class="blog-meta">14 July 2026 · 5 min read</p>
+      <p class="blog-meta">14 July 2026 &middot; 5 min read</p>
     </div>
   </section>
 
   <section class="section alt-bg blog-post-body">
-    <div class="container blog-post-grid" style="max-width: 780px;">
+    <div class="container" style="max-width: 760px;">
       <nav class="blog-toc" aria-label="Table of contents">
         <h2>On this page</h2>
         <ul>
@@ -199,20 +194,7 @@
 <h2 id="if-your-business-is-a-dnfbp-the-bar-is-higher">If your business is a DNFBP, the bar is higher</h2>
 <p>If your firm is a Designated Non-Financial Business or Profession, and law firms, accountants, real estate practices, and dealers in high-value goods often are, you're not just running "onboarding." You're operating under SCUML and AML obligations with a stricter customer due diligence standard. That means source-of-funds questions and PEP declarations aren't optional extras. They're part of what SCUML expects you to be assessing on your own clients as a routine matter, not a special case.</p>
 <h2 id="frequently-asked-questions">Frequently asked questions</h2>
-<div class="blog-faq">
-<div class="blog-faq-item">
-<p class="blog-faq-q">Do I need to run full KYC on every single client, regardless of size?</p>
-<p class="blog-faq-a">The depth should scale with risk. A small, low-value, low-risk client doesn't need the same scrutiny as a large corporate transaction involving multiple shareholders. What matters is that your process actually reflects that difference, rather than treating every client identically or, worse, skipping the assessment step entirely.</p>
-</div>
-<div class="blog-faq-item">
-<p class="blog-faq-q">What's the difference between KYC and KYB?</p>
-<p class="blog-faq-a">KYC (Know Your Customer) typically refers to verifying individuals. KYB (Know Your Business) extends that to verifying the company itself: its registration, ownership structure, and beneficial owners. In practice, onboarding a corporate client usually means doing both at once.</p>
-</div>
-<div class="blog-faq-item">
-<p class="blog-faq-q">Can KYC documents be collected and stored digitally?</p>
-<p class="blog-faq-a">Yes, and it's the norm now. The requirement isn't paper versus digital, it's that whatever system you use actually retains records for the required period and keeps the underlying data secure.</p>
-</div>
-</div>
+<p>&lt;div class="blog-faq"&gt; &lt;div class="blog-faq-item"&gt; &lt;p class="blog-faq-q"&gt;Do I need to run full KYC on every single client, regardless of size?&lt;/p&gt; &lt;p class="blog-faq-a"&gt;The depth should scale with risk. A small, low-value, low-risk client doesn't need the same scrutiny as a large corporate transaction involving multiple shareholders. What matters is that your process actually reflects that difference, rather than treating every client identically or, worse, skipping the assessment step entirely.&lt;/p&gt; &lt;/div&gt; &lt;div class="blog-faq-item"&gt; &lt;p class="blog-faq-q"&gt;What's the difference between KYC and KYB?&lt;/p&gt; &lt;p class="blog-faq-a"&gt;KYC (Know Your Customer) typically refers to verifying individuals. KYB (Know Your Business) extends that to verifying the company itself: its registration, ownership structure, and beneficial owners. In practice, onboarding a corporate client usually means doing both at once.&lt;/p&gt; &lt;/div&gt; &lt;div class="blog-faq-item"&gt; &lt;p class="blog-faq-q"&gt;Can KYC documents be collected and stored digitally?&lt;/p&gt; &lt;p class="blog-faq-a"&gt;Yes, and it's the norm now. The requirement isn't paper versus digital, it's that whatever system you use actually retains records for the required period and keeps the underlying data secure.&lt;/p&gt; &lt;/div&gt; &lt;/div&gt;</p>
 <h2 id="where-this-usually-breaks-down-in-practice">Where this usually breaks down in practice</h2>
 <p>The gap almost never shows up at the individual-document level. Most businesses remember to ask for an ID. It shows up in the structural pieces: proof of address as an actual document rather than a form field, PSC disclosure for corporate clients, a defined risk rating rather than a gut feeling, and a retention policy that doesn't quietly delete records the moment a file gets marked "done." Those are the parts worth checking your current process against, ideally before an auditor does it for you.</p>
 <p>Awal Global Consults runs KYC onboarding built around exactly this: structured intake for individuals, companies, and trustees, the documentation layer, and the risk assessment layer regulators actually check for.</p>
@@ -223,72 +205,65 @@
         <p>Awal Global Consults runs KYC onboarding for businesses that need it done properly the first time. Structured intake, document collection, and the compliance layer regulators actually check for.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="../../kyc/">Start KYC Onboarding</a>
-          <a class="btn btn-secondary" href="https://wa.me/2347038336596?text=Hello%20I%20have%20a%20question%20about%20KYC%20onboarding" target="_blank" rel="noopener">Chat on WhatsApp</a>
+          <a class="btn btn-whatsapp" href="https://wa.me/2347038336596?text=Hello%20I%20have%20a%20question%20about%20KYC%20onboarding" target="_blank" rel="noopener">Chat on WhatsApp</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
-
         <div class="footer-brand">
           <div class="footer-logo-wrap">
-            <img src="../../assets/images/logo-white.png" alt="Awal Global Consults" class="footer-logo"
-              onerror="this.onerror=null;this.src='../../assets/images/logo.png';this.style.filter='brightness(0) invert(1)';">
+            <img src="../../assets/images/logo.png" alt="Awal Global Consults" class="footer-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <div class="footer-logo-fallback" style="display:none;">
+              <span class="footer-brand-name">Awal Global Consults</span>
+            </div>
           </div>
-          <span class="footer-brand-name">Awal Global Consults Limited</span>
-          <p>Governance | Risk | Compliance</p>
-          <p>12 Hakeem Balogun Street, Agidingbi, Alausa, Ikeja 101233, Lagos</p>
-          <p class="rc">RC-9282103</p>
+          <p>Governance | Risk | Compliance</p><p style="margin-top:4px;">Business registration, trademark, and compliance support for individuals and SMEs across Nigeria.</p>
+          <p style="color:rgba(255,255,255,0.5); font-size:0.82rem; margin-top:4px;">📍 Lagos, Nigeria</p>
+          <p class="rc">RC-9282103 — Awal Global Consults Limited</p>
         </div>
-
         <div class="footer-col">
           <h4>Services</h4>
           <a href="../../cac-registration.html">CAC Registration</a>
-          <a href="../../trademark-ip.html">Trademark &amp; IP</a>
+          <a href="../../trademark-ip.html">Trademark Registration</a>
           <a href="../../business-advisory.html">Business Advisory</a>
           <a href="../../corporate-regulatory.html">Corporate &amp; Regulatory</a>
-          <a href="../../services.html">All Services →</a>
+          <a href="../../legal-documentation.html">Legal Documentation</a>
+          <a href="../../blog/">Blog</a>
         </div>
-
         <div class="footer-col">
           <h4>Company</h4>
           <a href="../../about.html">About Us</a>
           <a href="../../services.html">Services</a>
-          <a href="../index.html">Blog &amp; Guides</a>
           <a href="../../contact.html">Contact</a>
           <a href="../../kyc/">Start KYC Application</a>
         </div>
-
         <div class="footer-col">
           <h4>Contact Us</h4>
           <div class="footer-socials">
-            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services"
-               class="social-icon-link" target="_blank" rel="noopener" aria-label="WhatsApp">
-              <span class="social-icon-circle" style="background:#25d366;">
+            <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20help%20with%20your%20services" class="social-icon-link" target="_blank" rel="noopener" aria-label="WhatsApp">
+              <span class="social-icon-circle whatsapp-icon">
                 <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               </span>
               <span class="social-icon-label">+234 703 833 6596</span>
             </a>
             <a href="mailto:info@awalglobal.com.ng" class="social-icon-link" aria-label="Email">
-              <span class="social-icon-circle" style="background:var(--gold-600);">
+              <span class="social-icon-circle email-icon">
                 <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
               </span>
               <span class="social-icon-label">info@awalglobal.com.ng</span>
             </a>
-            <a href="https://instagram.com/awalglobalconsults" class="social-icon-link"
-               target="_blank" rel="noopener" aria-label="Instagram">
-              <span class="social-icon-circle" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">
+            <a href="https://instagram.com/awalglobalconsults" class="social-icon-link" target="_blank" rel="noopener" aria-label="Instagram">
+              <span class="social-icon-circle instagram-icon">
                 <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
               </span>
               <span class="social-icon-label">@awalglobalconsults</span>
             </a>
           </div>
         </div>
-
       </div>
 
       <div class="footer-bottom">
@@ -322,8 +297,6 @@
       document.getElementById('backToTop').classList.toggle('show', scrollTop > 500);
     });
   </script>
-
-<script src="../../assets/js/contact-submit.js" defer></script>
 
 </body>
 </html>

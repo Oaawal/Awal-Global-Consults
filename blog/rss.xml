@@ -3,8 +3,15 @@
   <channel>
     <title>Awal Global Consults Blog</title>
     <link>https://awalglobal.com.ng/blog/index.html</link>
-    <description>Guides on CAC registration, trademarks, and compliance in Nigeria.</description>
+    <description>Guides on CAC registration, trademarks, tax, and compliance in Nigeria.</description>
     <language>en-ng</language>
+    <item>
+      <title>Nigeria Tax Act 2025: TIN, Filing, and Penalties Explained</title>
+      <link>https://awalglobal.com.ng/blog/nigeria-tax-act-2025-compliance-guide/</link>
+      <guid>https://awalglobal.com.ng/blog/nigeria-tax-act-2025-compliance-guide/</guid>
+      <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A complete guide to Nigeria's 2025 tax reform. What the NTA and NTAA actually changed, who has to register and file, the deadlines that apply to your business, and the penalties for getting it wrong.]]></description>
+    </item>
     <item>
       <title>Complete Guide to CAC Registration in Nigeria (2026)</title>
       <link>https://awalglobal.com.ng/blog/cac-registration-guide-nigeria/</link>

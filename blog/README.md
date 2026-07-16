@@ -12,16 +12,24 @@ blog/
   _src/                    ← source files (not linked from the site, safe to ignore when browsing)
     content/*.md           ← write your posts here
     templates/post.html    ← HTML shell for individual posts
-    templates/index.html   ← HTML shell for the blog listing page
+    templates/index.html   ← HTML shell for listing pages (main + category)
     categories.js          ← category config (label + related service link)
     markdown.js            ← tiny markdown → HTML converter
     frontmatter.js         ← tiny frontmatter parser
     build-blog.js           ← the build script itself
   styles/blog.css          ← blog-specific styles (site-wide style.css still applies too)
-  index.html               ← GENERATED — the blog listing page
+  index.html               ← GENERATED — the main blog listing page
+  category/{slug}/index.html ← GENERATED — one listing page per category
   {slug}/index.html        ← GENERATED — one folder per post
   rss.xml                  ← GENERATED — RSS feed
 ```
+
+**Path convention:** the whole site uses relative paths (no leading "/"),
+so pages still work if opened directly from disk. The build script
+handles this automatically — it computes the right "../" depth for
+wherever a page ends up and rewrites any "/assets/..." style paths
+you write in markdown into the correct relative form. You don't need
+to think about this when writing content.
 
 ## Adding a new post
 

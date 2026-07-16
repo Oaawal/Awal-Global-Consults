@@ -23,7 +23,7 @@ Most businesses that need to run KYC on their clients start with a document chec
 
 ## Corporate clients
 
-![Three layers of a complete KYC process: documents, risk assessment, ongoing monitoring](../../assets/images/blog/kyc-three-layers.svg)
+![Three layers of a complete KYC process: documents, risk assessment, ongoing monitoring](/assets/images/blog/kyc-three-layers.svg)
 caption: Documentation is the foundation, but it's only the bottom layer of a complete process.
 
 - CAC Certificate of Incorporation and current Status Report

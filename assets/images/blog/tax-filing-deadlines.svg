@@ -1,0 +1,32 @@
+<svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect x="0" y="0" width="900" height="260" fill="#ffffff"/>
+  <text x="30" y="30" fill="#142238" font-size="15" font-weight="700">Recurring filing deadlines (every month, unless stated otherwise)</text>
+
+  <!-- PAYE -->
+  <rect x="30" y="55" width="190" height="90" rx="12" fill="#f8f5ec" stroke="#efe7d3"/>
+  <text x="125" y="82" text-anchor="middle" fill="#0d2340" font-size="15" font-weight="700">PAYE</text>
+  <text x="125" y="105" text-anchor="middle" fill="#5b6472" font-size="12">Remit by the</text>
+  <text x="125" y="122" text-anchor="middle" fill="#b6902d" font-size="18" font-weight="700">10th</text>
+
+  <!-- VAT -->
+  <rect x="240" y="55" width="190" height="90" rx="12" fill="#f8f5ec" stroke="#efe7d3"/>
+  <text x="335" y="82" text-anchor="middle" fill="#0d2340" font-size="15" font-weight="700">VAT Returns</text>
+  <text x="335" y="105" text-anchor="middle" fill="#5b6472" font-size="12">File by the</text>
+  <text x="335" y="122" text-anchor="middle" fill="#b6902d" font-size="18" font-weight="700">21st</text>
+
+  <!-- WHT -->
+  <rect x="450" y="55" width="190" height="90" rx="12" fill="#f8f5ec" stroke="#efe7d3"/>
+  <text x="545" y="82" text-anchor="middle" fill="#0d2340" font-size="15" font-weight="700">Withholding Tax</text>
+  <text x="545" y="105" text-anchor="middle" fill="#5b6472" font-size="12">Remit by month-end</text>
+  <text x="545" y="122" text-anchor="middle" fill="#b6902d" font-size="18" font-weight="700">30th</text>
+
+  <!-- CIT -->
+  <rect x="660" y="55" width="210" height="90" rx="12" fill="#0d2340"/>
+  <text x="765" y="82" text-anchor="middle" fill="#ffffff" font-size="15" font-weight="700">Companies Income Tax</text>
+  <text x="765" y="105" text-anchor="middle" fill="#c9d3de" font-size="12">Within</text>
+  <text x="765" y="128" text-anchor="middle" fill="#e8cf87" font-size="18" font-weight="700">6 months of year-end</text>
+
+  <rect x="30" y="165" width="840" height="70" rx="12" fill="#f2f4f7"/>
+  <text x="450" y="192" text-anchor="middle" fill="#0d2340" font-size="13" font-weight="700">Annual employer PAYE returns: due 31 January</text>
+  <text x="450" y="212" text-anchor="middle" fill="#5b6472" font-size="12">Even a "nil" position must be filed. Missing a return, not just missing a payment, triggers a penalty.</text>
+</svg>

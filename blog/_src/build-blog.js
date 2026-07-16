@@ -7,11 +7,20 @@
  *   2. Parses frontmatter + markdown body
  *   3. Renders each post into blog/{slug}/index.html using
  *      blog/_src/templates/post.html
- *   4. Rebuilds blog/index.html (the listing page) using
+ *   4. Rebuilds blog/index.html (the listing page, all posts) and
+ *      blog/category/{slug}/index.html (one per category) using
  *      blog/_src/templates/index.html
  *   5. Rebuilds blog/rss.xml
  *   6. Updates the root sitemap.xml — replaces any existing /blog/
  *      entries with the current set, leaves every other entry untouched
+ *
+ * PATH CONVENTION: the site uses relative paths everywhere (no leading
+ * "/"), so pages also work when opened directly from disk. This script
+ * computes a ROOT prefix per page depth ("../" from blog/index.html,
+ * "../../" from blog/{slug}/index.html) and injects it via {{ROOT}} in
+ * the templates, and rewrites any "/assets/..." style paths authored
+ * in markdown content into the correct relative form for wherever the
+ * post is actually rendered.
  *
  * Usage (run from the repo root):
  *   node blog/_src/build-blog.js
@@ -23,10 +32,10 @@ const { parseFrontmatter } = require('./frontmatter');
 const { parseMarkdown, slugify } = require('./markdown');
 const { categories } = require('./categories');
 
-const ROOT = path.resolve(__dirname, '..', '..'); // repo root
+const ROOT_DIR = path.resolve(__dirname, '..', '..'); // repo root
 const CONTENT_DIR = path.join(__dirname, 'content');
 const TEMPLATES_DIR = path.join(__dirname, 'templates');
-const BLOG_DIR = path.join(ROOT, 'blog');
+const BLOG_DIR = path.join(ROOT_DIR, 'blog');
 const SITE_URL = 'https://awalglobal.com.ng';
 
 function readTemplate(name) {
@@ -39,6 +48,14 @@ function fill(template, map) {
     out = out.split(`{{${key}}}`).join(value ?? '');
   }
   return out;
+}
+
+// Rewrite leading-"/" asset/internal links authored in markdown content
+// (e.g. "/assets/images/blog/x.svg") into the correct relative form for
+// a page rendered `root` levels deep ("../../" etc). Absolute
+// http(s) URLs are left untouched.
+function rewriteContentPaths(html, root) {
+  return html.replace(/((?:src|href))="\/([^"]+)"/g, (m, attr, p) => `${attr}="${root}${p}"`);
 }
 
 function formatDateDisplay(dateStr) {
@@ -62,7 +79,7 @@ const posts = files.map(file => {
   const slug = data.slug || slugify(data.title);
   const category = categories[data.category] || {
     label: data.category || 'Insights',
-    relatedService: { href: '/index.html', label: 'Contact Us' }
+    relatedService: { href: 'index.html', label: 'Contact Us' }
   };
   const readingTime = Math.max(1, Math.round(wordCount(body) / 200));
 
@@ -84,9 +101,10 @@ if (posts.length === 0) {
   process.exit(0);
 }
 
-// --- 2. Render each post page -----------------------------------------------
+// --- 2. Render each post page (2 levels deep -> ROOT = "../../") -----------
 
 const postTemplate = readTemplate('post.html');
+const POST_ROOT = '../../';
 
 posts.forEach(post => {
   const canonical = `${SITE_URL}/blog/${post.slug}/`;
@@ -127,7 +145,10 @@ ${post.toc.map(t => `          <li><a href="#${t.id}">${t.text}</a></li>`).join(
     ]
   }, null, 2);
 
+  const contentHtml = rewriteContentPaths(post.html, POST_ROOT);
+
   const rendered = fill(postTemplate, {
+    ROOT: POST_ROOT,
     TITLE: post.title,
     DESCRIPTION: post.description,
     CANONICAL: canonical,
@@ -139,7 +160,7 @@ ${post.toc.map(t => `          <li><a href="#${t.id}">${t.text}</a></li>`).join(
     CATEGORY_SLUG: post.categorySlug,
     READING_TIME: String(post.readingTime),
     TOC_HTML: tocHtml,
-    CONTENT: post.html,
+    CONTENT: contentHtml,
     CTA_TEXT: post.cta_text || 'Talk to us about your specific situation.',
     RELATED_SERVICE_HREF: post.category.relatedService.href,
     RELATED_SERVICE_LABEL: post.category.relatedService.label,
@@ -152,30 +173,64 @@ ${post.toc.map(t => `          <li><a href="#${t.id}">${t.text}</a></li>`).join(
   console.log(`Built /blog/${post.slug}/index.html`);
 });
 
-// --- 3. Render the listing page ---------------------------------------------
+// --- 3. Render listing pages: all posts + one per category -----------------
 
 const indexTemplate = readTemplate('index.html');
 
-const cardsHtml = posts.map(post => `        <div class="blog-card" data-category="${post.categorySlug}">
+function cardHtml(post, root) {
+  return `        <div class="blog-card">
           <span class="blog-card-category">${post.category.label}</span>
-          <h3><a href="${post.slug}/">${post.title}</a></h3>
+          <h3><a href="${root}${post.slug}/">${post.title}</a></h3>
           <p>${post.excerpt || post.description}</p>
-          <div class="blog-card-meta">${post.dateDisplay} · ${post.readingTime} min read</div>
-        </div>`).join('\n');
+          <div class="blog-card-meta">${post.dateDisplay} &middot; ${post.readingTime} min read</div>
+        </div>`;
+}
 
-const usedCategories = [...new Set(posts.map(p => p.categorySlug))];
-const filtersHtml = usedCategories.map(slug => {
+const usedCategorySlugs = [...new Set(posts.map(p => p.categorySlug))];
+
+// 3a. Main listing page (blog/index.html) — 1 level deep -> ROOT = "../"
+const INDEX_ROOT = '../';
+const allFiltersHtml = usedCategorySlugs.map(slug => {
   const cat = categories[slug];
-  return `        <button type="button" class="cat-filter-btn" data-filter="${slug}">${cat ? cat.label : slug}</button>`;
+  return `        <a href="category/${slug}/">${cat ? cat.label : slug}</a>`;
 }).join('\n');
+const allCardsHtml = posts.map(p => cardHtml(p, '')).join('\n'); // siblings, no prefix needed
 
-const indexRendered = fill(indexTemplate, {
-  POST_CARDS: cardsHtml,
-  CATEGORY_FILTERS: filtersHtml
-});
-
-fs.writeFileSync(path.join(BLOG_DIR, 'index.html'), indexRendered, 'utf8');
+fs.writeFileSync(
+  path.join(BLOG_DIR, 'index.html'),
+  fill(indexTemplate, { ROOT: INDEX_ROOT, POST_CARDS: allCardsHtml, CATEGORY_FILTERS: allFiltersHtml }),
+  'utf8'
+);
 console.log('Built /blog/index.html');
+
+// 3b. One category page per used category — 2 levels deep -> ROOT = "../../"
+const CATEGORY_ROOT = '../../';
+usedCategorySlugs.forEach(slug => {
+  const cat = categories[slug] || { label: slug };
+  const catPosts = posts.filter(p => p.categorySlug === slug);
+  const catCardsHtml = catPosts.map(p => cardHtml(p, '../')).join('\n'); // one level back up to blog/
+  const catFiltersHtml = usedCategorySlugs.map(s => {
+    const c = categories[s];
+    const href = s === slug ? '.' : `../${s}/`;
+    return `        <a href="${href}"${s === slug ? ' class="active"' : ''}>${c ? c.label : s}</a>`;
+  }).join('\n');
+
+  let rendered = fill(indexTemplate, { ROOT: CATEGORY_ROOT, POST_CARDS: catCardsHtml, CATEGORY_FILTERS: catFiltersHtml });
+  // Swap the generic hero copy for category-specific copy
+  rendered = rendered
+    .replace('Guides on CAC registration, trademarks &amp; compliance', cat.label)
+    .replace(
+      'Practical, plain-language guidance for founders and businesses navigating registration, IP protection, tax, and regulatory compliance in Nigeria.',
+      cat.description || ''
+    )
+    .replace('<title>Blog | Awal Global Consults</title>', `<title>${cat.label} | Awal Global Consults Blog</title>`)
+    .replace(/https:\/\/awalglobal\.com\.ng\/blog\/index\.html/g, `${SITE_URL}/blog/category/${slug}/`);
+
+  const outDir = path.join(BLOG_DIR, 'category', slug);
+  fs.mkdirSync(outDir, { recursive: true });
+  fs.writeFileSync(path.join(outDir, 'index.html'), rendered, 'utf8');
+  console.log(`Built /blog/category/${slug}/index.html`);
+});
 
 // --- 4. RSS feed -------------------------------------------------------------
 
@@ -192,7 +247,7 @@ const rss = `<?xml version="1.0" encoding="UTF-8"?>
   <channel>
     <title>Awal Global Consults Blog</title>
     <link>${SITE_URL}/blog/index.html</link>
-    <description>Guides on CAC registration, trademarks, and compliance in Nigeria.</description>
+    <description>Guides on CAC registration, trademarks, tax, and compliance in Nigeria.</description>
     <language>en-ng</language>
 ${rssItems}
   </channel>
@@ -204,7 +259,7 @@ console.log('Built /blog/rss.xml');
 
 // --- 5. Update root sitemap.xml ----------------------------------------------
 
-const sitemapPath = path.join(ROOT, 'sitemap.xml');
+const sitemapPath = path.join(ROOT_DIR, 'sitemap.xml');
 let sitemap = fs.readFileSync(sitemapPath, 'utf8');
 
 // Strip any existing /blog/ url blocks so re-running the build never
@@ -215,6 +270,7 @@ const today = new Date().toISOString().slice(0, 10);
 
 const blogUrlBlocks = [
   `  <url>\n    <loc>${SITE_URL}/blog/index.html</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
+  ...usedCategorySlugs.map(slug => `  <url>\n    <loc>${SITE_URL}/blog/category/${slug}/</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>`),
   ...posts.map(post => `  <url>\n    <loc>${SITE_URL}/blog/${post.slug}/</loc>\n    <lastmod>${post.date}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`)
 ].join('\n');
 
@@ -222,4 +278,4 @@ sitemap = sitemap.replace('</urlset>', `${blogUrlBlocks}\n</urlset>`);
 fs.writeFileSync(sitemapPath, sitemap, 'utf8');
 console.log('Updated sitemap.xml with blog URLs');
 
-console.log(`\nDone — built ${posts.length} post(s).`);
+console.log(`\nDone — built ${posts.length} post(s) across ${usedCategorySlugs.length} categor${usedCategorySlugs.length === 1 ? 'y' : 'ies'}.`);

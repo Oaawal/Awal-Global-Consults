@@ -17,7 +17,7 @@ Here's how the class system works, how to choose correctly, and where people usu
 
 Nigeria uses the **Nice Classification system**, an internationally standardised list of 45 classes used to categorise every type of goods and service a trademark can cover. Classes 1 to 34 cover goods (physical products). Classes 35 to 45 cover services.
 
-![Nice Classification split: 34 goods classes and 11 service classes with examples](../../assets/images/blog/trademark-nice-classification.svg)
+![Nice Classification split: 34 goods classes and 11 service classes with examples](/assets/images/blog/trademark-nice-classification.svg)
 caption: A rough map of where common Nigerian business types tend to fall.
 
 When you register a trademark, you're not registering the name or logo in the abstract. You're registering it for use in connection with specific goods or services, grouped into one or more of these classes. Your exclusive rights only apply within the class, or classes, you've actually filed under.
@@ -58,7 +58,7 @@ The right approach is usually to register in every class that reflects what your
 
 Choosing your class happens early, right after your clearance search confirms the mark itself is actually available.
 
-![Trademark registration timeline from search through certificate issuance](../../assets/images/blog/trademark-registration-timeline.svg)
+![Trademark registration timeline from search through certificate issuance](/assets/images/blog/trademark-registration-timeline.svg)
 caption: Class selection happens right after the clearance search, before anything is filed.
 
 Once your class (or classes) is settled, your application goes to the **Nigerian Industrial Property Office (NIPO)**, the body under the Federal Ministry of Industry, Trade and Investment responsible for trademarks (you'll also see it referred to by its older name, the Trademarks Registry). NIPO examines the application for conflicts, then publishes accepted marks in the Trademark Journal, opening a window for existing rights-holders to object. If unopposed, or if any opposition resolves in your favour, your certificate is issued. Registration runs for seven years and is renewable indefinitely after that.

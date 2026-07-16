@@ -68,32 +68,6 @@ function renderTable(rows) {
   return `<div class="blog-table-wrap"><table>${thead}${tbody}</table></div>`;
 }
 
-// Raw HTML block: a line that opens a block-level HTML tag (div, section,
-// table, aside, figure). We pass these straight through untouched, tracking
-// nested opens/closes of the *same* tag so the whole block — including
-// inner markup — round-trips exactly as authored instead of being escaped
-// and wrapped in a <p>.
-function isHtmlBlockStart(line) {
-  return /^<(div|section|table|aside|figure)\b[^>]*>/i.test(line.trim());
-}
-function consumeHtmlBlock(lines, startIdx) {
-  const tagMatch = lines[startIdx].trim().match(/^<(div|section|table|aside|figure)\b/i);
-  const tag = tagMatch[1].toLowerCase();
-  const openRe = new RegExp(`<${tag}\\b`, 'gi');
-  const closeRe = new RegExp(`</${tag}\\s*>`, 'gi');
-  const buf = [];
-  let depth = 0;
-  let i = startIdx;
-  for (; i < lines.length; i++) {
-    const line = lines[i];
-    buf.push(line);
-    depth += (line.match(openRe) || []).length;
-    depth -= (line.match(closeRe) || []).length;
-    if (depth <= 0) { i++; break; }
-  }
-  return { html: buf.join('\n'), nextIdx: i };
-}
-
 function parseMarkdown(md) {
   const lines = md.replace(/\r\n/g, '\n').split('\n');
   let html = [];
@@ -116,15 +90,6 @@ function parseMarkdown(md) {
     if (/^\s*$/.test(line)) {
       flushParagraph(paraBuf);
       i++;
-      continue;
-    }
-
-    // raw HTML block (passthrough, no escaping)
-    if (isHtmlBlockStart(line)) {
-      flushParagraph(paraBuf);
-      const { html: block, nextIdx } = consumeHtmlBlock(lines, i);
-      html.push(block);
-      i = nextIdx;
       continue;
     }
 
