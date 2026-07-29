@@ -79,7 +79,7 @@ const posts = files.map(file => {
   const slug = data.slug || slugify(data.title);
   const category = categories[data.category] || {
     label: data.category || 'Insights',
-    relatedService: { href: 'index.html', label: 'Contact Us' }
+    relatedService: { href: '', label: 'Contact Us' }
   };
   const readingTime = Math.max(1, Math.round(wordCount(body) / 200));
 
@@ -224,7 +224,7 @@ usedCategorySlugs.forEach(slug => {
       cat.description || ''
     )
     .replace('<title>Blog | Awal Global Consults</title>', `<title>${cat.label} | Awal Global Consults Blog</title>`)
-    .replace(/https:\/\/awalglobal\.com\.ng\/blog\/index\.html/g, `${SITE_URL}/blog/category/${slug}/`);
+    .replace(/https:\/\/awalglobal\.com\.ng\/blog\//g, `${SITE_URL}/blog/category/${slug}/`);
 
   const outDir = path.join(BLOG_DIR, 'category', slug);
   fs.mkdirSync(outDir, { recursive: true });
@@ -246,7 +246,7 @@ const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
     <title>Awal Global Consults Blog</title>
-    <link>${SITE_URL}/blog/index.html</link>
+    <link>${SITE_URL}/blog/</link>
     <description>Guides on CAC registration, trademarks, tax, and compliance in Nigeria.</description>
     <language>en-ng</language>
 ${rssItems}
@@ -269,7 +269,7 @@ sitemap = sitemap.replace(/\s*<url>\s*<loc>https:\/\/awalglobal\.com\.ng\/blog\/
 const today = new Date().toISOString().slice(0, 10);
 
 const blogUrlBlocks = [
-  `  <url>\n    <loc>${SITE_URL}/blog/index.html</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
+  `  <url>\n    <loc>${SITE_URL}/blog/</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
   ...usedCategorySlugs.map(slug => `  <url>\n    <loc>${SITE_URL}/blog/category/${slug}/</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>`),
   ...posts.map(post => `  <url>\n    <loc>${SITE_URL}/blog/${post.slug}/</loc>\n    <lastmod>${post.date}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`)
 ].join('\n');
