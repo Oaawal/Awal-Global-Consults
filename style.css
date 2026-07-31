@@ -848,10 +848,16 @@ button { font-family: inherit; }
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 8px 24px;
   font-size: 0.78rem;
   color: rgba(255,255,255,0.45);
 }
+.footer-legal-links a {
+  color: rgba(255,255,255,0.45);
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+.footer-legal-links a:hover { color: var(--gold-300); }
 
 /* ---------- WhatsApp float ---------- */
 .whatsapp-float {
