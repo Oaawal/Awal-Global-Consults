@@ -198,12 +198,13 @@
         <div class="form-group full-width" style="text-align:center; margin-top:8px;">
           <button type="submit" class="btn btn-primary">Check Availability →</button>
           <p style="margin-top:12px; font-size:0.82rem; color:var(--muted);">
-            This opens the Corporate Affairs Commission's official public search in a new tab (search.cac.gov.ng) and sends your name choices to our team on WhatsApp so we can help you register whichever one is free.
+            CAC's official search checks one name at a time. We'll open it for you and copy your first name to your clipboard — just paste it in, hit Search, then come back here to copy the next one.
           </p>
         </div>
       </form>
       <div id="name-check-result" style="display:none; max-width:520px; margin:24px auto 0; text-align:center; padding:20px; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper);">
-        <p style="margin-bottom:14px; font-size:0.95rem;">If a new tab didn't open, use these links directly:</p>
+        <p id="name-check-status" style="margin-bottom:14px; font-size:0.95rem; font-weight:600;"></p>
+        <ul id="name-check-list" style="list-style:none; padding:0; margin:0 0 16px; display:flex; flex-direction:column; gap:8px;"></ul>
         <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
           <a id="name-check-cac-link" href="https://icrp.cac.gov.ng/public-search" target="_blank" rel="noopener" class="btn btn-secondary">Open CAC Public Search</a>
           <a id="name-check-wa-link" href="#" target="_blank" rel="noopener" class="btn btn-whatsapp">Continue on WhatsApp</a>
@@ -578,12 +579,46 @@
         const list = names.map((n, i) => (i + 1) + '. ' + n).join('\n');
         const message = 'Hello, I would like help registering one of these business names:\n' + list;
         const waUrl = 'https://wa.me/2347038336596?text=' + encodeURIComponent(message);
-
         document.getElementById('name-check-wa-link').href = waUrl;
+
+        function copyName(text, btn) {
+          function markCopied() {
+            const original = btn.textContent;
+            btn.textContent = 'Copied ✓';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 2000);
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(markCopied).catch(() => {
+              window.prompt('Copy this name, then paste it into the CAC search box:', text);
+            });
+          } else {
+            window.prompt('Copy this name, then paste it into the CAC search box:', text);
+          }
+        }
+
+        const listEl = document.getElementById('name-check-list');
+        listEl.innerHTML = '';
+        names.forEach(function (name) {
+          const li = document.createElement('li');
+          li.className = 'name-check-row';
+          const span = document.createElement('span');
+          span.textContent = name;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = 'Copy';
+          btn.addEventListener('click', function () { copyName(name, btn); });
+          li.appendChild(span);
+          li.appendChild(btn);
+          listEl.appendChild(li);
+        });
+
+        document.getElementById('name-check-status').textContent =
+          'We copied "' + names[0] + '" to your clipboard. Paste it into the search box on the CAC page that just opened, hit Search, then come back and tap "Copy" next to your other names to check those too.';
         document.getElementById('name-check-result').style.display = 'block';
 
+        copyName(names[0], listEl.firstElementChild.querySelector('button'));
         window.open('https://icrp.cac.gov.ng/public-search', '_blank', 'noopener');
-        window.open(waUrl, '_blank', 'noopener');
       });
     }
   </script>

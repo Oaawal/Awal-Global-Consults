@@ -146,6 +146,30 @@ button { font-family: inherit; }
 .section-head.center h2::after,
 .section-head.center h2::before { left: 50%; transform: translateX(-50%); }
 .section-head.center p { margin-inline: auto; }
+.google-review-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 10px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.google-review-badge svg { width: 18px; height: 18px; flex-shrink: 0; display: block; }
+.google-review-badge:hover {
+  border-color: var(--gold-500);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+@media (max-width: 640px) {
+  .google-review-badge { padding: 8px 14px; font-size: 0.86rem; gap: 8px; }
+  .google-review-badge svg { width: 16px; height: 16px; }
+}
 
 /* ---------- Buttons ---------- */
 .btn {
@@ -829,6 +853,31 @@ button { font-family: inherit; }
   outline: none;
 }
 .form-group input::placeholder, .form-group textarea::placeholder { color: #97a0ab; }
+.name-check-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+}
+.name-check-row button {
+  border: none;
+  background: var(--navy-900);
+  color: var(--white);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.18s ease;
+}
+.name-check-row button:hover { background: var(--gold-700); }
+.name-check-row button.copied { background: #2e7d32; }
 
 /* ---------- Footer ---------- */
 .site-footer { background: var(--navy-950); padding: 64px 0 0; color: rgba(255,255,255,0.7); }
