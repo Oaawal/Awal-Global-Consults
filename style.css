@@ -216,6 +216,13 @@ button { font-family: inherit; }
   padding: 32px;
   backdrop-filter: blur(6px);
 }
+.map-embed {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  line-height: 0;
+}
+.map-embed iframe { display: block; }
 .hero-card-inner h3 { font-family: var(--display); font-weight: 600; font-size: 1.1rem; margin-bottom: 16px; color: var(--white); }
 .hero-card-inner li {
   padding-left: 22px;
