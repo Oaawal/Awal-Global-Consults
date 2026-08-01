@@ -174,6 +174,44 @@
     </div>
   </section>
 
+  <!-- Name Availability Check -->
+  <section class="section alt-bg" id="name-check">
+    <div class="container" style="max-width: 640px;">
+      <div class="section-head center">
+        <span class="eyebrow"><span class="seal-mark"></span>Free Tool</span>
+        <h2>Check your business name</h2>
+        <p>Enter up to three name ideas. We'll take you straight to the CAC's official public register to check them for free, and send your list to us at the same time in case you'd like our help either way.</p>
+      </div>
+      <form id="name-check-form" class="form-grid" style="max-width: 520px; margin: 0 auto;">
+        <div class="form-group full">
+          <label for="name-check-1">Proposed name 1</label>
+          <input type="text" id="name-check-1" placeholder="e.g. Bright Horizons Ventures" required>
+        </div>
+        <div class="form-group full">
+          <label for="name-check-2">Proposed name 2 <span style="font-weight:400; color:var(--muted);">(optional)</span></label>
+          <input type="text" id="name-check-2" placeholder="Your second choice">
+        </div>
+        <div class="form-group full">
+          <label for="name-check-3">Proposed name 3 <span style="font-weight:400; color:var(--muted);">(optional)</span></label>
+          <input type="text" id="name-check-3" placeholder="Your third choice">
+        </div>
+        <div class="form-group full-width" style="text-align:center; margin-top:8px;">
+          <button type="submit" class="btn btn-primary">Check Availability →</button>
+          <p style="margin-top:12px; font-size:0.82rem; color:var(--muted);">
+            This opens the Corporate Affairs Commission's official public search in a new tab (search.cac.gov.ng) and sends your name choices to our team on WhatsApp so we can help you register whichever one is free.
+          </p>
+        </div>
+      </form>
+      <div id="name-check-result" style="display:none; max-width:520px; margin:24px auto 0; text-align:center; padding:20px; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper);">
+        <p style="margin-bottom:14px; font-size:0.95rem;">If a new tab didn't open, use these links directly:</p>
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+          <a id="name-check-cac-link" href="https://icrp.cac.gov.ng/public-search" target="_blank" rel="noopener" class="btn btn-secondary">Open CAC Public Search</a>
+          <a id="name-check-wa-link" href="#" target="_blank" rel="noopener" class="btn btn-whatsapp">Continue on WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section" id="benefits">
     <div class="container">
       <div class="section-head">
@@ -525,6 +563,29 @@
       document.getElementById('scrollProgress').style.width = pct + '%';
       document.getElementById('backToTop').classList.toggle('show', scrollTop > 500);
     });
+
+    const nameCheckForm = document.getElementById('name-check-form');
+    if (nameCheckForm) {
+      nameCheckForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const names = [
+          document.getElementById('name-check-1').value.trim(),
+          document.getElementById('name-check-2').value.trim(),
+          document.getElementById('name-check-3').value.trim()
+        ].filter(Boolean);
+        if (names.length === 0) return;
+
+        const list = names.map((n, i) => (i + 1) + '. ' + n).join('\n');
+        const message = 'Hello, I would like help registering one of these business names:\n' + list;
+        const waUrl = 'https://wa.me/2347038336596?text=' + encodeURIComponent(message);
+
+        document.getElementById('name-check-wa-link').href = waUrl;
+        document.getElementById('name-check-result').style.display = 'block';
+
+        window.open('https://icrp.cac.gov.ng/public-search', '_blank', 'noopener');
+        window.open(waUrl, '_blank', 'noopener');
+      });
+    }
   </script>
 
 <script src="assets/js/contact-submit.js" defer></script>
