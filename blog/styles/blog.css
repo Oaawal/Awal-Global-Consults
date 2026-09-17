@@ -1,7 +1,9 @@
 /* Blog styles — layered on top of /style.css.
    Uses the current site design tokens (--navy-900, --gold-500, --paper,
    --ink, --muted, --line, --shadow-*, --radius*, --display/--body) so
-   the blog stays in sync automatically if the palette changes again. */
+   the blog stays in sync automatically if the palette changes again.
+   Note: --gold-500 is the brand's blue accent (#2F80ED), not gold —
+   see the token comment in /style.css for the full 2026 palette. */
 
 /* ---------- Listing page ---------- */
 
@@ -375,7 +377,7 @@
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: rgba(201,166,70,0.14);
+  background: rgba(47,128,237,0.14);
 }
 .blog-cta-box h3 {
   font-family: var(--display);

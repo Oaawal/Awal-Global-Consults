@@ -1,9 +1,18 @@
 /* ============================================================
    AWAL GLOBAL CONSULTS — Design System
-   Navy & Gold · Fraunces (display) + DM Sans (body)
+   Navy & Blue · Fraunces (display) + DM Sans (body)
    Signature motif: the "seal" — a registrar's stamp of
    authenticity, echoed in the eyebrow marks, the hero badge,
    and the certificate-style rule under H2s.
+
+   Brand palette (2026 blue refresh): the --navy-* and --gold-*
+   token NAMES are kept as-is on purpose (every rule in this file
+   and blog.css already references them), but --gold-* now holds
+   the brand's blue accent scale rather than gold. --navy-900 is
+   the brand's Deep Navy (#0F3A5F), --navy-800 is Primary Blue
+   (#1B6CA8), --gold-500 is Accent Blue (#2F80ED), --paper is
+   Light Background (#F4F8FC), --paper-deep is the Soft Gradient
+   Background (#EAF2F8). Treat --gold-* as "accent-*" mentally.
    ============================================================ */
 
 /* Fonts (Fraunces + DM Sans) are loaded via <link> in each page's <head>
@@ -29,28 +38,31 @@ button { font-family: inherit; }
 
 /* ---------- Tokens ---------- */
 :root {
-  --navy-950: #081524;
-  --navy-900: #0d2340;
-  --navy-800: #16345c;
-  --navy-700: #274b78;
-  --gold-700: #93701f;
-  --gold-600: #b6902d;
-  --gold-500: #c9a646;
-  --gold-300: #e8cf87;
-  --gold-200: #f2e3b8;
+  --navy-950: #0A2C48;
+  --navy-900: #0F3A5F;
+  --navy-800: #1B6CA8;
+  --navy-700: #2F80ED;
+  --gold-700: #14507F;
+  --gold-600: #1B6CA8;
+  --gold-500: #2F80ED;
+  --gold-300: #6FB2F5;
+  --gold-200: #B7D9FA;
 
-  --paper: #f8f5ec;
-  --paper-deep: #efe7d3;
+  --accent-gold: #C9A646;
+  --accent-gold-dark: #93701F;
+
+  --paper: #F4F8FC;
+  --paper-deep: #EAF2F8;
   --white: #ffffff;
-  --ink: #142238;
-  --muted: #5b6472;
-  --muted-light: rgba(248,245,236,0.72);
-  --line: rgba(13,35,64,0.11);
+  --ink: #222222;
+  --muted: #555555;
+  --muted-light: rgba(244,248,252,0.72);
+  --line: rgba(15,58,95,0.11);
   --line-light: rgba(255,255,255,0.14);
 
-  --shadow-sm: 0 8px 24px rgba(9,20,37,0.07);
-  --shadow-md: 0 20px 50px rgba(9,20,37,0.11);
-  --shadow-gold: 0 14px 34px rgba(150,115,30,0.22);
+  --shadow-sm: 0 8px 24px rgba(10,44,72,0.07);
+  --shadow-md: 0 20px 50px rgba(10,44,72,0.11);
+  --shadow-gold: 0 14px 34px rgba(47,128,237,0.22);
 
   --radius-sm: 10px;
   --radius: 18px;
@@ -106,9 +118,9 @@ button { font-family: inherit; }
   text-transform: uppercase;
   color: var(--gold-600);
 }
-.eyebrow .seal-mark { color: var(--gold-500); width: 16px; height: 16px; }
+.eyebrow .seal-mark { color: var(--accent-gold); width: 16px; height: 16px; }
 .navy-bg .eyebrow, .hero .eyebrow { color: var(--gold-300); }
-.navy-bg .eyebrow .seal-mark, .hero .eyebrow .seal-mark { color: var(--gold-300); }
+.navy-bg .eyebrow .seal-mark, .hero .eyebrow .seal-mark { color: var(--accent-gold); }
 
 /* Certificate-style double rule under section headings */
 .section-head { margin-bottom: 44px; max-width: 720px; }
@@ -206,7 +218,7 @@ button { font-family: inherit; }
   border-color: var(--gold-500);
   color: var(--navy-900);
 }
-.btn-secondary:hover { background: rgba(201,166,70,0.1); transform: translateY(-2px); }
+.btn-secondary:hover { background: rgba(47,128,237,0.1); transform: translateY(-2px); }
 .navy-bg .btn-secondary, .hero .btn-secondary { color: var(--white); border-color: rgba(255,255,255,0.4); }
 .navy-bg .btn-secondary:hover, .hero .btn-secondary:hover { background: rgba(255,255,255,0.08); }
 
@@ -413,12 +425,12 @@ button { font-family: inherit; }
 .rc-badge-icon {
   width: 34px; height: 34px;
   border-radius: 50%;
-  border: 1.5px solid var(--gold-500);
+  border: 1.5px solid var(--accent-gold);
   display: flex; align-items: center; justify-content: center;
   font-family: var(--display);
   font-weight: 700;
   font-size: 0.72rem;
-  color: var(--gold-700);
+  color: var(--accent-gold-dark);
   flex: none;
 }
 
@@ -434,7 +446,7 @@ button { font-family: inherit; }
 .hero::before {
   content: '';
   position: absolute; inset: 0;
-  background-image: repeating-linear-gradient(115deg, rgba(201,166,70,0.05) 0 1px, transparent 1px 34px);
+  background-image: repeating-linear-gradient(115deg, rgba(47,128,237,0.05) 0 1px, transparent 1px 34px);
   pointer-events: none;
 }
 .hero::after {
@@ -443,7 +455,7 @@ button { font-family: inherit; }
   right: -120px; top: -140px;
   width: 420px; height: 420px;
   border-radius: 50%;
-  border: 1px solid rgba(201,166,70,0.14);
+  border: 1px solid rgba(47,128,237,0.14);
   pointer-events: none;
 }
 .hero-grid {
@@ -584,7 +596,7 @@ button { font-family: inherit; }
 .service-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
-  border-color: rgba(201,166,70,0.35);
+  border-color: rgba(47,128,237,0.35);
 }
 .service-icon {
   width: 46px; height: 46px;
@@ -680,14 +692,14 @@ button { font-family: inherit; }
 .pricing-card.featured p, .pricing-card.featured li { color: rgba(255,255,255,0.8); }
 .pricing-badge {
   position: absolute; top: -13px; left: 30px;
-  background: var(--gold-500);
+  background: var(--accent-gold);
   color: var(--navy-950);
   font-size: 0.72rem; font-weight: 700;
   padding: 5px 14px;
   border-radius: 999px;
   letter-spacing: 0.04em;
 }
-.pkg-tag { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold-600); margin-bottom: 8px; }
+.pkg-tag { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-gold-dark); margin-bottom: 8px; }
 .pricing-card h3 { font-family: var(--display); font-weight: 600; font-size: 1.3rem; color: var(--navy-900); margin-bottom: 6px; }
 .price {
   font-family: var(--display);
@@ -735,7 +747,7 @@ button { font-family: inherit; }
 }
 
 /* ---------- Testimonials ---------- */
-.stars { color: var(--gold-500); letter-spacing: 2px; margin-bottom: 12px; }
+.stars { color: var(--accent-gold); letter-spacing: 2px; margin-bottom: 12px; }
 .testimonial-card blockquote { font-size: 0.96rem; color: var(--ink); margin-bottom: 20px; font-style: italic; }
 .testimonial-author { display: flex; align-items: center; gap: 12px; }
 .author-avatar {
@@ -774,7 +786,7 @@ button { font-family: inherit; }
   font-size: 0.86rem;
   color: rgba(255,255,255,0.72);
 }
-.rc-badge strong { color: var(--gold-300); }
+.rc-badge strong { color: var(--accent-gold); }
 
 /* ---------- FAQ ---------- */
 .faq-list { display: grid; gap: 14px; }
@@ -800,7 +812,7 @@ button { font-family: inherit; }
 .cta-section::before {
   content: '';
   position: absolute; inset: 0;
-  background-image: repeating-linear-gradient(115deg, rgba(201,166,70,0.05) 0 1px, transparent 1px 34px);
+  background-image: repeating-linear-gradient(115deg, rgba(47,128,237,0.05) 0 1px, transparent 1px 34px);
 }
 .cta-inner { position: relative; max-width: 680px; }
 .cta-inner h2 {
@@ -831,7 +843,7 @@ button { font-family: inherit; }
 .email-icon { background: var(--navy-900); }
 .instagram-icon { background: linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7); }
 .contact-channel-label { display: block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
-.contact-fastest { color: var(--gold-600); margin-left: 6px; }
+.contact-fastest { color: var(--accent-gold-dark); margin-left: 6px; }
 .contact-channel-val { font-family: var(--display); font-weight: 600; color: var(--navy-900); font-size: 1.02rem; }
 
 .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
@@ -886,7 +898,7 @@ button { font-family: inherit; }
 .footer-logo { width: 120px; }
 .footer-brand-name { font-family: var(--display); font-weight: 600; color: var(--white); font-size: 1.1rem; }
 .footer-brand p { font-size: 0.9rem; margin-bottom: 4px; }
-.footer-brand .rc { color: var(--gold-300); font-weight: 600; margin-top: 10px; }
+.footer-brand .rc { color: var(--accent-gold); font-weight: 600; margin-top: 10px; }
 .footer-col h4 { font-family: var(--display); font-weight: 600; color: var(--white); margin-bottom: 16px; font-size: 1rem; }
 .footer-col a { display: block; font-size: 0.9rem; margin-bottom: 10px; color: rgba(255,255,255,0.68); transition: color 0.18s ease; }
 .footer-col a:hover { color: var(--gold-300); }
@@ -942,7 +954,7 @@ button { font-family: inherit; }
   border-radius: 50%;
   background: var(--navy-900);
   color: var(--gold-300);
-  border: 1.5px solid rgba(201,166,70,0.4);
+  border: 1.5px solid rgba(47,128,237,0.4);
   display: flex; align-items: center; justify-content: center;
   font-size: 1.2rem;
   cursor: pointer;
