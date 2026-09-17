@@ -203,12 +203,12 @@ fs.writeFileSync(
 );
 console.log('Built /blog/index.html');
 
-// 3b. One category page per used category — 2 levels deep -> ROOT = "../../"
-const CATEGORY_ROOT = '../../';
+// 3b. One category page per used category — 3 levels deep -> ROOT = "../../../"
+const CATEGORY_ROOT = '../../../';
 usedCategorySlugs.forEach(slug => {
   const cat = categories[slug] || { label: slug };
   const catPosts = posts.filter(p => p.categorySlug === slug);
-  const catCardsHtml = catPosts.map(p => cardHtml(p, '../')).join('\n'); // one level back up to blog/
+  const catCardsHtml = catPosts.map(p => cardHtml(p, '../../')).join('\n'); // two levels back up to blog/
   const catFiltersHtml = usedCategorySlugs.map(s => {
     const c = categories[s];
     const href = s === slug ? '.' : `../${s}/`;
