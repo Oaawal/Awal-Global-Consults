@@ -67,7 +67,7 @@ The commonly cited retention period for KYC records after a client relationship 
 
 ## If your business is a DNFBP, the bar is higher
 
-If your firm is a Designated Non-Financial Business or Profession, and law firms, accountants, real estate practices, and dealers in high-value goods often are, you're not just running "onboarding." You're operating under SCUML and AML obligations with a stricter customer due diligence standard. That means source-of-funds questions and PEP declarations aren't optional extras. They're part of what SCUML expects you to be assessing on your own clients as a routine matter, not a special case.
+If your firm is a Designated Non-Financial Business or Profession, and law firms, accountants, real estate practices, and dealers in high-value goods often are, you're not just running "onboarding." You're operating under SCUML and AML obligations with a stricter customer due diligence standard. That means source-of-funds questions and PEP declarations aren't optional extras. They're part of what SCUML expects you to be assessing on your own clients as a routine matter, not a special case. If you haven't confirmed your own SCUML status yet, see our [guide to who actually needs SCUML registration](/blog/scuml-registration-nigeria/).
 
 ## Frequently asked questions
 

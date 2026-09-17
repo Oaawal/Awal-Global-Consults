@@ -50,7 +50,7 @@ caption: The typical path from name reservation to certificate, whichever struct
 1. **Name availability search and reservation.** You propose a name, usually with one or two backups, and the CAC checks it isn't already taken or confusingly close to an existing one. Once it clears, the name is held for you while you complete the rest of the filing.
 2. **Document preparation.** This differs by structure but generally covers valid ID for the proprietor, directors, or trustees, passport photographs, proof of address, and (for companies) shareholder details, share allocation, and registered office address.
 3. **Online filing.** Everything runs through the CAC's online portal. There's no need to visit a CAC office in person for a standard registration.
-4. **Payment of statutory fees.** Fees vary by structure and, for companies, by share capital. These are set by CAC gazette and have shifted more than once in recent years, so it's worth confirming the current fee schedule directly rather than trusting a number from somewhere online. We can confirm the exact current figure for your structure when you reach out.
+4. **Payment of statutory fees.** Fees vary by structure and, for companies, by share capital. These are set by CAC gazette and have shifted more than once in recent years, so it's worth confirming the current fee schedule directly rather than trusting a number from somewhere online. See our [breakdown of what actually drives CAC registration cost](/blog/cac-registration-cost-nigeria/) for the full picture, and we can confirm the exact current figure for your structure when you reach out.
 5. **Review and approval.** Once documents are submitted and fees paid, the CAC reviews the filing. Business names typically clear faster than companies. Companies take longer if any documentation needs correcting, which is where most delays actually come from.
 6. **Certificate issuance.** On approval, you get your digital Certificate of Incorporation (companies) or Certificate of Registration (business names), carrying your unique CAC registration number.
 
@@ -68,7 +68,7 @@ Companies also need to keep the **Persons with Significant Control (PSC)** requi
 
 Getting your certificate is the start of your compliance obligations, not the end of them. Depending on your structure, you'll need to stay on top of:
 
-- **Annual returns.** A yearly filing confirming your business or company is still active. Miss this consistently and your entity can be struck off the register entirely.
+- **Annual returns.** A yearly filing confirming your business or company is still active. Miss this consistently and your entity can be struck off the register entirely — see our [full annual returns deadline and penalty guide](/blog/cac-annual-returns-deadline-penalty/) for exactly when it's due.
 - **Statutory registers.** For companies, that means registers of members, directors, and (where relevant) charges.
 - **Your first AGM and auditor appointment.** Required for companies within a specific window after incorporation.
 - **Keeping the CAC updated** on any change: registered address, directors, shareholding, or significant control.
