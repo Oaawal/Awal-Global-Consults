@@ -27,7 +27,7 @@ module.exports = {
     'kyc-compliance': {
       label: 'KYC & Compliance',
       description: 'KYC onboarding, CAMA compliance, data protection, and AML obligations.',
-      relatedService: { href: 'kyc/', label: 'Start KYC Onboarding' }
+      relatedService: { href: 'kyc/', label: 'Start Your Application' }
     },
     'tax-compliance': {
       label: 'Tax & Revenue',

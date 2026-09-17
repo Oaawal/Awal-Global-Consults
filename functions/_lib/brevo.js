@@ -73,6 +73,5 @@ export const WHATSAPP_LINK = 'https://wa.me/2347038336596';
 export const BANK_DETAILS = {
   bank: 'KudaBank',
   accountName: 'Awal Global Consults Limited',
-  accountNumber: '3003466189',
-  paystackLink: 'https://paystack.shop/pay/awalglobal'
+  accountNumber: '3003466189'
 };

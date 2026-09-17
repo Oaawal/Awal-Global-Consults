@@ -1,12 +1,12 @@
 import { WHATSAPP_LINK } from './brevo.js';
 
-const NAVY = '#0b1f3a';
-const GOLD = '#c9973a';
-const GOLD_PALE = '#f9f0dc';
-const BG = '#faf9f6';
-const BORDER = '#e0ddd6';
-const TEXT = '#1a1a1a';
-const MUTED = '#666666';
+const NAVY = '#0F3A5F';
+const GOLD = '#2F80ED';
+const GOLD_PALE = '#f9f0dc'; // warning-banner background only — intentionally not a brand color
+const BG = '#F4F8FC';
+const BORDER = '#D7E6F2';
+const TEXT = '#222222';
+const MUTED = '#555555';
 
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
@@ -53,25 +53,31 @@ function serviceListHtml(services) {
   </div>`;
 }
 
-// ── KYC: client confirmation email ──────────────────────────────
-export function kycClientEmail({ fullName, services }) {
+// ── Application: client confirmation email ──────────────────────
+export function kycClientEmail({ fullName, services, attachedCount = 0, skippedFiles = [] }) {
+  const docLine = skippedFiles.length > 0
+    ? `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:10px 14px;margin:14px 0;">${attachedCount > 0 ? `We received ${attachedCount} document${attachedCount === 1 ? '' : 's'}, but ` : 'We could not receive '}the following ${skippedFiles.length === 1 ? 'file was' : 'files were'} too large to come through: <strong>${escapeHtml(skippedFiles.join(', '))}</strong>. Please resend ${skippedFiles.length === 1 ? 'it' : 'them'} directly on <a href="${WHATSAPP_LINK}" style="color:#a05a00;font-weight:600;">WhatsApp</a>.</div>`
+    : (attachedCount > 0
+      ? `<div style="font-size:13px;color:${TEXT};margin:14px 0;">✓ We received <strong>${attachedCount} document${attachedCount === 1 ? '' : 's'}</strong> along with your request.</div>`
+      : '');
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Thank you, ${escapeHtml(fullName || 'valued client')}</h2>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">
-      We've received your client intake. Our team will review your request and get back to you within
+      We've received your application. Our team will review your request and get back to you within
       <strong>1 working day</strong> with a clear, itemized quote and confirmation of any documents still needed.
       No payment is needed until then.
     </p>
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:20px;">Services Requested</div>
     ${serviceListHtml(services)}
-    <div style="margin:16px 0;padding:14px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13px;color:${NAVY};">Once you're happy with your quote, we'll share payment details (bank transfer or Paystack) and begin processing right away.</div>
+    ${docLine}
+    <div style="margin:16px 0;padding:14px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13px;color:${NAVY};">Once you're happy with your quote, we'll share our bank transfer details and begin processing right away.</div>
     <div style="margin-top:22px;padding-top:18px;border-top:1px solid ${BORDER};font-size:13px;color:${TEXT};">
       Have documents to send, or a question in the meantime? Chat with us directly on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>.
     </div>`;
   return shell(inner, { preheader: 'We\'ve received your request — here\'s what happens next.' });
 }
 
-// ── KYC: admin notification email ───────────────────────────────
+// ── Application: admin notification email ───────────────────────
 export function kycAdminEmail({ fields, services, attachmentsNote }) {
   const rows = Object.entries(fields)
     .filter(([, v]) => v !== '' && v !== undefined && v !== null)

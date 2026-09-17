@@ -9,8 +9,8 @@ const HIDDEN_FIELDS = new Set([
   'svc', 'Services_Requested', 'Subject'
 ]);
 
-const MAX_PER_FILE_BYTES = 5 * 1024 * 1024;   // matches the 5MB limit shown to users in the form
-const MAX_TOTAL_ATTACH_BYTES = 6 * 1024 * 1024; // keep total email payload comfortably under Brevo's cap
+const MAX_PER_FILE_BYTES = 7 * 1024 * 1024;   // matches the 7MB per-file limit shown to users in the form
+const MAX_TOTAL_ATTACH_BYTES = 14 * 1024 * 1024; // raw-byte budget; base64 inflates ~1.33x, keeping the encoded payload safely under Brevo's 20MB total cap
 
 function humanize(key) {
   return key.replace(/_/g, ' ');
@@ -50,24 +50,24 @@ export async function onRequestPost(context) {
 
     // Build attachments from every uploaded file, capped so the email stays within Brevo's size limits
     let runningBytes = 0;
-    let skippedForSize = false;
     const attachments = [];
+    const skippedFiles = [];
     for (const fieldName of MULTI_FILE_FIELDS) {
       const files = formData.getAll(fieldName).filter(f => typeof f !== 'string' && f.size > 0);
       for (const file of files) {
         if (file.size > MAX_PER_FILE_BYTES || runningBytes + file.size > MAX_TOTAL_ATTACH_BYTES) {
-          skippedForSize = true;
+          skippedFiles.push(file.name || fieldName);
           continue;
         }
         const b64 = await fileToBase64(file, MAX_PER_FILE_BYTES);
-        if (!b64) { skippedForSize = true; continue; }
+        if (!b64) { skippedFiles.push(file.name || fieldName); continue; }
         runningBytes += file.size;
         attachments.push({ name: file.name || fieldName, content: b64 });
       }
     }
 
-    const attachmentsNote = skippedForSize
-      ? 'One or more uploaded documents were too large to attach to this email. Please request them directly from the client via WhatsApp.'
+    const attachmentsNote = skippedFiles.length > 0
+      ? `These documents were too large to attach and were NOT received — ask the client to resend directly on WhatsApp: ${skippedFiles.join(', ')}`
       : (attachments.length === 0 ? 'No documents were attached to this submission.' : '');
 
     const subjectServices = services.slice(0, 3).join(', ') || 'New Submission';
@@ -82,10 +82,14 @@ export async function onRequestPost(context) {
     await sendBrevoEmail(env, {
       to: { email, name: fullName },
       subject: `We've Received Your Request — ${subjectServices}`,
-      html: kycClientEmail({ fullName, services })
+      html: kycClientEmail({ fullName, services, attachedCount: attachments.length, skippedFiles })
     });
 
-    return new Response(JSON.stringify({ ok: true }), {
+    return new Response(JSON.stringify({
+      ok: true,
+      attachedCount: attachments.length,
+      skippedFiles
+    }), {
       status: 200,
       headers: { 'content-type': 'application/json' }
     });
