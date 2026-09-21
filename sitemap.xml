@@ -109,6 +109,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://awalglobal.com.ng/blog/category/cybersecurity/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://awalglobal.com.ng/blog/category/cac-registration/</loc>
     <lastmod>2026-09-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -151,8 +157,32 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://awalglobal.com.ng/blog/data-breach-response-nigeria-ndpa/</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/business-email-compromise-payment-fraud-nigeria/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://awalglobal.com.ng/blog/cac-annual-returns-deadline-penalty/</loc>
     <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/whatsapp-business-account-security-nigeria/</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/cybersecurity-levy-nigeria-businesses/</loc>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

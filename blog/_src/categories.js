@@ -48,6 +48,11 @@ module.exports = {
       label: 'Regulatory & Licensing',
       description: 'NDPR/data protection, NIPC, business permits, and regulatory compliance.',
       relatedService: { href: 'corporate-regulatory', label: 'Talk to an Advisor' }
+    },
+    'cybersecurity': {
+      label: 'Cybersecurity & Digital Safety',
+      description: 'Practical cybersecurity, fraud prevention, and digital safety guidance for Nigerian businesses.',
+      relatedService: { href: 'cybersecurity-support', label: 'Get Cybersecurity Support' }
     }
   }
 };
