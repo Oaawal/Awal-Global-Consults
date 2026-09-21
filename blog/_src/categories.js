@@ -38,6 +38,16 @@ module.exports = {
       label: 'Business Advisory',
       description: 'Corporate structuring, licensing, and sector-specific guidance.',
       relatedService: { href: 'business-advisory', label: 'Talk to an Advisor' }
+    },
+    'identity-immigration': {
+      label: 'Identity & Immigration',
+      description: 'NIN, CERPAC, expatriate quota, and immigration documentation in Nigeria.',
+      relatedService: { href: 'kyc/', label: 'Start Your Application' }
+    },
+    'regulatory-licensing': {
+      label: 'Regulatory & Licensing',
+      description: 'NDPR/data protection, NIPC, business permits, and regulatory compliance.',
+      relatedService: { href: 'corporate-regulatory', label: 'Talk to an Advisor' }
     }
   }
 };
