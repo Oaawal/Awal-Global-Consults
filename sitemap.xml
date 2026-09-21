@@ -109,6 +109,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://awalglobal.com.ng/blog/category/identity-immigration/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://awalglobal.com.ng/blog/category/cybersecurity/</loc>
     <lastmod>2026-09-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -145,16 +151,40 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://awalglobal.com.ng/blog/category/identity-immigration/</loc>
+    <loc>https://awalglobal.com.ng/blog/category/tax-compliance/</loc>
     <lastmod>2026-09-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://awalglobal.com.ng/blog/category/tax-compliance/</loc>
-    <lastmod>2026-09-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://awalglobal.com.ng/blog/cerpac-renewal-nigeria/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/uk-vs-canada-vs-us-student-visa-nigeria/</loc>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/student-visa-refusal-reasons-nigeria/</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/uk-student-visa-financial-proof-nigeria/</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/nigerian-international-passport-guide/</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/data-breach-response-nigeria-ndpa/</loc>
