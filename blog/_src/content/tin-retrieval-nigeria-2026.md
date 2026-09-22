@@ -54,7 +54,7 @@ Your Tax ID isn't paperwork you file away and forget. It's the reference point f
 - Filing VAT returns, if your business is VAT-registered
 - Requesting a Tax Clearance Certificate
 - Opening or maintaining certain categories of corporate bank accounts
-- Payroll and PAYE-related filings, where applicable
+- Payroll-related filings, where applicable
 - Any correspondence with tax authorities about your business
 
 If you can't locate your Tax ID and the retrieval lookup isn't returning a result against your CAC number, that's usually a sign of a mismatch somewhere in your registration details, not a sign that you need to start a fresh application. That mismatch is worth resolving directly rather than guessing your way around it.

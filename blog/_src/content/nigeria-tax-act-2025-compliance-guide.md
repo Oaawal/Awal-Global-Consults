@@ -5,7 +5,7 @@ date: 2026-07-16
 category: tax-compliance
 description: A complete guide to Nigeria's 2025 tax reform. What the NTA and NTAA actually changed, who has to register and file, the deadlines that apply to your business, and the penalties for getting it wrong.
 excerpt: The Nigeria Tax Act and Tax Administration Act rewrote the rules from January 2026. Here's what applies to your business, what's due when, and what non-compliance actually costs.
-cta_text: Awal Global Consults handles TIN registration, TIN validation, VAT and PAYE filing, and tax clearance certificates, so your business stays compliant under the new regime without you having to track every deadline yourself.
+cta_text: Awal Global Consults handles TIN registration and validation, VAT filing, and tax clearance certificates, so your business stays compliant under the new regime without you having to track every deadline yourself.
 whatsapp_topic: tax registration and filing
 ---
 
@@ -134,4 +134,4 @@ The Tax Appeal Tribunal, established under the Joint Revenue Board Act, is now t
 
 ## Staying compliant without tracking it all yourself
 
-Between TIN registration, VAT and PAYE filing cycles, and a penalty regime that now escalates monthly, keeping every deadline straight is a genuine operational task, not a once-a-year errand. Awal Global Consults handles TIN registration and validation, VAT and PAYE filing, and tax clearance certificates for businesses that would rather have this managed properly than risk finding out about a gap during an audit.
+Between TIN registration, VAT filing cycles, and a penalty regime that now escalates monthly, keeping every deadline straight is a genuine operational task, not a once-a-year errand. Awal Global Consults handles TIN registration and validation, VAT filing, and tax clearance certificates for businesses that would rather have this managed properly than risk finding out about a gap during an audit.
