@@ -1,6 +1,7 @@
 import { verifyTurnstile } from './_lib/turnstile.js';
 import { sendBrevoEmail, bytesToBase64 } from './_lib/brevo.js';
 import { recordsEnabled, recordSubmission } from './_lib/records.js';
+import { documentContentType } from './_lib/cases.js';
 import { kycAdminEmail, kycClientEmail } from './_lib/email-templates.js';
 
 // "Documents" supports multiple files (the new lean intake form uses one
@@ -103,7 +104,8 @@ export async function onRequestPost(context) {
         const bytes = new Uint8Array(await file.arrayBuffer());
         runningBytes += file.size;
         attachments.push({ name, content: bytesToBase64(bytes) });
-        storedFiles.push({ name, type: file.type, bytes });
+        // Content type comes from the (already checked) extension, never from the browser
+        storedFiles.push({ name, type: documentContentType(name), bytes });
       }
     }
 
@@ -116,10 +118,12 @@ export async function onRequestPost(context) {
     // Save the client, case and documents to the records database. If that fails,
     // the submission still goes through by email and the admin email says so.
     let reference = null;
+    let caseUrl = null;
     let recordStatus = 'off';
     if (recordsEnabled(env)) {
       try {
-        ({ reference } = await recordSubmission(env, request, {
+        let caseId;
+        ({ reference, caseId } = await recordSubmission(env, request, {
           kind: 'application',
           fullName,
           email,
@@ -130,6 +134,7 @@ export async function onRequestPost(context) {
           consentProcessing: formData.get('Declaration_Consent') === 'Yes',
           files: storedFiles
         }));
+        caseUrl = `${new URL(request.url).origin}/admin/case/${caseId}`;
         recordStatus = 'saved';
       } catch (err) {
         console.error('submit-kyc: saving record failed:', err && err.message);
@@ -140,7 +145,7 @@ export async function onRequestPost(context) {
     await sendBrevoEmail(env, {
       to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
       subject: `${reference ? `[${reference}] ` : ''}Client Intake Received — ${subjectServices}`,
-      html: kycAdminEmail({ fields, services, attachmentsNote, reference, recordStatus }),
+      html: kycAdminEmail({ fields, services, attachmentsNote, reference, recordStatus, caseUrl }),
       replyTo: { email, name: fullName },
       attachments
     });

@@ -69,10 +69,12 @@ export async function onRequestPost(context) {
 
     // Save the enquiry to the records database; the email still goes out if that fails
     let reference = null;
+    let caseUrl = null;
     let recordStatus = 'off';
     if (recordsEnabled(env)) {
       try {
-        ({ reference } = await recordSubmission(env, request, {
+        let caseId;
+        ({ reference, caseId } = await recordSubmission(env, request, {
           kind: 'enquiry',
           fullName: fullName.slice(0, 120),
           email: email ? email.trim().slice(0, 254) : null,
@@ -80,6 +82,7 @@ export async function onRequestPost(context) {
           services: service ? [service] : [],
           fields: humanFields
         }));
+        caseUrl = `${new URL(request.url).origin}/admin/case/${caseId}`;
         recordStatus = 'saved';
       } catch (err) {
         console.error('submit-contact: saving record failed:', err && err.message);
@@ -90,7 +93,7 @@ export async function onRequestPost(context) {
     await sendBrevoEmail(env, {
       to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
       subject: `${reference ? `[${reference}] ` : ''}New Enquiry — ${service || 'Website Contact Form'}`,
-      html: contactAdminEmail({ fields: humanFields, service, reference, recordStatus }),
+      html: contactAdminEmail({ fields: humanFields, service, reference, recordStatus, caseUrl }),
       replyTo: email ? { email, name: fullName } : undefined
     });
 

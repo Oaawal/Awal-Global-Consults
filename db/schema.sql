@@ -92,3 +92,27 @@ CREATE TABLE IF NOT EXISTS counters (
   name  TEXT PRIMARY KEY,
   value INTEGER NOT NULL
 );
+
+-- ── Admin dashboard login (/admin) ─────────────────────────────────
+-- One-time login codes emailed to the admin. Only a hash of each code is
+-- stored; a code expires after 10 minutes or 5 wrong attempts.
+CREATE TABLE IF NOT EXISTS admin_login_codes (
+  id         TEXT PRIMARY KEY,
+  email      TEXT NOT NULL,
+  code_hash  TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  attempts   INTEGER NOT NULL DEFAULT 0,
+  used_at    TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_admin_login_codes_email ON admin_login_codes(email, created_at);
+
+-- Signed-in sessions. Only a hash of the session token is stored.
+CREATE TABLE IF NOT EXISTS admin_sessions (
+  token_hash TEXT PRIMARY KEY,
+  email      TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  ip         TEXT,
+  user_agent TEXT
+);

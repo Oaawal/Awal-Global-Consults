@@ -34,7 +34,8 @@ export async function sendBrevoEmail(env, { to, subject, html, replyTo, attachme
   if (replyTo) body.replyTo = replyTo;
   if (attachments && attachments.length > 0) body.attachment = attachments;
 
-  const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+  // BREVO_API_BASE is only set for local testing, to capture emails instead of sending them
+  const res = await fetch(`${env.BREVO_API_BASE || 'https://api.brevo.com'}/v3/smtp/email`, {
     method: 'POST',
     headers: {
       'api-key': env.BREVO_API_KEY,

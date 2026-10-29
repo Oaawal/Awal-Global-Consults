@@ -55,9 +55,9 @@ function referenceHtml(reference) {
 }
 
 /** Admin-only line saying whether the submission was saved to the records database. */
-function recordStatusHtml(reference, recordStatus) {
+function recordStatusHtml(reference, recordStatus, caseUrl) {
   if (recordStatus === 'saved') {
-    return `<div style="font-size:12.5px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:6px;padding:8px 12px;margin-bottom:12px;">Saved to client records as <strong>${escapeHtml(reference)}</strong>.</div>`;
+    return `<div style="font-size:12.5px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:6px;padding:8px 12px;margin-bottom:12px;">Saved to client records as <strong>${escapeHtml(reference)}</strong>.${caseUrl ? ` <a href="${escapeHtml(caseUrl)}" style="color:${NAVY};font-weight:700;">Open case in dashboard →</a>` : ''}</div>`;
   }
   if (recordStatus === 'failed') {
     return `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:8px 12px;margin-bottom:12px;"><strong>Not saved to client records</strong> — the records database could not be reached. Keep this email (and its attachments) as the record.</div>`;
@@ -98,7 +98,7 @@ export function kycClientEmail({ fullName, services, attachedCount = 0, skippedF
 }
 
 // ── Application: admin notification email ───────────────────────
-export function kycAdminEmail({ fields, services, attachmentsNote, reference = null, recordStatus = 'off' }) {
+export function kycAdminEmail({ fields, services, attachmentsNote, reference = null, recordStatus = 'off', caseUrl = null }) {
   const rows = Object.entries(fields)
     .filter(([, v]) => v !== '' && v !== undefined && v !== null)
     .map(([k, v]) => `<tr><td style="padding:6px 10px;border-bottom:1px solid ${BORDER};font-size:12px;color:${MUTED};white-space:nowrap;vertical-align:top;">${escapeHtml(k)}</td><td style="padding:6px 10px;border-bottom:1px solid ${BORDER};font-size:12.5px;color:${TEXT};">${escapeHtml(v)}</td></tr>`)
@@ -107,7 +107,7 @@ export function kycAdminEmail({ fields, services, attachmentsNote, reference = n
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 6px;">New Client Intake${reference ? ` — ${escapeHtml(reference)}` : ''}</h2>
     <div style="font-size:12.5px;color:${MUTED};margin-bottom:14px;">Remember to send a quote within 1 working day.</div>
-    ${recordStatusHtml(reference, recordStatus)}
+    ${recordStatusHtml(reference, recordStatus, caseUrl)}
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:10px;">Services Requested</div>
     ${serviceListHtml(services)}
     ${attachmentsNote ? `<div style="font-size:12px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:8px 12px;margin-bottom:12px;">${escapeHtml(attachmentsNote)}</div>` : ''}
@@ -132,7 +132,7 @@ export function contactClientEmail({ fullName, service, reference = null }) {
 }
 
 // ── Contact form: admin notification email ──────────────────────
-export function contactAdminEmail({ fields, service, reference = null, recordStatus = 'off' }) {
+export function contactAdminEmail({ fields, service, reference = null, recordStatus = 'off', caseUrl = null }) {
   const rows = Object.entries(fields)
     .filter(([, v]) => v !== '' && v !== undefined && v !== null)
     .map(([k, v]) => `<tr><td style="padding:6px 10px;border-bottom:1px solid ${BORDER};font-size:12px;color:${MUTED};white-space:nowrap;vertical-align:top;">${escapeHtml(k)}</td><td style="padding:6px 10px;border-bottom:1px solid ${BORDER};font-size:12.5px;color:${TEXT};">${escapeHtml(v)}</td></tr>`)
@@ -140,7 +140,36 @@ export function contactAdminEmail({ fields, service, reference = null, recordSta
 
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 6px;">New Enquiry${service ? ` — ${escapeHtml(service)}` : ''}</h2>
-    ${recordStatusHtml(reference, recordStatus)}
+    ${recordStatusHtml(reference, recordStatus, caseUrl)}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:10px;">${rows}</table>`;
   return shell(inner, { preheader: `New website enquiry${service ? ` — ${service}` : ''}.` });
+}
+
+// ── Admin dashboard: login code email ───────────────────────────
+export function adminLoginCodeEmail({ code }) {
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 12px;">Your dashboard login code</h2>
+    <div style="font-size:30px;font-weight:700;letter-spacing:8px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:8px;padding:16px;text-align:center;margin:12px 0;">${escapeHtml(code)}</div>
+    <p style="font-size:13px;line-height:1.7;color:${MUTED};margin:0;">
+      This code expires in 10 minutes and can only be used once. If you did not try to sign in, you can ignore this email —
+      nobody can sign in without the code.
+    </p>`;
+  return shell(inner, { preheader: `Your login code is ${code}` });
+}
+
+// ── Case status update email to the client ──────────────────────
+export function caseStatusEmail({ fullName, reference, statusLabel, statusMessage, note }) {
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Update on your request</h2>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(fullName || 'valued client')},</p>
+    <div style="background:${BG};border:1px solid ${BORDER};border-radius:8px;padding:14px 16px;margin:16px 0;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};">Reference ${escapeHtml(reference)}</div>
+      <div style="font-size:16px;font-weight:700;color:${NAVY};margin-top:4px;">${escapeHtml(statusLabel)}</div>
+    </div>
+    ${statusMessage ? `<p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${escapeHtml(statusMessage)}</p>` : ''}
+    ${note ? `<div style="margin:14px 0;padding:12px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13.5px;line-height:1.7;color:${TEXT};white-space:pre-line;">${escapeHtml(note)}</div>` : ''}
+    <div style="margin-top:22px;padding-top:18px;border-top:1px solid ${BORDER};font-size:13px;color:${TEXT};">
+      Questions? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>, quoting your reference number.
+    </div>`;
+  return shell(inner, { preheader: `${reference}: ${statusLabel}` });
 }
