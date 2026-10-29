@@ -8,6 +8,7 @@
  *   GET  /admin/case/:id         case details
  *   POST /admin/case/:id/status  change status (optionally emails the client)
  *   POST /admin/case/:id/note    add a private note
+ *   POST /admin/case/:id/followup set or clear a follow-up reminder date
  *   GET  /admin/doc/:id          view an uploaded document
  *
  * Every page except sign-in requires a session (see _lib/admin-auth.js).
@@ -16,7 +17,7 @@
  */
 import { createLoginCode, verifyLoginCode, createSession, currentAdmin, endSession, isAdminEmail } from '../_lib/admin-auth.js';
 import { loginPage, listPage, casePage, notFoundPage, page, VIEWS } from '../_lib/admin-views.js';
-import { statusesFor, statusInfo, retentionFor, documentContentType } from '../_lib/cases.js';
+import { statusesFor, statusInfo, retentionFor, documentContentType, autoFollowUp } from '../_lib/cases.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
 import { adminLoginCodeEmail, caseStatusEmail } from '../_lib/email-templates.js';
 
@@ -34,6 +35,7 @@ const VIEW_SQL = {
   open: OPEN_SQL,
   new: "c.status = 'new'",
   closed: `NOT (${OPEN_SQL})`,
+  followups: 'c.follow_up_at IS NOT NULL',
   all: '1 = 1'
 };
 
@@ -141,11 +143,11 @@ export async function onRequest(context) {
     const bindArgs = q ? [like] : [];
 
     const listStmt = env.DB.prepare(
-      `SELECT c.id, c.reference, c.kind, c.services, c.status, c.created_at, cl.full_name,
+      `SELECT c.id, c.reference, c.kind, c.services, c.status, c.created_at, c.follow_up_at, cl.full_name,
               (SELECT COUNT(*) FROM documents d WHERE d.case_id = c.id AND d.deleted_at IS NULL) AS docs
        FROM cases c JOIN clients cl ON cl.id = c.client_id
        WHERE ${VIEW_SQL[view]}${searchSql}
-       ORDER BY c.created_at DESC LIMIT 200`
+       ORDER BY ${view === 'followups' ? 'c.follow_up_at ASC' : 'c.created_at DESC'} LIMIT 200`
     ).bind(...bindArgs);
     const countStmt = env.DB.prepare(
       `SELECT ${VIEWS.map(v => `SUM(CASE WHEN ${VIEW_SQL[v.key]} THEN 1 ELSE 0 END) AS "${v.key}"`).join(', ')}
@@ -180,9 +182,15 @@ export async function onRequest(context) {
 
       const now = new Date().toISOString();
       const { closedAt, retainUntil } = retentionFor(c.kind, status, now);
+      const statusChanged = status !== c.status;
+      // Delivering a CAC or CERPAC case sets a renewal follow-up, unless one is already set
+      const followUp = statusChanged && !c.follow_up_at ? autoFollowUp(c.services, status, now) : null;
       await env.DB.batch([
-        env.DB.prepare('UPDATE cases SET status = ?2, updated_at = ?3, closed_at = ?4, retain_until = ?5 WHERE id = ?1')
-          .bind(c.id, status, now, closedAt, retainUntil),
+        env.DB.prepare(`UPDATE cases SET status = ?2, updated_at = ?3, closed_at = ?4, retain_until = ?5,
+                          status_changed_at = CASE WHEN ?6 THEN ?3 ELSE status_changed_at END,
+                          follow_up_at = COALESCE(?7, follow_up_at), follow_up_note = COALESCE(?8, follow_up_note)
+                        WHERE id = ?1`)
+          .bind(c.id, status, now, closedAt, retainUntil, statusChanged ? 1 : 0, followUp ? followUp.at : null, followUp ? followUp.note : null),
         env.DB.prepare("INSERT INTO case_events (case_id, event, from_status, to_status, note, actor, created_at) VALUES (?1, 'status_changed', ?2, ?3, ?4, ?5, ?6)")
           .bind(c.id, c.status, status, message || null, actor, now),
         env.DB.prepare("INSERT INTO audit_log (at, actor, action, entity_type, entity_id, detail, ip) VALUES (?1, ?2, 'case.status_changed', 'case', ?3, ?4, ?5)")
@@ -226,6 +234,27 @@ export async function onRequest(context) {
         : env.DB.prepare('UPDATE cases SET updated_at = ?2 WHERE id = ?1').bind(c.id, now));
       await env.DB.batch(statements);
       return redirect(`/admin/case/${c.id}?done=note`);
+    }
+
+    if (parts[2] === 'followup' && method === 'POST') {
+      const form = await request.formData();
+      const clear = form.get('clear') === '1';
+      const date = String(form.get('date') || '');
+      const note = String(form.get('note') || '').trim().slice(0, 500);
+      if (!clear && !/^\d{4}-\d{2}-\d{2}$/.test(date)) return redirect(`/admin/case/${c.id}?done=followup_invalid`);
+      // Due at 8am Lagos time on the chosen day
+      const due = new Date(`${date}T07:00:00.000Z`);
+      if (!clear && Number.isNaN(due.getTime())) return redirect(`/admin/case/${c.id}?done=followup_invalid`);
+      const at = clear ? null : due.toISOString();
+      const now = new Date().toISOString();
+      await env.DB.batch([
+        env.DB.prepare('UPDATE cases SET follow_up_at = ?2, follow_up_note = ?3, updated_at = ?4 WHERE id = ?1').bind(c.id, at, clear ? null : (note || null), now),
+        env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'follow_up', ?2, ?3, ?4)")
+          .bind(c.id, clear ? 'Follow-up cleared' : `Follow-up set for ${date}${note ? `: ${note}` : ''}`, actor, now),
+        env.DB.prepare("INSERT INTO audit_log (at, actor, action, entity_type, entity_id, detail, ip) VALUES (?1, ?2, 'case.follow_up_set', 'case', ?3, ?4, ?5)")
+          .bind(now, actor, c.id, JSON.stringify({ reference: c.reference, date: clear ? null : date }), request.headers.get('CF-Connecting-IP'))
+      ]);
+      return redirect(`/admin/case/${c.id}?done=${clear ? 'followup_cleared' : 'followup'}`);
     }
   }
 

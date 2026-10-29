@@ -37,11 +37,15 @@ CREATE TABLE IF NOT EXISTS cases (
   closed_at          TEXT,
   retention_class    TEXT NOT NULL CHECK (retention_class IN ('application', 'enquiry')),
   retain_until       TEXT,
-  legal_hold         INTEGER NOT NULL DEFAULT 0
+  legal_hold         INTEGER NOT NULL DEFAULT 0,
+  status_changed_at  TEXT,                        -- when the current status was set (drives client reminders)
+  follow_up_at       TEXT,                        -- optional reminder date for you, e.g. annual returns
+  follow_up_note     TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_cases_client ON cases(client_id);
 CREATE INDEX IF NOT EXISTS idx_cases_status ON cases(status);
 CREATE INDEX IF NOT EXISTS idx_cases_retain ON cases(retain_until);
+CREATE INDEX IF NOT EXISTS idx_cases_follow_up ON cases(follow_up_at);
 
 -- Files live in the private R2 bucket awal-documents under storage_key;
 -- this table is the index of what was received, and when.
@@ -115,4 +119,13 @@ CREATE TABLE IF NOT EXISTS admin_sessions (
   expires_at TEXT NOT NULL,
   ip         TEXT,
   user_agent TEXT
+);
+
+-- One row per scheduled job per day, so a job never runs twice on the same day.
+CREATE TABLE IF NOT EXISTS job_runs (
+  job      TEXT NOT NULL,
+  run_date TEXT NOT NULL,                         -- Lagos date, YYYY-MM-DD
+  ran_at   TEXT NOT NULL,
+  detail   TEXT,
+  PRIMARY KEY (job, run_date)
 );

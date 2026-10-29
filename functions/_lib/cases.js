@@ -85,3 +85,26 @@ export function documentContentType(fileName) {
     default: return 'application/octet-stream';
   }
 }
+
+/** Public site address used in links inside emails. */
+export const SITE_URL = 'https://awalglobal.com.ng';
+
+/**
+ * A follow-up reminder for you, set automatically when a case is delivered,
+ * for services that bring repeat work. Returns null when none applies.
+ * The note says what to check, since exact due dates depend on the entity.
+ */
+export function autoFollowUp(services, status, now) {
+  if (status !== 'delivered') return null;
+  const s = String(services || '');
+  if (/cerpac|expatriate|residence permit/i.test(s)) {
+    return { at: addMonths(now, 11), note: 'CERPAC renewal coming up — offer to handle the renewal.' };
+  }
+  if (/cac|business name|company|incorporat|trustee|annual return/i.test(s)) {
+    return {
+      at: addMonths(now, 11),
+      note: 'CAC annual returns coming up (business names yearly; a company\'s first return is due 18 months after incorporation) — offer to file.'
+    };
+  }
+  return null;
+}

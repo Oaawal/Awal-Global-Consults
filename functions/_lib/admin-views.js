@@ -84,6 +84,9 @@ const FLASH = {
   status_email_failed: ['err', 'Status updated, but the email to the client could not be sent.'],
   status_no_email: ['ok', 'Status updated. The client has no email address, so contact them directly.'],
   note: ['ok', 'Note added.'],
+  followup: ['ok', 'Follow-up saved. It will appear in your daily summary when due.'],
+  followup_cleared: ['ok', 'Follow-up cleared.'],
+  followup_invalid: ['err', 'Please choose a valid date for the follow-up.'],
   unchanged: ['ok', 'Nothing changed.']
 };
 
@@ -152,6 +155,7 @@ export function loginPage({ step = 'email', email = '', next = '/admin/', error 
 export const VIEWS = [
   { key: 'open', label: 'Open' },
   { key: 'new', label: 'New' },
+  { key: 'followups', label: 'Follow-ups' },
   { key: 'closed', label: 'Closed' },
   { key: 'all', label: 'All' }
 ];
@@ -167,6 +171,7 @@ export function listPage({ rows, view, q, counts }) {
       <div class="name">${esc(r.full_name)}</div>
       <div class="meta">${esc(r.services || (r.kind === 'enquiry' ? 'Enquiry' : 'Application'))}</div>
       <div class="meta">${fmtDate(r.created_at)}${r.docs ? ` · ${r.docs} document${r.docs === 1 ? '' : 's'}` : ''}</div>
+      ${r.follow_up_at ? `<div class="meta" style="color:${new Date(r.follow_up_at) <= new Date() ? 'var(--warn)' : 'var(--navy)'};font-weight:600">Follow up ${fmtDay(r.follow_up_at)}</div>` : ''}
     </a>`).join('') : '<div class="card empty">No cases here.</div>';
 
   return page('Cases', `
@@ -194,6 +199,9 @@ export function casePage({ c, docs, events, flash }) {
       ${c.email ? `<a class="btn secondary" href="mailto:${esc(c.email)}?subject=${encodeURIComponent(`Your request ${c.reference}`)}">Email</a>` : ''}
     </div>`;
 
+  const reminderInfo = c.kind === 'application' && ['quote_sent', 'awaiting_documents'].includes(c.status)
+    ? '<p class="meta">While a case is in this status, the client gets an automatic reminder after 3 days and again after 7 days. Changing the status stops them.</p>'
+    : '';
   const statusForm = `
     <form method="post" action="/admin/case/${esc(c.id)}/status">
       <label for="status">Move to</label>
@@ -203,7 +211,18 @@ export function casePage({ c, docs, events, flash }) {
       <label for="message">Message to the client (optional)</label>
       <textarea id="message" name="message" maxlength="2000" placeholder="Added under the standard update, e.g. what you need from them next"></textarea>
       ${c.email ? `<label class="check"><input type="checkbox" name="notify" value="1" checked> Email the client about this update</label>` : '<p class="meta">No client email on file — update them on WhatsApp.</p>'}
+      ${reminderInfo}
       <div class="actions"><button type="submit">Update status</button></div>
+    </form>`;
+
+  const followUpHtml = `
+    ${c.follow_up_at ? `<p><strong>${fmtDay(c.follow_up_at)}</strong>${c.follow_up_note ? ` — ${esc(c.follow_up_note)}` : ''}</p>` : '<p class="meta">None set. It shows in your 8am summary from a week before it is due.</p>'}
+    <form method="post" action="/admin/case/${esc(c.id)}/followup">
+      <label for="fu-date">${c.follow_up_at ? 'Change date' : 'Remind me on'}</label>
+      <input id="fu-date" name="date" type="date" value="${c.follow_up_at ? esc(c.follow_up_at.slice(0, 10)) : ''}">
+      <label for="fu-note">What to do</label>
+      <input id="fu-note" name="note" maxlength="500" placeholder="e.g. Offer annual returns filing" value="${esc(c.follow_up_note || '')}">
+      <div class="actions"><button type="submit" class="secondary">Save follow-up</button>${c.follow_up_at ? '<button type="submit" name="clear" value="1" class="secondary" formnovalidate>Clear</button>' : ''}</div>
     </form>`;
 
   const docsHtml = docs.length ? docs.map(d => `
@@ -223,8 +242,10 @@ export function casePage({ c, docs, events, flash }) {
       ? `Status: ${esc(statusInfo(c.kind, e.from_status).label)} → <strong>${esc(statusInfo(c.kind, e.to_status).label)}</strong>`
       : e.event === 'created' ? 'Case created from the website'
       : e.event === 'client_notified' ? 'Client emailed'
-      : e.event === 'note' ? 'Note' : esc(e.event);
-    return `<li><div>${what}</div>${e.note && e.event !== 'created' ? `<div style="white-space:pre-line">${esc(e.note)}</div>` : ''}<div class="meta">${fmtDate(e.created_at)}</div></li>`;
+      : e.event === 'note' ? 'Note'
+      : e.event === 'reminder_sent' ? 'Automatic reminder sent to client'
+      : e.event === 'follow_up' ? 'Follow-up' : esc(e.event);
+    return `<li><div>${what}</div>${e.note && !['created', 'reminder_sent'].includes(e.event) ? `<div style="white-space:pre-line">${esc(e.note)}</div>` : ''}<div class="meta">${fmtDate(e.created_at)}</div></li>`;
   }).join('');
 
   const retention = c.legal_hold
@@ -241,6 +262,7 @@ export function casePage({ c, docs, events, flash }) {
       ${contact}
     </div>
     <div class="card"><h2>Update status</h2>${statusForm}</div>
+    <div class="card"><h2>Follow-up reminder</h2>${followUpHtml}</div>
     <div class="card"><h2>Documents</h2>${docsHtml}</div>
     <div class="card"><h2>Client details</h2>
       <dl>

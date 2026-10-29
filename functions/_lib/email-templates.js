@@ -87,6 +87,7 @@ export function kycClientEmail({ fullName, services, attachedCount = 0, skippedF
       No payment is needed until then.
     </p>
     ${referenceHtml(reference)}
+    ${trackLinkHtml(reference)}
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:20px;">Services Requested</div>
     ${serviceListHtml(services)}
     ${docLine}
@@ -168,8 +169,63 @@ export function caseStatusEmail({ fullName, reference, statusLabel, statusMessag
     </div>
     ${statusMessage ? `<p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${escapeHtml(statusMessage)}</p>` : ''}
     ${note ? `<div style="margin:14px 0;padding:12px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13.5px;line-height:1.7;color:${TEXT};white-space:pre-line;">${escapeHtml(note)}</div>` : ''}
+    ${trackLinkHtml(reference)}
     <div style="margin-top:22px;padding-top:18px;border-top:1px solid ${BORDER};font-size:13px;color:${TEXT};">
       Questions? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>, quoting your reference number.
     </div>`;
   return shell(inner, { preheader: `${reference}: ${statusLabel}` });
+}
+
+function trackLinkHtml(reference) {
+  if (!reference) return '';
+  return `<div style="font-size:13px;color:${TEXT};margin:14px 0;">Check the status of your request any time at
+    <a href="https://awalglobal.com.ng/track" style="color:${NAVY};font-weight:600;">awalglobal.com.ng/track</a> with your reference number and email address.</div>`;
+}
+
+// ── Automatic reminder to a client we are waiting on ────────────
+export function caseReminderEmail({ fullName, reference, status, reminderNumber }) {
+  const waitingForDocs = status === 'awaiting_documents';
+  const lead = waitingForDocs
+    ? 'We are still waiting for some documents or information from you before we can continue with your request.'
+    : 'We sent you a quote for your request and wanted to check whether you have any questions about it.';
+  const ask = waitingForDocs
+    ? 'Please send them on WhatsApp or reply to this email, and we will pick things up straight away.'
+    : 'When you are ready to go ahead, just reply to this email or message us on WhatsApp.';
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">${reminderNumber > 1 ? 'A quick follow-up' : 'Just checking in'}</h2>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(fullName || 'valued client')},</p>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${lead}</p>
+    <div style="background:${BG};border:1px solid ${BORDER};border-radius:8px;padding:12px 16px;margin:16px 0;font-size:13px;color:${TEXT};">
+      Reference: <strong style="color:${NAVY};">${escapeHtml(reference)}</strong>
+    </div>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${ask}</p>
+    <div style="margin-top:20px;"><a href="${WHATSAPP_LINK}?text=${encodeURIComponent(`Hello, about my request ${reference}`)}" style="display:inline-block;background:#25d366;color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Message us on WhatsApp</a></div>
+    <p style="font-size:12px;line-height:1.6;color:${MUTED};margin:18px 0 0;">If you have already replied or decided not to proceed, please ignore this message — or let us know and we will stop the reminders.</p>`;
+  return shell(inner, { preheader: waitingForDocs ? `We need a few more things for ${reference}` : `Any questions about your quote for ${reference}?` });
+}
+
+// ── Daily summary for you ───────────────────────────────────────
+function summarySection(title, rows, empty) {
+  if (!rows.length && !empty) return '';
+  const body = rows.length
+    ? rows.map(r => `<tr><td style="padding:8px 0;border-top:1px solid ${BORDER};font-size:13px;color:${TEXT};vertical-align:top;">
+        <a href="${escapeHtml(r.url)}" style="color:${NAVY};font-weight:700;text-decoration:none;">${escapeHtml(r.reference)}</a> · ${escapeHtml(r.name)}
+        <div style="color:${MUTED};font-size:12px;margin-top:2px;">${escapeHtml(r.detail)}</div></td></tr>`).join('')
+    : `<tr><td style="padding:6px 0;font-size:13px;color:${MUTED};">${escapeHtml(empty)}</td></tr>`;
+  return `<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin:20px 0 4px;">${escapeHtml(title)} (${rows.length})</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">${body}</table>`;
+}
+
+export function dailySummaryEmail({ dateLabel, counts, newCases, waiting, inProgress, followUps, remindersSent, retentionDue, dashboardUrl }) {
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 4px;">Good morning</h2>
+    <div style="font-size:13px;color:${MUTED};">${escapeHtml(dateLabel)} · in the last 24 hours: <strong>${counts.applications}</strong> new application${counts.applications === 1 ? '' : 's'}, <strong>${counts.enquiries}</strong> enquir${counts.enquiries === 1 ? 'y' : 'ies'}</div>
+    ${summarySection('Needs your reply', newCases)}
+    ${summarySection('Follow-ups due', followUps)}
+    ${summarySection('Waiting on the client', waiting)}
+    ${summarySection('In progress', inProgress)}
+    ${summarySection('Reminders sent to clients this morning', remindersSent)}
+    ${retentionDue ? `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:10px 14px;margin-top:20px;"><strong>${retentionDue}</strong> record${retentionDue === 1 ? ' has' : 's have'} passed the retention period and should be reviewed for deletion.</div>` : ''}
+    <div style="margin-top:24px;"><a href="${escapeHtml(dashboardUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Open dashboard</a></div>`;
+  return shell(inner, { preheader: `${newCases.length} need a reply · ${followUps.length} follow-ups due · ${waiting.length} waiting on clients` });
 }

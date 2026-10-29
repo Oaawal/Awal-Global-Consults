@@ -79,8 +79,8 @@ export async function recordSubmission(env, request, s) {
 
     statements.push(env.DB.prepare(
       `INSERT INTO cases (id, reference, client_id, kind, services, status, form_data, consent_accuracy, consent_processing,
-                          source_page, created_at, updated_at, retention_class, retain_until)
-       VALUES (?1, ?2, ?3, ?4, ?5, 'new', ?6, ?7, ?8, ?9, ?10, ?10, ?4, ?11)`
+                          source_page, created_at, updated_at, status_changed_at, retention_class, retain_until)
+       VALUES (?1, ?2, ?3, ?4, ?5, 'new', ?6, ?7, ?8, ?9, ?10, ?10, ?10, ?4, ?11)`
     ).bind(
       caseId, reference, clientId, kind, services, JSON.stringify(s.fields || {}),
       s.consentAccuracy ? 1 : 0, s.consentProcessing ? 1 : 0, sourcePage, now,
