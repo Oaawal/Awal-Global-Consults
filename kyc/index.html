@@ -230,6 +230,7 @@
 <!-- MAIN FORM -->
 <div id="form-wrapper">
 <form id="kyc-form" method="POST" enctype="multipart/form-data">
+<div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"><label>Leave this field empty<input type="text" name="company_website" tabindex="-1" autocomplete="off"></label></div>
   <input type="hidden" name="Subject" id="h-subject" value="New Client Intake Submission">
   <input type="hidden" name="Services_Requested" id="h-services" value="">
 
@@ -653,6 +654,7 @@ function showToast(msg) {
 }
 
 // ═══ SUBMIT ═══
+function escapeHtml(t){return String(t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 async function submitKYC() {
   if (!document.getElementById('dec1').checked || !document.getElementById('dec2').checked) {
     document.getElementById('decl-error').style.display = 'block';
@@ -681,7 +683,7 @@ async function submitKYC() {
     const attachedCount = result.attachedCount || 0;
     const skippedFiles = result.skippedFiles || [];
     if (skippedFiles.length > 0) {
-      docsStatus.innerHTML = `<p style="color:#a05a00;background:#fff4e5;border-radius:8px;padding:10px 14px;">${attachedCount > 0 ? `We received ${attachedCount} document${attachedCount===1?'':'s'}, but ` : 'We could not receive '}<strong>${skippedFiles.length === 1 ? 'this file' : 'these files'} came through too large: ${skippedFiles.join(', ')}</strong>. Please send ${skippedFiles.length===1?'it':'them'} directly on WhatsApp: +234 703 833 6596.</p>`;
+      docsStatus.innerHTML = `<p style="color:#a05a00;background:#fff4e5;border-radius:8px;padding:10px 14px;">${attachedCount > 0 ? `We received ${attachedCount} document${attachedCount===1?'':'s'}, but ` : 'We could not receive '}<strong>${skippedFiles.length === 1 ? 'this file' : 'these files'} could not be received (unsupported type or too large): ${skippedFiles.map(escapeHtml).join(', ')}</strong>. Please send ${skippedFiles.length===1?'it':'them'} directly on WhatsApp: +234 703 833 6596.</p>`;
     } else if (attachedCount > 0) {
       docsStatus.innerHTML = `<p>✓ We received <strong>${attachedCount} document${attachedCount===1?'':'s'}</strong> with your request.</p>`;
     } else {

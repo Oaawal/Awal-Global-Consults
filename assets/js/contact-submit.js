@@ -7,6 +7,15 @@
   const form = document.querySelector('form.form-grid');
   if (!form) return;
 
+  // Honeypot field for bots (hidden from people and screen readers)
+  if (!form.querySelector('[name="company_website"]')) {
+    const trap = document.createElement('div');
+    trap.setAttribute('aria-hidden', 'true');
+    trap.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;';
+    trap.innerHTML = '<label>Leave this field empty<input type="text" name="company_website" tabindex="-1" autocomplete="off"></label>';
+    form.appendChild(trap);
+  }
+
   let msg = document.getElementById('agc-form-msg');
   if (!msg) {
     msg = document.createElement('div');

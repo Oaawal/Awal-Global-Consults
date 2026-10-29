@@ -1,7 +1,16 @@
 import { sendBrevoEmail } from './_lib/brevo.js';
 import { contactAdminEmail, contactClientEmail } from './_lib/email-templates.js';
 
-const HIDDEN_FIELDS = new Set(['Service']);
+const HIDDEN_FIELDS = new Set(['Service', 'company_website']);
+const MAX_FIELD_LENGTH = 3000;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function jsonResponse(body, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'content-type': 'application/json' }
+  });
+}
 
 function humanize(key) {
   return key.replace(/_/g, ' ');
@@ -21,11 +30,17 @@ export async function onRequestPost(context) {
   try {
     const formData = await request.formData();
 
+    // Honeypot: real visitors never see or fill this field; bots do.
+    if (String(formData.get('company_website') || '').trim()) {
+      return jsonResponse({ ok: true });
+    }
+
     const fields = {};
     for (const [key, value] of formData.entries()) {
       if (HIDDEN_FIELDS.has(key) || typeof value !== 'string') continue;
       if (!value.trim()) continue;
-      fields[key] = fields[key] ? `${fields[key]}, ${value}` : value;
+      const v = value.slice(0, MAX_FIELD_LENGTH);
+      fields[key] = fields[key] ? `${fields[key]}, ${v}`.slice(0, MAX_FIELD_LENGTH) : v;
     }
 
     const service = String(formData.get('Service') || '').trim();
@@ -34,10 +49,10 @@ export async function onRequestPost(context) {
     const phone = pick(fields, 'Phone Number', 'Phone_Number', 'Phone', 'Phone / WhatsApp Number');
 
     if (!fullName || !phone) {
-      return new Response(JSON.stringify({ error: 'Missing required contact details' }), {
-        status: 400,
-        headers: { 'content-type': 'application/json' }
-      });
+      return jsonResponse({ error: 'Missing required contact details' }, 400);
+    }
+    if (email && !EMAIL_RE.test(email.trim())) {
+      return jsonResponse({ error: 'Please enter a valid email address' }, 400);
     }
 
     const humanFields = {};
@@ -60,14 +75,9 @@ export async function onRequestPost(context) {
       });
     }
 
-    return new Response(JSON.stringify({ ok: true }), {
-      status: 200,
-      headers: { 'content-type': 'application/json' }
-    });
+    return jsonResponse({ ok: true });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message || 'Unknown error' }), {
-      status: 500,
-      headers: { 'content-type': 'application/json' }
-    });
+    console.error('submit-contact failed:', err && err.message);
+    return jsonResponse({ error: 'Submission failed. Please try again or contact us on WhatsApp.' }, 500);
   }
 }
