@@ -1,12 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js). Consent Mode: no analytics cookies until the visitor accepts (banner in assets/js/site.js) -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+    try { if (localStorage.getItem('agc_consent') === 'granted') gtag('consent', 'update', { analytics_storage: 'granted' }); } catch (e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-JL7KZYEE7Q');
+  </script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL7KZYEE7Q"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-JL7KZYEE7Q');</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Start Your Application | Awal Global Consults</title>
   <meta name="robots" content="noindex, nofollow"/>
+  <meta name="description" content="Start your CAC registration, trademark, compliance or immigration application with Awal Global Consults online. Choose your services, upload documents, and get an itemized quote within 1 working day.">
+  <link rel="canonical" href="https://awalglobal.com.ng/kyc/">
+  <meta property="og:title" content="Start Your Application | Awal Global Consults">
+  <meta property="og:description" content="Apply online for CAC registration, trademark, compliance and immigration support in Nigeria.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://awalglobal.com.ng/kyc/">
+  <meta property="og:site_name" content="Awal Global Consults">
+  <meta property="og:image" content="https://awalglobal.com.ng/assets/images/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://awalglobal.com.ng/assets/images/og-image.jpg">
   <link rel="icon" type="image/png" href="../assets/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -690,6 +708,10 @@ async function submitKYC() {
       docsStatus.innerHTML = '';
     }
 
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'generate_lead', { form_name: 'application', service: selectedServices.slice(0, 3).join(', '), documents: attachedCount });
+    }
+
     document.getElementById('form-wrapper').style.display = 'none';
     document.getElementById('success-screen').style.display = 'block';
     window.scrollTo({top:0,behavior:'smooth'});
@@ -713,5 +735,6 @@ async function submitKYC() {
     document.getElementById('backToTop').classList.toggle('show', (document.documentElement.scrollTop || document.body.scrollTop) > 500);
   });
 </script>
+<script src="../assets/js/site.js" defer></script>
 </body>
 </html>

@@ -1,7 +1,8 @@
+import { verifyTurnstile } from './_lib/turnstile.js';
 import { sendBrevoEmail } from './_lib/brevo.js';
 import { contactAdminEmail, contactClientEmail } from './_lib/email-templates.js';
 
-const HIDDEN_FIELDS = new Set(['Service', 'company_website']);
+const HIDDEN_FIELDS = new Set(['Service', 'company_website', 'cf-turnstile-response']);
 const MAX_FIELD_LENGTH = 3000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -33,6 +34,11 @@ export async function onRequestPost(context) {
     // Honeypot: real visitors never see or fill this field; bots do.
     if (String(formData.get('company_website') || '').trim()) {
       return jsonResponse({ ok: true });
+    }
+
+    // Bot check (only active once TURNSTILE_SECRET_KEY is configured)
+    if (!(await verifyTurnstile(env, formData, request))) {
+      return jsonResponse({ error: 'Security check failed. Please refresh the page and try again.' }, 400);
     }
 
     const fields = {};

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL7KZYEE7Q"></script>
+  <!-- Google tag (gtag.js). Consent Mode: no analytics cookies until the visitor accepts (banner in assets/js/site.js) -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+    try { if (localStorage.getItem('agc_consent') === 'granted') gtag('consent', 'update', { analytics_storage: 'granted' }); } catch (e) {}
     gtag('js', new Date());
     gtag('config', 'G-JL7KZYEE7Q');
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL7KZYEE7Q"></script>
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -110,7 +112,7 @@
       </nav>
       <span class="eyebrow"><span class="seal-mark"></span>Legal</span>
       <h1>Privacy Policy</h1>
-      <p class="blog-meta">Last updated: 21 September 2026</p>
+      <p class="blog-meta">Last updated: 29 October 2026</p>
     </div>
   </section>
 
@@ -195,7 +197,8 @@
 <p>If you'd like us to delete information we hold about you sooner, contact us and we'll act on that request — except where we're legally required to keep it for the period stated above (for example, the 5-year AML retention window). See "Your rights" below.</p>
 
 <h2 id="cookies-and-analytics">Cookies and analytics</h2>
-<p>Our website uses Google Analytics (GA4) to understand general visitor behaviour — such as which pages are viewed and how visitors reach the site. This data is aggregated and does not identify you personally. Google Analytics uses cookies to do this; you can disable cookies in your browser settings at any time, though some site features may not function as smoothly without them.</p>
+<p>Our website uses Google Analytics (GA4) to understand general visitor behaviour — such as which pages are viewed, how visitors reach the site, and whether they go on to contact us (for example, by tapping a WhatsApp button or submitting a form). This data is aggregated and does not identify you personally.</p>
+<p>We only set Google Analytics cookies if you accept them in the cookie banner. If you decline, or have not chosen yet, Google Analytics runs in a restricted "consent mode" that sets no analytics cookies. Your choice is saved in your browser so we don't ask again on every page. You can change it at any time: <a href="#cookies-and-analytics" data-cookie-settings>open cookie settings</a>.</p>
 
 <h2 id="your-rights">Your rights</h2>
 <p>Under the NDPA, you have the right to:</p>
@@ -291,7 +294,7 @@
       <div class="footer-bottom">
         <p>© 2026 Awal Global Consults Limited. All rights reserved.</p>
         <p>RC-9282103 | Lagos, Nigeria | CAC Registered Business</p>
-        <p class="footer-legal-links"><a href="privacy-policy">Privacy Policy</a> &middot; <a href="terms-of-service">Terms of Service</a></p>
+        <p class="footer-legal-links"><a href="privacy-policy">Privacy Policy</a> &middot; <a href="terms-of-service">Terms of Service</a> &middot; <a href="privacy-policy#cookies-and-analytics" data-cookie-settings>Cookie Settings</a></p>
       </div>
     </div>
   </footer>
@@ -323,5 +326,6 @@
 
 <script src="assets/js/contact-submit.js" defer></script>
 
+<script src="assets/js/site.js" defer></script>
 </body>
 </html>

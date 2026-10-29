@@ -38,7 +38,17 @@
       const fd = new FormData(form);
       const res = await fetch('/submit-contact', { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Request failed');
-      window.location.href = '/thank-you.html';
+      // Record the lead in Google Analytics, then move on (max 800ms wait)
+      const service = String(fd.get('Service') || '').trim();
+      let done = false;
+      const go = function () { if (!done) { done = true; window.location.href = '/thank-you.html'; } };
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'generate_lead', {
+          form_name: 'contact', service: service || 'general', page_path: location.pathname,
+          transport_type: 'beacon', event_callback: go
+        });
+      }
+      setTimeout(go, 800);
     } catch (err) {
       msg.textContent = 'Something went wrong sending your message. Please try again, or reach us directly on WhatsApp.';
       msg.style.cssText = 'display:block;color:#c0392b;background:#fdf0f0;border:1px solid #e8c0c0;border-radius:6px;padding:10px 14px;margin:12px 0;font-size:13px;';

@@ -1,0 +1,14 @@
+# Cloudflare Pages response headers — https://developers.cloudflare.com/pages/configuration/headers/
+/*
+  Strict-Transport-Security: max-age=31536000
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Content-Security-Policy: frame-ancestors 'self'; base-uri 'self'; object-src 'none'
+
+/assets/images/*
+  Cache-Control: public, max-age=2592000
+
+/kyc/*
+  X-Robots-Tag: noindex

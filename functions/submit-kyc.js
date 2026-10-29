@@ -1,3 +1,4 @@
+import { verifyTurnstile } from './_lib/turnstile.js';
 import { sendBrevoEmail, fileToBase64 } from './_lib/brevo.js';
 import { kycAdminEmail, kycClientEmail } from './_lib/email-templates.js';
 
@@ -50,11 +51,16 @@ export async function onRequestPost(context) {
       return jsonResponse({ ok: true, attachedCount: 0, skippedFiles: [] });
     }
 
+    // Bot check (only active once TURNSTILE_SECRET_KEY is configured)
+    if (!(await verifyTurnstile(env, formData, request))) {
+      return jsonResponse({ error: 'Security check failed. Please refresh the page and try again.' }, 400);
+    }
+
     // Group text fields (handles repeated keys like multi-checked checkboxes)
     const grouped = {};
     for (const [key, value] of formData.entries()) {
       if (MULTI_FILE_FIELDS.includes(key) || HIDDEN_FIELDS.has(key)) continue;
-      if (key === 'company_website') continue;
+      if (key === 'company_website' || key === 'cf-turnstile-response') continue;
       if (typeof value !== 'string') continue; // skip file entries
       if (!(key in grouped)) grouped[key] = [];
       grouped[key].push(value);

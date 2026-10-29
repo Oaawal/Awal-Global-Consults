@@ -518,8 +518,10 @@ button { font-family: inherit; }
 .stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.55); margin-top: 2px; }
 
 .hero-image-wrap { position: relative; width: 100%; max-width: 360px; margin-inline: auto; }
+.hero-image-wrap picture, .founder-grid picture { display: block; }
 .founder-image {
   width: 100%;
+  height: auto;
   border-radius: var(--radius-lg);
   object-fit: cover;
   object-position: top;
