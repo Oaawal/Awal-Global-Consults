@@ -436,11 +436,11 @@
       <div class="sec-label">Declaration</div>
 
       <div class="chk-field" id="fw-dec1">
-        <input type="checkbox" id="dec1"/>
+        <input type="checkbox" id="dec1" name="Declaration_Accurate" value="Yes"/>
         <label for="dec1">I confirm that the information I've provided is accurate to the best of my knowledge.</label>
       </div>
       <div class="chk-field" id="fw-dec2">
-        <input type="checkbox" id="dec2"/>
+        <input type="checkbox" id="dec2" name="Declaration_Consent" value="Yes"/>
         <label for="dec2">I consent to Awal Global Consults Limited processing this information and any documents solely for the services I have requested.</label>
       </div>
 
@@ -459,6 +459,11 @@
   <div class="success-icon">✓</div>
   <h2>Request Received</h2>
   <p>Thank you, <strong id="s-name">—</strong>. Your intake has been submitted to Awal Global Consults Limited.</p>
+  <div class="ref-box" id="s-ref-box" style="display:none;">
+    <strong>Your reference number:</strong>
+    <span id="s-ref" style="display:block;margin-top:4px;font-size:16px;font-weight:700;color:var(--navy);letter-spacing:0.5px;"></span>
+    <span style="display:block;margin-top:4px;color:var(--muted);">Please quote it when you contact us about this application.</span>
+  </div>
   <div class="ref-box">
     <strong>Services requested:</strong>
     <span id="s-services" style="display:block;margin-top:4px;color:var(--muted);"></span>
@@ -696,6 +701,10 @@ async function submitKYC() {
 
     document.getElementById('s-name').textContent = name;
     document.getElementById('s-services').textContent = selectedServices.join(', ');
+    if (result.reference) {
+      document.getElementById('s-ref').textContent = result.reference;
+      document.getElementById('s-ref-box').style.display = 'block';
+    }
 
     const docsStatus = document.getElementById('s-docs-status');
     const attachedCount = result.attachedCount || 0;

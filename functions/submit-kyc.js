@@ -1,5 +1,6 @@
 import { verifyTurnstile } from './_lib/turnstile.js';
-import { sendBrevoEmail, fileToBase64 } from './_lib/brevo.js';
+import { sendBrevoEmail, bytesToBase64 } from './_lib/brevo.js';
+import { recordsEnabled, recordSubmission } from './_lib/records.js';
 import { kycAdminEmail, kycClientEmail } from './_lib/email-templates.js';
 
 // "Documents" supports multiple files (the new lean intake form uses one
@@ -86,6 +87,7 @@ export async function onRequestPost(context) {
     // Build attachments from every uploaded file, capped so the email stays within Brevo's size limits
     let runningBytes = 0;
     const attachments = [];
+    const storedFiles = [];
     const skippedFiles = [];
     for (const fieldName of MULTI_FILE_FIELDS) {
       const files = formData.getAll(fieldName)
@@ -98,10 +100,10 @@ export async function onRequestPost(context) {
           skippedFiles.push(name);
           continue;
         }
-        const b64 = await fileToBase64(file, MAX_PER_FILE_BYTES);
-        if (!b64) { skippedFiles.push(name); continue; }
+        const bytes = new Uint8Array(await file.arrayBuffer());
         runningBytes += file.size;
-        attachments.push({ name, content: b64 });
+        attachments.push({ name, content: bytesToBase64(bytes) });
+        storedFiles.push({ name, type: file.type, bytes });
       }
     }
 
@@ -111,24 +113,49 @@ export async function onRequestPost(context) {
 
     const subjectServices = services.slice(0, 3).join(', ') || 'New Submission';
 
+    // Save the client, case and documents to the records database. If that fails,
+    // the submission still goes through by email and the admin email says so.
+    let reference = null;
+    let recordStatus = 'off';
+    if (recordsEnabled(env)) {
+      try {
+        ({ reference } = await recordSubmission(env, request, {
+          kind: 'application',
+          fullName,
+          email,
+          phone: String(formData.get('Phone') || formData.get('Phone_Number') || '').slice(0, 40),
+          services,
+          fields,
+          consentAccuracy: formData.get('Declaration_Accurate') === 'Yes',
+          consentProcessing: formData.get('Declaration_Consent') === 'Yes',
+          files: storedFiles
+        }));
+        recordStatus = 'saved';
+      } catch (err) {
+        console.error('submit-kyc: saving record failed:', err && err.message);
+        recordStatus = 'failed';
+      }
+    }
+
     await sendBrevoEmail(env, {
       to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
-      subject: `Client Intake Received — ${subjectServices}`,
-      html: kycAdminEmail({ fields, services, attachmentsNote }),
+      subject: `${reference ? `[${reference}] ` : ''}Client Intake Received — ${subjectServices}`,
+      html: kycAdminEmail({ fields, services, attachmentsNote, reference, recordStatus }),
       replyTo: { email, name: fullName },
       attachments
     });
 
     await sendBrevoEmail(env, {
       to: { email, name: fullName },
-      subject: `We've Received Your Request — ${subjectServices}`,
-      html: kycClientEmail({ fullName, services, attachedCount: attachments.length, skippedFiles })
+      subject: `We've Received Your Request — ${subjectServices}${reference ? ` (Ref ${reference})` : ''}`,
+      html: kycClientEmail({ fullName, services, attachedCount: attachments.length, skippedFiles, reference })
     });
 
     return jsonResponse({
       ok: true,
       attachedCount: attachments.length,
-      skippedFiles
+      skippedFiles,
+      reference
     });
   } catch (err) {
     // Log the real reason server-side only; never expose internals to visitors.

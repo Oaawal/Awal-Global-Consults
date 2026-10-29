@@ -1,6 +1,7 @@
 import { verifyTurnstile } from './_lib/turnstile.js';
 import { sendBrevoEmail } from './_lib/brevo.js';
 import { contactAdminEmail, contactClientEmail } from './_lib/email-templates.js';
+import { recordsEnabled, recordSubmission } from './_lib/records.js';
 
 const HIDDEN_FIELDS = new Set(['Service', 'company_website', 'cf-turnstile-response']);
 const MAX_FIELD_LENGTH = 3000;
@@ -66,10 +67,30 @@ export async function onRequestPost(context) {
       humanFields[humanize(key)] = value;
     }
 
+    // Save the enquiry to the records database; the email still goes out if that fails
+    let reference = null;
+    let recordStatus = 'off';
+    if (recordsEnabled(env)) {
+      try {
+        ({ reference } = await recordSubmission(env, request, {
+          kind: 'enquiry',
+          fullName: fullName.slice(0, 120),
+          email: email ? email.trim().slice(0, 254) : null,
+          phone: phone.slice(0, 40),
+          services: service ? [service] : [],
+          fields: humanFields
+        }));
+        recordStatus = 'saved';
+      } catch (err) {
+        console.error('submit-contact: saving record failed:', err && err.message);
+        recordStatus = 'failed';
+      }
+    }
+
     await sendBrevoEmail(env, {
       to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
-      subject: `New Enquiry — ${service || 'Website Contact Form'}`,
-      html: contactAdminEmail({ fields: humanFields, service }),
+      subject: `${reference ? `[${reference}] ` : ''}New Enquiry — ${service || 'Website Contact Form'}`,
+      html: contactAdminEmail({ fields: humanFields, service, reference, recordStatus }),
       replyTo: email ? { email, name: fullName } : undefined
     });
 
@@ -77,7 +98,7 @@ export async function onRequestPost(context) {
       await sendBrevoEmail(env, {
         to: { email, name: fullName },
         subject: 'We\u2019ve Received Your Enquiry — Awal Global Consults',
-        html: contactClientEmail({ fullName, service })
+        html: contactClientEmail({ fullName, service, reference })
       });
     }
 

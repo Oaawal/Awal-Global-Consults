@@ -59,9 +59,12 @@ export async function sendBrevoEmail(env, { to, subject, html, replyTo, attachme
 export async function fileToBase64(file, maxBytes) {
   if (!file || typeof file.arrayBuffer !== 'function' || file.size === 0) return null;
   if (maxBytes && file.size > maxBytes) return null;
-  const buf = await file.arrayBuffer();
+  return bytesToBase64(new Uint8Array(await file.arrayBuffer()));
+}
+
+/** Base64-encode raw bytes (for Brevo attachments). */
+export function bytesToBase64(bytes) {
   let binary = '';
-  const bytes = new Uint8Array(buf);
   const chunkSize = 0x8000;
   for (let i = 0; i < bytes.length; i += chunkSize) {
     binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));

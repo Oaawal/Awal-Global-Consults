@@ -46,6 +46,25 @@ function shell(innerHtml, { preheader = '' } = {}) {
 </html>`;
 }
 
+function referenceHtml(reference) {
+  if (!reference) return '';
+  return `<div style="background:${BG};border:1px solid ${BORDER};border-radius:8px;padding:12px 16px;margin:16px 0;font-size:13px;color:${TEXT};">
+    Your reference number: <strong style="color:${NAVY};font-size:15px;letter-spacing:0.5px;">${escapeHtml(reference)}</strong><br>
+    <span style="font-size:12px;color:${MUTED};">Please quote it whenever you contact us about this request.</span>
+  </div>`;
+}
+
+/** Admin-only line saying whether the submission was saved to the records database. */
+function recordStatusHtml(reference, recordStatus) {
+  if (recordStatus === 'saved') {
+    return `<div style="font-size:12.5px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:6px;padding:8px 12px;margin-bottom:12px;">Saved to client records as <strong>${escapeHtml(reference)}</strong>.</div>`;
+  }
+  if (recordStatus === 'failed') {
+    return `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:8px 12px;margin-bottom:12px;"><strong>Not saved to client records</strong> — the records database could not be reached. Keep this email (and its attachments) as the record.</div>`;
+  }
+  return '';
+}
+
 function serviceListHtml(services) {
   if (!services || services.length === 0) return '';
   return `<div style="background:${BG};border:1px solid ${BORDER};border-radius:8px;padding:14px 16px;margin:16px 0;">
@@ -54,7 +73,7 @@ function serviceListHtml(services) {
 }
 
 // ── Application: client confirmation email ──────────────────────
-export function kycClientEmail({ fullName, services, attachedCount = 0, skippedFiles = [] }) {
+export function kycClientEmail({ fullName, services, attachedCount = 0, skippedFiles = [], reference = null }) {
   const docLine = skippedFiles.length > 0
     ? `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:10px 14px;margin:14px 0;">${attachedCount > 0 ? `We received ${attachedCount} document${attachedCount === 1 ? '' : 's'}, but ` : 'We could not receive '}the following ${skippedFiles.length === 1 ? 'file was' : 'files were'} not received (unsupported file type or too large): <strong>${escapeHtml(skippedFiles.join(', '))}</strong>. Please resend ${skippedFiles.length === 1 ? 'it' : 'them'} directly on <a href="${WHATSAPP_LINK}" style="color:#a05a00;font-weight:600;">WhatsApp</a>.</div>`
     : (attachedCount > 0
@@ -67,6 +86,7 @@ export function kycClientEmail({ fullName, services, attachedCount = 0, skippedF
       <strong>1 working day</strong> with a clear, itemized quote and confirmation of any documents still needed.
       No payment is needed until then.
     </p>
+    ${referenceHtml(reference)}
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:20px;">Services Requested</div>
     ${serviceListHtml(services)}
     ${docLine}
@@ -78,15 +98,16 @@ export function kycClientEmail({ fullName, services, attachedCount = 0, skippedF
 }
 
 // ── Application: admin notification email ───────────────────────
-export function kycAdminEmail({ fields, services, attachmentsNote }) {
+export function kycAdminEmail({ fields, services, attachmentsNote, reference = null, recordStatus = 'off' }) {
   const rows = Object.entries(fields)
     .filter(([, v]) => v !== '' && v !== undefined && v !== null)
     .map(([k, v]) => `<tr><td style="padding:6px 10px;border-bottom:1px solid ${BORDER};font-size:12px;color:${MUTED};white-space:nowrap;vertical-align:top;">${escapeHtml(k)}</td><td style="padding:6px 10px;border-bottom:1px solid ${BORDER};font-size:12.5px;color:${TEXT};">${escapeHtml(v)}</td></tr>`)
     .join('');
 
   const inner = `
-    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 6px;">New Client Intake</h2>
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 6px;">New Client Intake${reference ? ` — ${escapeHtml(reference)}` : ''}</h2>
     <div style="font-size:12.5px;color:${MUTED};margin-bottom:14px;">Remember to send a quote within 1 working day.</div>
+    ${recordStatusHtml(reference, recordStatus)}
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:10px;">Services Requested</div>
     ${serviceListHtml(services)}
     ${attachmentsNote ? `<div style="font-size:12px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:8px 12px;margin-bottom:12px;">${escapeHtml(attachmentsNote)}</div>` : ''}
@@ -96,13 +117,14 @@ export function kycAdminEmail({ fields, services, attachmentsNote }) {
 }
 
 // ── Contact form: client acknowledgement email ──────────────────
-export function contactClientEmail({ fullName, service }) {
+export function contactClientEmail({ fullName, service, reference = null }) {
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Thank you, ${escapeHtml(fullName || 'there')}</h2>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">
       We've received your enquiry${service ? ` about <strong>${escapeHtml(service)}</strong>` : ''}. A member of our team will
       review it and get back to you shortly.
     </p>
+    ${referenceHtml(reference)}
     <div style="margin-top:20px;padding-top:18px;border-top:1px solid ${BORDER};font-size:13px;color:${TEXT};">
       Need a faster response? Chat with us directly on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>.
     </div>`;
@@ -110,7 +132,7 @@ export function contactClientEmail({ fullName, service }) {
 }
 
 // ── Contact form: admin notification email ──────────────────────
-export function contactAdminEmail({ fields, service }) {
+export function contactAdminEmail({ fields, service, reference = null, recordStatus = 'off' }) {
   const rows = Object.entries(fields)
     .filter(([, v]) => v !== '' && v !== undefined && v !== null)
     .map(([k, v]) => `<tr><td style="padding:6px 10px;border-bottom:1px solid ${BORDER};font-size:12px;color:${MUTED};white-space:nowrap;vertical-align:top;">${escapeHtml(k)}</td><td style="padding:6px 10px;border-bottom:1px solid ${BORDER};font-size:12.5px;color:${TEXT};">${escapeHtml(v)}</td></tr>`)
@@ -118,6 +140,7 @@ export function contactAdminEmail({ fields, service }) {
 
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 6px;">New Enquiry${service ? ` — ${escapeHtml(service)}` : ''}</h2>
+    ${recordStatusHtml(reference, recordStatus)}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:10px;">${rows}</table>`;
   return shell(inner, { preheader: `New website enquiry${service ? ` — ${service}` : ''}.` });
 }
