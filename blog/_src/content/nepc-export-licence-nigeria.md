@@ -2,12 +2,11 @@
 title: "Export Licence in Nigeria: NEPC Registration Explained"
 slug: nepc-export-licence-nigeria
 date: 2026-10-31
-draft: true
 topic: licences-and-permits
 category: export-licensing
 description: What the NEPC exporter's certificate is, why only companies can get it, the documents and steps on the NEPC e-registration portal, validity and renewal, and what else you need to export.
 excerpt: Before you can export from Nigeria through the formal system, you need an NEPC exporter's certificate — and only registered companies qualify. Here's what it takes and how long it lasts.
-cta_text: Awal Global Consults handles NEPC export registration and other licences — and if you're still a business name, we register your company first.
+cta_text: Awal Global Consults handles NEPC export registration from portal assistance to full export-readiness support — and if you're still a business name, we register your company first.
 whatsapp_topic: NEPC export licence
 ---
 
@@ -23,7 +22,7 @@ The NEPC certificate identifies you as a registered exporter. In practice it is 
 
 ## What you'll need
 
-- **Your company's CAC registration documents** (certificate of incorporation and particulars of directors and shareholders).
+- **Your company's CAC registration documents** — certificate of incorporation, particulars of directors and shareholders, Memorandum and Articles of Association, and a board resolution authorising the application.
 - **The company's tax identification number (TIN).**
 - **Company details** — address, directors, contact person, and the products you intend to export.
 - Any other documents requested on the NEPC portal at the time you apply.
@@ -34,6 +33,22 @@ The NEPC certificate identifies you as a registered exporter. In practice it is 
 2. **Complete the application** and upload the documents.
 3. **Pay the registration fee.** At the time of writing, NEPC lists ₦13,500 for a new certificate; check the portal for the current fee.
 4. **Receive the certificate.** NEPC states that certificates are issued within 24 hours once payment is confirmed and the documents are in order. Delays usually come from unconfirmed payments, incomplete information or documents that don't match.
+
+## How we can help
+
+You can apply on the NEPC portal yourself. Most rejections and delays come from documents that don't match what NEPC expects, or from applications stuck in portal lags and queries. Our service packages cover as much or as little as you need:
+
+| Package | Our service fee | What it covers |
+|---|---|---|
+| **Basic** — portal assistance | ₦15,000 – ₦25,000 | Creating your NEPC account, uploading your ready documents, and tracking the application |
+| **Standard** — full application support | ₦30,000 – ₦50,000 | Reviewing your documents, completing the forms, following up with NEPC, and printing your certificate |
+| **Comprehensive** — export readiness | ₦60,000 – ₦100,000+ | Everything in Standard, plus sorting out CAC issues, TIN and tax guidance, product sourcing advice, and full compliance support |
+
+Our service fee is separate from NEPC's own registration fee. Every quote is itemised before you pay.
+
+- **Document check:** we make sure your CAC certificate, Memorandum and Articles of Association and board resolution match NEPC's requirements, so the application isn't rejected.
+- **Speed and follow-up:** we deal with portal lags and queries, so you don't spend days stuck.
+- **Export advice:** guidance on product selection — for example hibiscus, ginger or sesame — and the compliance requirements that come with each product.
 
 ## Validity and renewal
 

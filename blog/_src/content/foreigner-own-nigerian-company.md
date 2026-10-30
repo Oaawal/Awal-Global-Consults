@@ -2,7 +2,6 @@
 title: "Can a Foreigner Own 100% of a Nigerian Company?"
 slug: foreigner-own-nigerian-company
 date: 2026-10-31
-draft: true
 topic: choosing-a-structure
 category: cac-registration
 description: Yes, foreigners can generally own all of a Nigerian company — but with a ₦100m minimum share capital, NIPC registration, and sector exceptions. Here's what applies and in what order.

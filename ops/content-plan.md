@@ -40,7 +40,7 @@ High buyer intent, low risk of stale figures, and they open the new
 ### Choosing a structure
 - [x] 1. **Can a civil servant register a business name in Nigeria?** — P1 ⚠ (Public Service Rules position; confirm current CAC practice)
 - [ ] 2. **Business name, partnership or limited company: how each is taxed under the Nigeria Tax Act 2025** — P1 ⚠ (small-company thresholds)
-- [ ] 3. **Can a foreigner own 100% of a Nigerian company?** — P1 ⚠ (NIPC registration, minimum share capital for foreign participation)
+- [x] 3. **Can a foreigner own 100% of a Nigerian company?** — P1 ⚠ (NIPC registration, minimum share capital for foreign participation)
 - [ ] 4. **Do I need a lawyer to register a company in Nigeria?** — P2
 
 ### Registering with CAC
@@ -54,7 +54,7 @@ High buyer intent, low risk of stale figures, and they open the new
 - [ ] 10. **How much share capital should a new Nigerian company register?** — P2 ⚠
 
 ### After registration
-- [ ] 11. **How to change your business name, address or partners after CAC registration** — P1
+- [x] 11. **How to change your business name, address or partners after CAC registration** — P1
 - [ ] 12. **Adding or removing a director or shareholder: the CAC process** — P1
 - [x] 13. **Can I convert my business name to a limited company?** — P1
 - [ ] 14. **Haven't filed annual returns for years? How to get your company back in good standing** — P1 ⚠ (penalty amounts)
@@ -62,18 +62,18 @@ High buyer intent, low risk of stale figures, and they open the new
 - [ ] 16. **Opening a corporate bank account in Nigeria: what banks will ask for** — P2
 
 ### NGOs and trustees
-- [ ] 17. **How to register an NGO, church or association in Nigeria (incorporated trustees)** — P1 ⚠ (current requirements and timelines)
+- [x] 17. **How to register an NGO, church or association in Nigeria (incorporated trustees)** — P1 ⚠ (current requirements and timelines)
 - [ ] 18. **Incorporated trustees vs company limited by guarantee: which suits your organisation?** — P2
 
 ### Licences and permits
-- [ ] 19. **Export licence in Nigeria: NEPC registration explained** — P1 ⚠ (we handle NEPC and other export licences)
+- [x] 19. **Export licence in Nigeria: NEPC registration explained** — P1 ⚠ (we handle NEPC and other export licences)
 - [ ] 20. **Which licences does a new Nigerian business actually need?** — P2
 
 ## Tax, compliance and data
 
 ### Tax and TIN
 - [ ] 21. **The small company tax exemption under the Nigeria Tax Act 2025: who qualifies** — P1 ⚠ (thresholds)
-- [ ] 22. **How to get a tax clearance certificate (TCC) in Nigeria** — P1 ⚠ (current NRS process; we handle tax registration and TCCs)
+- [x] 22. **How to get a tax clearance certificate (TCC) in Nigeria** — P1 ⚠ (current NRS process; we handle tax registration and TCCs)
 - [ ] 23. **Does a business that made no profit still need to file tax returns?** — P2
 - [ ] 24. **VAT registration for small businesses in Nigeria: when it applies** — P2 ⚠
 
@@ -109,12 +109,12 @@ High buyer intent, low risk of stale figures, and they open the new
 ## Nigerians abroad (new section — appears once its first guide is live)
 
 - [x] 36. **Can I register a business in Nigeria while living in the UK?** — P1 · abroad-uk
-- [ ] 37. **Registering a Nigerian company from the US: the remote process** — P1 · abroad-us
-- [ ] 38. **Registering a Nigerian business from Canada** — P1 · abroad-canada
+- [x] 37. **Registering a Nigerian company from the US: the remote process** — P1 · abroad-us
+- [x] 38. **Registering a Nigerian business from Canada** — P1 · abroad-canada
 - [x] 39. **Do I need a Nigerian address to register a business with CAC?** — P1 · abroad-all
 - [x] 40. **Signing CAC documents from abroad: e-signatures, notarisation and power of attorney** — P1 · abroad-all ⚠
 - [ ] 41. **Running a Nigerian business from abroad: who should be your local representative?** — P2 · abroad-all
-- [ ] 42. **Buying property in Nigeria from abroad: the legal documents to check first** — P1 · abroad-all (checks and preparation done by our team of professional lawyers)
+- [x] 42. **Buying property in Nigeria from abroad: the legal documents to check first** — P1 · abroad-all (checks and preparation done by our team of professional lawyers)
 
 ## Data and reference (new section — "free to cite", attracts links)
 
@@ -162,5 +162,18 @@ official CAC service times or fees — say so wherever they are quoted.
   property document checks and preparation (by our team of professional
   lawyers); tax registration and tax clearance certificates; passport
   applications, renewals and procurement; NIN services for people abroad.
+- **Business name → company (30 Oct 2026):** use the CAC **consent** route when
+  the client keeps the business name (CAC's system otherwise shows the name as
+  taken); the consent issues a name availability code used to register the
+  company. A new company without consent only when the client wants a new name.
+- **Business name change of name:** consent application first; its name
+  availability code is used on CAC's post-registration portal.
+- **Passport and NIN from abroad:** applicants must attend the embassy or an
+  approved centre in person for biometrics — say so in #32 and #33.
+- **NEPC service packages:** Basic (portal assistance) ₦15,000–₦25,000;
+  Standard (full application support) ₦30,000–₦50,000; Comprehensive (export
+  readiness) ₦60,000–₦100,000+. Separate from NEPC's own fee.
+- **NGOs** must register with SCUML. **Business name owners** get their TCC from
+  the State Internal Revenue Service.
 - **Bylines:** every guide carries "Reviewed by A.O. Abdullateef" — so every
   guide must be read by the owner before `draft: true` is removed.

@@ -2,7 +2,6 @@
 title: "How to Get a Tax Clearance Certificate (TCC) in Nigeria"
 slug: tax-clearance-certificate-nigeria
 date: 2026-10-31
-draft: true
 topic: tax-and-tin
 category: tax-compliance
 description: What a tax clearance certificate is, who issues it to companies and to individuals, what you need to have filed first, how to apply now that NRS has moved to Rev360, and the common reasons applications are held up.

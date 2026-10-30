@@ -2,7 +2,6 @@
 title: "Changing Your Business Name, Address or Partners After CAC Registration"
 slug: change-business-name-address-partners-cac
 date: 2026-10-31
-draft: true
 topic: after-registration
 category: cac-registration
 description: Which changes must be filed with CAC after registration — name, address, partners, directors, shareholders, share capital and business activity — how each is done for business names and companies, and why filing on time matters.
@@ -22,7 +21,7 @@ Keeping it current isn't just paperwork. Banks, regulators, tenders and partners
 | New business address | Notice of change of address |
 | Adding or removing a partner (proprietor) | Change of proprietors, with the incoming partner's details and ID |
 | Change in the nature of the business | Change of business activity |
-| Changing the name itself | Generally a new registration — a business name's name is its identity |
+| Changing the name itself | A consent application first; the **name availability code** it produces is then used to file the change of name on CAC's post-registration portal |
 | Closing the business | Notice of cessation |
 
 ## Changes for limited companies
@@ -56,7 +55,7 @@ If the change you're planning is bigger — bringing in investors, limiting liab
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can I change my business name's name without re-registering?</p>
-<p class="blog-faq-a">A business name's registered name is its identity, so a new name is generally handled as a new registration. Companies, by contrast, can change their name by special resolution and keep the same RC number.</p>
+<p class="blog-faq-a">Yes. You apply for consent for the new name, and CAC issues a name availability code that is used to file the change of name through its post-registration portal. Companies change their name by special resolution and keep the same RC number.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Do I have to file a change before my annual return?</p>

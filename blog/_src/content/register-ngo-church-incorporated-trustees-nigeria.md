@@ -2,7 +2,6 @@
 title: "How to Register an NGO, Church or Association in Nigeria (Incorporated Trustees)"
 slug: register-ngo-church-incorporated-trustees-nigeria
 date: 2026-10-31
-draft: true
 topic: ngos-and-trustees
 category: cac-registration
 description: How NGOs, churches, mosques, foundations, clubs and associations register as incorporated trustees with CAC — trustees, constitution, the 28-day public notice, the four stages and realistic timelines, and what comes after.
@@ -54,7 +53,7 @@ Our incorporated trustees packages start from **₦150,000, government fees incl
 - **Annual returns.** Incorporated trustees file annual returns with CAC, like companies and business names. See [CAC annual returns](/blog/cac-annual-returns-deadline-penalty/).
 - **A bank account** in the organisation's registered name.
 - **Tax.** Registration doesn't make an organisation tax-free automatically. Exemptions depend on the organisation's purpose and activities, and income from trading activities may be taxable.
-- **SCUML registration.** Non-profit organisations are expected to register with SCUML for anti-money-laundering purposes. See [SCUML registration in Nigeria](/blog/scuml-registration-nigeria/).
+- **SCUML registration.** Non-profit organisations are required to register with SCUML for anti-money-laundering purposes. See [SCUML registration in Nigeria](/blog/scuml-registration-nigeria/).
 - **Keeping records** — trustee changes, constitution amendments and accounts, filed as required.
 
 <div class="blog-faq">

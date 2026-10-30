@@ -4,7 +4,7 @@ slug: convert-business-name-to-limited-company-nigeria
 date: 2026-10-30
 topic: after-registration
 category: cac-registration
-description: How to move from a business name to a limited company in Nigeria — the upgrade-with-consent route, the register-new-and-close route, keeping your name, and everything to update afterwards.
+description: How to move from a business name to a limited company in Nigeria and keep your name — why the consent route is the reliable way, when a new company is simpler, and everything to update afterwards.
 excerpt: You can't just tick a box that turns a business name into a company — but you can keep your name and move the business into a new company. Here are the two routes and what changes for you.
 cta_text: Awal Global Consults handles the full move from business name to limited company — name consent, incorporation, and a checklist of everything to update afterwards.
 whatsapp_topic: converting a business name to a limited company
@@ -26,14 +26,19 @@ Because of that difference, a business name can't simply be relabelled as a comp
 Becoming a company protects you from the company's debts **going forward**. Debts and obligations the business name took on before the move stay with you personally.
 :::
 
-## The two routes
+## The two routes — and which one we use
 
-| | Route 1: Upgrade with consent | Route 2: New company, then close the business name |
+If you want to **keep your business name** for the new company, the **consent route** is the reliable way, and it's the one we use. Without it, CAC's system often won't reserve your existing business name for a new company — it can't tell that the person applying is the same owner, so the name simply shows as already taken. The consent application links the two, and CAC issues a **name availability code** that is used to complete the company registration.
+
+If you're happy with a **different name** for the company, you can skip the consent and register the new company directly.
+
+
+| | Route 1: Consent — keep your name (recommended) | Route 2: New company with a different name |
 |---|---|---|
-| How it works | You apply to CAC for consent to use your existing business name for a new company ("Your Brand Limited"), using your business name details | You register a new company — with the same name if it's available, or a new one — and then file to cease the business name |
-| Keeps the same name | Yes — this is the main reason to use it | Only if the name is available as a company name |
-| Typical requirements | Your business name certificate, up-to-date annual returns, a consent application, then normal company registration | Normal company registration, then a cessation filing for the business name |
-| Best for | Established brands that want to be sure of keeping their name | When the name is free to register as a company, or you're happy with a new name |
+| How it works | You apply to CAC for consent to use your existing business name for a new company ("Your Brand Limited"); CAC issues a name availability code used to register the company | You register a new company under a different name, then keep or cease the business name |
+| Keeps the same name | Yes — this is the main reason to use it | No |
+| Typical requirements | Your business name certificate, up-to-date annual returns, a consent application, then normal company registration | Normal company registration; a cessation filing if you close the business name |
+| Best for | Anyone who wants customers to keep recognising the same name | Owners who want a fresh name for the company |
 
 CAC's exact requirements for the consent route can change, so we confirm the current documents and fees before starting. One requirement is consistent: **your business name's annual returns should be up to date** before you apply. If they're behind, that's the first thing to fix (see our guide to [CAC annual returns](/blog/cac-annual-returns-deadline-penalty/)).
 

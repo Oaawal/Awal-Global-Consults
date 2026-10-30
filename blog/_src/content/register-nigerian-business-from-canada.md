@@ -2,7 +2,6 @@
 title: "Registering a Nigerian Business from Canada"
 slug: register-nigerian-business-from-canada
 date: 2026-10-31
-draft: true
 topic: abroad-canada
 category: cac-registration
 description: How Nigerians in Canada register a business name or company in Nigeria remotely — what to prepare, permanent residents and Canadian citizens, the ₦100m foreign-participation rule, signatures, and Canadian tax points.
