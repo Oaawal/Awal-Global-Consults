@@ -2,7 +2,6 @@
 title: "How Nigerians Abroad Can Get a NIN"
 slug: nin-for-nigerians-abroad
 date: 2026-10-30
-draft: true
 topic: abroad-all
 category: identity-documents
 description: How Nigerians living abroad enrol for a National Identification Number (NIN) through NIMC's licensed diaspora enrolment partners, what to bring, why you must attend in person, and why you need a NIN before renewing your passport.

@@ -2,7 +2,6 @@
 title: "CAC Name Search: Why Names Get Rejected and How to Pick One That Passes"
 slug: cac-name-search-rejection-reasons
 date: 2026-10-30
-draft: true
 topic: registering-with-cac
 category: cac-registration
 description: The most common reasons CAC rejects a proposed business or company name — identical and similar names, restricted words, trademarks, offensive or misleading names — and practical tips for choosing a name that gets approved first time.
@@ -52,7 +51,7 @@ If you already trade as a business name and want the same name for a new company
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can I use my own name?</p>
-<p class="blog-faq-a">Yes. Trading under your own true name doesn't require a business name registration at all, but adding words like "Ventures" or "Enterprises" turns it into a business name that must be registered.</p>
+<p class="blog-faq-a">Yes. Trading under your own true name doesn't require a business name registration, but adding words like "Ventures" or "Enterprises" turns it into a business name that must be registered. Banks also usually expect a registered business before opening a business account.</p>
 </div>
 </div>
 

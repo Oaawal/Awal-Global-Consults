@@ -2,7 +2,6 @@
 title: "Renewing a Nigerian Passport from Abroad (UK, US, Canada)"
 slug: renew-nigerian-passport-from-abroad
 date: 2026-10-30
-draft: true
 topic: abroad-all
 category: identity-documents
 description: How Nigerians in the UK, US, Canada and elsewhere renew their passport — the online application, payment, the biometrics appointment at the embassy or high commission, the NIN requirement, contactless renewal, and how to avoid delays.

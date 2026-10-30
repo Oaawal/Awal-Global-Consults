@@ -44,9 +44,9 @@ High buyer intent, low risk of stale figures, and they open the new
 - [ ] 4. **Do I need a lawyer to register a company in Nigeria?** — P2
 
 ### Registering with CAC
-- [ ] 5. **How to register a business name in Nigeria in 2026: step by step** — P1 ⚠ (current portal steps)
+- [x] 5. **How to register a business name in Nigeria in 2026: step by step** — P1 ⚠ (current portal steps)
 - [x] 6. **How long does CAC registration take? Realistic timelines and what delays approval** — P1
-- [ ] 7. **CAC name search: why names get rejected and how to pick one that passes** — P1
+- [x] 7. **CAC name search: why names get rejected and how to pick one that passes** — P1
 - [ ] 8. **Can one person own and run a company in Nigeria? Single-member companies under CAMA 2020** — P2
 
 ### Costs and timelines
@@ -55,9 +55,9 @@ High buyer intent, low risk of stale figures, and they open the new
 
 ### After registration
 - [x] 11. **How to change your business name, address or partners after CAC registration** — P1
-- [ ] 12. **Adding or removing a director or shareholder: the CAC process** — P1
+- [x] 12. **Adding or removing a director or shareholder: the CAC process** — P1
 - [x] 13. **Can I convert my business name to a limited company?** — P1
-- [ ] 14. **Haven't filed annual returns for years? How to get your company back in good standing** — P1 ⚠ (penalty amounts)
+- [x] 14. **Haven't filed annual returns for years? How to get your company back in good standing** — P1 ⚠ (penalty amounts)
 - [ ] 15. **How to get a certified true copy (CTC) of your CAC documents** — P2
 - [ ] 16. **Opening a corporate bank account in Nigeria: what banks will ask for** — P2
 
@@ -79,7 +79,7 @@ High buyer intent, low risk of stale figures, and they open the new
 
 ### AML, KYC and SCUML
 - [ ] 25. **SCUML for real estate agents, car dealers and jewellers: what changes for you** — P2
-- [ ] 26. **How to check a company is real: verifying a business on the CAC portal** — P1
+- [x] 26. **How to check a company is real: verifying a business on the CAC portal** — P1
 
 ### Data protection
 - [ ] 27. **Does my small business need a privacy policy in Nigeria?** — P2
@@ -88,7 +88,7 @@ High buyer intent, low risk of stale figures, and they open the new
 
 ### Trademark basics
 - [x] 28. **How to do a trademark search in Nigeria before you register** — P1
-- [ ] 29. **Can someone else register my business name as a trademark?** — P1
+- [x] 29. **Can someone else register my business name as a trademark?** — P1
 - [x] 30. **Business name vs trademark: is CAC registration enough to protect my brand?** — P1
 
 ### Trademark costs and timelines
@@ -97,8 +97,8 @@ High buyer intent, low risk of stale figures, and they open the new
 ## Identity, immigration and study
 
 ### NIN and passports
-- [ ] 32. **Renewing a Nigerian passport from abroad (UK, US, Canada)** — P1 ⚠ (also file under abroad-*; we support new passports, renewals and procurement)
-- [ ] 33. **How Nigerians abroad can get a NIN** — P1 ⚠ (we provide NIN services for people abroad)
+- [x] 32. **Renewing a Nigerian passport from abroad (UK, US, Canada)** — P1 ⚠ (also file under abroad-*; we support new passports, renewals and procurement)
+- [x] 33. **How Nigerians abroad can get a NIN** — P1 ⚠ (we provide NIN services for people abroad)
 
 ### Expatriates and CERPAC
 - [ ] 34. **Expatriate quota: how many foreign staff can a Nigerian company employ?** — P2 ⚠

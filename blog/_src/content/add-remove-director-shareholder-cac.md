@@ -2,7 +2,6 @@
 title: "Adding or Removing a Director or Shareholder: The CAC Process"
 slug: add-remove-director-shareholder-cac
 date: 2026-10-30
-draft: true
 topic: after-registration
 category: cac-registration
 description: How Nigerian companies appoint or remove directors and bring in or buy out shareholders — the resolutions, share transfer documents, stamp duty, persons with significant control, and the CAC filings that make the change official.
@@ -30,7 +29,7 @@ Directors run a company; shareholders own it. Sometimes they're the same people,
 
 ## Removing a director
 
-A director can **resign** by notice, or be **removed** by an ordinary resolution of the shareholders at a meeting. Removal has procedural requirements — including notice to the company and giving the director a chance to be heard — so follow them carefully. Then file the change with CAC and update the bank mandate.
+A director can **resign** by notice, or be **removed** by an ordinary resolution of the shareholders at a meeting. Removal has procedural requirements — including special notice of the resolution and giving the director a chance to be heard — so follow them carefully. Then file the change with CAC and update the bank mandate.
 
 ::: callout
 Most private companies need at least **two directors**; a **small company** can have one. Check that removing a director doesn't leave the company below its minimum.

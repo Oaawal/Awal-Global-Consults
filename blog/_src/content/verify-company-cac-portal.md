@@ -2,7 +2,6 @@
 title: "How to Check a Company Is Real: Verifying a Business on the CAC Portal"
 slug: verify-company-cac-portal
 date: 2026-10-30
-draft: true
 topic: aml-kyc-scuml
 category: kyc-compliance
 description: How to verify a Nigerian business before you pay, partner or sign — using CAC's public search, what the RC or BN number and status tell you, ordering an official status report, and the red flags that point to a fake.

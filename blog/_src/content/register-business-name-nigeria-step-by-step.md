@@ -2,7 +2,6 @@
 title: "How to Register a Business Name in Nigeria in 2026: Step by Step"
 slug: register-business-name-nigeria-step-by-step
 date: 2026-10-30
-draft: true
 topic: registering-with-cac
 category: cac-registration
 description: The full process for registering a business name with CAC in 2026 — who can register, what you need, the online steps from name search to certificate, how long it takes, and what to do after.
@@ -29,7 +28,7 @@ A business name is not a separate legal person — you and the business are the 
 - **The nature of the business** — a clear description of what you'll do.
 - **A business address in Nigeria** — see [do I need a Nigerian address?](/blog/nigerian-address-cac-registration/)
 - For each proprietor: **full name, date of birth, nationality, occupation, phone, email and residential address**.
-- For each proprietor: **valid ID** (international passport, NIN, driver's licence or voter's card), a **passport photograph** and a **signature image**.
+- For each proprietor: **valid ID** (international passport, NIN, or a Nigerian driver's licence or voter's card), a **passport photograph** and a **signature image**.
 - The **commencement date** — when the business started or will start.
 
 ## The steps

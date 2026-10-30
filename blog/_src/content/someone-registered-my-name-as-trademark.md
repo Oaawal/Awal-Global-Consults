@@ -2,12 +2,11 @@
 title: "Can Someone Else Register My Business Name as a Trademark?"
 slug: someone-registered-my-name-as-trademark
 date: 2026-10-30
-draft: true
 topic: trademark-basics
 category: trademarks-ip
 description: Yes — CAC registration doesn't stop someone trademarking your name. Here's how it happens, your options at each stage (opposition, cancellation, passing off), the role of prior use and bad faith, and how to prevent it.
 excerpt: Your CAC certificate doesn't stop someone else trademarking your business name. If it happens, your options depend on timing. Here's what you can do at each stage — and how to stop it happening at all.
-cta_text: Awal Global Consults monitors and registers trademarks, files oppositions, and advises on cancellation when someone else claims your brand.
+cta_text: Awal Global Consults searches and registers trademarks, and advises on oppositions and cancellation when someone else claims your brand.
 whatsapp_topic: someone registered my brand as a trademark
 ---
 
@@ -53,7 +52,7 @@ In trademark disputes, dated evidence wins. Keep proof of when you started using
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">How do I find out if someone has applied for my name?</p>
-<p class="blog-faq-a">Through a trademark search and by watching the Trade Marks Journal. We can monitor it for you.</p>
+<p class="blog-faq-a">Through a trademark search and by watching the Trade Marks Journal, where applications are published. We can check this for you.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Is it too late if their mark is already registered?</p>

@@ -2,7 +2,6 @@
 title: "Haven't Filed Annual Returns for Years? How to Get Your Company Back in Good Standing"
 slug: revive-inactive-company-unfiled-annual-returns
 date: 2026-10-30
-draft: true
 topic: after-registration
 category: cac-registration
 description: What happens when a Nigerian company stops filing annual returns — inactive status, striking off, penalties — how to file the backlog and reactivate, and what to do if your company has already been struck off.
