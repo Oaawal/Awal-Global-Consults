@@ -8,6 +8,17 @@
 export default {
   async scheduled(event, env, ctx) {
     ctx.waitUntil(run(env));
+  },
+
+  // Opening the Worker's address with ?key=<CRON_SECRET> runs the job now (it
+  // still only runs once per day); without the key it just says it is alive.
+  async fetch(request, env) {
+    const key = new URL(request.url).searchParams.get('key');
+    if (!key || key !== env.CRON_SECRET) {
+      return new Response('awal-daily is running. It starts the daily job at 8am Lagos time.');
+    }
+    const result = await run(env);
+    return new Response(`Daily job response: ${result.status} ${result.body}`);
   }
 };
 
@@ -16,5 +27,7 @@ async function run(env) {
     method: 'POST',
     headers: { Authorization: `Bearer ${env.CRON_SECRET}` }
   });
-  console.log('daily job:', res.status, await res.text());
+  const body = await res.text();
+  console.log('daily job:', res.status, body);
+  return { status: res.status, body };
 }
