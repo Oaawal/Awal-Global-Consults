@@ -46,7 +46,7 @@ The move is a good moment to decide:
 - **Directors** — who will run the company. One director is enough for a small company.
 - **Share capital** — enough for your needs and your bank's expectations.
 
-Our limited company registration packages start from **₦75,000**, and companies are typically approved within **48–72 hours** if there are no queries. See [how long CAC registration takes](/blog/how-long-cac-registration-takes/).
+Our limited company registration packages start from **₦75,000**, government fees included, and companies are typically approved within **48–72 hours** if there are no queries. See [how long CAC registration takes](/blog/how-long-cac-registration-takes/).
 
 ## What to update after the move
 

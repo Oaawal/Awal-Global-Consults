@@ -31,7 +31,7 @@ The choice works the same way from abroad as it does at home, but a few points m
 | Banks, contracts, investors | Accepted for small trading | Usually preferred, and often required |
 | Running it from abroad | Possible, but everything is in your name | Easier to appoint a manager or director in Nigeria |
 | Typical registration time (our experience) | Within 24 hours | 48–72 hours if there are no queries |
-| Our packages from | ₦40,000 | ₦75,000 |
+| Our packages from (government fees included) | ₦40,000 | ₦75,000 |
 
 If you plan to hire staff, sign larger contracts, or eventually hand day-to-day running to someone in Nigeria, a limited company is usually the better fit. Our guide to [business name vs limited company](/blog/business-name-vs-limited-company-nigeria/) goes through the trade-offs in detail.
 
@@ -40,7 +40,7 @@ If you plan to hire staff, sign larger contracts, or eventually hand day-to-day 
 For each owner (proprietor, director or shareholder):
 
 - **Full name, date of birth, nationality, occupation and phone number**, exactly as they appear on your ID.
-- **A valid means of identification.** For Nigerian citizens this is usually your Nigerian international passport or NIN. A UK driving licence on its own is not normally enough for CAC.
+- **A valid means of identification.** An international passport works. Nigerian citizens can also use their NIN. A UK driving licence may not be accepted, so use your passport.
 - **Your residential address**, which can be your UK address.
 - **A signature**, provided as a clear image (more on this in our guide to [signing CAC documents from abroad](/blog/signing-cac-documents-from-abroad/)).
 - **A passport photograph** in digital form.
@@ -56,7 +56,7 @@ For the business itself:
 
 At Awal Global Consults, clients abroad usually reach us through a referral or on WhatsApp. From there, the steps are the same every time:
 
-1. **First conversation.** On WhatsApp or by email, we confirm what you want to register and send you a clear, itemised quote. Packages start from ₦40,000 for a business name and ₦75,000 for a limited company; add-ons are quoted separately.
+1. **First conversation.** On WhatsApp or by email, we confirm what you want to register and send you a clear, itemised quote. Packages start from ₦40,000 for a business name and ₦75,000 for a limited company, government fees included; add-ons are quoted separately.
 2. **Your details and documents.** You submit them through our secure online application at awalglobal.com.ng/kyc — or, if it's easier for you, by email or WhatsApp. Signatures are sent the same way, as a clear image.
 3. **Name check and reservation.** We search and reserve the name with CAC.
 4. **Filing.** We prepare and file the registration, and respond to any CAC queries on your behalf.
@@ -74,7 +74,7 @@ How long a business name registration typically takes in our experience, once yo
 Many Nigerians in the UK hold both passports, and registering as a Nigerian citizen is the simplest route. If you — or any co-owner — will register using **only a non-Nigerian passport**, the company is treated as having **foreign participation**, and extra rules apply:
 
 - Foreign shareholders register with a passport rather than a Nigerian ID.
-- Companies with foreign participation have **minimum share capital requirements**, and these have changed more than once in recent years. We confirm the current figure with you before filing rather than quoting one that may be out of date.
+- A company with **any foreign shareholder** must have a **minimum share capital of ₦100 million**. That's far higher than a typical all-Nigerian company, so it affects your budget and your decision about how to register.
 - The company may also need to register with the **Nigerian Investment Promotion Commission (NIPC)** after incorporation, and other permits can apply depending on the business.
 
 If you have dual nationality, it is usually worth registering as a Nigerian citizen with your Nigerian passport or NIN.

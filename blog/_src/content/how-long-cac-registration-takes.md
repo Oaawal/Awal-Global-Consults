@@ -13,7 +13,7 @@ whatsapp_topic: CAC registration timeline
 
 How long registration takes depends mostly on **what you're registering** and **how clean your information is when it's filed**. The figures below come from our own filings with the Corporate Affairs Commission (CAC). They are not official CAC service times, and busy periods or system downtime can stretch them — but they're what clients can realistically expect.
 
-| What you're registering | Typical time in our experience | Our packages from |
+| What you're registering | Typical time in our experience | Our packages from (government fees included) |
 |---|---|---|
 | Business name | **Within 24 hours** | ₦40,000 |
 | Limited company | **48–72 hours**, if CAC raises no queries | ₦75,000 |
