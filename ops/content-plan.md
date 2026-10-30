@@ -17,7 +17,7 @@ and set `updated:` in its frontmatter.
 
 ---
 
-## Batch 1 (write first)
+## Batch 1 (write first) — drafted 30 Oct 2026, awaiting owner review (`draft: true`)
 
 High buyer intent, low risk of stale figures, and they open the new
 "Nigerians abroad" section.
@@ -139,3 +139,24 @@ High buyer intent, low risk of stale figures, and they open the new
 4. **Bylines:** guides are signed by the relevant "desk". If you want your own
    name on guides you have reviewed (stronger for Google), say so and we will
    add a reviewer line and a profile page.
+
+---
+
+## Owner answers (use in every guide)
+
+Recorded 30 Oct 2026. These are the firm's own experience and prices, not
+official CAC service times or fees — say so wherever they are quoted.
+
+- **Clients abroad:** usually arrive by referral or WhatsApp. Details,
+  documents and signatures can be sent through the online application
+  (awalglobal.com.ng/kyc — preferred), by email, or by WhatsApp.
+- **Timelines:** business name within 24 hours; limited company 48–72 hours if
+  CAC raises no queries; incorporated trustees: name consent and reservation
+  (~3 business days) → newspaper publication (28-day window, required by law)
+  → declaration of trustees (within the 28 days) → final submission and
+  approval (~3 business days).
+- **Package prices (from):** business name ₦40,000; limited company ₦75,000;
+  incorporated trustees ₦150,000. Packages can be higher with add-ons; every
+  quote is itemised first.
+- **Bylines:** every guide carries "Reviewed by A.O. Abdullateef" — so every
+  guide must be read by the owner before `draft: true` is removed.
