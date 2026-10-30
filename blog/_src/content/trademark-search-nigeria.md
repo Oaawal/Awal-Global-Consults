@@ -2,7 +2,6 @@
 title: "How to Do a Trademark Search in Nigeria Before You Register"
 slug: trademark-search-nigeria
 date: 2026-10-30
-draft: true
 topic: trademark-basics
 category: trademarks-ip
 description: Why a trademark availability search comes before filing in Nigeria, what the official search covers, the extra checks worth doing yourself, and how to read the results.

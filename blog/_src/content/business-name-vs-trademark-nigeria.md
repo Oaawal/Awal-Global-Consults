@@ -2,7 +2,6 @@
 title: "Business Name vs Trademark: Is CAC Registration Enough to Protect My Brand?"
 slug: business-name-vs-trademark-nigeria
 date: 2026-10-30
-draft: true
 topic: trademark-basics
 category: trademarks-ip
 description: CAC registration lets you trade under a name; a trademark gives you exclusive rights to the brand. Here's the difference, why many Nigerian businesses need both, and what happens when they clash.
@@ -32,7 +31,7 @@ A CAC certificate proves your business exists. It doesn't make the brand yours t
 
 ## Where the gap bites
 
-- **Someone uses your name on their products.** If they haven't registered it with CAC, CAC registration gives you little to act on. A registered trademark does.
+- **Someone uses your name on their products.** Your CAC registration gives you little to act on, even though you registered first. A registered trademark does.
 - **Someone registers your brand as a trademark first.** They may then challenge your use of it — even though you registered the business name earlier.
 - **Your name clashes with an existing trademark.** CAC approval doesn't override trademark rights, and CAC has in the past directed companies to change names that conflict with registered trademarks.
 - **You want to expand online.** Marketplaces and social platforms generally respond to complaints backed by registered trademarks.

@@ -17,7 +17,7 @@ and set `updated:` in its frontmatter.
 
 ---
 
-## Batch 1 (write first) — drafted 30 Oct 2026, awaiting owner review (`draft: true`)
+## Batch 1 — published 30 Oct 2026
 
 High buyer intent, low risk of stale figures, and they open the new
 "Nigerians abroad" section.
@@ -38,14 +38,14 @@ High buyer intent, low risk of stale figures, and they open the new
 ## Start and run a business
 
 ### Choosing a structure
-- [ ] 1. **Can a civil servant register a business name in Nigeria?** — P1 ⚠ (Public Service Rules position; confirm current CAC practice)
+- [x] 1. **Can a civil servant register a business name in Nigeria?** — P1 ⚠ (Public Service Rules position; confirm current CAC practice)
 - [ ] 2. **Business name, partnership or limited company: how each is taxed under the Nigeria Tax Act 2025** — P1 ⚠ (small-company thresholds)
 - [ ] 3. **Can a foreigner own 100% of a Nigerian company?** — P1 ⚠ (NIPC registration, minimum share capital for foreign participation)
 - [ ] 4. **Do I need a lawyer to register a company in Nigeria?** — P2
 
 ### Registering with CAC
 - [ ] 5. **How to register a business name in Nigeria in 2026: step by step** — P1 ⚠ (current portal steps)
-- [ ] 6. **How long does CAC registration take? Realistic timelines and what delays approval** — P1
+- [x] 6. **How long does CAC registration take? Realistic timelines and what delays approval** — P1
 - [ ] 7. **CAC name search: why names get rejected and how to pick one that passes** — P1
 - [ ] 8. **Can one person own and run a company in Nigeria? Single-member companies under CAMA 2020** — P2
 
@@ -56,7 +56,7 @@ High buyer intent, low risk of stale figures, and they open the new
 ### After registration
 - [ ] 11. **How to change your business name, address or partners after CAC registration** — P1
 - [ ] 12. **Adding or removing a director or shareholder: the CAC process** — P1
-- [ ] 13. **Can I convert my business name to a limited company?** — P1
+- [x] 13. **Can I convert my business name to a limited company?** — P1
 - [ ] 14. **Haven't filed annual returns for years? How to get your company back in good standing** — P1 ⚠ (penalty amounts)
 - [ ] 15. **How to get a certified true copy (CTC) of your CAC documents** — P2
 - [ ] 16. **Opening a corporate bank account in Nigeria: what banks will ask for** — P2
@@ -87,9 +87,9 @@ High buyer intent, low risk of stale figures, and they open the new
 ## Protect your brand
 
 ### Trademark basics
-- [ ] 28. **How to do a trademark search in Nigeria before you register** — P1
+- [x] 28. **How to do a trademark search in Nigeria before you register** — P1
 - [ ] 29. **Can someone else register my business name as a trademark?** — P1
-- [ ] 30. **Business name vs trademark: is CAC registration enough to protect my brand?** — P1
+- [x] 30. **Business name vs trademark: is CAC registration enough to protect my brand?** — P1
 
 ### Trademark costs and timelines
 - [ ] 31. **How long does trademark registration take in Nigeria, and when do you renew?** — P2 ⚠
@@ -108,11 +108,11 @@ High buyer intent, low risk of stale figures, and they open the new
 
 ## Nigerians abroad (new section — appears once its first guide is live)
 
-- [ ] 36. **Can I register a business in Nigeria while living in the UK?** — P1 · abroad-uk
+- [x] 36. **Can I register a business in Nigeria while living in the UK?** — P1 · abroad-uk
 - [ ] 37. **Registering a Nigerian company from the US: the remote process** — P1 · abroad-us
 - [ ] 38. **Registering a Nigerian business from Canada** — P1 · abroad-canada
-- [ ] 39. **Do I need a Nigerian address to register a business with CAC?** — P1 · abroad-all
-- [ ] 40. **Signing CAC documents from abroad: e-signatures, notarisation and power of attorney** — P1 · abroad-all ⚠
+- [x] 39. **Do I need a Nigerian address to register a business with CAC?** — P1 · abroad-all
+- [x] 40. **Signing CAC documents from abroad: e-signatures, notarisation and power of attorney** — P1 · abroad-all ⚠
 - [ ] 41. **Running a Nigerian business from abroad: who should be your local representative?** — P2 · abroad-all
 - [ ] 42. **Buying property in Nigeria from abroad: the legal documents to check first** — P1 · abroad-all (checks and preparation done by our team of professional lawyers)
 

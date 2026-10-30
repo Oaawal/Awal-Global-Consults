@@ -2,7 +2,6 @@
 title: "Can a Civil Servant Register a Business Name in Nigeria?"
 slug: can-civil-servant-register-business-name-nigeria
 date: 2026-10-30
-draft: true
 topic: choosing-a-structure
 category: cac-registration
 description: What the Constitution's Code of Conduct says about public officers running private businesses, the farming exception, owning shares versus managing a business, and safe ways for civil servants to start one.

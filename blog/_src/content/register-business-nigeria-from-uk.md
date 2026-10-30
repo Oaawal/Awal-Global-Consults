@@ -2,13 +2,12 @@
 title: "Can I Register a Business in Nigeria While Living in the UK?"
 slug: register-business-nigeria-from-uk
 date: 2026-10-30
-draft: true
 topic: abroad-uk
 category: cac-registration
 featured: true
 description: Yes — CAC registration is done online, so Nigerians in the UK can register a business name or company without travelling home. Here's what you need, what has to be in Nigeria, and how the process works remotely.
 excerpt: You don't need to fly home to register a Nigerian business. CAC registration is online, and the only thing that genuinely has to be in Nigeria is the business address. Here's the full remote process.
-cta_text: Awal Global Consults registers businesses for clients in the UK every month — you send your details and documents online, we handle the CAC filing, and your certificate comes back by email.
+cta_text: Awal Global Consults registers businesses for clients living abroad, including the UK — you send your details and documents online, we handle the CAC filing, and your certificate comes back by email.
 whatsapp_topic: registering a Nigerian business from the UK
 ---
 
@@ -71,10 +70,10 @@ How long a business name registration typically takes in our experience, once yo
 
 ## If you hold only a British passport
 
-Many Nigerians in the UK hold both passports, and registering as a Nigerian citizen is the simplest route. If you — or any co-owner — will register using **only a non-Nigerian passport**, the company is treated as having **foreign participation**, and extra rules apply:
+Many Nigerians in the UK hold both passports, and registering as a Nigerian citizen is the simplest route. If you — or any co-owner — will register a company using **only a non-Nigerian passport**, the company is treated as having **foreign participation**, and extra rules apply:
 
 - Foreign shareholders register with a passport rather than a Nigerian ID.
-- A company with **any foreign shareholder** must have a **minimum share capital of ₦100 million**. That's far higher than a typical all-Nigerian company, so it affects your budget and your decision about how to register.
+- A company with **any foreign shareholder** must have a **minimum share capital of ₦100 million**. That's far higher than a typical all-Nigerian company, and government fees rise with share capital, so our standard company package doesn't apply — we quote these registrations individually.
 - The company may also need to register with the **Nigerian Investment Promotion Commission (NIPC)** after incorporation, and other permits can apply depending on the business.
 
 If you have dual nationality, it is usually worth registering as a Nigerian citizen with your Nigerian passport or NIN.

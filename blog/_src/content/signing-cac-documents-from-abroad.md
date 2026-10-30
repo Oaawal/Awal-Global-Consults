@@ -2,7 +2,6 @@
 title: "Signing CAC Documents from Abroad: E-Signatures, Notarisation and Power of Attorney"
 slug: signing-cac-documents-from-abroad
 date: 2026-10-30
-draft: true
 topic: abroad-all
 category: cac-registration
 description: How Nigerians abroad sign CAC registration documents without travelling home — when a scanned signature is enough, when notarisation applies, and when you need a power of attorney.
@@ -30,7 +29,7 @@ A blurred photo, a signature on lined paper, or a signature drawn with a finger 
 
 ## 2. When notarisation comes in
 
-Notarisation is when a notary public (or a solicitor acting as one) confirms that you signed a document, usually after checking your ID. It isn't normally needed for standard CAC registration, but you may be asked for notarised or certified documents by:
+Notarisation is when a notary public confirms that you signed a document, usually after checking your ID. It isn't normally needed for standard CAC registration, but you may be asked for notarised or certified documents by:
 
 - **Banks**, when opening a corporate account for a business whose directors live abroad.
 - **Other institutions** — landlords, regulators or business partners — who want certainty about who signed.

@@ -2,7 +2,6 @@
 title: "How Long Does CAC Registration Take? Realistic Timelines and What Delays Approval"
 slug: how-long-cac-registration-takes
 date: 2026-10-30
-draft: true
 topic: registering-with-cac
 category: cac-registration
 description: Realistic CAC registration timelines from our own filings — business names within 24 hours, companies in 48–72 hours, incorporated trustees around five to six weeks — and the mistakes that cause queries and delays.

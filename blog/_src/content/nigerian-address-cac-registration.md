@@ -2,7 +2,6 @@
 title: "Do I Need a Nigerian Address to Register a Business with CAC?"
 slug: nigerian-address-cac-registration
 date: 2026-10-30
-draft: true
 topic: abroad-all
 category: cac-registration
 description: Your business needs an address in Nigeria for CAC registration, but you personally don't. Here's which address goes where, what counts as acceptable, and the options if you live abroad.
@@ -47,7 +46,7 @@ Whichever you choose, keep the details consistent: the same address should appea
 
 ## Can the business address change later?
 
-Yes. If you move the business, the change is filed with CAC as a post-registration update. Keeping the address current matters — notices sent to an old address still count as delivered.
+Yes. If you move the business, the change is filed with CAC as a post-registration update. Keeping the address current matters — legal notices sent to the address on record are generally treated as properly delivered, even if you've moved.
 
 ## Mistakes that cause queries
 

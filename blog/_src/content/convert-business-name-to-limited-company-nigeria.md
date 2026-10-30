@@ -2,7 +2,6 @@
 title: "Can I Convert My Business Name to a Limited Company in Nigeria?"
 slug: convert-business-name-to-limited-company-nigeria
 date: 2026-10-30
-draft: true
 topic: after-registration
 category: cac-registration
 description: How to move from a business name to a limited company in Nigeria — the upgrade-with-consent route, the register-new-and-close route, keeping your name, and everything to update afterwards.
@@ -31,10 +30,10 @@ Becoming a company protects you from the company's debts **going forward**. Debt
 
 | | Route 1: Upgrade with consent | Route 2: New company, then close the business name |
 |---|---|---|
-| How it works | You apply to CAC to use your business name's name for a new company ("Your Brand Limited"), with your business name details and consent | You register a new company — with the same name if it's available, or a new one — and then file to cease the business name |
+| How it works | You apply to CAC for consent to use your existing business name for a new company ("Your Brand Limited"), using your business name details | You register a new company — with the same name if it's available, or a new one — and then file to cease the business name |
 | Keeps the same name | Yes — this is the main reason to use it | Only if the name is available as a company name |
 | Typical requirements | Your business name certificate, up-to-date annual returns, a consent application, then normal company registration | Normal company registration, then a cessation filing for the business name |
-| Best for | Established brands that want continuity | Businesses happy to rebrand, or where timing makes it simpler |
+| Best for | Established brands that want to be sure of keeping their name | When the name is free to register as a company, or you're happy with a new name |
 
 CAC's exact requirements for the consent route can change, so we confirm the current documents and fees before starting. One requirement is consistent: **your business name's annual returns should be up to date** before you apply. If they're behind, that's the first thing to fix (see our guide to [CAC annual returns](/blog/cac-annual-returns-deadline-penalty/)).
 
