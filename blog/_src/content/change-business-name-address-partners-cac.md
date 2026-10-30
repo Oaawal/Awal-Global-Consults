@@ -1,7 +1,7 @@
 ---
 title: "Changing Your Business Name, Address or Partners After CAC Registration"
 slug: change-business-name-address-partners-cac
-date: 2026-10-31
+date: 2026-10-30
 topic: after-registration
 category: cac-registration
 description: Which changes must be filed with CAC after registration — name, address, partners, directors, shareholders, share capital and business activity — how each is done for business names and companies, and why filing on time matters.

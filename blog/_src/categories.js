@@ -49,6 +49,11 @@ module.exports = {
       description: 'NDPR/data protection, NIPC, business permits, and regulatory compliance.',
       relatedService: { href: 'corporate-regulatory', label: 'Talk to an Advisor' }
     },
+    'identity-documents': {
+      label: 'Passports & NIN',
+      description: 'Passport applications and renewals, NIN enrolment and identity documents, including for Nigerians abroad.',
+      relatedService: { href: 'identity-documentation', label: 'Get Passport & NIN Support' }
+    },
     'export-licensing': {
       label: 'Export & Licensing',
       description: 'NEPC export registration, export documentation, and business licences in Nigeria.',

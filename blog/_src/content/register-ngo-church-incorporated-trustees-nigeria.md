@@ -1,7 +1,7 @@
 ---
 title: "How to Register an NGO, Church or Association in Nigeria (Incorporated Trustees)"
 slug: register-ngo-church-incorporated-trustees-nigeria
-date: 2026-10-31
+date: 2026-10-30
 topic: ngos-and-trustees
 category: cac-registration
 description: How NGOs, churches, mosques, foundations, clubs and associations register as incorporated trustees with CAC — trustees, constitution, the 28-day public notice, the four stages and realistic timelines, and what comes after.

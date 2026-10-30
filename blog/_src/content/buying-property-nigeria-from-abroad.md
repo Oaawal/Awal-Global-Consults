@@ -1,7 +1,7 @@
 ---
 title: "Buying Property in Nigeria from Abroad: The Legal Documents to Check First"
 slug: buying-property-nigeria-from-abroad
-date: 2026-10-31
+date: 2026-10-30
 topic: abroad-all
 category: property-legal
 description: The documents to verify before you pay for land or a house in Nigeria from abroad — C of O, survey plan, deed of assignment, Governor's consent, registry and litigation searches — and the red flags that should stop a deal.

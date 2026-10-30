@@ -1,7 +1,7 @@
 ---
 title: "Export Licence in Nigeria: NEPC Registration Explained"
 slug: nepc-export-licence-nigeria
-date: 2026-10-31
+date: 2026-10-30
 topic: licences-and-permits
 category: export-licensing
 description: What the NEPC exporter's certificate is, why only companies can get it, the documents and steps on the NEPC e-registration portal, validity and renewal, and what else you need to export.

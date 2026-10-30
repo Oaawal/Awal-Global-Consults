@@ -1,7 +1,7 @@
 ---
 title: "Registering a Nigerian Company from the US: The Remote Process"
 slug: register-nigerian-company-from-us
-date: 2026-10-31
+date: 2026-10-30
 topic: abroad-us
 category: cac-registration
 description: How Nigerians in the United States register a business name or company in Nigeria without travelling — documents, the Nigerian address, signatures, US passports and the ₦100m rule, and US tax points to check.
