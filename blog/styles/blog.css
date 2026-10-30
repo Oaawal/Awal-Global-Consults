@@ -514,6 +514,9 @@ body:has(.guide-hero) { background: #fff; }
 .desk-sm .desk-mark { width: 26px; height: 26px; font-size: 0.64rem; }
 .desk-sm .desk-meta { margin-left: 0; width: 100%; padding-left: 36px; margin-top: -6px; }
 .desk-lg { margin-top: 6px; }
+.reviewer { display: flex; align-items: flex-start; gap: 8px; margin-top: 12px; font-size: 0.9rem; color: var(--muted); }
+.reviewer svg { color: #2E7D5B; flex: none; margin-top: 2px; }
+.reviewer a { color: var(--navy-950); font-weight: 700; text-decoration: underline; text-decoration-color: rgba(15,58,95,0.25); text-underline-offset: 3px; }
 .desk-lg .desk-meta { margin-left: 0; }
 .desk-lg .desk-meta::before { content: '·'; margin-right: 10px; }
 

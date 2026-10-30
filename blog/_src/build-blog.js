@@ -46,6 +46,14 @@ const BLOG_DIR = path.join(ROOT_DIR, 'blog');
 const SITE_URL = 'https://awalglobal.com.ng';
 const ORG = 'Awal Global Consults';
 
+// Every guide is reviewed by the founder before it is published. A guide can
+// opt out with `reviewed_by: none`; `reviewed:` (YYYY-MM-DD) dates the review.
+const REVIEWER = {
+  name: 'A.O. Abdullateef',
+  role: 'Legal Professional, Founder of Awal Global Consults',
+  path: 'about#founder'
+};
+
 function readTemplate(name) {
   return fs.readFileSync(path.join(TEMPLATES_DIR, name), 'utf8');
 }
@@ -89,6 +97,9 @@ hubs.forEach(hub => hub.topics.forEach(topic => { topicIndex[topic.slug] = { top
 
 // --- 1. Load and parse every post -----------------------------------------
 
+// Guides marked `draft: true` are skipped, so they can sit in the repo for review
+// without going live. Set BLOG_INCLUDE_DRAFTS=1 to build them for a local preview.
+const INCLUDE_DRAFTS = process.env.BLOG_INCLUDE_DRAFTS === '1';
 const files = fs.readdirSync(CONTENT_DIR).filter(f => f.endsWith('.md'));
 
 const posts = files.map(file => {
@@ -124,7 +135,8 @@ const posts = files.map(file => {
     updatedDisplay: updated ? formatDateDisplay(updated) : null,
     updatedIso: new Date((updated || data.date) + 'T00:00:00').toISOString()
   };
-}).sort((a, b) => new Date(b.date) - new Date(a.date));
+}).filter(p => INCLUDE_DRAFTS || !(p.draft === 'true' || p.draft === true))
+  .sort((a, b) => new Date(b.date) - new Date(a.date));
 
 if (posts.length === 0) {
   console.log('No posts found in blog/_src/content — nothing to build.');
@@ -230,7 +242,14 @@ ${post.toc.map(t => `          <li><a href="#${t.id}">${t.text}</a></li>`).join(
       name: ORG,
       logo: { '@type': 'ImageObject', url: `${SITE_URL}/assets/images/logo.png` }
     },
-    mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonical,
+      ...(post.reviewed_by !== 'none' ? {
+        reviewedBy: { '@type': 'Person', name: REVIEWER.name, jobTitle: 'Legal Professional', url: `${SITE_URL}/about#founder`, worksFor: { '@type': 'Organization', name: ORG } },
+        lastReviewed: new Date((post.reviewed || post.updated || post.date) + 'T00:00:00').toISOString()
+      } : {})
+    },
     image: `${SITE_URL}/assets/images/og-image.jpg`
   }, null, 2);
 
@@ -249,9 +268,12 @@ ${post.toc.map(t => `          <li><a href="#${t.id}">${t.text}</a></li>`).join(
         <a href="${POST_ROOT}">Home</a><span>&middot;</span><a href="../">Guides</a><span>&middot;</span><a href="../topic/${post.topic.slug}/">${esc(post.topic.label)}</a>
       </nav>`;
 
+  const reviewed = post.reviewed_by !== 'none';
   const bylineHtml = `      <div class="desk desk-lg"><span class="desk-mark">${initials(post.hub.desk)}</span>
         <span><strong>${esc(post.hub.desk)}</strong> &middot; ${ORG}</span>
-        <span class="desk-meta">${post.updatedDisplay ? `Updated ${post.updatedDisplay}` : post.dateDisplay} &middot; ${post.readingTime} min read</span></div>`;
+        <span class="desk-meta">${post.updatedDisplay ? `Updated ${post.updatedDisplay}` : post.dateDisplay} &middot; ${post.readingTime} min read</span></div>${reviewed ? `
+      <div class="reviewer"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4.5 6v5.5c0 4.5 3.2 8 7.5 9.5 4.3-1.5 7.5-5 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span>Reviewed by <a href="${POST_ROOT}${REVIEWER.path}">${REVIEWER.name}</a>, ${REVIEWER.role}</span></div>` : ''}`;
 
   // Related: same topic first, then the rest of the hub, newest first
   const related = posts.filter(p => p !== post && p.topic.slug === post.topic.slug)
@@ -336,13 +358,14 @@ const SEARCH_SCRIPT = `<script>
 const INDEX_ROOT = '../';
 // Featured = newest guide; the latest row prefers newer guides from other hubs,
 // so the top of the page shows the range of subjects rather than one cluster
-const featured = posts[0];
+// (`featured: true` in a guide's frontmatter picks it instead; the newest such guide wins)
+const featured = posts.find(p => p.featured === 'true' || p.featured === true) || posts[0];
 const latest = [];
 const seenHubs = new Set([featured.hub.slug]);
-for (const p of posts.slice(1)) {
+for (const p of posts.filter(x => x !== featured)) {
   if (latest.length < 3 && !seenHubs.has(p.hub.slug)) { latest.push(p); seenHubs.add(p.hub.slug); }
 }
-for (const p of posts.slice(1)) if (latest.length < 3 && !latest.includes(p)) latest.push(p);
+for (const p of posts.filter(x => x !== featured)) if (latest.length < 3 && !latest.includes(p)) latest.push(p);
 
 const hubBody = `  <section class="guide-hero">
     <div class="container">
