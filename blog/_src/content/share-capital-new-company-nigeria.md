@@ -2,7 +2,6 @@
 title: "How Much Share Capital Should a New Nigerian Company Register?"
 slug: share-capital-new-company-nigeria
 date: 2026-10-30
-draft: true
 topic: costs-and-timelines
 category: cac-registration
 description: The legal minimum is ₦100,000 for a private company (₦100m with foreign shareholders), but the right figure depends on fees, stamp duty, banks, contracts and licences. Here's how to choose.

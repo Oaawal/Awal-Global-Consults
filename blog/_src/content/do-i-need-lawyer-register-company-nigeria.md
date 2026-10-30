@@ -2,7 +2,6 @@
 title: "Do I Need a Lawyer to Register a Company in Nigeria?"
 slug: do-i-need-lawyer-register-company-nigeria
 date: 2026-10-30
-draft: true
 topic: registering-with-cac
 category: cac-registration
 description: Since CAMA 2020, you can register a company yourself on the CAC portal — no lawyer required by law. Here's what self-registration involves, where it goes wrong, and when professional help is worth paying for.

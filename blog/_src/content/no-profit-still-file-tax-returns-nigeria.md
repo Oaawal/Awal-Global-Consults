@@ -2,7 +2,6 @@
 title: "My Business Made No Profit. Do I Still Need to File Tax Returns?"
 slug: no-profit-still-file-tax-returns-nigeria
 date: 2026-10-30
-draft: true
 topic: tax-and-tin
 category: tax-compliance
 description: Yes — in Nigeria, companies must file returns every year even with no profit, no sales or a zero tax rate. Here's why, what a nil return means, the small-company rules, and the cost of not filing.

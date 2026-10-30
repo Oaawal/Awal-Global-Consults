@@ -2,12 +2,11 @@
 title: "How to Get a Certified True Copy (CTC) of Your CAC Documents"
 slug: cac-certified-true-copy
 date: 2026-10-30
-draft: true
 topic: after-registration
 category: cac-registration
 description: What a CAC certified true copy is, when banks, embassies, tenders and courts ask for one, which documents can be certified, how to request them, and how they differ from a status report.
 excerpt: Banks, embassies, tenders and courts often won't accept a photocopy of your CAC documents. They want certified true copies. Here's what they are and how to get them.
-cta_text: Awal Global Consults requests certified true copies and status reports from CAC for businesses, companies and incorporated trustees — and delivers them by email.
+cta_text: Awal Global Consults requests certified true copies and status reports from CAC on your behalf — for business names, companies and incorporated trustees.
 whatsapp_topic: CAC certified true copies
 ---
 

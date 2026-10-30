@@ -2,7 +2,6 @@
 title: "Running a Nigerian Business From Abroad: Who Should Be Your Local Representative?"
 slug: local-representative-nigerian-business-abroad
 date: 2026-10-30
-draft: true
 topic: abroad-all
 category: cac-registration
 description: If you own a Nigerian business but live abroad, someone on the ground often has to sign, collect, attend and act. Here's what a local representative does, who to choose, how to give them authority, and how to stay in control.

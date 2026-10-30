@@ -2,7 +2,6 @@
 title: "Can One Person Own and Run a Company in Nigeria? Single-Member Companies Under CAMA 2020"
 slug: single-member-company-nigeria
 date: 2026-10-30
-draft: true
 topic: choosing-a-structure
 category: cac-registration
 description: Since CAMA 2020, one person can own a private company and, if it's a small company, be its only director. Here's what qualifies, what changes as you grow, and how it compares with a business name.

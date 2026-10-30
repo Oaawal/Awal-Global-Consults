@@ -2,7 +2,6 @@
 title: "Incorporated Trustees vs Company Limited by Guarantee: Which Should Your NGO Use?"
 slug: incorporated-trustees-vs-company-limited-by-guarantee
 date: 2026-10-30
-draft: true
 topic: ngos-and-trustees
 category: cac-registration
 description: Both structures suit non-profits in Nigeria. Here's how incorporated trustees and companies limited by guarantee differ on governance, members, approvals, foreign involvement and running costs — and how to choose.

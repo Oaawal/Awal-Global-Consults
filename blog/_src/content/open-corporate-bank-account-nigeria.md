@@ -2,7 +2,6 @@
 title: "Opening a Corporate Bank Account in Nigeria: What Banks Will Ask For"
 slug: open-corporate-bank-account-nigeria
 date: 2026-10-30
-draft: true
 topic: after-registration
 category: cac-registration
 description: The documents Nigerian banks usually ask for to open a business or company account — CAC documents, IDs, BVN, references, board resolution and proof of address — plus the common reasons applications stall.

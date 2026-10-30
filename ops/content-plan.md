@@ -41,29 +41,29 @@ High buyer intent, low risk of stale figures, and they open the new
 - [x] 1. **Can a civil servant register a business name in Nigeria?** — P1 ⚠ (Public Service Rules position; confirm current CAC practice)
 - [ ] 2. **Business name, partnership or limited company: how each is taxed under the Nigeria Tax Act 2025** — P1 ⚠ (small-company thresholds)
 - [x] 3. **Can a foreigner own 100% of a Nigerian company?** — P1 ⚠ (NIPC registration, minimum share capital for foreign participation)
-- [ ] 4. **Do I need a lawyer to register a company in Nigeria?** — P2
+- [x] 4. **Do I need a lawyer to register a company in Nigeria?** — P2
 
 ### Registering with CAC
 - [x] 5. **How to register a business name in Nigeria in 2026: step by step** — P1 ⚠ (current portal steps)
 - [x] 6. **How long does CAC registration take? Realistic timelines and what delays approval** — P1
 - [x] 7. **CAC name search: why names get rejected and how to pick one that passes** — P1
-- [ ] 8. **Can one person own and run a company in Nigeria? Single-member companies under CAMA 2020** — P2
+- [x] 8. **Can one person own and run a company in Nigeria? Single-member companies under CAMA 2020** — P2
 
 ### Costs and timelines
 - [ ] 9. **Business name registration cost in Nigeria (2026)** — P1 ⚠ (owner to confirm current figures)
-- [ ] 10. **How much share capital should a new Nigerian company register?** — P2 ⚠
+- [x] 10. **How much share capital should a new Nigerian company register?** — P2 ⚠
 
 ### After registration
 - [x] 11. **How to change your business name, address or partners after CAC registration** — P1
 - [x] 12. **Adding or removing a director or shareholder: the CAC process** — P1
 - [x] 13. **Can I convert my business name to a limited company?** — P1
 - [x] 14. **Haven't filed annual returns for years? How to get your company back in good standing** — P1 ⚠ (penalty amounts)
-- [ ] 15. **How to get a certified true copy (CTC) of your CAC documents** — P2
-- [ ] 16. **Opening a corporate bank account in Nigeria: what banks will ask for** — P2
+- [x] 15. **How to get a certified true copy (CTC) of your CAC documents** — P2
+- [x] 16. **Opening a corporate bank account in Nigeria: what banks will ask for** — P2
 
 ### NGOs and trustees
 - [x] 17. **How to register an NGO, church or association in Nigeria (incorporated trustees)** — P1 ⚠ (current requirements and timelines)
-- [ ] 18. **Incorporated trustees vs company limited by guarantee: which suits your organisation?** — P2
+- [x] 18. **Incorporated trustees vs company limited by guarantee: which suits your organisation?** — P2
 
 ### Licences and permits
 - [x] 19. **Export licence in Nigeria: NEPC registration explained** — P1 ⚠ (we handle NEPC and other export licences)
@@ -74,7 +74,7 @@ High buyer intent, low risk of stale figures, and they open the new
 ### Tax and TIN
 - [ ] 21. **The small company tax exemption under the Nigeria Tax Act 2025: who qualifies** — P1 ⚠ (thresholds)
 - [x] 22. **How to get a tax clearance certificate (TCC) in Nigeria** — P1 ⚠ (current NRS process; we handle tax registration and TCCs)
-- [ ] 23. **Does a business that made no profit still need to file tax returns?** — P2
+- [x] 23. **Does a business that made no profit still need to file tax returns?** — P2
 - [ ] 24. **VAT registration for small businesses in Nigeria: when it applies** — P2 ⚠
 
 ### AML, KYC and SCUML
@@ -113,7 +113,7 @@ High buyer intent, low risk of stale figures, and they open the new
 - [x] 38. **Registering a Nigerian business from Canada** — P1 · abroad-canada
 - [x] 39. **Do I need a Nigerian address to register a business with CAC?** — P1 · abroad-all
 - [x] 40. **Signing CAC documents from abroad: e-signatures, notarisation and power of attorney** — P1 · abroad-all ⚠
-- [ ] 41. **Running a Nigerian business from abroad: who should be your local representative?** — P2 · abroad-all
+- [x] 41. **Running a Nigerian business from abroad: who should be your local representative?** — P2 · abroad-all
 - [x] 42. **Buying property in Nigeria from abroad: the legal documents to check first** — P1 · abroad-all (checks and preparation done by our team of professional lawyers)
 
 ## Data and reference (new section — "free to cite", attracts links)
