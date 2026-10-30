@@ -13,7 +13,7 @@ whatsapp_topic: filing tax returns with no profit
 **Yes.** In Nigeria, the obligation to **file** a tax return is separate from the obligation to **pay** tax. A company that made a loss, had no sales, or qualifies for a 0% tax rate must still file its return every year.
 
 ::: callout
-Not filing because "there was nothing to pay" is one of the most common — and most expensive — mistakes small businesses make. Penalties for late or missing returns can apply even when the tax due is zero.
+Not filing because "there was nothing to pay" is one of the most common — and most expensive — mistakes small businesses make. Under the Nigeria Tax Administration Act 2025, failing to file a return — **including a nil return** — attracts a penalty of **₦100,000 for the first month and ₦50,000 for each month after**, even when the tax due is zero.
 :::
 
 ## Why you still have to file
@@ -25,15 +25,22 @@ Not filing because "there was nothing to pay" is one of the most common — and 
 
 ## What a "nil return" means
 
-A nil return is simply a return showing **no income, no profit or no tax due** for the period. It's still a full return: the company's details, the period, and figures — even if they're zeros — usually supported by accounts.
+A nil return is a return showing **no income, no profit or no tax due** for the period — and **filing it is required by law**. It's still a full return: the company's details, the period, and figures — even if they're zeros — usually supported by accounts.
 
 ## Small companies and the 0% rate
 
-Nigerian tax law gives **small companies** — those below set turnover and asset thresholds — a **0% company income tax rate**. But:
+Under the Nigeria Tax Act 2025, a **small company** pays **0% company income tax**. A company is small if **both** of these are true:
 
-- They **still have to file** their returns every year.
-- **Professional services businesses** are excluded from the small-company definition under the newer tax laws, so they may pay tax even if their turnover is small.
-- The thresholds have changed in recent tax reforms, so check what applies to your year — see [the Nigeria Tax Act 2025 compliance guide](/blog/nigeria-tax-act-2025-compliance-guide/).
+::: stat
+₦100m
+Annual turnover of ₦100 million or less, **and** total fixed assets of less than ₦250 million.
+:::
+
+Small companies are also exempt from capital gains tax and the 4% development levy. But:
+
+- They **still have to file** their returns every year — a 0% rate is not an exemption from filing.
+- **Professional services businesses** — such as consultancies, law, accounting and similar firms — are excluded from the small-company definition whatever their size, so they may pay tax even with a small turnover.
+- If you cross either threshold, the company pays tax at the standard rate. See [the Nigeria Tax Act 2025 compliance guide](/blog/nigeria-tax-act-2025-compliance-guide/).
 
 ## Other filings that don't depend on profit
 
@@ -70,4 +77,4 @@ Don't wait for a demand notice. Get your accounts prepared, file the outstanding
 
 ## The short version
 
-No profit doesn't mean no filing. Companies must file returns every year, small companies at 0% included, and CAC annual returns, PAYE and VAT obligations continue regardless. Filing on time keeps you eligible for tax clearance and avoids penalties.
+No profit doesn't mean no filing. A nil return is required by law, and missing one costs ₦100,000 for the first month and ₦50,000 for each month after. Companies must file every year, small companies at 0% included, and CAC annual returns, PAYE and VAT obligations continue regardless. Filing on time keeps you eligible for tax clearance and avoids penalties.

@@ -72,7 +72,7 @@ High buyer intent, low risk of stale figures, and they open the new
 ## Tax, compliance and data
 
 ### Tax and TIN
-- [ ] 21. **The small company tax exemption under the Nigeria Tax Act 2025: who qualifies** — P1 ⚠ (thresholds)
+- [ ] 21. **The small company tax exemption under the Nigeria Tax Act 2025: who qualifies** — P1 (thresholds confirmed: see owner answers)
 - [x] 22. **How to get a tax clearance certificate (TCC) in Nigeria** — P1 ⚠ (current NRS process; we handle tax registration and TCCs)
 - [x] 23. **Does a business that made no profit still need to file tax returns?** — P2
 - [ ] 24. **VAT registration for small businesses in Nigeria: when it applies** — P2 ⚠
@@ -158,6 +158,10 @@ official CAC service times or fees — say so wherever they are quoted.
 - **Package prices (from):** business name ₦40,000; limited company ₦75,000;
   incorporated trustees ₦150,000, company limited by guarantee from ₦150,000. Packages can be higher with add-ons; every
   quote is itemised first.
+- **Tax figures confirmed (30 Oct 2026, NTA/NTAA 2025):** small company = turnover
+  ≤ ₦100m AND fixed assets < ₦250m (professional services excluded), 0% CIT. A nil
+  return is required by law. Failure to file: ₦100,000 first month + ₦50,000 each
+  month after. The ₦50,000/₦25,000 figure some sources quote for filing is the old law.
 - **Services confirmed (30 Oct 2026):** NEPC export licences and other licences;
   property document checks and preparation (by our team of professional
   lawyers); tax registration and tax clearance certificates; passport

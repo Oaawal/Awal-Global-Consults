@@ -39,7 +39,7 @@ In practice, this is what applies to different types of businesses:
 | Entity type | What applies | Key rate or threshold |
 |---|---|---|
 | Individual / employee | PAYE (via employer) or direct personal income tax | First ₦800,000 of annual income is tax-free, then 15% to 25% progressively |
-| Small company (turnover ≤₦50m, fixed assets ≤₦250m, non-professional services) | Companies Income Tax | 0% CIT, but VAT still applies where taxable supplies are made |
+| Small company (turnover ≤₦100m, fixed assets under ₦250m, non-professional services) | Companies Income Tax | 0% CIT, but VAT still applies where taxable supplies are made |
 | Standard company | Companies Income Tax, VAT, WHT, Development Levy | 30% CIT, 7.5% VAT, 4% development levy on assessable profits |
 | Large company / MNE group | CIT plus a minimum effective tax rate | 15% minimum ETR once turnover crosses a high threshold, to stop profit-shifting |
 | Non-resident supplying into Nigeria | VAT registration, withholding tax, permanent establishment rules | Taxed on Nigeria-sourced income and significant economic presence |
@@ -59,7 +59,7 @@ Employers should also note that the PAYE base has been widened to capture more f
 
 ## What changed for companies
 
-The small company definition has been raised: turnover of ₦50 million or less, and fixed assets of ₦250 million or less, excluding professional services firms, now qualifies for 0% Companies Income Tax. Everyone above that pays 30%. The old "medium company" tax band has been removed entirely, so it's now a two-tier system rather than three.
+The small company definition has been raised: turnover of ₦100 million or less, and fixed assets of less than ₦250 million, excluding professional services firms, now qualifies for 0% Companies Income Tax. Everyone above that pays 30%. The old "medium company" tax band has been removed entirely, so it's now a two-tier system rather than three.
 
 Large companies and multinational groups above a high turnover threshold face a 15% minimum effective tax rate, aimed squarely at preventing profit-shifting into low-tax jurisdictions. If a company's actual effective rate falls below that floor, a top-up tax closes the gap.
 
