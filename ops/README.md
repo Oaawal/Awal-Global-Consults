@@ -31,10 +31,14 @@ Changing a variable or secret only takes effect after the next deployment.
 - **Forms** (`functions/submit-kyc.js`, `functions/submit-contact.js`) save each
   submission through `functions/_lib/records.js`, then email you and the client.
   If the database is unreachable, the email still goes out and says so.
-- **Dashboard** at `/admin` (`functions/admin/[[path]].js`): sign in with a code
-  emailed to an address in `ADMIN_EMAILS`.
+- **Dashboard** at `/admin` (`functions/admin/[[path]].js`, pages in
+  `functions/_lib/admin-views.js`, look and feel in `functions/_lib/admin-ui.js`):
+  sign in with a code emailed to an address in `ADMIN_EMAILS`. Sections:
+  Overview, Cases, Clients, Records (retention review, legal holds, client data
+  requests, backups) and Activity (the audit log).
 - **Daily job** at `POST /cron/daily` (`functions/_lib/automation.js`): client
-  reminders and the 8am summary. Runs at most once per Lagos day; the
+  reminders, the 8am summary, and a database backup to `backups/YYYY-MM-DD.json`
+  in the R2 bucket (kept 30 days, so erased data leaves backups within 30 days). Runs at most once per Lagos day; the
   `job_runs` table shows each run.
 - **Tracking page** at `/track` (`functions/track.js`).
 - **Audit log**: the `audit_log` table records every sign-in, case view,
@@ -46,6 +50,10 @@ Changing a variable or secret only takes effect after the next deployment.
 - Applications: 6 years after the case is closed (covers the 5-year AML minimum).
 - Cancelled applications and enquiries: 12 months after last activity.
 - Nothing is deleted automatically; a case on legal hold is never deleted.
+- Erasing (`functions/_lib/compliance.js`) deletes a case's documents and personal
+  details but keeps a stub (reference, service, dates) as a record that it existed.
+  Early erasure is only for test or duplicate entries, with the reason logged.
+- D1 also keeps its own point-in-time restore history (Time Travel) for recent days.
 
 ## If something stops working
 

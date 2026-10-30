@@ -5,12 +5,14 @@
  *      Reminders stop as soon as the case status changes.
  *   2. Emails you a summary: new cases, follow-ups due, cases waiting on
  *      clients, cases in progress, and records past their retention date.
+ *   3. Backs up the database to the private bucket (kept 30 days).
  * It runs at most once per Lagos calendar day.
  */
 import { sendBrevoEmail } from './brevo.js';
 import { adminEmails } from './admin-auth.js';
 import { caseReminderEmail, dailySummaryEmail } from './email-templates.js';
 import { statusInfo, SITE_URL } from './cases.js';
+import { backupDatabase } from './compliance.js';
 
 const DAY_MS = 86400000;
 const REMINDER_DAYS = [3, 7];          // reminder 1 after 3 days, reminder 2 after 7
@@ -103,7 +105,7 @@ export async function runDailyJob(env, request, { now = new Date() } = {}) {
     env.DB.prepare(
       "SELECT SUM(kind = 'application') AS applications, SUM(kind = 'enquiry') AS enquiries FROM cases WHERE created_at >= ?1").bind(dayAgo),
     env.DB.prepare(
-      'SELECT COUNT(*) AS n FROM cases WHERE retain_until IS NOT NULL AND retain_until < ?1 AND legal_hold = 0').bind(nowIso)
+      'SELECT COUNT(*) AS n FROM cases WHERE retain_until IS NOT NULL AND retain_until < ?1 AND legal_hold = 0 AND purged_at IS NULL').bind(nowIso)
   ]);
 
   const newCases = (newRes.results || []).map(c => {
@@ -154,7 +156,16 @@ export async function runDailyJob(env, request, { now = new Date() } = {}) {
     }
   }
 
+  // ── 3. Backup ─────────────────────────────────────────────────
+  let backup = null;
+  try {
+    backup = await backupDatabase(env, runDate);
+  } catch (err) {
+    console.error('daily job: backup failed:', err && err.message);
+  }
+
   const detail = {
+    backupBytes: backup ? backup.bytes : null, backupsRemoved: backup ? backup.removed : 0,
     remindersSent: remindersSent.length, newCases: newCases.length, followUps: followUps.length,
     waiting: waiting.length, inProgress: inProgress.length, retentionDue, summarySent
   };

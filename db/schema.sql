@@ -40,7 +40,9 @@ CREATE TABLE IF NOT EXISTS cases (
   legal_hold         INTEGER NOT NULL DEFAULT 0,
   status_changed_at  TEXT,                        -- when the current status was set (drives client reminders)
   follow_up_at       TEXT,                        -- optional reminder date for you, e.g. annual returns
-  follow_up_note     TEXT
+  follow_up_note     TEXT,
+  legal_hold_reason  TEXT,
+  purged_at          TEXT                         -- personal data and documents erased; the case row stays as a record that it existed
 );
 CREATE INDEX IF NOT EXISTS idx_cases_client ON cases(client_id);
 CREATE INDEX IF NOT EXISTS idx_cases_status ON cases(status);
@@ -129,3 +131,16 @@ CREATE TABLE IF NOT EXISTS job_runs (
   detail   TEXT,
   PRIMARY KEY (job, run_date)
 );
+
+-- Requests from clients under the NDPA (access, correction, erasure, ...), and what was done.
+CREATE TABLE IF NOT EXISTS data_requests (
+  id           TEXT PRIMARY KEY,
+  client_id    TEXT REFERENCES clients(id),
+  kind         TEXT NOT NULL CHECK (kind IN ('access', 'correction', 'erasure', 'objection', 'other')),
+  received_at  TEXT NOT NULL,
+  completed_at TEXT,
+  outcome      TEXT,
+  note         TEXT,
+  created_by   TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_data_requests_open ON data_requests(completed_at);

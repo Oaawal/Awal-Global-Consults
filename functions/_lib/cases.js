@@ -108,3 +108,19 @@ export function autoFollowUp(services, status, now) {
   }
   return null;
 }
+
+// The usual next stage, offered as the one-tap action on a case
+const NEXT_STATUS = {
+  application: { new: 'quote_sent', quote_sent: 'paid', awaiting_documents: 'filed', paid: 'filed', filed: 'approved', approved: 'delivered', delivered: 'closed' },
+  enquiry: { new: 'contacted', contacted: 'closed' }
+};
+
+export function nextStatus(kind, status) {
+  return (NEXT_STATUS[kind] || {})[status] || null;
+}
+
+/** Stages to draw in a progress tracker: the main path, plus a side stage while it is current. */
+export function progressPath(kind, status) {
+  return statusesFor(kind).filter(s =>
+    s.key === status || !['closed', 'cancelled', 'converted', 'awaiting_documents'].includes(s.key));
+}
