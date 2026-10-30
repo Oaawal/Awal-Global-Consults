@@ -49,6 +49,16 @@ module.exports = {
       description: 'NDPR/data protection, NIPC, business permits, and regulatory compliance.',
       relatedService: { href: 'corporate-regulatory', label: 'Talk to an Advisor' }
     },
+    'export-licensing': {
+      label: 'Export & Licensing',
+      description: 'NEPC export registration, export documentation, and business licences in Nigeria.',
+      relatedService: { href: 'export-import-licensing', label: 'Get Your Export Licence' }
+    },
+    'property-legal': {
+      label: 'Property & Legal Documents',
+      description: 'Property due diligence, title checks, and legal documentation in Nigeria.',
+      relatedService: { href: 'legal-documentation', label: 'Request a Property Document Check' }
+    },
     'cybersecurity': {
       label: 'Cybersecurity & Digital Safety',
       description: 'Practical cybersecurity, fraud prevention, and digital safety guidance for Nigerian businesses.',
