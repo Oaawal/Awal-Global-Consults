@@ -156,7 +156,7 @@ official CAC service times or fees — say so wherever they are quoted.
   → declaration of trustees (within the 28 days) → final submission and
   approval (~3 business days).
 - **Package prices (from):** business name ₦40,000; limited company ₦75,000;
-  incorporated trustees ₦150,000. Packages can be higher with add-ons; every
+  incorporated trustees ₦150,000, company limited by guarantee from ₦150,000. Packages can be higher with add-ons; every
   quote is itemised first.
 - **Services confirmed (30 Oct 2026):** NEPC export licences and other licences;
   property document checks and preparation (by our team of professional

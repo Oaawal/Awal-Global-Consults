@@ -6,7 +6,7 @@ topic: ngos-and-trustees
 category: cac-registration
 description: Both structures suit non-profits in Nigeria. Here's how incorporated trustees and companies limited by guarantee differ on governance, members, approvals, foreign involvement and running costs — and how to choose.
 excerpt: NGOs, foundations, churches and associations in Nigeria usually register as incorporated trustees or as a company limited by guarantee. They're both non-profit, but they work very differently. Here's how to choose.
-cta_text: Awal Global Consults registers incorporated trustees from ₦150,000, government fees included, and advises NGOs on the right structure before they file.
+cta_text: Awal Global Consults registers both incorporated trustees and companies limited by guarantee from ₦150,000, government fees included — and advises on the right structure before you file.
 whatsapp_topic: NGO structure — incorporated trustees or company limited by guarantee
 ---
 
@@ -47,6 +47,10 @@ Whichever structure you choose, non-profits are generally expected to register w
 - **Want the simplest governance with a small trustee board?** Incorporated trustees.
 
 If you're unsure, ask before you file — changing structure later means starting again.
+
+## What it costs with us
+
+We register **both structures from ₦150,000**, government fees included. Packages with extra services — such as SCUML registration — are quoted separately before you pay.
 
 <div class="blog-faq">
 <div class="blog-faq-item">
