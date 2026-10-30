@@ -2,6 +2,7 @@
 title: "Nigeria's Cybersecurity Levy: Who Actually Has to Pay It?"
 slug: cybersecurity-levy-nigeria-businesses
 date: 2026-09-10
+topic: cybersecurity
 category: cybersecurity
 description: What Nigeria's 0.5% Cybersecurity Levy actually covers, which businesses are the ones legally required to remit it, and why most small businesses have misunderstood who it applies to.
 excerpt: The Cybersecurity Levy caused genuine confusion when it was announced, suspended, then quietly reinstated. Most small business owners still aren't sure if it applies to them. Here's the actual answer.

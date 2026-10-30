@@ -2,6 +2,7 @@
 title: "How to Get Your Tax ID (TIN) in Nigeria: The 2026 Retrieval Process"
 slug: tin-retrieval-nigeria-2026
 date: 2026-08-04
+topic: tax-and-tin
 category: tax-compliance
 description: How to retrieve your Tax Identification Number in Nigeria under the unified Tax ID system that took effect in January 2026, and why you likely already have one without applying.
 excerpt: Since January 2026, a separate TIN application is mostly a thing of the past for registered businesses. Here's what changed, and exactly how to retrieve the number you probably already have.

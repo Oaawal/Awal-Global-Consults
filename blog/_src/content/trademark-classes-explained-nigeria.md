@@ -2,6 +2,7 @@
 title: Trademark Classes in Nigeria Explained: How to Choose the Right One
 slug: trademark-classes-explained-nigeria
 date: 2026-07-14
+topic: trademark-basics
 category: trademarks-ip
 description: A plain-language guide to Nigeria's 45 trademark classes under the Nice Classification system. How they work, how to pick the right one, and what happens if you get it wrong.
 excerpt: Trademark protection only extends to the class you register in. Here's how to figure out which of the 45 classes actually covers your business.

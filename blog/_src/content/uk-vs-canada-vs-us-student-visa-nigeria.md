@@ -2,6 +2,7 @@
 title: "UK vs Canada vs US Student Visa: Which Is Actually More Achievable for Nigerian Students?"
 slug: uk-vs-canada-vs-us-student-visa-nigeria
 date: 2026-09-29
+topic: study-abroad
 category: identity-immigration
 description: A practical comparison of UK, Canada, and US student visa requirements for Nigerian applicants in 2026, focused on financial thresholds, approval odds, and what each country actually scrutinises.
 excerpt: "Which country is easier?" isn't really the right question. Each one is strict about a different thing. Here's what that means for a Nigerian applicant choosing where to apply.

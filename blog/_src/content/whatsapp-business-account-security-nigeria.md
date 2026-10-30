@@ -2,6 +2,7 @@
 title: "WhatsApp Business Account Security: Protecting Your Business from Takeover"
 slug: whatsapp-business-account-security-nigeria
 date: 2026-09-13
+topic: cybersecurity
 category: cybersecurity
 description: How WhatsApp Business account takeovers actually happen in Nigeria, the single setting that prevents most of them, and what to do in the first hour if your business account is hijacked.
 excerpt: A hijacked WhatsApp Business account gets used to scam your own customers under your name. Here's the one setting that stops most takeovers, and what to do if it's too late.

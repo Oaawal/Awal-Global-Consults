@@ -2,6 +2,7 @@
 title: KYC Documentation in Nigeria: What Banks and Regulators Actually Ask For
 slug: kyc-documentation-checklist-nigeria
 date: 2026-07-14
+topic: aml-kyc-scuml
 category: kyc-compliance
 description: A practical checklist of what KYC documentation Nigerian businesses need to collect from individuals, companies, and trustees, and the pieces most onboarding processes quietly miss.
 excerpt: A working checklist for individual, corporate, and trustee KYC, including the parts a lot of onboarding forms quietly skip.

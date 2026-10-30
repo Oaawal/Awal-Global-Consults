@@ -2,6 +2,7 @@
 title: CAC Annual Returns in Nigeria: Deadline, Process, and the Penalty for Missing It
 slug: cac-annual-returns-deadline-penalty
 date: 2026-09-16
+topic: after-registration
 category: cac-registration
 description: When CAC annual returns are due for business names and limited companies in Nigeria, what filing actually involves, and what happens if you miss the deadline.
 excerpt: Registering your business isn't a one-time task. Annual returns are the recurring filing that keeps your registration alive, and missing them costs far more than the filing itself.

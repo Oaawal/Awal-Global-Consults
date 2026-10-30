@@ -2,6 +2,7 @@
 title: "NIN Retrieval and Correction in Nigeria: What Actually Works"
 slug: nin-retrieval-correction-nigeria
 date: 2026-08-13
+topic: nin-and-passports
 category: identity-immigration
 description: How to retrieve a lost NIN and correct errors on your NIMC record in Nigeria, including what documents NIMC actually accepts for a correction and where the process commonly gets rejected.
 excerpt: A forgotten NIN and an incorrect one need two completely different fixes. Here's the right path for each, and the document details that get corrections rejected.

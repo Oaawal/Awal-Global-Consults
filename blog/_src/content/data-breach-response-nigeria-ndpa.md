@@ -2,6 +2,7 @@
 title: "Responding to a Data Breach in Nigeria: What the NDPA Actually Requires"
 slug: data-breach-response-nigeria-ndpa
 date: 2026-09-18
+topic: data-protection
 category: cybersecurity
 description: The specific steps the Nigeria Data Protection Act requires after a data breach, including the 72-hour NDPC notification window, the breach register requirement, and the annual audit obligation most businesses don't know exists.
 excerpt: A data breach isn't just an IT problem in Nigeria, it's a legal deadline. Here's exactly what the NDPA requires you to do, and by when.

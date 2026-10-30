@@ -2,6 +2,7 @@
 title: "Nigerian International Passport: New Application, Renewal, and What Actually Delays It"
 slug: nigerian-international-passport-guide
 date: 2026-09-22
+topic: nin-and-passports
 category: identity-immigration
 description: How Nigerian international passport applications and renewals actually work in 2026, current fees inside and outside Nigeria, and the specific document issues that cause the longest delays.
 excerpt: A passport application rarely stalls because of the passport office. It stalls because of a document detail nobody flagged before submission. Here's what actually causes the delay, and current fees.

@@ -104,12 +104,12 @@
 
   <section class="section-sm blog-post-hero">
     <div class="container" style="max-width: 760px;">
-      <nav class="blog-breadcrumb" aria-label="Breadcrumb">
-        <a href="{{ROOT}}">Home</a> / <a href="{{ROOT}}blog/">Blog</a> / <span>{{CATEGORY_LABEL}}</span>
-      </nav>
-      <span class="eyebrow"><span class="seal-mark"></span>{{CATEGORY_LABEL}}</span>
+{{BREADCRUMB_HTML}}
+      <span class="guide-eyebrow"><span class="dot"></span>{{TOPIC_LABEL}}</span>
       <h1>{{TITLE}}</h1>
-      <p class="blog-meta">{{DATE_DISPLAY}} &middot; {{READING_TIME}} min read</p>
+      <p class="guide-lede">{{DESCRIPTION}}</p>
+{{BYLINE_HTML}}
+      <figure class="guide-cover">{{COVER_HTML}}</figure>
     </div>
   </section>
 
@@ -130,6 +130,7 @@
       </div>
     </div>
   </section>
+{{RELATED_HTML}}
 
   <footer class="site-footer">
     <div class="container">

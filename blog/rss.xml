@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>Awal Global Consults Blog</title>
+    <title>Awal Guides — Awal Global Consults</title>
     <link>https://awalglobal.com.ng/blog/</link>
-    <description>Guides on CAC registration, trademarks, tax, and compliance in Nigeria.</description>
+    <description>Guides on CAC registration, trademarks, tax, compliance and immigration in Nigeria.</description>
     <language>en-ng</language>
     <item>
       <title>CERPAC Renewal in Nigeria: What Changes the Second Time Around</title>
       <link>https://awalglobal.com.ng/blog/cerpac-renewal-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/cerpac-renewal-nigeria/</guid>
       <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
+      <category>Expatriates and CERPAC</category>
       <description><![CDATA[How CERPAC renewal actually works in Nigeria, the shift to a fully digital process, and why the underlying conditions from the first approval still have to hold up at renewal time.]]></description>
     </item>
     <item>
@@ -17,6 +18,7 @@
       <link>https://awalglobal.com.ng/blog/uk-vs-canada-vs-us-student-visa-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/uk-vs-canada-vs-us-student-visa-nigeria/</guid>
       <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
+      <category>Study abroad</category>
       <description><![CDATA[A practical comparison of UK, Canada, and US student visa requirements for Nigerian applicants in 2026, focused on financial thresholds, approval odds, and what each country actually scrutinises.]]></description>
     </item>
     <item>
@@ -24,6 +26,7 @@
       <link>https://awalglobal.com.ng/blog/student-visa-refusal-reasons-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/student-visa-refusal-reasons-nigeria/</guid>
       <pubDate>Sat, 26 Sep 2026 00:00:00 GMT</pubDate>
+      <category>Study abroad</category>
       <description><![CDATA[The real, documented reasons Nigerian student visa applications get refused for the UK, Canada, and beyond, and the two underlying issues that account for the overwhelming majority of them.]]></description>
     </item>
     <item>
@@ -31,6 +34,7 @@
       <link>https://awalglobal.com.ng/blog/uk-student-visa-financial-proof-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/uk-student-visa-financial-proof-nigeria/</guid>
       <pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate>
+      <category>Study abroad</category>
       <description><![CDATA[The exact UK student visa financial requirements for Nigerian applicants in 2026, including the new higher maintenance threshold taking effect in November, and the banking-history mistakes that cause refusals.]]></description>
     </item>
     <item>
@@ -38,6 +42,7 @@
       <link>https://awalglobal.com.ng/blog/nigerian-international-passport-guide/</link>
       <guid>https://awalglobal.com.ng/blog/nigerian-international-passport-guide/</guid>
       <pubDate>Tue, 22 Sep 2026 00:00:00 GMT</pubDate>
+      <category>NIN and passports</category>
       <description><![CDATA[How Nigerian international passport applications and renewals actually work in 2026, current fees inside and outside Nigeria, and the specific document issues that cause the longest delays.]]></description>
     </item>
     <item>
@@ -45,6 +50,7 @@
       <link>https://awalglobal.com.ng/blog/data-breach-response-nigeria-ndpa/</link>
       <guid>https://awalglobal.com.ng/blog/data-breach-response-nigeria-ndpa/</guid>
       <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <category>Data protection (NDPA)</category>
       <description><![CDATA[The specific steps the Nigeria Data Protection Act requires after a data breach, including the 72-hour NDPC notification window, the breach register requirement, and the annual audit obligation most businesses don't know exists.]]></description>
     </item>
     <item>
@@ -52,6 +58,7 @@
       <link>https://awalglobal.com.ng/blog/business-email-compromise-payment-fraud-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/business-email-compromise-payment-fraud-nigeria/</guid>
       <pubDate>Wed, 16 Sep 2026 00:00:00 GMT</pubDate>
+      <category>Cybersecurity and fraud</category>
       <description><![CDATA[How business email and WhatsApp compromise scams actually work against Nigerian businesses, why Nigeria is a documented hotspot for this specific fraud type, and the one habit that stops almost all of it.]]></description>
     </item>
     <item>
@@ -59,6 +66,7 @@
       <link>https://awalglobal.com.ng/blog/cac-annual-returns-deadline-penalty/</link>
       <guid>https://awalglobal.com.ng/blog/cac-annual-returns-deadline-penalty/</guid>
       <pubDate>Wed, 16 Sep 2026 00:00:00 GMT</pubDate>
+      <category>After registration</category>
       <description><![CDATA[When CAC annual returns are due for business names and limited companies in Nigeria, what filing actually involves, and what happens if you miss the deadline.]]></description>
     </item>
     <item>
@@ -66,6 +74,7 @@
       <link>https://awalglobal.com.ng/blog/whatsapp-business-account-security-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/whatsapp-business-account-security-nigeria/</guid>
       <pubDate>Sun, 13 Sep 2026 00:00:00 GMT</pubDate>
+      <category>Cybersecurity and fraud</category>
       <description><![CDATA[How WhatsApp Business account takeovers actually happen in Nigeria, the single setting that prevents most of them, and what to do in the first hour if your business account is hijacked.]]></description>
     </item>
     <item>
@@ -73,6 +82,7 @@
       <link>https://awalglobal.com.ng/blog/cybersecurity-levy-nigeria-businesses/</link>
       <guid>https://awalglobal.com.ng/blog/cybersecurity-levy-nigeria-businesses/</guid>
       <pubDate>Thu, 10 Sep 2026 00:00:00 GMT</pubDate>
+      <category>Cybersecurity and fraud</category>
       <description><![CDATA[What Nigeria's 0.5% Cybersecurity Levy actually covers, which businesses are the ones legally required to remit it, and why most small businesses have misunderstood who it applies to.]]></description>
     </item>
     <item>
@@ -80,6 +90,7 @@
       <link>https://awalglobal.com.ng/blog/ndpa-compliance-nigerian-business/</link>
       <guid>https://awalglobal.com.ng/blog/ndpa-compliance-nigerian-business/</guid>
       <pubDate>Sat, 05 Sep 2026 00:00:00 GMT</pubDate>
+      <category>Data protection (NDPA)</category>
       <description><![CDATA[Whether your Nigerian business needs to register as a data controller or processor under the NDPA, what the GAID's registration tiers actually mean, and the compliance basics most businesses get wrong.]]></description>
     </item>
     <item>
@@ -87,6 +98,7 @@
       <link>https://awalglobal.com.ng/blog/scuml-registration-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/scuml-registration-nigeria/</guid>
       <pubDate>Sat, 05 Sep 2026 00:00:00 GMT</pubDate>
+      <category>AML, KYC and SCUML</category>
       <description><![CDATA[What SCUML certification actually is, which businesses in Nigeria are legally required to get one, and what happens to your bank account if you skip it.]]></description>
     </item>
     <item>
@@ -94,6 +106,7 @@
       <link>https://awalglobal.com.ng/blog/trademark-registration-cost-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/trademark-registration-cost-nigeria/</guid>
       <pubDate>Sat, 29 Aug 2026 00:00:00 GMT</pubDate>
+      <category>Trademark costs and timelines</category>
       <description><![CDATA[What actually drives the cost of trademark registration in Nigeria, why it's billed per class rather than as a single flat fee, and the fee components most quotes leave out.]]></description>
     </item>
     <item>
@@ -101,6 +114,7 @@
       <link>https://awalglobal.com.ng/blog/business-name-vs-limited-company-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/business-name-vs-limited-company-nigeria/</guid>
       <pubDate>Thu, 27 Aug 2026 00:00:00 GMT</pubDate>
+      <category>Choosing a structure</category>
       <description><![CDATA[A decision framework for choosing between a CAC business name and a limited company in Nigeria — liability, funding, tax, perception, and how to tell which stage you're actually at.]]></description>
     </item>
     <item>
@@ -108,6 +122,7 @@
       <link>https://awalglobal.com.ng/blog/cerpac-expatriate-quota-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/cerpac-expatriate-quota-nigeria/</guid>
       <pubDate>Sat, 22 Aug 2026 00:00:00 GMT</pubDate>
+      <category>Expatriates and CERPAC</category>
       <description><![CDATA[How Expatriate Quota and CERPAC actually work together for Nigerian employers hiring foreign staff, the digital process that replaced the old paper system, and where the process commonly stalls.]]></description>
     </item>
     <item>
@@ -115,6 +130,7 @@
       <link>https://awalglobal.com.ng/blog/cac-registration-cost-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/cac-registration-cost-nigeria/</guid>
       <pubDate>Tue, 18 Aug 2026 00:00:00 GMT</pubDate>
+      <category>Costs and timelines</category>
       <description><![CDATA[What actually determines the cost of CAC business registration in Nigeria in 2026 — statutory fees, share capital, structure, and the add-ons people forget to budget for.]]></description>
     </item>
     <item>
@@ -122,6 +138,7 @@
       <link>https://awalglobal.com.ng/blog/nin-retrieval-correction-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/nin-retrieval-correction-nigeria/</guid>
       <pubDate>Thu, 13 Aug 2026 00:00:00 GMT</pubDate>
+      <category>NIN and passports</category>
       <description><![CDATA[How to retrieve a lost NIN and correct errors on your NIMC record in Nigeria, including what documents NIMC actually accepts for a correction and where the process commonly gets rejected.]]></description>
     </item>
     <item>
@@ -129,6 +146,7 @@
       <link>https://awalglobal.com.ng/blog/tin-retrieval-nigeria-2026/</link>
       <guid>https://awalglobal.com.ng/blog/tin-retrieval-nigeria-2026/</guid>
       <pubDate>Tue, 04 Aug 2026 00:00:00 GMT</pubDate>
+      <category>Tax and TIN</category>
       <description><![CDATA[How to retrieve your Tax Identification Number in Nigeria under the unified Tax ID system that took effect in January 2026, and why you likely already have one without applying.]]></description>
     </item>
     <item>
@@ -136,6 +154,7 @@
       <link>https://awalglobal.com.ng/blog/nigeria-tax-act-2025-compliance-guide/</link>
       <guid>https://awalglobal.com.ng/blog/nigeria-tax-act-2025-compliance-guide/</guid>
       <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
+      <category>Tax and TIN</category>
       <description><![CDATA[A complete guide to Nigeria's 2025 tax reform. What the NTA and NTAA actually changed, who has to register and file, the deadlines that apply to your business, and the penalties for getting it wrong.]]></description>
     </item>
     <item>
@@ -143,6 +162,7 @@
       <link>https://awalglobal.com.ng/blog/cac-registration-guide-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/cac-registration-guide-nigeria/</guid>
       <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <category>Registering with CAC</category>
       <description><![CDATA[A plain-language guide to CAC registration in Nigeria. Business name vs limited company vs incorporated trustees, the step-by-step process, documents needed, and what happens after you register.]]></description>
     </item>
     <item>
@@ -150,6 +170,7 @@
       <link>https://awalglobal.com.ng/blog/kyc-documentation-checklist-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/kyc-documentation-checklist-nigeria/</guid>
       <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <category>AML, KYC and SCUML</category>
       <description><![CDATA[A practical checklist of what KYC documentation Nigerian businesses need to collect from individuals, companies, and trustees, and the pieces most onboarding processes quietly miss.]]></description>
     </item>
     <item>
@@ -157,6 +178,7 @@
       <link>https://awalglobal.com.ng/blog/trademark-classes-explained-nigeria/</link>
       <guid>https://awalglobal.com.ng/blog/trademark-classes-explained-nigeria/</guid>
       <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <category>Trademark basics</category>
       <description><![CDATA[A plain-language guide to Nigeria's 45 trademark classes under the Nice Classification system. How they work, how to pick the right one, and what happens if you get it wrong.]]></description>
     </item>
   </channel>

@@ -2,6 +2,7 @@
 title: "Why Nigerian Student Visa Applications Get Refused (And How to Avoid It)"
 slug: student-visa-refusal-reasons-nigeria
 date: 2026-09-26
+topic: study-abroad
 category: identity-immigration
 description: The real, documented reasons Nigerian student visa applications get refused for the UK, Canada, and beyond, and the two underlying issues that account for the overwhelming majority of them.
 excerpt: Most refusal letters mention insufficient funds or weak ties to Nigeria. Almost none of them explain what that actually means, or how to fix it before you apply again.

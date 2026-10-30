@@ -2,6 +2,7 @@
 title: How Much Does Trademark Registration Actually Cost in Nigeria?
 slug: trademark-registration-cost-nigeria
 date: 2026-08-29
+topic: trademark-costs
 category: trademarks-ip
 description: What actually drives the cost of trademark registration in Nigeria, why it's billed per class rather than as a single flat fee, and the fee components most quotes leave out.
 excerpt: Nigeria doesn't allow multi-class trademark filing, which quietly changes how the cost adds up. Here's what actually goes into a trademark registration quote.

@@ -2,6 +2,7 @@
 title: Nigeria Tax Act 2025: TIN, Filing, and Penalties Explained
 slug: nigeria-tax-act-2025-compliance-guide
 date: 2026-07-16
+topic: tax-and-tin
 category: tax-compliance
 description: A complete guide to Nigeria's 2025 tax reform. What the NTA and NTAA actually changed, who has to register and file, the deadlines that apply to your business, and the penalties for getting it wrong.
 excerpt: The Nigeria Tax Act and Tax Administration Act rewrote the rules from January 2026. Here's what applies to your business, what's due when, and what non-compliance actually costs.

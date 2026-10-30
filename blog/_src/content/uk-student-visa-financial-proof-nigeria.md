@@ -2,6 +2,7 @@
 title: "UK Student Visa Financial Proof: What Nigerian Applicants Actually Need to Show"
 slug: uk-student-visa-financial-proof-nigeria
 date: 2026-09-24
+topic: study-abroad
 category: identity-immigration
 description: The exact UK student visa financial requirements for Nigerian applicants in 2026, including the new higher maintenance threshold taking effect in November, and the banking-history mistakes that cause refusals.
 excerpt: The single most common reason Nigerian student visa applications get refused isn't the wrong course or the wrong school. It's how the money is shown. Here's what the UK actually requires.

@@ -2,6 +2,7 @@
 title: Complete Guide to CAC Registration in Nigeria (2026)
 slug: cac-registration-guide-nigeria
 date: 2026-07-14
+topic: registering-with-cac
 category: cac-registration
 description: A plain-language guide to CAC registration in Nigeria. Business name vs limited company vs incorporated trustees, the step-by-step process, documents needed, and what happens after you register.
 excerpt: Everything you need to know before registering your business with the Corporate Affairs Commission. Structure choice, process, documents, and the compliance calendar that starts once you're approved.

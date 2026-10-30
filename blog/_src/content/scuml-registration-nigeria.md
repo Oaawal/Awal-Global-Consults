@@ -2,6 +2,7 @@
 title: "SCUML Registration in Nigeria: Who Needs It and How to Get It"
 slug: scuml-registration-nigeria
 date: 2026-09-05
+topic: aml-kyc-scuml
 category: kyc-compliance
 description: What SCUML certification actually is, which businesses in Nigeria are legally required to get one, and what happens to your bank account if you skip it.
 excerpt: If your business is a DNFBP and you don't have a SCUML certificate, it usually shows up first as a frozen or rejected corporate bank account. Here's who needs one and how it works.

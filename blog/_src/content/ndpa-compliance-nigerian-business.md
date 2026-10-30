@@ -2,6 +2,7 @@
 title: "NDPA Compliance: Does Your Nigerian Business Need to Register with the NDPC?"
 slug: ndpa-compliance-nigerian-business
 date: 2026-09-05
+topic: data-protection
 category: regulatory-licensing
 description: Whether your Nigerian business needs to register as a data controller or processor under the NDPA, what the GAID's registration tiers actually mean, and the compliance basics most businesses get wrong.
 excerpt: A specific number of data subjects is the real trigger for NDPC registration, not company size or industry. Here's the threshold, the tiers, and what compliance actually requires beyond a privacy policy.

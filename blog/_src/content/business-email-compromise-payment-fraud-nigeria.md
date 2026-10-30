@@ -2,6 +2,7 @@
 title: "How Nigerian Businesses Get Scammed Out of Payments (And How to Stop It)"
 slug: business-email-compromise-payment-fraud-nigeria
 date: 2026-09-16
+topic: cybersecurity
 category: cybersecurity
 description: How business email and WhatsApp compromise scams actually work against Nigerian businesses, why Nigeria is a documented hotspot for this specific fraud type, and the one habit that stops almost all of it.
 excerpt: The scam that costs businesses the most rarely involves anything getting hacked. It's a fake message asking you to pay a different account "this time." Here's how it works, and the one habit that stops it.

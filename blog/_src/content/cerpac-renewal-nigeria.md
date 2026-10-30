@@ -2,6 +2,7 @@
 title: "CERPAC Renewal in Nigeria: What Changes the Second Time Around"
 slug: cerpac-renewal-nigeria
 date: 2026-10-01
+topic: expatriates-and-cerpac
 category: identity-immigration
 description: How CERPAC renewal actually works in Nigeria, the shift to a fully digital process, and why the underlying conditions from the first approval still have to hold up at renewal time.
 excerpt: A CERPAC isn't a one-time approval. It's a biennial commitment, and the conditions that got it approved the first time need to still be true when renewal comes around.

@@ -2,6 +2,7 @@
 title: How Much Does CAC Registration Cost in Nigeria? (2026 Price Guide)
 slug: cac-registration-cost-nigeria
 date: 2026-08-18
+topic: costs-and-timelines
 category: cac-registration
 description: What actually determines the cost of CAC business registration in Nigeria in 2026 — statutory fees, share capital, structure, and the add-ons people forget to budget for.
 excerpt: There's no single "CAC registration price." Here's what actually drives the cost, structure by structure, and the extras most people forget to budget for.

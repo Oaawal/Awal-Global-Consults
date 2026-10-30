@@ -2,6 +2,7 @@
 title: "CERPAC and Expatriate Quota: A Guide for Nigerian Employers of Foreign Staff"
 slug: cerpac-expatriate-quota-nigeria
 date: 2026-08-22
+topic: expatriates-and-cerpac
 category: identity-immigration
 description: How Expatriate Quota and CERPAC actually work together for Nigerian employers hiring foreign staff, the digital process that replaced the old paper system, and where the process commonly stalls.
 excerpt: Expatriate Quota and CERPAC are two different approvals solving two different problems, and employers who treat them as one step tend to lose the most time. Here's how they actually fit together.
