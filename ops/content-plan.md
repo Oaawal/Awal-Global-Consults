@@ -66,14 +66,14 @@ High buyer intent, low risk of stale figures, and they open the new
 - [ ] 18. **Incorporated trustees vs company limited by guarantee: which suits your organisation?** — P2
 
 ### Licences and permits
-- [ ] 19. **Export licence in Nigeria: NEPC registration explained** — P2 ⚠
-- [ ] 20. **Which licences does a new Nigerian business actually need?** — P2 (confirm which licences we help with)
+- [ ] 19. **Export licence in Nigeria: NEPC registration explained** — P1 ⚠ (we handle NEPC and other export licences)
+- [ ] 20. **Which licences does a new Nigerian business actually need?** — P2
 
 ## Tax, compliance and data
 
 ### Tax and TIN
 - [ ] 21. **The small company tax exemption under the Nigeria Tax Act 2025: who qualifies** — P1 ⚠ (thresholds)
-- [ ] 22. **How to get a tax clearance certificate (TCC) in Nigeria** — P1 ⚠ (current NRS process)
+- [ ] 22. **How to get a tax clearance certificate (TCC) in Nigeria** — P1 ⚠ (current NRS process; we handle tax registration and TCCs)
 - [ ] 23. **Does a business that made no profit still need to file tax returns?** — P2
 - [ ] 24. **VAT registration for small businesses in Nigeria: when it applies** — P2 ⚠
 
@@ -97,8 +97,8 @@ High buyer intent, low risk of stale figures, and they open the new
 ## Identity, immigration and study
 
 ### NIN and passports
-- [ ] 32. **Renewing a Nigerian passport from abroad (UK, US, Canada)** — P1 ⚠ (also file under abroad-*)
-- [ ] 33. **How Nigerians abroad can get a NIN** — P1 ⚠
+- [ ] 32. **Renewing a Nigerian passport from abroad (UK, US, Canada)** — P1 ⚠ (also file under abroad-*; we support new passports, renewals and procurement)
+- [ ] 33. **How Nigerians abroad can get a NIN** — P1 ⚠ (we provide NIN services for people abroad)
 
 ### Expatriates and CERPAC
 - [ ] 34. **Expatriate quota: how many foreign staff can a Nigerian company employ?** — P2 ⚠
@@ -114,7 +114,7 @@ High buyer intent, low risk of stale figures, and they open the new
 - [ ] 39. **Do I need a Nigerian address to register a business with CAC?** — P1 · abroad-all
 - [ ] 40. **Signing CAC documents from abroad: e-signatures, notarisation and power of attorney** — P1 · abroad-all ⚠
 - [ ] 41. **Running a Nigerian business from abroad: who should be your local representative?** — P2 · abroad-all
-- [ ] 42. **Buying property in Nigeria from abroad: the legal documents to check first** — P2 · abroad-all (confirm we offer this)
+- [ ] 42. **Buying property in Nigeria from abroad: the legal documents to check first** — P1 · abroad-all (checks and preparation done by our team of professional lawyers)
 
 ## Data and reference (new section — "free to cite", attracts links)
 
@@ -158,5 +158,9 @@ official CAC service times or fees — say so wherever they are quoted.
 - **Package prices (from):** business name ₦40,000; limited company ₦75,000;
   incorporated trustees ₦150,000. Packages can be higher with add-ons; every
   quote is itemised first.
+- **Services confirmed (30 Oct 2026):** NEPC export licences and other licences;
+  property document checks and preparation (by our team of professional
+  lawyers); tax registration and tax clearance certificates; passport
+  applications, renewals and procurement; NIN services for people abroad.
 - **Bylines:** every guide carries "Reviewed by A.O. Abdullateef" — so every
   guide must be read by the owner before `draft: true` is removed.
