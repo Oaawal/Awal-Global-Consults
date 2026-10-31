@@ -10,7 +10,7 @@ cta_text: Awal Global Consults runs the official availability search and the wid
 whatsapp_topic: trademark search
 ---
 
-Before you file a trademark in Nigeria, you should know whether someone else already owns the same or a confusingly similar mark. That's what an **availability search** is for — and it's the cheapest step in the whole process.
+Before you file a trademark in Nigeria, you should know whether someone else already owns the same or a confusingly similar mark. That's what an **availability search** is for, and it's the cheapest step in the whole process.
 
 Skipping it is how businesses end up paying for an application that gets refused, opposed after publication, or worse, building a brand they later have to abandon.
 
@@ -19,7 +19,7 @@ Skipping it is how businesses end up paying for an application that gets refused
 Trademarks in Nigeria are registered by the **Trademarks Registry** under the Federal Ministry of Industry, Trade and Investment, through its online IP portal. An availability search checks the Registry's records for marks that are:
 
 - **identical** to yours, or
-- **similar enough to cause confusion** — similar spelling, sound or meaning,
+- **similar enough to cause confusion**: similar spelling, sound or meaning,
 
 in the **same class** of goods or services. Nigeria uses the international Nice classification, and each application covers one class, so the class you search is the class you intend to register. Our guide to [trademark classes](/blog/trademark-classes-explained-nigeria/) explains how to choose.
 
@@ -56,11 +56,11 @@ The search costs a fraction of a full application, and it's the step that tells 
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can I search by myself?</p>
-<p class="blog-faq-a">You can do the informal checks — online, social media, CAC — yourself. The official availability search is done through the Registry's portal; we run it as part of every trademark engagement and explain the results.</p>
+<p class="blog-faq-a">You can do the informal checks (online, social media, CAC) yourself. The official availability search is done through the Registry's portal; we run it as part of every trademark engagement and explain the results.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">My business name is registered with CAC. Do I still need a trademark search?</p>
-<p class="blog-faq-a">Yes. CAC registration and trademark registration are separate systems — a name approved by CAC can still clash with someone's registered trademark. See <a href="/blog/business-name-vs-trademark-nigeria/">business name vs trademark</a>.</p>
+<p class="blog-faq-a">Yes. CAC registration and trademark registration are separate systems: a name approved by CAC can still clash with someone's registered trademark. See <a href="/blog/business-name-vs-trademark-nigeria/">business name vs trademark</a>.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Should I search my logo as well as my name?</p>

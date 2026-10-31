@@ -6,7 +6,7 @@ topic: cybersecurity
 category: cybersecurity
 description: How business email and WhatsApp compromise scams actually work against Nigerian businesses, why Nigeria is a documented hotspot for this specific fraud type, and the one habit that stops almost all of it.
 excerpt: The scam that costs businesses the most rarely involves anything getting hacked. It's a fake message asking you to pay a different account "this time." Here's how it works, and the one habit that stops it.
-cta_text: Awal Global Consults never asks you to change payment details over a forwarded message — always confirm ours directly if anything about a payment instruction looks even slightly different.
+cta_text: Awal Global Consults never asks you to change payment details over a forwarded message: always confirm ours directly if anything about a payment instruction looks even slightly different.
 whatsapp_topic: payment fraud prevention
 ---
 

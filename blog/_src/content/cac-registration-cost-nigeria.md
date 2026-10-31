@@ -5,7 +5,7 @@ date: 2026-08-18
 updated: 2026-10-31
 topic: costs-and-timelines
 category: cac-registration
-description: What actually determines the cost of CAC business registration in Nigeria in 2026 — statutory fees, share capital, structure, and the add-ons people forget to budget for.
+description: What actually determines the cost of CAC business registration in Nigeria in 2026: statutory fees, share capital, structure, and the add-ons people forget to budget for.
 excerpt: There's no single "CAC registration price." Here's what actually drives the cost, structure by structure, and the extras most people forget to budget for.
 cta_text: Awal Global Consults quotes every CAC registration as one itemized total upfront, government fees and service charge included, before you commit to anything.
 whatsapp_topic: CAC registration cost
@@ -30,7 +30,7 @@ Every CAC registration total is really three things stacked together: the **stat
 | Structure | Statutory fee driver | Typical extras to budget for |
 |---|---|---|
 | Business Name | Flat government fee, same regardless of business type | Name reservation, TIN (automatic, no extra fee), stamp duty on some filings |
-| Limited Company | Scales with share capital — higher authorised share capital means a higher statutory fee | Stamp duty on share capital, MEMART preparation, professional filing fee |
+| Limited Company | Scales with share capital: higher authorised share capital means a higher statutory fee | Stamp duty on share capital, MEMART preparation, professional filing fee |
 | Incorporated Trustees | Flat fee plus a mandatory newspaper publication of intent to incorporate | Publication cost (varies by paper), longer processing window |
 
 The line people budget for least is stamp duty on a limited company's share capital. It's a real, separate cost tied to how much authorised share capital you set at incorporation, which is one more reason not to pick an arbitrary, unnecessarily high share capital figure "just to look serious" to banks or clients. It doesn't buy you anything functionally, and it raises what you pay in fees and stamp duty for no operational benefit.
@@ -42,7 +42,7 @@ The number of cost drivers most first-timers forget: stamp duty and post-registr
 
 ## What's genuinely free that people sometimes get charged for
 
-Since the tax administration changes that took effect in January 2026, your CAC registration number doubles as your Tax Identification Number automatically — retrieving it is a free government service tied to your CAC record, not a separate paid registration. If anyone quotes you a standalone "TIN registration fee" for a business that's already CAC-registered, that's worth questioning before you pay it.
+Since the tax administration changes that took effect in January 2026, your CAC registration number doubles as your Tax Identification Number automatically: retrieving it is a free government service tied to your CAC record, not a separate paid registration. If anyone quotes you a standalone "TIN registration fee" for a business that's already CAC-registered, that's worth questioning before you pay it.
 
 ## What drives the professional/service fee side
 
@@ -62,14 +62,14 @@ What a properly scoped service fee should cover:
 
 ## Getting a number you can actually trust
 
-For the official government fees themselves — name reservation, registration per ₦1 million of share capital and stamp duty — see [CAC fees 2026: the official fee table](/blog/cac-fees-2026-fee-table/).
+For the official government fees themselves: name reservation, registration per ₦1 million of share capital and stamp duty. See [CAC fees 2026: the official fee table](/blog/cac-fees-2026-fee-table/).
 
 The only way to get an accurate total is to have your structure and (for companies) proposed share capital confirmed first, then receive an itemized quote covering the statutory fee, any stamp duty, and the service charge, all before you pay anything. That's the only version of "how much does it cost" that means something, because it's built around your actual registration rather than a generic average.
 
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Is business name registration always cheaper than a limited company?</p>
-<p class="blog-faq-a">Usually yes, since the statutory fee is flat rather than tied to share capital, and there's no stamp duty on share capital to budget for. But cheaper isn't automatically right for you — see our <a href="/blog/business-name-vs-limited-company-nigeria/">business name vs. limited company comparison</a> if you're still deciding.</p>
+<p class="blog-faq-a">Usually yes, since the statutory fee is flat rather than tied to share capital, and there's no stamp duty on share capital to budget for. But cheaper isn't automatically right for you. See our <a href="/blog/business-name-vs-limited-company-nigeria/">business name vs. limited company comparison</a> if you're still deciding.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Does a higher share capital always mean a higher registration fee?</p>
@@ -77,7 +77,7 @@ The only way to get an accurate total is to have your structure and (for compani
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Are there any recurring costs after registration?</p>
-<p class="blog-faq-a">Yes — annual returns are a recurring filing obligation with their own fee and deadline, separate from your one-time registration cost. Missing them carries its own penalty, covered in our <a href="/blog/cac-annual-returns-deadline-penalty/">annual returns guide</a>.</p>
+<p class="blog-faq-a">Yes: annual returns are a recurring filing obligation with their own fee and deadline, separate from your one-time registration cost. Missing them carries its own penalty, covered in our <a href="/blog/cac-annual-returns-deadline-penalty/">annual returns guide</a>.</p>
 </div>
 </div>
 

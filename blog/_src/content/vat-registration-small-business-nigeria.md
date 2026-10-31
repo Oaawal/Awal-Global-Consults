@@ -4,9 +4,9 @@ slug: vat-registration-small-business-nigeria
 date: 2026-10-31
 topic: tax-and-tin
 category: tax-compliance
-description: When a small Nigerian business must register for, charge and file VAT under the 2025 tax laws — the 7.5% rate, the ₦100m threshold, exempt and zero-rated items, monthly returns and the mistakes that lead to penalties.
+description: When a small Nigerian business must register for, charge and file VAT under the 2025 tax laws: the 7.5% rate, the ₦100m threshold, exempt and zero-rated items, monthly returns and the mistakes that lead to penalties.
 excerpt: VAT in Nigeria is 7.5%, but businesses with turnover of ₦100 million or less don't have to charge it. Here's how to tell whether you're in, what changes when you cross the line, and how VAT returns work.
-cta_text: Awal Global Consults handles TIN registration and tax clearance certificates — and helps businesses understand their VAT position before it becomes a penalty.
+cta_text: Awal Global Consults handles TIN registration and tax clearance certificates, and helps businesses understand their VAT position before it becomes a penalty.
 whatsapp_topic: VAT registration
 ---
 
@@ -29,12 +29,12 @@ Watch your turnover through the year. If you cross ₦100 million and don't star
 
 - **Register for VAT** with the tax authority, using your TIN.
 - **Charge 7.5% VAT** on taxable sales and show it on your invoices.
-- **File VAT returns monthly** — including nil returns for months with no sales — and pay what you've collected, less VAT you've paid on qualifying business purchases.
+- **File VAT returns monthly**, including nil returns for months with no sales, and pay what you've collected, less VAT you've paid on qualifying business purchases.
 - **Keep records** of sales invoices and purchase invoices.
 
 ## Exempt and zero-rated supplies
 
-Some goods and services are **exempt** from VAT or **zero-rated**. Under the 2025 tax laws, these include many basic food items, medical and pharmaceutical products, educational services and some others. If everything you sell is exempt, VAT may not apply to you even above the threshold — but check the current lists, because they changed with the reforms.
+Some goods and services are **exempt** from VAT or **zero-rated**. Under the 2025 tax laws, these include many basic food items, medical and pharmaceutical products, educational services and some others. If everything you sell is exempt, VAT may not apply to you even above the threshold, but check the current lists, because they changed with the reforms.
 
 | Type | What it means |
 |---|---|
@@ -45,14 +45,14 @@ Some goods and services are **exempt** from VAT or **zero-rated**. Under the 202
 ## Mistakes that lead to penalties
 
 - **Not registering** once you cross the threshold.
-- **Charging VAT but not remitting it** — this is treated very seriously.
+- **Charging VAT but not remitting it**: this is treated very seriously.
 - **Missing monthly returns**, including nil returns.
 - **Invoices without VAT details**, or VAT charged at the wrong rate.
 - **Not keeping purchase invoices**, so you can't claim input VAT.
 
 ## Selling to big companies and government
 
-Large companies and government bodies may deduct VAT at source from what they pay you, and they often ask for your TIN and evidence of tax compliance — sometimes a tax clearance certificate. See [tax clearance certificates](/blog/tax-clearance-certificate-nigeria/).
+Large companies and government bodies may deduct VAT at source from what they pay you, and they often ask for your TIN and evidence of tax compliance, sometimes a tax clearance certificate. See [tax clearance certificates](/blog/tax-clearance-certificate-nigeria/).
 
 <div class="blog-faq">
 <div class="blog-faq-item">
@@ -61,7 +61,7 @@ Large companies and government bodies may deduct VAT at source from what they pa
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Is VAT the same as the small company income tax exemption?</p>
-<p class="blog-faq-a">No. They're separate taxes with separate rules. A company can pay 0% income tax and still have VAT obligations — see <a href="/blog/small-company-tax-exemption-nigeria-tax-act-2025/">the small company tax exemption</a>.</p>
+<p class="blog-faq-a">No. They're separate taxes with separate rules. A company can pay 0% income tax and still have VAT obligations. See <a href="/blog/small-company-tax-exemption-nigeria-tax-act-2025/">the small company tax exemption</a>.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">When are VAT returns due?</p>

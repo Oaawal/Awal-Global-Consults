@@ -26,14 +26,14 @@ const FLASH = {
   hold_off: ['ok', 'Legal hold released.'],
   hold_reason: ['err', 'Please give a reason for the legal hold.'],
   erased: ['ok', 'Personal data and documents erased. A record that the case existed has been kept.'],
-  erase_blocked: ['err', 'This case cannot be erased yet — see the reason below.'],
+  erase_blocked: ['err', 'This case cannot be erased yet. See the reason below.'],
   erase_confirm: ['err', 'To erase, tick the confirmation box and type the case reference exactly.'],
   client_updated: ['ok', 'Client details updated.'],
   client_invalid: ['err', 'Please enter a name and a valid email address.'],
   request_logged: ['ok', 'Request recorded. It stays on the Records page until you mark it done.'],
   request_done: ['ok', 'Request marked as done.'],
   client_erased: ['ok', 'The client\'s personal data and documents have been erased.'],
-  client_erase_blocked: ['err', 'Some of this client\'s records must still be kept by law — nothing was erased.']
+  client_erase_blocked: ['err', 'Some of this client\'s records must still be kept by law: nothing was erased.']
 };
 
 export function flashFor(key) {
@@ -251,7 +251,7 @@ function caseSummary(c) {
 
   const notifyBox = (checked) => c.email
     ? `<label class="check"><input type="checkbox" name="notify" value="1"${checked ? ' checked' : ''}> Email ${esc(c.full_name.split(' ')[0] || 'the client')} about this update</label>`
-    : '<p class="small muted">No email on file — let the client know on WhatsApp.</p>';
+    : '<p class="small muted">No email on file: let the client know on WhatsApp.</p>';
 
   const progress = c.purged_at ? '' : `
     <div class="card"><div class="card-head"><h2>Progress</h2></div><div class="card-body">
@@ -281,7 +281,7 @@ function caseSummary(c) {
   const followUp = c.purged_at ? '' : `
     <div class="card"><div class="card-head"><h2>Follow-up reminder</h2></div><div class="card-body">
       ${c.follow_up_at
-        ? `<div class="note" style="margin-bottom:6px">${icon('bell', 18)}<span><strong>${esc(fmtDay(c.follow_up_at))}</strong>${c.follow_up_note ? ` — ${esc(c.follow_up_note)}` : ''}</span></div>`
+        ? `<div class="note" style="margin-bottom:6px">${icon('bell', 18)}<span><strong>${esc(fmtDay(c.follow_up_at))}</strong>${c.follow_up_note ? `: ${esc(c.follow_up_note)}` : ''}</span></div>`
         : '<p class="small muted" style="margin:0">None set. Follow-ups appear in your morning summary from a week before they are due.</p>'}
       <details class="more"${c.follow_up_at ? '' : ''}>
         <summary>${c.follow_up_at ? 'Change or clear' : 'Set a follow-up'}</summary>
@@ -338,7 +338,7 @@ function caseActivity(c, events) {
 function caseRecords(c) {
   const now = new Date().toISOString();
   const retention = c.purged_at ? `Erased on ${fmtDay(c.purged_at)}`
-    : c.legal_hold ? 'On legal hold — kept until the hold is released'
+    : c.legal_hold ? 'On legal hold: kept until the hold is released'
     : c.retain_until ? `Keep until ${fmtDay(c.retain_until)}`
     : 'Kept while the case is open; the clock starts when it is closed';
   const blocker = eraseBlocker(c, now);
@@ -370,7 +370,7 @@ function caseRecords(c) {
            <form method="post" action="/admin/case/${esc(c.id)}/erase"><input type="hidden" name="mode" value="retention">${confirmFields}
            <div class="btn-row"><button class="btn danger" type="submit">${icon('trash', 16)}Erase now</button></div></form>`}
       ${blocker && !c.legal_hold ? `
-      <details class="more"><summary>Erase early — test or duplicate entries only</summary>
+      <details class="more"><summary>Erase early: test or duplicate entries only</summary>
         <p class="small muted">Only for entries that were never a real client matter. Real client files must be kept for the full retention period. The reason is recorded permanently.</p>
         <form method="post" action="/admin/case/${esc(c.id)}/erase"><input type="hidden" name="mode" value="early">
           <label for="early-reason">Reason</label>
@@ -495,7 +495,7 @@ export function recordsPage({ admin, badges, due, holds, requests, backups, stat
   const reqList = requests.length ? `<div class="rows">${requests.map(r => {
     const days = Math.floor((Date.now() - new Date(r.received_at).getTime()) / 86400000);
     return `<a class="row" href="/admin/client/${esc(r.client_id)}"><span class="tl-dot">${icon('clock', 15)}</span>
-      <div class="row-main"><div class="row-title">${esc(r.full_name || 'Client')} — ${esc(REQUEST_KINDS[r.kind] || r.kind)}</div><div class="row-sub">Received ${esc(fmtDay(r.received_at))}${r.note ? ` · ${esc(r.note)}` : ''}</div></div>
+      <div class="row-main"><div class="row-title">${esc(r.full_name || 'Client')}: ${esc(REQUEST_KINDS[r.kind] || r.kind)}</div><div class="row-sub">Received ${esc(fmtDay(r.received_at))}${r.note ? ` · ${esc(r.note)}` : ''}</div></div>
       <div class="row-side">${pill(`${days} day${days === 1 ? '' : 's'} open`, days >= 21 ? 'red' : 'amber')}</div></a>`;
   }).join('')}</div>`
     : `<div class="card-body">${emptyState('check', 'No open requests')}</div>`;
@@ -520,7 +520,7 @@ export function recordsPage({ admin, badges, due, holds, requests, backups, stat
       <div class="card"><div class="card-head"><h2>Legal holds</h2></div>${holdList}</div>
       <div class="card"><div class="card-head"><h2>Backups</h2><span class="small muted">Kept 30 days</span></div>${backupList}</div>
     </div>
-    <div class="note">${icon('shield', 18)}<span>Retention: applications are kept 6 years after closing (12 months if cancelled before any work); enquiries 12 months after last activity. Nothing is erased automatically — you approve every erasure, and each one is logged permanently.</span></div>` });
+    <div class="note">${icon('shield', 18)}<span>Retention: applications are kept 6 years after closing (12 months if cancelled before any work); enquiries 12 months after last activity. Nothing is erased automatically: you approve every erasure, and each one is logged permanently.</span></div>` });
 }
 
 // ── Activity (audit log) ────────────────────────────────────────
@@ -556,7 +556,7 @@ export function activityPage({ admin, badges, rows, filter, nextBefore }) {
       <div class="small muted">${esc(fmtDate(r.at))} · ${esc(who)}</div></div></li>`;
   }).join('')}</ul>` : `<div class="card-body">${emptyState('activity', 'No activity')}</div>`;
   return shell({ title: 'Activity', active: 'activity', admin, badges, body: `
-    ${pageHead('Activity log', 'A permanent record of every action — it cannot be edited or deleted')}
+    ${pageHead('Activity log', 'A permanent record of every action: it cannot be edited or deleted')}
     <div class="chips">${chips}</div>
     <div class="card">${list}</div>
     ${nextBefore ? `<div class="btn-row"><a class="btn ghost" href="/admin/activity?filter=${esc(filter)}&before=${nextBefore}">Older entries ${icon('arrow', 16)}</a></div>` : ''}` });

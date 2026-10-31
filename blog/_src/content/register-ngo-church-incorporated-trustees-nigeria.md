@@ -4,9 +4,9 @@ slug: register-ngo-church-incorporated-trustees-nigeria
 date: 2026-10-30
 topic: ngos-and-trustees
 category: cac-registration
-description: How NGOs, churches, mosques, foundations, clubs and associations register as incorporated trustees with CAC — trustees, constitution, the 28-day public notice, the four stages and realistic timelines, and what comes after.
+description: How NGOs, churches, mosques, foundations, clubs and associations register as incorporated trustees with CAC: trustees, constitution, the 28-day public notice, the four stages and realistic timelines, and what comes after.
 excerpt: Registering a non-profit takes weeks, not days, because the law requires a 28-day public notice. Here's who can register, what you need to prepare, and the four stages from name consent to certificate.
-cta_text: Awal Global Consults registers incorporated trustees from ₦150,000, government fees included — name consent, publication, trustee declarations and final filing, handled end to end.
+cta_text: Awal Global Consults registers incorporated trustees from ₦150,000, government fees included: name consent, publication, trustee declarations and final filing, handled end to end.
 whatsapp_topic: registering an NGO or church
 ---
 
@@ -14,9 +14,9 @@ Churches, mosques, NGOs, foundations, alumni and community associations, clubs a
 
 ## Who should register this way
 
-Incorporated trustees suit organisations set up for **religious, educational, literary, scientific, social, development, cultural, sporting or charitable** purposes — where the aim is the cause, not profit for members.
+Incorporated trustees suit organisations set up for **religious, educational, literary, scientific, social, development, cultural, sporting or charitable** purposes, where the aim is the cause, not profit for members.
 
-If you want to make and share profits, a company is the right structure instead. If you want a non-profit company with members rather than trustees, a company limited by guarantee is the alternative — we can explain the difference for your situation.
+If you want to make and share profits, a company is the right structure instead. If you want a non-profit company with members rather than trustees, a company limited by guarantee is the alternative: we can explain the difference for your situation.
 
 ## What you need to prepare
 
@@ -32,7 +32,7 @@ Get the constitution right before you file. It governs how the organisation runs
 
 ## The four stages and how long each takes
 
-These timelines come from our own experience. They are not official CAC service times — except the 28-day notice, which is required by law.
+These timelines come from our own experience. They are not official CAC service times: except the 28-day notice, which is required by law.
 
 | Stage | What happens | Typical time |
 |---|---|---|
@@ -54,12 +54,12 @@ Our incorporated trustees packages start from **₦150,000, government fees incl
 - **A bank account** in the organisation's registered name.
 - **Tax.** Registration doesn't make an organisation tax-free automatically. Exemptions depend on the organisation's purpose and activities, and income from trading activities may be taxable.
 - **SCUML registration.** Non-profit organisations are required to register with SCUML for anti-money-laundering purposes. See [SCUML registration in Nigeria](/blog/scuml-registration-nigeria/).
-- **Keeping records** — trustee changes, constitution amendments and accounts, filed as required.
+- **Keeping records**: trustee changes, constitution amendments and accounts, filed as required.
 
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can trustees live outside Nigeria?</p>
-<p class="blog-faq-a">Yes. Trustees abroad can provide their details and signatures remotely. Declarations sworn abroad may need to be notarised and authenticated — see <a href="/blog/signing-cac-documents-from-abroad/">signing documents from abroad</a>.</p>
+<p class="blog-faq-a">Yes. Trustees abroad can provide their details and signatures remotely. Declarations sworn abroad may need to be notarised and authenticated. See <a href="/blog/signing-cac-documents-from-abroad/">signing documents from abroad</a>.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">What happens if someone objects during the 28 days?</p>

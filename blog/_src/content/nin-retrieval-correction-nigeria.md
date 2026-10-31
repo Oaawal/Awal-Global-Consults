@@ -56,7 +56,7 @@ Your NIN has become load-bearing infrastructure for a growing list of processes:
 
 ::: stat
 ₦0
-The retrieval and verification fee NIMC has waived during the current SIM/NIN update exercise — treat a "retrieval fee" quote as a red flag
+The retrieval and verification fee NIMC has waived during the current SIM/NIN update exercise: treat a "retrieval fee" quote as a red flag
 :::
 
 ## Getting it right the first time

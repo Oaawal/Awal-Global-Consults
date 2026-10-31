@@ -31,7 +31,7 @@ The two most common ways attackers get that code:
 
 ::: stat
 6
-The number of digits in the WhatsApp Two-Step Verification PIN — set once, and re-registration on a new device becomes impossible without it, even with your SMS code
+The number of digits in the WhatsApp Two-Step Verification PIN: set once, and re-registration on a new device becomes impossible without it, even with your SMS code
 :::
 
 **Two-Step Verification** is a WhatsApp setting, found under Settings → Account → Two-Step Verification, that adds a separate 6-digit PIN required before your number can be re-registered on any device. Without it, your SMS verification code alone is enough for someone to move your account. With it, an attacker who has your SMS code still can't get in without the PIN, which they were never sent.

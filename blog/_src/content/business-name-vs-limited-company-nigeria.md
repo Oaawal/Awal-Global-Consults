@@ -4,7 +4,7 @@ slug: business-name-vs-limited-company-nigeria
 date: 2026-08-27
 topic: choosing-a-structure
 category: business-advisory
-description: A decision framework for choosing between a CAC business name and a limited company in Nigeria — liability, funding, tax, perception, and how to tell which stage you're actually at.
+description: A decision framework for choosing between a CAC business name and a limited company in Nigeria: liability, funding, tax, perception, and how to tell which stage you're actually at.
 excerpt: The two options look similar on a CAC form. They're not similar in what happens if things go wrong, or in how far they can take your business. Here's how to actually decide.
 cta_text: Awal Global Consults advises on structure before you file, not after, so you're not paying to convert or fix a mismatched registration later.
 whatsapp_topic: business structure advice
@@ -54,7 +54,7 @@ The right structure is the one that matches what your business actually does and
 
 | Factor | Business Name | Limited Company |
 |---|---|---|
-| Legal separation from owner | None — you are personally liable | Full — company is a separate legal person |
+| Legal separation from owner | None: you are personally liable | Full: company is a separate legal person |
 | Can raise investment / issue shares | No | Yes |
 | Typical fit for government tenders / corporate clients | Often disqualifying | Usually required |
 | Ongoing compliance | Minimal (annual return) | Higher (registers, AGM, PSC disclosure, annual returns) |
@@ -76,7 +76,7 @@ Registering a business name doesn't lock you out of incorporating a company down
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">If I'm not sure yet, is it safer to just register the company?</p>
-<p class="blog-faq-a">Not necessarily "safer" — it means carrying more compliance obligations from day one, whether or not you need them yet. The better move is usually a short, honest conversation about where the business is actually headed in the next 12–18 months, not defaulting to whichever option sounds more serious.</p>
+<p class="blog-faq-a">Not necessarily "safer": it means carrying more compliance obligations from day one, whether or not you need them yet. The better move is usually a short, honest conversation about where the business is actually headed in the next 12–18 months, not defaulting to whichever option sounds more serious.</p>
 </div>
 </div>
 

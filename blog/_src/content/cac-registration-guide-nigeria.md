@@ -69,7 +69,7 @@ Companies also need to keep the **Persons with Significant Control (PSC)** requi
 
 Getting your certificate is the start of your compliance obligations, not the end of them. Depending on your structure, you'll need to stay on top of:
 
-- **Annual returns.** A yearly filing confirming your business or company is still active. Miss this consistently and your entity can be struck off the register entirely — see our [full annual returns deadline and penalty guide](/blog/cac-annual-returns-deadline-penalty/) for exactly when it's due.
+- **Annual returns.** A yearly filing confirming your business or company is still active. Miss this consistently and your entity can be struck off the register entirely. See our [full annual returns deadline and penalty guide](/blog/cac-annual-returns-deadline-penalty/) for exactly when it's due.
 - **Statutory registers.** For companies, that means registers of members, directors, and (where relevant) charges.
 - **Your first AGM and auditor appointment.** Required for companies within a specific window after incorporation.
 - **Keeping the CAC updated** on any change: registered address, directors, shareholding, or significant control.

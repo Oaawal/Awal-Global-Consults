@@ -54,6 +54,22 @@ const REVIEWER = {
   path: 'about#founder'
 };
 
+
+// Search engines cut titles at roughly 60 characters and descriptions at roughly 160,
+// so the brand suffix is dropped from long titles and long descriptions are
+// shortened at a word boundary. The full text still shows on the page itself.
+const BRAND_SUFFIX = ' | Awal Global Consults';
+function headTitle(title) {
+  return title.length + BRAND_SUFFIX.length <= 65 ? title + BRAND_SUFFIX : title;
+}
+function metaDescription(text, max = 158) {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  const sentence = cut.lastIndexOf('. ');
+  if (sentence > 90) return cut.slice(0, sentence + 1);
+  return cut.slice(0, cut.lastIndexOf(' ')).replace(/[,:;]$/, '') + '…';
+}
+
 function readTemplate(name) {
   return fs.readFileSync(path.join(TEMPLATES_DIR, name), 'utf8');
 }
@@ -114,7 +130,7 @@ const posts = files.map(file => {
   };
   const placed = topicIndex[data.topic];
   if (!placed) {
-    console.warn(`! ${file}: unknown or missing topic "${data.topic || ''}" — add it to hubs.js. Filed under "${hubs[0].topics[0].label}" for now.`);
+    console.warn(`! ${file}: unknown or missing topic "${data.topic || ''}": add it to hubs.js. Filed under "${hubs[0].topics[0].label}" for now.`);
   }
   const { topic, hub } = placed || { topic: hubs[0].topics[0], hub: hubs[0] };
   const readingTime = Math.max(1, Math.round(wordCount(body) / 200));
@@ -139,7 +155,7 @@ const posts = files.map(file => {
   .sort((a, b) => new Date(b.date) - new Date(a.date));
 
 if (posts.length === 0) {
-  console.log('No posts found in blog/_src/content — nothing to build.');
+  console.log('No posts found in blog/_src/content: nothing to build.');
   process.exit(0);
 }
 
@@ -200,7 +216,7 @@ function ctaBand(root) {
       <div class="guide-cta-inner">
         <div>
           <h2>Rather have it handled for you?</h2>
-          <p>Tell us what you need and get a clear, itemised quote within one working day — no payment until you're happy with it.</p>
+          <p>Tell us what you need and get a clear, itemised quote within one working day: no payment until you're happy with it.</p>
         </div>
         <div class="hero-actions">
           <a class="btn btn-primary" href="${root}kyc/">Start your application</a>
@@ -293,7 +309,9 @@ ${related.map(p => card(p, '../')).join('\n')}
   const rendered = fill(postTemplate, {
     ROOT: POST_ROOT,
     TITLE: post.title,
+    HEAD_TITLE: headTitle(post.title),
     DESCRIPTION: post.description,
+    META_DESCRIPTION: metaDescription(post.description),
     CANONICAL: canonical,
     ARTICLE_SCHEMA: articleSchema,
     BREADCRUMB_SCHEMA: breadcrumbSchema,
@@ -372,10 +390,10 @@ const hubBody = `  <section class="guide-hero">
       <nav class="guide-crumbs" aria-label="Breadcrumb"><a href="${INDEX_ROOT}">Home</a><span>&middot;</span><span>Awal Guides</span></nav>
       <span class="guide-eyebrow"><span class="dot"></span>Awal Guides</span>
       <h1>Plain answers for building<br>a business that lasts.</h1>
-      <p class="guide-lede">What the rules actually say about registering, protecting and running a business in Nigeria — and from wherever you live.</p>
+      <p class="guide-lede">What the rules actually say about registering, protecting and running a business in Nigeria, and from wherever you live.</p>
       <div class="guide-search" id="search">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="guide-search" type="search" placeholder="Search guides — e.g. annual returns, TIN, trademark cost" autocomplete="off" aria-label="Search guides">
+        <input id="guide-search" type="search" placeholder="Search guides: e.g. annual returns, TIN, trademark cost" autocomplete="off" aria-label="Search guides">
         <div id="guide-search-results" class="guide-search-results" hidden></div>
       </div>
 ${chipsRow('', null)}
@@ -520,7 +538,7 @@ const rssItems = posts.map(post => `    <item>
 const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>Awal Guides — Awal Global Consults</title>
+    <title>Awal Guides | Awal Global Consults</title>
     <link>${SITE_URL}/blog/</link>
     <description>Guides on CAC registration, trademarks, tax, compliance and immigration in Nigeria.</description>
     <language>en-ng</language>
@@ -557,4 +575,4 @@ sitemap = sitemap.replace('</urlset>', `${blogUrlBlocks}\n</urlset>`);
 fs.writeFileSync(sitemapPath, sitemap, 'utf8');
 console.log('Updated sitemap.xml with blog URLs');
 
-console.log(`\nDone — built ${posts.length} guide(s) across ${liveTopicList.length} topic${liveTopicList.length === 1 ? '' : 's'}.`);
+console.log(`\nDone: built ${posts.length} guide(s) across ${liveTopicList.length} topic${liveTopicList.length === 1 ? '' : 's'}.`);

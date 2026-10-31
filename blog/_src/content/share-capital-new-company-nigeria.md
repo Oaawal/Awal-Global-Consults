@@ -6,12 +6,12 @@ updated: 2026-10-31
 topic: costs-and-timelines
 category: cac-registration
 description: The legal minimum is ₦100,000 for a private company (₦100m with foreign shareholders), but the right figure depends on fees, stamp duty, banks, contracts and licences. Here's how to choose.
-excerpt: Share capital affects your registration cost, how banks and clients see you, and whether you can get certain licences. Here's how to pick a figure that fits — without paying for capital you don't need.
+excerpt: Share capital affects your registration cost, how banks and clients see you, and whether you can get certain licences. Here's how to pick a figure that fits, without paying for capital you don't need.
 cta_text: Awal Global Consults advises on share capital as part of every company registration, so you don't overpay at registration or fall short of what your business needs.
 whatsapp_topic: choosing share capital
 ---
 
-Every company registers a **share capital** — the total value of the shares it issues to its shareholders. It's one of the first decisions in registration, and one of the most misunderstood.
+Every company registers a **share capital**: the total value of the shares it issues to its shareholders. It's one of the first decisions in registration, and one of the most misunderstood.
 
 ## The legal minimum
 
@@ -28,17 +28,17 @@ Because share capital affects more than the registration form:
 - **Banks and lenders** look at share capital as one sign of how serious and substantial a company is.
 - **Contracts and tenders** sometimes set minimum capital for bidders.
 - **Licences.** Some regulated sectors require a minimum share capital before they'll license you.
-- **Foreign shareholders.** The ₦100 million minimum applies the moment any shareholder is foreign — see [can a foreigner own a Nigerian company?](/blog/foreigner-own-nigerian-company/)
+- **Foreign shareholders.** The ₦100 million minimum applies the moment any shareholder is foreign. See [can a foreigner own a Nigerian company?](/blog/foreigner-own-nigerian-company/)
 
 ::: callout
-Share capital isn't a fee that disappears — it represents what shareholders contribute to the company. But the government fees and stamp duty you pay to register it are a real cost, so choose deliberately.
+Share capital isn't a fee that disappears: it represents what shareholders contribute to the company. But the government fees and stamp duty you pay to register it are a real cost, so choose deliberately.
 :::
 
 ## A practical way to choose
 
 | Your situation | A sensible approach |
 |---|---|
-| Small service or trading business, no special licences | Start modestly — you can increase later |
+| Small service or trading business, no special licences | Start modestly: you can increase later |
 | You'll bid for contracts or tenders | Check the capital they expect |
 | Regulated sector (finance, insurance, some logistics and others) | Find the regulator's minimum first |
 | Foreign shareholder involved | At least ₦100 million |
@@ -50,7 +50,7 @@ Share capital can be **increased** by resolution and a filing with CAC, paying s
 
 ## How it affects your registration price
 
-Our company registration packages start from **₦75,000**, government fees included, for a standard all-Nigerian company. Because government fees and stamp duty rise with share capital — ₦10,000 registration plus ₦7,500 stamp duty for every ₦1 million — a higher share capital means a higher quote, always itemised before you pay. See [CAC fees 2026](/blog/cac-fees-2026-fee-table/).
+Our company registration packages start from **₦75,000**, government fees included, for a standard all-Nigerian company. Because government fees and stamp duty rise with share capital (₦10,000 registration plus ₦7,500 stamp duty for every ₦1 million) a higher share capital means a higher quote, always itemised before you pay. See [CAC fees 2026](/blog/cac-fees-2026-fee-table/).
 
 <div class="blog-faq">
 <div class="blog-faq-item">
@@ -69,4 +69,4 @@ Our company registration packages start from **₦75,000**, government fees incl
 
 ## The short version
 
-The minimum is ₦100,000 (₦100 million with foreign shareholders). Pick a figure that fits your banks, contracts and licences without paying for capital you don't need — and increase it later as you grow.
+The minimum is ₦100,000 (₦100 million with foreign shareholders). Pick a figure that fits your banks, contracts and licences without paying for capital you don't need, and increase it later as you grow.

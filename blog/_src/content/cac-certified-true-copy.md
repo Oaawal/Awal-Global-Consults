@@ -6,7 +6,7 @@ topic: after-registration
 category: cac-registration
 description: What a CAC certified true copy is, when banks, embassies, tenders and courts ask for one, which documents can be certified, how to request them, and how they differ from a status report.
 excerpt: Banks, embassies, tenders and courts often won't accept a photocopy of your CAC documents. They want certified true copies. Here's what they are and how to get them.
-cta_text: Awal Global Consults requests certified true copies and status reports from CAC on your behalf — for business names, companies and incorporated trustees.
+cta_text: Awal Global Consults requests certified true copies and status reports from CAC on your behalf, for business names, companies and incorporated trustees.
 whatsapp_topic: CAC certified true copies
 ---
 
@@ -19,7 +19,7 @@ A **certified true copy (CTC)** is a copy of a document in CAC's records, certif
 - **Visa and immigration applications** where the business is relevant.
 - **Court cases and legal transactions**, including property.
 - **Licences and regulatory applications.**
-- **Due diligence** by investors, partners or acquirers — see [verifying a company](/blog/verify-company-cac-portal/).
+- **Due diligence** by investors, partners or acquirers. See [verifying a company](/blog/verify-company-cac-portal/).
 
 ## Which documents can be certified
 
@@ -35,21 +35,21 @@ A **certified true copy (CTC)** is a copy of a document in CAC's records, certif
 
 ## CTC or status report?
 
-A **status report** is a CAC-generated summary of an entity's current details — directors, shareholders, address and status. Many banks accept it for routine purposes. A **CTC** certifies specific documents and is usually what courts, embassies and formal transactions need. If you're not sure which the requesting organisation wants, ask before ordering.
+A **status report** is a CAC-generated summary of an entity's current details: directors, shareholders, address and status. Many banks accept it for routine purposes. A **CTC** certifies specific documents and is usually what courts, embassies and formal transactions need. If you're not sure which the requesting organisation wants, ask before ordering.
 
 ::: callout
-Make sure the CAC record is up to date before you order CTCs. A CTC certifies what's on file — so if your directors or address changed and weren't filed, the CTC will show the old information. See [changes after CAC registration](/blog/change-business-name-address-partners-cac/).
+Make sure the CAC record is up to date before you order CTCs. A CTC certifies what's on file, so if your directors or address changed and weren't filed, the CTC will show the old information. See [changes after CAC registration](/blog/change-business-name-address-partners-cac/).
 :::
 
 ## How to get them
 
 1. **Identify exactly which documents** the requesting organisation needs.
-2. **Request the CTCs from CAC** — online through its post-registration services — and pay the certification fees, which depend on the documents and number of pages.
+2. **Request the CTCs from CAC**, online through its post-registration services, and pay the certification fees, which depend on the documents and number of pages.
 3. **Receive the certified copies** once CAC processes the request.
 
 ## From abroad?
 
-You can request CTCs without being in Nigeria. If they're for use abroad — for example an embassy or foreign bank — ask whether they also need further authentication.
+You can request CTCs without being in Nigeria. If they're for use abroad, for example an embassy or foreign bank, ask whether they also need further authentication.
 
 <div class="blog-faq">
 <div class="blog-faq-item">
@@ -62,7 +62,7 @@ You can request CTCs without being in Nigeria. If they're for use abroad — for
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can I get CTCs for another company?</p>
-<p class="blog-faq-a">CAC records are generally searchable by the public, and copies of filed documents can be requested — useful for due diligence before a deal.</p>
+<p class="blog-faq-a">CAC records are generally searchable by the public, and copies of filed documents can be requested: useful for due diligence before a deal.</p>
 </div>
 </div>
 

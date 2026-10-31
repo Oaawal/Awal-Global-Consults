@@ -20,7 +20,7 @@ Here's what the filing actually involves and why the deadline matters more than 
 It's not a tax filing, and it's not the same as filing your accounts with tax authorities. An annual return is specifically a CAC filing that confirms your business's registered details are still accurate: for a business name, that the business is still operating and its particulars haven't changed; for a limited company, that also covers directors, shareholding, and registered address, alongside confirmation the company is still active.
 
 ::: callout
-A business that never files an annual return looks, from the CAC's records, indistinguishable from one that's been abandoned. The certificate you were issued at registration doesn't protect your standing on its own — filing every year is what keeps that standing intact.
+A business that never files an annual return looks, from the CAC's records, indistinguishable from one that's been abandoned. The certificate you were issued at registration doesn't protect your standing on its own: filing every year is what keeps that standing intact.
 :::
 
 ## When it's due
@@ -29,7 +29,7 @@ Annual returns for business names are due by **30 June** each year, covering the
 
 ::: stat
 30 June
-The annual deadline for business name returns in Nigeria — the date that matters more than most first-time registrants realize
+The annual deadline for business name returns in Nigeria: the date that matters more than most first-time registrants realize
 :::
 
 Because these dates and the underlying filing framework are subject to CAC updates, it's worth confirming the exact current deadline and window for your specific registration date and structure rather than assuming last year's rule still applies unchanged.
@@ -61,11 +61,11 @@ For most business names, it's a relatively light process: confirming current det
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Do I need to file an annual return the same year I registered my business?</p>
-<p class="blog-faq-a">No. Newly registered businesses are generally exempt from filing for their registration year — the obligation starts from the following filing cycle. Filing too early or assuming you owe one in year one is a common, harmless-but-confusing mistake.</p>
+<p class="blog-faq-a">No. Newly registered businesses are generally exempt from filing for their registration year: the obligation starts from the following filing cycle. Filing too early or assuming you owe one in year one is a common, harmless-but-confusing mistake.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">My business hasn't made any money this year. Do I still need to file?</p>
-<p class="blog-faq-a">Yes. The annual return confirms your registration details and active status to the CAC — it isn't conditional on revenue or activity level. A dormant business still needs to file.</p>
+<p class="blog-faq-a">Yes. The annual return confirms your registration details and active status to the CAC: it isn't conditional on revenue or activity level. A dormant business still needs to file.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can I still file if I've already missed a year or two?</p>

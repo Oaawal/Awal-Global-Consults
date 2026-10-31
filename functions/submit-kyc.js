@@ -110,7 +110,7 @@ export async function onRequestPost(context) {
     }
 
     const attachmentsNote = skippedFiles.length > 0
-      ? `These documents were NOT received (unsupported file type or too large) — ask the client to resend directly on WhatsApp: ${skippedFiles.join(', ')}`
+      ? `These documents were NOT received (unsupported file type or too large). Ask the client to resend them on WhatsApp: ${skippedFiles.join(', ')}`
       : (attachments.length === 0 ? 'No documents were attached to this submission.' : '');
 
     const subjectServices = services.slice(0, 3).join(', ') || 'New Submission';
@@ -144,7 +144,7 @@ export async function onRequestPost(context) {
 
     await sendBrevoEmail(env, {
       to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
-      subject: `${reference ? `[${reference}] ` : ''}Client Intake Received — ${subjectServices}`,
+      subject: `${reference ? `[${reference}] ` : ''}Client Intake Received: ${subjectServices}`,
       html: kycAdminEmail({ fields, services, attachmentsNote, reference, recordStatus, caseUrl }),
       replyTo: { email, name: fullName },
       attachments
@@ -152,7 +152,7 @@ export async function onRequestPost(context) {
 
     await sendBrevoEmail(env, {
       to: { email, name: fullName },
-      subject: `We've Received Your Request — ${subjectServices}${reference ? ` (Ref ${reference})` : ''}`,
+      subject: `We've Received Your Request: ${subjectServices}${reference ? ` (Ref ${reference})` : ''}`,
       html: kycClientEmail({ fullName, services, attachedCount: attachments.length, skippedFiles, reference })
     });
 

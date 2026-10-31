@@ -12,14 +12,14 @@ whatsapp_topic: business address for CAC registration
 
 Short answer: **the business needs a Nigerian address, but you don't.** CAC registration asks for two different kinds of address, and only one of them has to be in Nigeria.
 
-This matters most for Nigerians living abroad, who often assume they can't register until they have a place of their own back home. You can — as long as the business has somewhere real to be.
+This matters most for Nigerians living abroad, who often assume they can't register until they have a place of their own back home. You can, as long as the business has somewhere real to be.
 
 ## The two addresses CAC asks for
 
 | Address | What it's for | Must it be in Nigeria? |
 |---|---|---|
 | **Business address** (principal place of business for a business name; registered office for a company) | Where the business operates and where official letters and legal notices can be delivered | **Yes** |
-| **Residential address** of each owner, director or shareholder | Identifies the individual | **No** — it can be in the UK, US, Canada or anywhere else |
+| **Residential address** of each owner, director or shareholder | Identifies the individual | **No**: it can be in the UK, US, Canada or anywhere else |
 
 ::: callout
 A company's registered office is where legal documents can be formally served on it. That's why it has to be a real, reachable address in Nigeria, not a placeholder.
@@ -29,7 +29,7 @@ A company's registered office is where legal documents can be formally served on
 
 The address should be:
 
-- **Real and complete** — street number, street name, area, town or city, and state. Vague addresses ("near the market, Ikeja") invite queries.
+- **Real and complete**: street number, street name, area, town or city, and state. Vague addresses ("near the market, Ikeja") invite queries.
 - **Somewhere mail and notices can actually reach**, with someone able to receive them.
 - **Used with permission.** If the property isn't yours, the owner or occupier should know and agree.
 
@@ -46,7 +46,7 @@ Whichever you choose, keep the details consistent: the same address should appea
 
 ## Can the business address change later?
 
-Yes. If you move the business, the change is filed with CAC as a post-registration update. Keeping the address current matters — legal notices sent to the address on record are generally treated as properly delivered, even if you've moved.
+Yes. If you move the business, the change is filed with CAC as a post-registration update. Keeping the address current matters: legal notices sent to the address on record are generally treated as properly delivered, even if you've moved.
 
 ## Mistakes that cause queries
 
@@ -72,4 +72,4 @@ Yes. If you move the business, the change is filed with CAC as a post-registrati
 
 ## The short version
 
-You can register from anywhere, but your business needs a genuine Nigerian address where its post and legal notices can be received. Choose that address deliberately — a family home, a manager's office or a proper serviced office — and keep it the same across every record.
+You can register from anywhere, but your business needs a genuine Nigerian address where its post and legal notices can be received. Choose that address deliberately (a family home, a manager's office or a proper serviced office) and keep it the same across every record.

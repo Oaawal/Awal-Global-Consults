@@ -4,16 +4,16 @@ slug: verify-company-cac-portal
 date: 2026-10-30
 topic: aml-kyc-scuml
 category: kyc-compliance
-description: How to verify a Nigerian business before you pay, partner or sign — using CAC's public search, what the RC or BN number and status tell you, ordering an official status report, and the red flags that point to a fake.
+description: How to verify a Nigerian business before you pay, partner or sign: using CAC's public search, what the RC or BN number and status tell you, ordering an official status report, and the red flags that point to a fake.
 excerpt: Before you pay a supplier, sign a contract or invest, check that the company exists and is who it says it is. It takes minutes on CAC's public search. Here's what to look for.
-cta_text: Awal Global Consults carries out company verification and due diligence — CAC status, directors, shareholders and official reports — before you commit money.
+cta_text: Awal Global Consults carries out company verification and due diligence (CAC status, directors, shareholders and official reports) before you commit money.
 whatsapp_topic: verifying a company
 ---
 
 Fake companies, cloned names and forged certificates are behind a lot of business fraud in Nigeria. The good news is that the first check takes minutes: the Corporate Affairs Commission (CAC) runs a **public search** of registered businesses.
 
 ::: callout
-Do this check **before** you pay a deposit, sign a contract or hand over goods on credit — not after something has gone wrong.
+Do this check **before** you pay a deposit, sign a contract or hand over goods on credit, not after something has gone wrong.
 :::
 
 ## Step 1: Search the CAC register
@@ -26,24 +26,24 @@ Search CAC's public register by the business name or registration number:
 
 Check that:
 
-- **The exact name exists** — not just something similar.
+- **The exact name exists**: not just something similar.
 - **The number matches** the one on their certificate, letterhead or invoice.
-- **The status is active.** An inactive or struck-off status is a warning sign — see [what happens when companies stop filing](/blog/revive-inactive-company-unfiled-annual-returns/).
+- **The status is active.** An inactive or struck-off status is a warning sign. See [what happens when companies stop filing](/blog/revive-inactive-company-unfiled-annual-returns/).
 - **The registered address** makes sense for the business.
 
 ## Step 2: Look deeper when the stakes are high
 
 For a significant contract, investment or credit, the public search isn't enough. Order an official **status report** or **certified true copies** of the company's documents, which show:
 
-- **Directors and shareholders** — are the people you're dealing with actually involved?
-- **Share capital** — does it fit the size of the deal?
+- **Directors and shareholders**: are the people you're dealing with actually involved?
+- **Share capital**: does it fit the size of the deal?
 - **Registered address and company secretary.**
-- **The company's filing history** — are annual returns up to date?
+- **The company's filing history**: are annual returns up to date?
 
 ## Step 3: Match the paperwork to the person
 
 - Does the person you're dealing with appear as a director, or have a written authority from the company?
-- Is the **bank account** you're paying into in the company's exact registered name? Payments to personal accounts or differently named accounts are a classic fraud signal — see [how businesses get scammed out of payments](/blog/business-email-compromise-payment-fraud-nigeria/).
+- Is the **bank account** you're paying into in the company's exact registered name? Payments to personal accounts or differently named accounts are a classic fraud signal. See [how businesses get scammed out of payments](/blog/business-email-compromise-payment-fraud-nigeria/).
 - Do the **TIN** and other registrations match the same name?
 
 ## Red flags

@@ -5,9 +5,9 @@ date: 2026-10-30
 topic: abroad-uk
 category: cac-registration
 featured: true
-description: Yes — CAC registration is done online, so Nigerians in the UK can register a business name or company without travelling home. Here's what you need, what has to be in Nigeria, and how the process works remotely.
+description: Yes. CAC registration is done online, so Nigerians in the UK can register a business name or company without travelling home. Here's what you need, what has to be in Nigeria, and how the process works remotely.
 excerpt: You don't need to fly home to register a Nigerian business. CAC registration is online, and the only thing that genuinely has to be in Nigeria is the business address. Here's the full remote process.
-cta_text: Awal Global Consults registers businesses for clients living abroad, including the UK — you send your details and documents online, we handle the CAC filing, and your certificate comes back by email.
+cta_text: Awal Global Consults registers businesses for clients living abroad, including the UK: you send your details and documents online, we handle the CAC filing, and your certificate comes back by email.
 whatsapp_topic: registering a Nigerian business from the UK
 ---
 
@@ -16,7 +16,7 @@ Yes. You can register a business name or a limited company in Nigeria while livi
 What trips people up isn't distance. It's knowing which parts of the registration genuinely have to be Nigerian, which documents count as valid ID, and what changes if you or a co-owner hold only a British passport.
 
 ::: callout
-The one thing that must be in Nigeria is the **business address**. Your own home address can be in the UK. Everything else — your details, your ID, your signature — can be provided from abroad.
+The one thing that must be in Nigeria is the **business address**. Your own home address can be in the UK. Everything else (your details, your ID, your signature) can be provided from abroad.
 :::
 
 ## Business name or limited company?
@@ -26,7 +26,7 @@ The choice works the same way from abroad as it does at home, but a few points m
 | | Business name | Limited company |
 |---|---|---|
 | Who owns it | You personally (or partners) | The company, owned by its shareholders |
-| Your personal liability | Unlimited — business debts are your debts | Limited to your shares |
+| Your personal liability | Unlimited: business debts are your debts | Limited to your shares |
 | Banks, contracts, investors | Accepted for small trading | Usually preferred, and often required |
 | Running it from abroad | Possible, but everything is in your name | Easier to appoint a manager or director in Nigeria |
 | Typical registration time (our experience) | Within 24 hours | 48–72 hours if there are no queries |
@@ -47,7 +47,7 @@ For each owner (proprietor, director or shareholder):
 For the business itself:
 
 - **Two or three proposed names**, in order of preference, in case the first is rejected.
-- **The nature of the business** — what you actually intend to do.
+- **The nature of the business**: what you actually intend to do.
 - **A business address in Nigeria** (see [do I need a Nigerian address?](/blog/nigerian-address-cac-registration/)).
 - For a company, the **share capital** and how shares are split between shareholders.
 
@@ -56,7 +56,7 @@ For the business itself:
 At Awal Global Consults, clients abroad usually reach us through a referral or on WhatsApp. From there, the steps are the same every time:
 
 1. **First conversation.** On WhatsApp or by email, we confirm what you want to register and send you a clear, itemised quote. Packages start from ₦40,000 for a business name and ₦75,000 for a limited company, government fees included; add-ons are quoted separately.
-2. **Your details and documents.** You submit them through our secure online application at awalglobal.com.ng/kyc — or, if it's easier for you, by email or WhatsApp. Signatures are sent the same way, as a clear image.
+2. **Your details and documents.** You submit them through our secure online application at awalglobal.com.ng/kyc, or, if it's easier for you, by email or WhatsApp. Signatures are sent the same way, as a clear image.
 3. **Name check and reservation.** We search and reserve the name with CAC.
 4. **Filing.** We prepare and file the registration, and respond to any CAC queries on your behalf.
 5. **Your certificate.** You receive your certificate and registration documents by email, and you can check progress any time at awalglobal.com.ng/track with your reference number.
@@ -70,10 +70,10 @@ How long a business name registration typically takes in our experience, once yo
 
 ## If you hold only a British passport
 
-Many Nigerians in the UK hold both passports, and registering as a Nigerian citizen is the simplest route. If you — or any co-owner — will register a company using **only a non-Nigerian passport**, the company is treated as having **foreign participation**, and extra rules apply:
+Many Nigerians in the UK hold both passports, and registering as a Nigerian citizen is the simplest route. If you, or any co-owner, will register a company using **only a non-Nigerian passport**, the company is treated as having **foreign participation**, and extra rules apply:
 
 - Foreign shareholders register with a passport rather than a Nigerian ID.
-- A company with **any foreign shareholder** must have a **minimum share capital of ₦100 million**. That's far higher than a typical all-Nigerian company, and government fees rise with share capital, so our standard company package doesn't apply — we quote these registrations individually.
+- A company with **any foreign shareholder** must have a **minimum share capital of ₦100 million**. That's far higher than a typical all-Nigerian company, and government fees rise with share capital, so our standard company package doesn't apply: we quote these registrations individually.
 - The company may also need to register with the **Nigerian Investment Promotion Commission (NIPC)** after incorporation, and other permits can apply depending on the business.
 
 If you have dual nationality, it is usually worth registering as a Nigerian citizen with your Nigerian passport or NIN.
@@ -82,7 +82,7 @@ If you have dual nationality, it is usually worth registering as a Nigerian citi
 
 - **Tax ID (TIN).** Your registration generates a tax identification number for the business. Keep a copy.
 - **Bank account.** Opening a corporate account is where being abroad matters most. Some banks complete KYC remotely; others ask for documents to be certified, or for a director to appear in person. Ask your chosen bank early.
-- **Annual returns.** Every registered business files an annual return with CAC, whether or not it traded. Missing them leads to penalties — see our guide to [CAC annual returns](/blog/cac-annual-returns-deadline-penalty/).
+- **Annual returns.** Every registered business files an annual return with CAC, whether or not it traded. Missing them leads to penalties. See our guide to [CAC annual returns](/blog/cac-annual-returns-deadline-penalty/).
 - **UK tax.** If you're UK tax resident, income you receive from a Nigerian business may also need to be reported in the UK. Take UK tax advice on your own situation.
 
 <div class="blog-faq">
@@ -106,4 +106,4 @@ If you have dual nationality, it is usually worth registering as a Nigerian citi
 
 ## The short version
 
-Living in the UK is not a barrier to owning a registered Nigerian business. Prepare valid ID, a Nigerian business address and a clear signature, decide between a business name and a company, and the registration itself can be done entirely online — usually within one to three days.
+Living in the UK is not a barrier to owning a registered Nigerian business. Prepare valid ID, a Nigerian business address and a clear signature, decide between a business name and a company, and the registration itself can be done entirely online, usually within one to three days.

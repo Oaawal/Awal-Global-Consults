@@ -4,13 +4,13 @@ slug: business-name-registration-cost-nigeria
 date: 2026-10-31
 topic: costs-and-timelines
 category: cac-registration
-description: What it costs to register a business name with CAC in 2026 — our ₦40,000 package with government fees included, what's covered, what can add to the cost, and the yearly costs to budget for after registration.
+description: What it costs to register a business name with CAC in 2026: our ₦40,000 package with government fees included, what's covered, what can add to the cost, and the yearly costs to budget for after registration.
 excerpt: Our business name registration starts from ₦40,000, government fees included, and is usually done within 24 hours of receiving complete details. Here's exactly what that covers, and what else to budget for.
-cta_text: Awal Global Consults registers business names from ₦40,000, government fees included — usually within 24 hours of receiving your complete details.
+cta_text: Awal Global Consults registers business names from ₦40,000, government fees included, usually within 24 hours of receiving your complete details.
 whatsapp_topic: business name registration cost
 ---
 
-A business name is the simplest and cheapest way to register a business with the Corporate Affairs Commission (CAC). It suits sole traders, freelancers and small partnerships — see [business name vs limited company](/blog/business-name-vs-limited-company-nigeria/) if you're still deciding.
+A business name is the simplest and cheapest way to register a business with the Corporate Affairs Commission (CAC). It suits sole traders, freelancers and small partnerships. See [business name vs limited company](/blog/business-name-vs-limited-company-nigeria/) if you're still deciding.
 
 ::: stat
 ₦40,000
@@ -31,13 +31,13 @@ Our business name registration package, **government fees included**. Usually re
 Every quote is itemised before you pay. A package can be higher if you add extra services, for example:
 
 - **More than one proprietor** or partners with complex details.
-- **Tax registration** or a TIN for the business — see [TIN retrieval](/blog/tin-retrieval-nigeria-2026/).
-- **SCUML registration**, if your business is in a designated sector — see [SCUML registration](/blog/scuml-registration-nigeria/).
-- **Trademark search or filing** to protect the name as a brand — see [business name vs trademark](/blog/business-name-vs-trademark-nigeria/).
-- **Bank account support documents** — see [opening a corporate bank account](/blog/open-corporate-bank-account-nigeria/).
+- **Tax registration** or a TIN for the business. See [TIN retrieval](/blog/tin-retrieval-nigeria-2026/).
+- **SCUML registration**, if your business is in a designated sector. See [SCUML registration](/blog/scuml-registration-nigeria/).
+- **Trademark search or filing** to protect the name as a brand. See [business name vs trademark](/blog/business-name-vs-trademark-nigeria/).
+- **Bank account support documents**. See [opening a corporate bank account](/blog/open-corporate-bank-account-nigeria/).
 
 ::: callout
-The ₦40,000 is our package price — the firm's own price, not an official CAC fee. The official government fees — ₦1,000 name reservation and ₦20,000 registration, plus Remita charges — are already inside it, so there's nothing extra to pay CAC for a standard registration. See [CAC fees 2026](/blog/cac-fees-2026-fee-table/).
+The ₦40,000 is our package price: the firm's own price, not an official CAC fee. The official government fees (₦1,000 name reservation and ₦20,000 registration, plus Remita charges) are already inside it, so there's nothing extra to pay CAC for a standard registration. See [CAC fees 2026](/blog/cac-fees-2026-fee-table/).
 :::
 
 ## Costs after registration
@@ -46,14 +46,14 @@ A business name isn't a one-off cost. Budget for:
 
 | Yearly item | Why |
 |---|---|
-| **CAC annual returns** | Required every year after the year of registration — see [CAC annual returns](/blog/cac-annual-returns-deadline-penalty/) |
-| **Personal income tax** | You pay tax on the business's profits as personal income — see [how each business type is taxed](/blog/business-name-partnership-company-tax-nigeria/) |
-| **State and local permits** | Depending on your premises and sector — see [which licences you need](/blog/licences-new-business-nigeria/) |
-| **Changes** | Address, partners or name changes are filed separately — see [changes after registration](/blog/change-business-name-address-partners-cac/) |
+| **CAC annual returns** | Required every year after the year of registration. See [CAC annual returns](/blog/cac-annual-returns-deadline-penalty/) |
+| **Personal income tax** | You pay tax on the business's profits as personal income. See [how each business type is taxed](/blog/business-name-partnership-company-tax-nigeria/) |
+| **State and local permits** | Depending on your premises and sector. See [which licences you need](/blog/licences-new-business-nigeria/) |
+| **Changes** | Address, partners or name changes are filed separately. See [changes after registration](/blog/change-business-name-address-partners-cac/) |
 
 ## Is a business name cheaper than a company?
 
-Yes — our limited company registration starts from ₦75,000, government fees included, and companies have more ongoing filing duties. But a company gives you limited liability and is easier to grow. See [converting a business name to a limited company](/blog/convert-business-name-to-limited-company-nigeria/) if you start small and grow.
+Yes. Our limited company registration starts from ₦75,000, government fees included, and companies have more ongoing filing duties. But a company gives you limited liability and is easier to grow. See [converting a business name to a limited company](/blog/convert-business-name-to-limited-company-nigeria/) if you start small and grow.
 
 <div class="blog-faq">
 <div class="blog-faq-item">

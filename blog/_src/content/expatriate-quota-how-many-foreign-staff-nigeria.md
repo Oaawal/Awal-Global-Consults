@@ -4,7 +4,7 @@ slug: expatriate-quota-how-many-foreign-staff-nigeria
 date: 2026-10-31
 topic: expatriates-and-cerpac
 category: identity-immigration
-description: There's no fixed number of foreigners a Nigerian company can employ — each position must be approved under an expatriate quota. Here's how quota positions are granted, what the Ministry looks at, understudy expectations and renewals.
+description: There's no fixed number of foreigners a Nigerian company can employ: each position must be approved under an expatriate quota. Here's how quota positions are granted, what the Ministry looks at, understudy expectations and renewals.
 excerpt: Nigeria doesn't set a fixed headcount for foreign staff. Each foreign employee must fill an approved expatriate quota position. Here's how the Ministry decides how many positions you get.
 cta_text: Awal Global Consults manages expatriate quota and CERPAC applications through the current digital process, from eligibility to renewal.
 whatsapp_topic: expatriate quota positions
@@ -16,10 +16,10 @@ See [expatriate quota and CERPAC](/blog/cerpac-expatriate-quota-nigeria/) for ho
 
 ## How quota positions work
 
-- A quota is granted **to the company**, for **named roles** — for example "Chief Engineer" or "Finance Director".
+- A quota is granted **to the company**, for **named roles**, for example "Chief Engineer" or "Finance Director".
 - Each approved position can be filled by **one foreign national** at a time.
 - Positions are granted for a **period**, and must be renewed.
-- Hiring a foreigner into a role that isn't approved — or more foreigners than approved positions — isn't allowed.
+- Hiring a foreigner into a role that isn't approved, or more foreigners than approved positions, isn't allowed.
 
 ## What the Ministry looks at
 
@@ -38,11 +38,11 @@ The expatriate quota system expects **Nigerian understudies**: Nigerian staff tr
 
 ## Permanent quota ("until reviewed")
 
-Some senior positions — typically for the company's top management where the business is foreign-owned — can be granted on a longer-term basis, often described as "permanent until reviewed". Other positions are time-limited.
+Some senior positions, typically for the company's top management where the business is foreign-owned, can be granted on a longer-term basis, often described as "permanent until reviewed". Other positions are time-limited.
 
 ## Renewals and changes
 
-- **Renew before expiry.** A lapsed quota leaves the employee's CERPAC without a valid position — see [CERPAC renewal](/blog/cerpac-renewal-nigeria/).
+- **Renew before expiry.** A lapsed quota leaves the employee's CERPAC without a valid position. See [CERPAC renewal](/blog/cerpac-renewal-nigeria/).
 - **Apply for upgrades or additional positions** when the business grows.
 - **Redesignate** a position if the role changes.
 - **Report** when an expatriate leaves and the position is vacant.
@@ -52,7 +52,7 @@ The Ministry's **Expatriate Administration System** handles quota and related ap
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Is there a minimum share capital for expatriate quota?</p>
-<p class="blog-faq-a">The Ministry assesses the company's capital as part of the application, and companies with foreign shareholders must meet the ₦100m minimum share capital — see <a href="/blog/foreigner-own-nigerian-company/">can a foreigner own a Nigerian company?</a> Ask us for the current expectations for your sector.</p>
+<p class="blog-faq-a">The Ministry assesses the company's capital as part of the application, and companies with foreign shareholders must meet the ₦100m minimum share capital. See <a href="/blog/foreigner-own-nigerian-company/">can a foreigner own a Nigerian company?</a> Ask us for the current expectations for your sector.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Do directors who are foreigners need quota positions?</p>

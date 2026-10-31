@@ -2,7 +2,7 @@ import { WHATSAPP_LINK } from './brevo.js';
 
 const NAVY = '#0F3A5F';
 const GOLD = '#2F80ED';
-const GOLD_PALE = '#f9f0dc'; // warning-banner background only — intentionally not a brand color
+const GOLD_PALE = '#f9f0dc'; // warning-banner background only: intentionally not a brand color
 const BG = '#F4F8FC';
 const BORDER = '#D7E6F2';
 const TEXT = '#222222';
@@ -60,7 +60,7 @@ function recordStatusHtml(reference, recordStatus, caseUrl) {
     return `<div style="font-size:12.5px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:6px;padding:8px 12px;margin-bottom:12px;">Saved to client records as <strong>${escapeHtml(reference)}</strong>.${caseUrl ? ` <a href="${escapeHtml(caseUrl)}" style="color:${NAVY};font-weight:700;">Open case in dashboard →</a>` : ''}</div>`;
   }
   if (recordStatus === 'failed') {
-    return `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:8px 12px;margin-bottom:12px;"><strong>Not saved to client records</strong> — the records database could not be reached. Keep this email (and its attachments) as the record.</div>`;
+    return `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:8px 12px;margin-bottom:12px;"><strong>Not saved to client records</strong>: the records database could not be reached. Keep this email (and its attachments) as the record.</div>`;
   }
   return '';
 }
@@ -95,7 +95,7 @@ export function kycClientEmail({ fullName, services, attachedCount = 0, skippedF
     <div style="margin-top:22px;padding-top:18px;border-top:1px solid ${BORDER};font-size:13px;color:${TEXT};">
       Have documents to send, or a question in the meantime? Chat with us directly on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>.
     </div>`;
-  return shell(inner, { preheader: 'We\'ve received your request — here\'s what happens next.' });
+  return shell(inner, { preheader: 'We\'ve received your request: here\'s what happens next.' });
 }
 
 // ── Application: admin notification email ───────────────────────
@@ -106,7 +106,7 @@ export function kycAdminEmail({ fields, services, attachmentsNote, reference = n
     .join('');
 
   const inner = `
-    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 6px;">New Client Intake${reference ? ` — ${escapeHtml(reference)}` : ''}</h2>
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 6px;">New Client Intake${reference ? `: ${escapeHtml(reference)}` : ''}</h2>
     <div style="font-size:12.5px;color:${MUTED};margin-bottom:14px;">Remember to send a quote within 1 working day.</div>
     ${recordStatusHtml(reference, recordStatus, caseUrl)}
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:10px;">Services Requested</div>
@@ -129,7 +129,7 @@ export function contactClientEmail({ fullName, service, reference = null }) {
     <div style="margin-top:20px;padding-top:18px;border-top:1px solid ${BORDER};font-size:13px;color:${TEXT};">
       Need a faster response? Chat with us directly on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>.
     </div>`;
-  return shell(inner, { preheader: 'We\'ve received your enquiry — a consultant will be in touch shortly.' });
+  return shell(inner, { preheader: 'We\'ve received your enquiry: a consultant will be in touch shortly.' });
 }
 
 // ── Contact form: admin notification email ──────────────────────
@@ -140,10 +140,10 @@ export function contactAdminEmail({ fields, service, reference = null, recordSta
     .join('');
 
   const inner = `
-    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 6px;">New Enquiry${service ? ` — ${escapeHtml(service)}` : ''}</h2>
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 6px;">New Enquiry${service ? `: ${escapeHtml(service)}` : ''}</h2>
     ${recordStatusHtml(reference, recordStatus, caseUrl)}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:10px;">${rows}</table>`;
-  return shell(inner, { preheader: `New website enquiry${service ? ` — ${service}` : ''}.` });
+  return shell(inner, { preheader: `New website enquiry${service ? `: ${service}` : ''}.` });
 }
 
 // ── Admin dashboard: login code email ───────────────────────────
@@ -152,7 +152,7 @@ export function adminLoginCodeEmail({ code }) {
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 12px;">Your dashboard login code</h2>
     <div style="font-size:30px;font-weight:700;letter-spacing:8px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:8px;padding:16px;text-align:center;margin:12px 0;">${escapeHtml(code)}</div>
     <p style="font-size:13px;line-height:1.7;color:${MUTED};margin:0;">
-      This code expires in 10 minutes and can only be used once. If you did not try to sign in, you can ignore this email —
+      This code expires in 10 minutes and can only be used once. If you did not try to sign in, you can ignore this email:
       nobody can sign in without the code.
     </p>`;
   return shell(inner, { preheader: `Your login code is ${code}` });
@@ -200,7 +200,7 @@ export function caseReminderEmail({ fullName, reference, status, reminderNumber 
     </div>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${ask}</p>
     <div style="margin-top:20px;"><a href="${WHATSAPP_LINK}?text=${encodeURIComponent(`Hello, about my request ${reference}`)}" style="display:inline-block;background:#25d366;color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Message us on WhatsApp</a></div>
-    <p style="font-size:12px;line-height:1.6;color:${MUTED};margin:18px 0 0;">If you have already replied or decided not to proceed, please ignore this message — or let us know and we will stop the reminders.</p>`;
+    <p style="font-size:12px;line-height:1.6;color:${MUTED};margin:18px 0 0;">If you have already replied or decided not to proceed, please ignore this message, or let us know and we will stop the reminders.</p>`;
   return shell(inner, { preheader: waitingForDocs ? `We need a few more things for ${reference}` : `Any questions about your quote for ${reference}?` });
 }
 

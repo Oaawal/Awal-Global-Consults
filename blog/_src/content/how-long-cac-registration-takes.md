@@ -4,13 +4,13 @@ slug: how-long-cac-registration-takes
 date: 2026-10-30
 topic: registering-with-cac
 category: cac-registration
-description: Realistic CAC registration timelines from our own filings — business names within 24 hours, companies in 48–72 hours, incorporated trustees around five to six weeks — and the mistakes that cause queries and delays.
+description: Realistic CAC registration timelines from our own filings (business names within 24 hours, companies in 48–72 hours, incorporated trustees around five to six weeks) and the mistakes that cause queries and delays.
 excerpt: A business name can be done within a day. A company takes two to three days. Incorporated trustees take weeks, because the law requires a 28-day newspaper notice. Here's why, and what slows each one down.
-cta_text: Awal Global Consults checks every detail before filing, so your registration doesn't sit in a query queue — and you can track its progress online with your reference number.
+cta_text: Awal Global Consults checks every detail before filing, so your registration doesn't sit in a query queue, and you can track its progress online with your reference number.
 whatsapp_topic: CAC registration timeline
 ---
 
-How long registration takes depends mostly on **what you're registering** and **how clean your information is when it's filed**. The figures below come from our own filings with the Corporate Affairs Commission (CAC). They are not official CAC service times, and busy periods or system downtime can stretch them — but they're what clients can realistically expect.
+How long registration takes depends mostly on **what you're registering** and **how clean your information is when it's filed**. The figures below come from our own filings with the Corporate Affairs Commission (CAC). They are not official CAC service times, and busy periods or system downtime can stretch them, but they're what clients can realistically expect.
 
 | What you're registering | Typical time in our experience | Our packages from (government fees included) |
 |---|---|---|
@@ -21,7 +21,7 @@ How long registration takes depends mostly on **what you're registering** and **
 Packages can cost more where you add extras. Every quote is itemised before you pay anything.
 
 ::: callout
-The clock starts when your details and documents are **complete**. Most delays we see happen before filing — a missing ID, a name that's unavailable, or details that don't match.
+The clock starts when your details and documents are **complete**. Most delays we see happen before filing: a missing ID, a name that's unavailable, or details that don't match.
 :::
 
 ## Business names: usually within 24 hours
@@ -30,20 +30,20 @@ Once the name is available and your details are complete, a business name is typ
 
 ## Limited companies: 48–72 hours without queries
 
-A company involves more information — directors, shareholders, share capital and a statement of compliance — so there's more for CAC to check. Without queries, we usually have companies approved within two to three days. A query adds time while it's answered and the filing is reviewed again.
+A company involves more information (directors, shareholders, share capital and a statement of compliance) so there's more for CAC to check. Without queries, we usually have companies approved within two to three days. A query adds time while it's answered and the filing is reviewed again.
 
 ## Incorporated trustees: weeks, because the law requires it
 
 Registering an NGO, church, mosque, association or foundation as incorporated trustees has a stage that cannot be rushed: **the public notice**. In our experience the process runs like this:
 
-1. **Name consent and reservation** — about **3 business days**.
-2. **Newspaper publication** — a notice inviting objections must run for a **28-day window**. This period is required by law.
-3. **Declaration of trustees** — prepared and completed **within the 28-day window**.
-4. **Final submission and approval** — about **3 business days** after the notice period.
+1. **Name consent and reservation**: about **3 business days**.
+2. **Newspaper publication**: a notice inviting objections must run for a **28-day window**. This period is required by law.
+3. **Declaration of trustees**: prepared and completed **within the 28-day window**.
+4. **Final submission and approval**: about **3 business days** after the notice period.
 
 ::: stat
 28 days
-The objection window for incorporated trustees is set by law — it's the one part of the timeline no one can shorten.
+The objection window for incorporated trustees is set by law: it's the one part of the timeline no one can shorten.
 :::
 
 ## What causes delays
@@ -51,9 +51,9 @@ The objection window for incorporated trustees is set by law — it's the one pa
 - **The name isn't available**, or is too close to an existing name or registered trademark. Always give two or three alternatives.
 - **Details that don't match ID.** A middle name missing, a different spelling, or a date of birth that differs from the ID document.
 - **Unclear documents.** Blurred ID scans, cropped passports or signatures on lined paper.
-- **An incomplete or foreign business address.** The business address must be a full address in Nigeria — see [do I need a Nigerian address?](/blog/nigerian-address-cac-registration/)
+- **An incomplete or foreign business address.** The business address must be a full address in Nigeria. See [do I need a Nigerian address?](/blog/nigerian-address-cac-registration/)
 - **Vague business objects.** "General business" invites questions; describe what the business actually does.
-- **Restricted words in the name** — words like "Federal", "National", "Bank" or "Insurance" need special approval or licences.
+- **Restricted words in the name**: words like "Federal", "National", "Bank" or "Insurance" need special approval or licences.
 
 ## How to get registered fastest
 

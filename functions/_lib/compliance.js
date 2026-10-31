@@ -54,7 +54,7 @@ export async function eraseCase(env, c, { actor, reason, ip }) {
     // Notes and messages can contain personal details
     env.DB.prepare('UPDATE case_events SET note = NULL WHERE case_id = ?1').bind(c.id),
     env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'erased', ?2, ?3, ?4)")
-      .bind(c.id, `Personal data and ${docs.length} document${docs.length === 1 ? '' : 's'} erased — ${reason}`, actor, now),
+      .bind(c.id, `Personal data and ${docs.length} document${docs.length === 1 ? '' : 's'} erased: ${reason}`, actor, now),
     env.DB.prepare("INSERT INTO audit_log (at, actor, action, entity_type, entity_id, detail, ip) VALUES (?1, ?2, 'case.erased', 'case', ?3, ?4, ?5)")
       .bind(now, actor, c.id, JSON.stringify({ reference: c.reference, reason, documents: docs.length, clientErased: eraseClient }), ip)
   ];

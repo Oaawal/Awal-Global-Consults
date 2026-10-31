@@ -4,13 +4,13 @@ slug: add-remove-director-shareholder-cac
 date: 2026-10-30
 topic: after-registration
 category: cac-registration
-description: How Nigerian companies appoint or remove directors and bring in or buy out shareholders — the resolutions, share transfer documents, stamp duty, persons with significant control, and the CAC filings that make the change official.
-excerpt: A new partner, a director stepping down, shares changing hands — none of it is official until it's filed with CAC. Here's what each change needs, in the right order.
+description: How Nigerian companies appoint or remove directors and bring in or buy out shareholders: the resolutions, share transfer documents, stamp duty, persons with significant control, and the CAC filings that make the change official.
+excerpt: A new partner, a director stepping down, shares changing hands: none of it is official until it's filed with CAC. Here's what each change needs, in the right order.
 cta_text: Awal Global Consults prepares the resolutions and transfer documents and files director and shareholder changes with CAC, so your records match reality.
 whatsapp_topic: changing directors or shareholders
 ---
 
-Directors run a company; shareholders own it. Sometimes they're the same people, sometimes not — and when either changes, the change has to be **decided properly inside the company and then filed with CAC**. Until it's filed, CAC's records — which banks, partners and regulators rely on — still show the old position.
+Directors run a company; shareholders own it. Sometimes they're the same people, sometimes not, and when either changes, the change has to be **decided properly inside the company and then filed with CAC**. Until it's filed, CAC's records (which banks, partners and regulators rely on) still show the old position.
 
 ## Directors and shareholders are different
 
@@ -29,7 +29,7 @@ Directors run a company; shareholders own it. Sometimes they're the same people,
 
 ## Removing a director
 
-A director can **resign** by notice, or be **removed** by an ordinary resolution of the shareholders at a meeting. Removal has procedural requirements — including special notice of the resolution and giving the director a chance to be heard — so follow them carefully. Then file the change with CAC and update the bank mandate.
+A director can **resign** by notice, or be **removed** by an ordinary resolution of the shareholders at a meeting. Removal has procedural requirements, including special notice of the resolution and giving the director a chance to be heard, so follow them carefully. Then file the change with CAC and update the bank mandate.
 
 ::: callout
 Most private companies need at least **two directors**; a **small company** can have one. Check that removing a director doesn't leave the company below its minimum.
@@ -39,16 +39,16 @@ Most private companies need at least **two directors**; a **small company** can 
 
 There are two ways:
 
-- **Transfer** — an existing shareholder sells or gives some or all of their shares. This needs a **share transfer instrument**, payment of **stamp duty**, an update to the **register of members**, and notice to CAC.
-- **Allotment** — the company issues new shares to the incoming shareholder. If there aren't enough unissued shares, the share capital may need to be **increased** first by resolution. The allotment is then filed with CAC.
+- **Transfer**: an existing shareholder sells or gives some or all of their shares. This needs a **share transfer instrument**, payment of **stamp duty**, an update to the **register of members**, and notice to CAC.
+- **Allotment**: the company issues new shares to the incoming shareholder. If there aren't enough unissued shares, the share capital may need to be **increased** first by resolution. The allotment is then filed with CAC.
 
 ## Persons with significant control
 
-Companies must disclose their **persons with significant control** — people who own or control a significant stake (5% or more) or otherwise influence the company. When shareholdings change, check whether the PSC information needs updating too.
+Companies must disclose their **persons with significant control**: people who own or control a significant stake (5% or more) or otherwise influence the company. When shareholdings change, check whether the PSC information needs updating too.
 
 ## Shareholders abroad
 
-Foreign or diaspora shareholders can sign transfer documents remotely — see [signing documents from abroad](/blog/signing-cac-documents-from-abroad/). But if a **non-Nigerian** becomes a shareholder, the company becomes one with foreign participation, with a **₦100 million** minimum share capital — see [can a foreigner own a Nigerian company?](/blog/foreigner-own-nigerian-company/)
+Foreign or diaspora shareholders can sign transfer documents remotely. See [signing documents from abroad](/blog/signing-cac-documents-from-abroad/). But if a **non-Nigerian** becomes a shareholder, the company becomes one with foreign participation, with a **₦100 million** minimum share capital. See [can a foreigner own a Nigerian company?](/blog/foreigner-own-nigerian-company/)
 
 <div class="blog-faq">
 <div class="blog-faq-item">

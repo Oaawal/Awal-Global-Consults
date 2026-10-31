@@ -4,13 +4,13 @@ slug: scuml-real-estate-car-dealers-jewellers-nigeria
 date: 2026-10-31
 topic: aml-kyc-scuml
 category: kyc-compliance
-description: Real estate agents, car dealers, jewellers and other designated non-financial businesses must register with SCUML and follow anti-money-laundering rules. Here's what that means day to day — customer checks, cash transaction reports, suspicious activity and record keeping.
+description: Real estate agents, car dealers, jewellers and other designated non-financial businesses must register with SCUML and follow anti-money-laundering rules. Here's what that means day to day: customer checks, cash transaction reports, suspicious activity and record keeping.
 excerpt: If you sell property, cars or jewellery, Nigerian anti-money-laundering law treats you as a designated business. That means SCUML registration, customer checks and reporting large cash deals. Here's what changes.
-cta_text: Awal Global Consults handles SCUML registration alongside your CAC and KYC setup — so your banking and deals aren't held up by a missing certificate.
+cta_text: Awal Global Consults handles SCUML registration alongside your CAC and KYC setup, so your banking and deals aren't held up by a missing certificate.
 whatsapp_topic: SCUML for my business
 ---
 
-Nigeria's anti-money-laundering law — the Money Laundering (Prevention and Prohibition) Act 2022 — doesn't only apply to banks. It also covers **designated non-financial businesses and professions (DNFBPs)**: businesses where large sums can change hands and criminals might try to hide money.
+Nigeria's anti-money-laundering law, the Money Laundering (Prevention and Prohibition) Act 2022, doesn't only apply to banks. It also covers **designated non-financial businesses and professions (DNFBPs)**: businesses where large sums can change hands and criminals might try to hide money.
 
 These businesses must register with the **Special Control Unit against Money Laundering (SCUML)** and follow AML rules. See [SCUML registration](/blog/scuml-registration-nigeria/) for the registration process itself.
 
@@ -40,15 +40,15 @@ Before a significant transaction, identify your customer and verify their ID. Fo
 Cash transactions above ₦5 million for an individual, or ₦10 million for a company, must be reported through the channels SCUML prescribes.
 :::
 
-**Splitting** a payment into smaller amounts to stay under the threshold is itself an offence — by the customer, and by a business that helps.
+**Splitting** a payment into smaller amounts to stay under the threshold is itself an offence, by the customer, and by a business that helps.
 
 ### 3. Report suspicious activity
 
-If something about a transaction looks wrong — the customer won't explain where the money came from, pays in unusual ways, or the deal makes no sense — you must file a **suspicious transaction report**. Don't tell the customer you've reported them.
+If something about a transaction looks wrong (the customer won't explain where the money came from, pays in unusual ways, or the deal makes no sense) you must file a **suspicious transaction report**. Don't tell the customer you've reported them.
 
 ### 4. Keep records
 
-Keep customer identification and transaction records for the period the law requires — generally at least **five years** after the transaction or relationship ends.
+Keep customer identification and transaction records for the period the law requires, generally at least **five years** after the transaction or relationship ends.
 
 ::: callout
 Banks increasingly ask DNFBPs for their **SCUML certificate** before opening or maintaining accounts. Without it, your banking can stall.

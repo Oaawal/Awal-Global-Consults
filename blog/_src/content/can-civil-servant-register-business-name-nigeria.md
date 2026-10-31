@@ -5,12 +5,12 @@ date: 2026-10-30
 topic: choosing-a-structure
 category: cac-registration
 description: What the Constitution's Code of Conduct says about public officers running private businesses, the farming exception, owning shares versus managing a business, and safe ways for civil servants to start one.
-excerpt: The rule isn't "civil servants can't own anything." It's narrower — and the difference between owning and running a business is what matters. Here's what the Code of Conduct says and how to stay on the right side of it.
-cta_text: Awal Global Consults helps public officers choose a structure that fits the rules — whether that's a company you invest in, a farming business, or registration ready for when you leave service.
+excerpt: The rule isn't "civil servants can't own anything." It's narrower, and the difference between owning and running a business is what matters. Here's what the Code of Conduct says and how to stay on the right side of it.
+cta_text: Awal Global Consults helps public officers choose a structure that fits the rules, whether that's a company you invest in, a farming business, or registration ready for when you leave service.
 whatsapp_topic: civil servant business registration
 ---
 
-It's one of the most common questions we get, and the honest answer is: **it depends on what "register a business" means for you.** Nigerian law doesn't stop public officers from earning anything outside their job. What it restricts is **managing or running** a private business while employed full time — with an important exception for farming.
+It's one of the most common questions we get, and the honest answer is: **it depends on what "register a business" means for you.** Nigerian law doesn't stop public officers from earning anything outside their job. What it restricts is **managing or running** a private business while employed full time, with an important exception for farming.
 
 ::: callout
 This guide explains the general rule. Your own position also depends on your terms of service and your employer's rules, so check with your HR or establishment department before you register, and keep a copy of any approval.
@@ -36,7 +36,7 @@ A **limited company** is different: the company is a separate legal person. Hold
 
 | Option | Generally fits the rule? |
 |---|---|
-| Registering a farming business (agriculture, poultry, fish farming and similar) | Yes — farming is expressly allowed |
+| Registering a farming business (agriculture, poultry, fish farming and similar) | Yes: farming is expressly allowed |
 | Holding shares in a company someone else runs | Generally yes, as a passive investor |
 | Being a director or manager who runs a company day to day | No, while you're a full-time officer |
 | Registering and running a business name in your own name | No, unless it's farming or you're not full time |
@@ -50,7 +50,7 @@ A **limited company** is different: the company is a separate legal person. Hold
 - **Ask in writing.** Some services and agencies have their own rules or approval processes. A written answer protects you.
 
 ::: quote
-Registering a business in a relative's name while you quietly run it doesn't remove the restriction — it just hides it. The structure should match who genuinely runs the business.
+Registering a business in a relative's name while you quietly run it doesn't remove the restriction: it just hides it. The structure should match who genuinely runs the business.
 :::
 
 ## Declaring your assets
@@ -60,7 +60,7 @@ Public officers also declare their assets to the Code of Conduct Bureau. Shares 
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Will CAC refuse my registration because I'm a civil servant?</p>
-<p class="blog-faq-a">CAC registers businesses based on the information provided; it isn't the body that enforces the Code of Conduct. That's exactly why the decision is yours to get right — the consequences come from the Code and your service rules, not from CAC.</p>
+<p class="blog-faq-a">CAC registers businesses based on the information provided; it isn't the body that enforces the Code of Conduct. That's exactly why the decision is yours to get right: the consequences come from the Code and your service rules, not from CAC.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can my spouse register a business?</p>

@@ -4,16 +4,16 @@ slug: incorporated-trustees-vs-company-limited-by-guarantee
 date: 2026-10-30
 topic: ngos-and-trustees
 category: cac-registration
-description: Both structures suit non-profits in Nigeria. Here's how incorporated trustees and companies limited by guarantee differ on governance, members, approvals, foreign involvement and running costs — and how to choose.
+description: Both structures suit non-profits in Nigeria. Here's how incorporated trustees and companies limited by guarantee differ on governance, members, approvals, foreign involvement and running costs, and how to choose.
 excerpt: NGOs, foundations, churches and associations in Nigeria usually register as incorporated trustees or as a company limited by guarantee. They're both non-profit, but they work very differently. Here's how to choose.
-cta_text: Awal Global Consults registers both incorporated trustees and companies limited by guarantee from ₦150,000, government fees included — and advises on the right structure before you file.
-whatsapp_topic: NGO structure — incorporated trustees or company limited by guarantee
+cta_text: Awal Global Consults registers both incorporated trustees and companies limited by guarantee from ₦150,000, government fees included, and advises on the right structure before you file.
+whatsapp_topic: NGO structure: incorporated trustees or company limited by guarantee
 ---
 
-If you're setting up a non-profit in Nigeria — a charity, foundation, church, mosque, association or professional body — the Companies and Allied Matters Act 2020 (CAMA 2020) gives you two main options:
+If you're setting up a non-profit in Nigeria (a charity, foundation, church, mosque, association or professional body) the Companies and Allied Matters Act 2020 (CAMA 2020) gives you two main options:
 
-1. **Incorporated trustees (IT)** — a body of trustees registered under Part F of CAMA.
-2. **Company limited by guarantee (CLG)** — a company with no share capital whose members guarantee a fixed amount if it winds up.
+1. **Incorporated trustees (IT)**: a body of trustees registered under Part F of CAMA.
+2. **Company limited by guarantee (CLG)**: a company with no share capital whose members guarantee a fixed amount if it winds up.
 
 Neither can distribute profits to its members. The differences are in **how they're run**, **who controls them** and **what it takes to register**.
 
@@ -31,7 +31,7 @@ Neither can distribute profits to its members. The differences are in **how they
 
 ## The registration processes
 
-**Incorporated trustees** go through name reservation, a **newspaper publication** inviting objections, the trustees' declarations and final approval — see [registering an NGO or church as incorporated trustees](/blog/register-ngo-church-incorporated-trustees-nigeria/).
+**Incorporated trustees** go through name reservation, a **newspaper publication** inviting objections, the trustees' declarations and final approval. See [registering an NGO or church as incorporated trustees](/blog/register-ngo-church-incorporated-trustees-nigeria/).
 
 **A company limited by guarantee** needs name reservation, its memorandum and articles, and **the Attorney-General's consent** before CAC registers it. That consent stage adds time and paperwork, so plan for it.
 
@@ -43,14 +43,14 @@ Whichever structure you choose, non-profits are generally expected to register w
 
 - **Religious body, community association or locally led NGO?** Incorporated trustees is usually the natural fit.
 - **Foreign founders, foreign funding partners or an international affiliate?** A company limited by guarantee is usually the route.
-- **Want formal company governance** — members, directors, AGMs — and plan to grow into a large organisation? Consider a CLG.
+- **Want formal company governance** (members, directors, AGMs) and plan to grow into a large organisation? Consider a CLG.
 - **Want the simplest governance with a small trustee board?** Incorporated trustees.
 
-If you're unsure, ask before you file — changing structure later means starting again.
+If you're unsure, ask before you file: changing structure later means starting again.
 
 ## What it costs with us
 
-We register **both structures from ₦150,000**, government fees included. Packages with extra services — such as SCUML registration — are quoted separately before you pay.
+We register **both structures from ₦150,000**, government fees included. Packages with extra services, such as SCUML registration, are quoted separately before you pay.
 
 <div class="blog-faq">
 <div class="blog-faq-item">
@@ -69,4 +69,4 @@ We register **both structures from ₦150,000**, government fees included. Packa
 
 ## The short version
 
-Incorporated trustees suit trustee-led, locally rooted organisations; companies limited by guarantee suit organisations wanting company governance or with foreign involvement, and need the Attorney-General's consent. Choose before you file — switching later means starting over.
+Incorporated trustees suit trustee-led, locally rooted organisations; companies limited by guarantee suit organisations wanting company governance or with foreign involvement, and need the Attorney-General's consent. Choose before you file: switching later means starting over.

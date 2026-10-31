@@ -71,7 +71,7 @@ export async function runDailyJob(env, request, { now = new Date() } = {}) {
         to: { email: c.email, name: c.full_name },
         subject: c.status === 'awaiting_documents'
           ? `Reminder: we need a few more things for ${c.reference}`
-          : `Following up on your quote — ${c.reference}`,
+          : `Following up on your quote: ${c.reference}`,
         html: caseReminderEmail({ fullName: c.full_name, reference: c.reference, status: c.status, reminderNumber }),
         replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' }
       });
@@ -112,21 +112,21 @@ export async function runDailyJob(env, request, { now = new Date() } = {}) {
     const days = daysSince(c.created_at, now);
     return {
       reference: c.reference, name: c.full_name, url: caseUrl(c.id),
-      detail: `${c.services || (c.kind === 'enquiry' ? 'Enquiry' : 'Application')} · ${days === 0 ? 'received in the last day' : `waiting ${days} day${days === 1 ? '' : 's'}`}${days >= 1 && c.kind === 'application' ? ' — quote was promised within 1 working day' : ''}`
+      detail: `${c.services || (c.kind === 'enquiry' ? 'Enquiry' : 'Application')} · ${days === 0 ? 'received in the last day' : `waiting ${days} day${days === 1 ? '' : 's'}`}${days >= 1 && c.kind === 'application' ? ': quote was promised within 1 working day' : ''}`
     };
   });
   const waiting = waitingRows.map(c => {
     const days = daysSince(c.status_changed_at, now);
     return {
       reference: c.reference, name: c.full_name, url: caseUrl(c.id),
-      detail: `${statusInfo('application', c.status).label} ${days} day${days === 1 ? '' : 's'} ago · ${c.reminders} reminder${c.reminders === 1 ? '' : 's'} sent${c.reminders >= REMINDER_DAYS.length ? ' — time to call them' : ''}`
+      detail: `${statusInfo('application', c.status).label} ${days} day${days === 1 ? '' : 's'} ago · ${c.reminders} reminder${c.reminders === 1 ? '' : 's'} sent${c.reminders >= REMINDER_DAYS.length ? ': time to call them' : ''}`
     };
   });
   const inProgress = (progressRes.results || []).map(c => {
     const days = daysSince(c.status_changed_at, now);
     return {
       reference: c.reference, name: c.full_name, url: caseUrl(c.id),
-      detail: `${statusInfo('application', c.status).label} for ${days} day${days === 1 ? '' : 's'}${c.status === 'filed' && days >= STALE_IN_PROGRESS_DAYS ? ' — check with the agency' : ''}`
+      detail: `${statusInfo('application', c.status).label} for ${days} day${days === 1 ? '' : 's'}${c.status === 'filed' && days >= STALE_IN_PROGRESS_DAYS ? ': check with the agency' : ''}`
     };
   });
   const followUps = (followRes.results || []).map(c => ({

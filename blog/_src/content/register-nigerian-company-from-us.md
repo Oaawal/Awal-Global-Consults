@@ -4,35 +4,35 @@ slug: register-nigerian-company-from-us
 date: 2026-10-30
 topic: abroad-us
 category: cac-registration
-description: How Nigerians in the United States register a business name or company in Nigeria without travelling — documents, the Nigerian address, signatures, US passports and the ₦100m rule, and US tax points to check.
+description: How Nigerians in the United States register a business name or company in Nigeria without travelling: documents, the Nigerian address, signatures, US passports and the ₦100m rule, and US tax points to check.
 excerpt: Living in Houston, Atlanta or New York doesn't stop you owning a registered Nigerian business. Here's the remote process step by step, and the two things that change if you only hold a US passport.
-cta_text: Awal Global Consults registers businesses for Nigerians in the US — you send everything online, we file with CAC, and your certificate arrives by email.
+cta_text: Awal Global Consults registers businesses for Nigerians in the US: you send everything online, we file with CAC, and your certificate arrives by email.
 whatsapp_topic: registering a Nigerian company from the US
 ---
 
 You can register a Nigerian business name or limited company from anywhere in the United States, without flying home. Registration with the Corporate Affairs Commission (CAC) is done online, and every document it needs can be sent from the US.
 
-The process is almost identical to registering from the UK — see our guide to [registering from the UK](/blog/register-business-nigeria-from-uk/) for the full checklist. This guide covers what's different for Nigerians in the US.
+The process is almost identical to registering from the UK. See our guide to [registering from the UK](/blog/register-business-nigeria-from-uk/) for the full checklist. This guide covers what's different for Nigerians in the US.
 
 ## The process, step by step
 
-1. **Talk to us** on WhatsApp or by email. Time zones aren't a problem — messages are answered during Lagos business hours, which overlap with US mornings.
+1. **Talk to us** on WhatsApp or by email. Time zones aren't a problem: messages are answered during Lagos business hours, which overlap with US mornings.
 2. **Get an itemised quote.** Packages start from **₦40,000** for a business name and **₦75,000** for a limited company, government fees included. Add-ons are quoted separately.
 3. **Send your details and documents** through our secure online application at awalglobal.com.ng/kyc, by email or by WhatsApp.
 4. **We reserve the name and file** with CAC, and answer any queries.
-5. **Receive your certificate by email** — typically within **24 hours** for a business name and **48–72 hours** for a company if there are no queries. Track progress any time at awalglobal.com.ng/track.
+5. **Receive your certificate by email**: typically within **24 hours** for a business name and **48–72 hours** for a company if there are no queries. Track progress any time at awalglobal.com.ng/track.
 
 ## What you'll need
 
 - **Valid ID.** An international passport works. If you're a Nigerian citizen, use your Nigerian passport or NIN. A US driver's license or state ID may not be accepted.
-- **Your US home address** — fine as your personal address.
-- **A business address in Nigeria** — this one must be Nigerian. See [do I need a Nigerian address?](/blog/nigerian-address-cac-registration/)
+- **Your US home address**: fine as your personal address.
+- **A business address in Nigeria**: this one must be Nigerian. See [do I need a Nigerian address?](/blog/nigerian-address-cac-registration/)
 - **A clear signature image** and a **passport photo**.
 - **Two or three name options** and a clear description of what the business will do.
 
 ## If you hold only a US passport
 
-Many Nigerian-Americans are dual citizens. If you register a company as a Nigerian citizen, the standard process applies. If you — or a co-owner — register a company using **only a US passport**, it has **foreign participation**:
+Many Nigerian-Americans are dual citizens. If you register a company as a Nigerian citizen, the standard process applies. If you, or a co-owner, register a company using **only a US passport**, it has **foreign participation**:
 
 ::: callout
 A company with any foreign shareholder needs a **minimum share capital of ₦100 million**. Government fees rise with share capital, so these registrations are quoted individually rather than at our standard company price.
@@ -65,4 +65,4 @@ US citizens and US tax residents are generally taxed on worldwide income, and ow
 
 ## The short version
 
-From the US, the registration itself is fully remote and usually takes one to three days. The two things to get right are which passport you register with — because of the ₦100m foreign-participation rule — and your US tax reporting.
+From the US, the registration itself is fully remote and usually takes one to three days. The two things to get right are which passport you register with, because of the ₦100m foreign-participation rule, and your US tax reporting.

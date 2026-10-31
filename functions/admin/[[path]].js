@@ -183,7 +183,7 @@ export async function onRequest(context) {
     const s = (counts.results || [])[0] || {};
     const reviewN = review.results[0].n, requestN = requests.results[0].n;
     const alerts = [];
-    if (reviewN) alerts.push({ href: '/admin/records', tone: 'warn', icon: 'clock', text: `${reviewN} record${reviewN === 1 ? ' has' : 's have'} passed the retention period — review for erasure.` });
+    if (reviewN) alerts.push({ href: '/admin/records', tone: 'warn', icon: 'clock', text: `${reviewN} record${reviewN === 1 ? ' has' : 's have'} passed the retention period: review for erasure.` });
     if (requestN) alerts.push({ href: '/admin/records', tone: 'warn', icon: 'inbox', text: `${requestN} client data request${requestN === 1 ? ' is' : 's are'} open.` });
     return html(overviewPage({
       admin, badges: { cases: s.newCount || 0, records: reviewN + requestN },

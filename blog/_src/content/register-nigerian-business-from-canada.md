@@ -4,19 +4,19 @@ slug: register-nigerian-business-from-canada
 date: 2026-10-30
 topic: abroad-canada
 category: cac-registration
-description: How Nigerians in Canada register a business name or company in Nigeria remotely — what to prepare, permanent residents and Canadian citizens, the ₦100m foreign-participation rule, signatures, and Canadian tax points.
+description: How Nigerians in Canada register a business name or company in Nigeria remotely: what to prepare, permanent residents and Canadian citizens, the ₦100m foreign-participation rule, signatures, and Canadian tax points.
 excerpt: Whether you're in Toronto, Calgary or Halifax, you can register a Nigerian business without travelling. Here's how it works, and what changes if you're registering with a Canadian passport.
-cta_text: Awal Global Consults registers businesses for Nigerians in Canada — everything is sent online, we file with CAC, and you receive your certificate by email.
+cta_text: Awal Global Consults registers businesses for Nigerians in Canada: everything is sent online, we file with CAC, and you receive your certificate by email.
 whatsapp_topic: registering a Nigerian business from Canada
 ---
 
-Many Nigerians in Canada keep a business running back home — a family trade, an import-export line, property, or a new venture they plan to grow. You can register it from Canada without travelling: the Corporate Affairs Commission (CAC) registration is online and every document can be sent from abroad.
+Many Nigerians in Canada keep a business running back home: a family trade, an import-export line, property, or a new venture they plan to grow. You can register it from Canada without travelling: the Corporate Affairs Commission (CAC) registration is online and every document can be sent from abroad.
 
 ## Business name or company?
 
 | | Business name | Limited company |
 |---|---|---|
-| Liability | Personal — business debts are yours | Limited to your shares |
+| Liability | Personal: business debts are yours | Limited to your shares |
 | Best for | Small trading under your own name | Growth, staff, contracts, partners, exporting |
 | Typical time (our experience) | Within 24 hours | 48–72 hours if no queries |
 | Our packages from (government fees included) | ₦40,000 | ₦75,000 |
@@ -33,7 +33,7 @@ If you plan to **export from Nigeria**, choose a company: the Nigerian Export Pr
 
 - An international passport (or NIN for Nigerian citizens). A provincial driver's licence may not be accepted.
 - Your Canadian home address, for your personal details.
-- A **business address in Nigeria** — see [do I need a Nigerian address?](/blog/nigerian-address-cac-registration/)
+- A **business address in Nigeria**. See [do I need a Nigerian address?](/blog/nigerian-address-cac-registration/)
 - A clear signature image and a passport photo.
 - Two or three business name options and a clear description of the business.
 
@@ -52,7 +52,7 @@ Canadian residents are generally taxed on worldwide income, and owning shares in
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can I register as a sole proprietor from Canada?</p>
-<p class="blog-faq-a">Yes — a business name is Nigeria's equivalent. It's quick and inexpensive, but the business and you are legally the same, so its debts are yours.</p>
+<p class="blog-faq-a">Yes: a business name is Nigeria's equivalent. It's quick and inexpensive, but the business and you are legally the same, so its debts are yours.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Who should be the director if I'm in Canada?</p>

@@ -5,26 +5,26 @@ date: 2026-10-30
 topic: licences-and-permits
 category: export-licensing
 description: What the NEPC exporter's certificate is, why only companies can get it, the documents and steps on the NEPC e-registration portal, validity and renewal, and what else you need to export.
-excerpt: Before you can export from Nigeria through the formal system, you need an NEPC exporter's certificate — and only registered companies qualify. Here's what it takes and how long it lasts.
-cta_text: Awal Global Consults handles NEPC export registration from portal assistance to full export-readiness support — and if you're still a business name, we register your company first.
+excerpt: Before you can export from Nigeria through the formal system, you need an NEPC exporter's certificate, and only registered companies qualify. Here's what it takes and how long it lasts.
+cta_text: Awal Global Consults handles NEPC export registration from portal assistance to full export-readiness support, and if you're still a business name, we register your company first.
 whatsapp_topic: NEPC export licence
 ---
 
-If you want to export goods from Nigeria — agricultural produce, processed foods, crafts, manufactured goods — the starting point is registration with the **Nigerian Export Promotion Council (NEPC)**. The **exporter's certificate** it issues is what people usually mean by an "export licence".
+If you want to export goods from Nigeria (agricultural produce, processed foods, crafts, manufactured goods) the starting point is registration with the **Nigerian Export Promotion Council (NEPC)**. The **exporter's certificate** it issues is what people usually mean by an "export licence".
 
 ## Why you need it
 
 The NEPC certificate identifies you as a registered exporter. In practice it is what banks and other agencies look for when you start formal export transactions, including the documentation used to process export proceeds. Without it, exporting through official channels is difficult.
 
 ::: callout
-**Only registered companies qualify.** NEPC does not issue exporter registration to business names. If you're trading as a business name, the first step is registering a limited company — see [converting a business name to a limited company](/blog/convert-business-name-to-limited-company-nigeria/).
+**Only registered companies qualify.** NEPC does not issue exporter registration to business names. If you're trading as a business name, the first step is registering a limited company. See [converting a business name to a limited company](/blog/convert-business-name-to-limited-company-nigeria/).
 :::
 
 ## What you'll need
 
-- **Your company's CAC registration documents** — certificate of incorporation, particulars of directors and shareholders, Memorandum and Articles of Association, and a board resolution authorising the application.
+- **Your company's CAC registration documents**: certificate of incorporation, particulars of directors and shareholders, Memorandum and Articles of Association, and a board resolution authorising the application.
 - **The company's tax identification number (TIN).**
-- **Company details** — address, directors, contact person, and the products you intend to export.
+- **Company details**: address, directors, contact person, and the products you intend to export.
 - Any other documents requested on the NEPC portal at the time you apply.
 
 ## The process
@@ -40,21 +40,21 @@ You can apply on the NEPC portal yourself. Most rejections and delays come from 
 
 | Package | Our service fee | What it covers |
 |---|---|---|
-| **Basic** — portal assistance | ₦15,000 – ₦25,000 | Creating your NEPC account, uploading your ready documents, and tracking the application |
-| **Standard** — full application support | ₦30,000 – ₦50,000 | Reviewing your documents, completing the forms, following up with NEPC, and printing your certificate |
-| **Comprehensive** — export readiness | ₦60,000 – ₦100,000+ | Everything in Standard, plus sorting out CAC issues, TIN and tax guidance, product sourcing advice, and full compliance support |
+| **Basic**: portal assistance | ₦15,000 – ₦25,000 | Creating your NEPC account, uploading your ready documents, and tracking the application |
+| **Standard**: full application support | ₦30,000 – ₦50,000 | Reviewing your documents, completing the forms, following up with NEPC, and printing your certificate |
+| **Comprehensive**: export readiness | ₦60,000 – ₦100,000+ | Everything in Standard, plus sorting out CAC issues, TIN and tax guidance, product sourcing advice, and full compliance support |
 
 Our service fee is separate from NEPC's own registration fee. Every quote is itemised before you pay.
 
 - **Document check:** we make sure your CAC certificate, Memorandum and Articles of Association and board resolution match NEPC's requirements, so the application isn't rejected.
 - **Speed and follow-up:** we deal with portal lags and queries, so you don't spend days stuck.
-- **Export advice:** guidance on product selection — for example hibiscus, ginger or sesame — and the compliance requirements that come with each product.
+- **Export advice:** guidance on product selection (for example hibiscus, ginger or sesame) and the compliance requirements that come with each product.
 
 ## Validity and renewal
 
 ::: stat
 2 years
-How long a new NEPC certificate is valid. After that it is renewed every year — and renewing late costs more.
+How long a new NEPC certificate is valid. After that it is renewed every year, and renewing late costs more.
 :::
 
 Set a reminder well before the expiry date. A lapsed certificate can hold up shipments and payments at the worst possible moment.
@@ -63,14 +63,14 @@ Set a reminder well before the expiry date. A lapsed certificate can hold up shi
 
 NEPC registration is the foundation, not the whole picture. Depending on the product and destination, exporters also deal with:
 
-- **Product certification** — for example quality, health or phytosanitary certificates for food and agricultural products.
-- **Product-specific rules** — some goods have their own permits or are restricted for export.
+- **Product certification**: for example quality, health or phytosanitary certificates for food and agricultural products.
+- **Product-specific rules**: some goods have their own permits or are restricted for export.
 - **The destination country's import rules**, which your buyer can usually help confirm.
 
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can I export as a business name if I'm only shipping small quantities?</p>
-<p class="blog-faq-a">NEPC registration is only available to companies. Registering a limited company first is the reliable route — our packages start from ₦75,000, government fees included.</p>
+<p class="blog-faq-a">NEPC registration is only available to companies. Registering a limited company first is the reliable route: our packages start from ₦75,000, government fees included.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can I register for NEPC from abroad?</p>

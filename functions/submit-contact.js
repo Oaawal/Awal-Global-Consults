@@ -92,7 +92,7 @@ export async function onRequestPost(context) {
 
     await sendBrevoEmail(env, {
       to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
-      subject: `${reference ? `[${reference}] ` : ''}New Enquiry — ${service || 'Website Contact Form'}`,
+      subject: `${reference ? `[${reference}] ` : ''}New Enquiry: ${service || 'Website Contact Form'}`,
       html: contactAdminEmail({ fields: humanFields, service, reference, recordStatus, caseUrl }),
       replyTo: email ? { email, name: fullName } : undefined
     });
@@ -100,7 +100,7 @@ export async function onRequestPost(context) {
     if (email) {
       await sendBrevoEmail(env, {
         to: { email, name: fullName },
-        subject: 'We\u2019ve Received Your Enquiry — Awal Global Consults',
+        subject: 'We\u2019ve Received Your Enquiry | Awal Global Consults',
         html: contactClientEmail({ fullName, service, reference })
       });
     }

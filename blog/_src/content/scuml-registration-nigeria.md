@@ -57,7 +57,7 @@ By the time SCUML comes up, it's usually not a paperwork conversation anymore. I
 
 Broadly, SCUML registration follows a similar shape to other regulatory registrations: confirming your business falls into a designated category, preparing the required corporate documentation (typically your CAC certificate, business description, and ownership details), and submitting through the official SCUML registration channel. Because it's a government process with its own current requirements and processing timeline, it's worth confirming the exact current documentation list at the point of application rather than relying on a checklist from somewhere online that may already be out of date. Official SCUML registration is free; if you'd like us to handle the application, our professional fee is ₦70,000.
 
-## SCUML doesn't stand alone — it's tied to ongoing KYC
+## SCUML doesn't stand alone: it's tied to ongoing KYC
 
 Getting the certificate isn't the finish line. Once registered, a DNFBP is expected to run genuine customer due diligence on its own clients: identity verification, source-of-funds questions for higher-value transactions, and screening for Politically Exposed Persons, not as occasional extras but as a routine part of how the business operates. This is exactly the layer covered in our [KYC documentation checklist](/blog/kyc-documentation-checklist-nigeria/), and for a DNFBP, that standard is the baseline, not the upgrade.
 

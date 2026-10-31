@@ -4,7 +4,7 @@ slug: foreigner-own-nigerian-company
 date: 2026-10-30
 topic: choosing-a-structure
 category: cac-registration
-description: Yes, foreigners can generally own all of a Nigerian company — but with a ₦100m minimum share capital, NIPC registration, and sector exceptions. Here's what applies and in what order.
+description: Yes, foreigners can generally own all of a Nigerian company, but with a ₦100m minimum share capital, NIPC registration, and sector exceptions. Here's what applies and in what order.
 excerpt: Nigeria generally allows full foreign ownership of a company, but it comes with a ₦100 million minimum share capital and extra registrations. Here's the full picture before you commit.
 cta_text: Awal Global Consults registers companies with foreign shareholders and handles the follow-on registrations, with a clear quote for your share capital before you start.
 whatsapp_topic: foreign ownership of a Nigerian company
@@ -18,23 +18,23 @@ But "allowed" isn't the same as "simple". A company with any foreign shareholder
 
 ::: stat
 ₦100 million
-The minimum share capital for a company with any foreign participation — whether the foreign shareholding is 1% or 100%.
+The minimum share capital for a company with any foreign participation, whether the foreign shareholding is 1% or 100%.
 :::
 
 - **Minimum share capital of ₦100 million.** Government fees rise with share capital, so these registrations cost more than a standard all-Nigerian company and are quoted individually.
 - **Registration with the Nigerian Investment Promotion Commission (NIPC)** after incorporation, as a company with foreign participation.
-- **Bringing in the capital properly.** When foreign investment is brought into Nigeria through a bank, investors usually obtain a **Certificate of Capital Importation (CCI)** through that bank. Keep it — it supports the later repatriation of dividends and capital.
+- **Bringing in the capital properly.** When foreign investment is brought into Nigeria through a bank, investors usually obtain a **Certificate of Capital Importation (CCI)** through that bank. Keep it: it supports the later repatriation of dividends and capital.
 - **Permits for foreign staff.** If the company will employ foreign nationals, it will need the relevant immigration approvals, such as an expatriate quota. See [CERPAC and expatriate quota](/blog/cerpac-expatriate-quota-nigeria/).
 - **Sector licences.** Some businesses need a licence or approval from a sector regulator before they can operate, whoever owns them.
 
 ## Where full foreign ownership isn't possible
 
-A small number of activities are closed to foreign investors, including those related to arms and ammunition, narcotic drugs and military or paramilitary items. Some sectors also have their own ownership rules or local-content requirements — for example in oil and gas, shipping and some communications businesses. If your business is in a regulated sector, check its rules before registering.
+A small number of activities are closed to foreign investors, including those related to arms and ammunition, narcotic drugs and military or paramilitary items. Some sectors also have their own ownership rules or local-content requirements, for example in oil and gas, shipping and some communications businesses. If your business is in a regulated sector, check its rules before registering.
 
 ## The order things happen in
 
 1. **Choose the structure and share capital** (₦100m minimum), and confirm the business isn't restricted.
-2. **Register the company with CAC** — the foreign shareholder registers with their passport.
+2. **Register the company with CAC**: the foreign shareholder registers with their passport.
 3. **Register with NIPC.**
 4. **Open a bank account and bring in capital**, obtaining a CCI where applicable.
 5. **Get sector licences and staff permits** the business needs.

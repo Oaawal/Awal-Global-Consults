@@ -35,7 +35,7 @@ This is exactly why picking your class (or classes) correctly matters as much as
 
 ::: stat
 7 years
-How long a Nigerian trademark registration lasts before renewal — the same one-time filing cost buys protection for the full term, not an annual fee
+How long a Nigerian trademark registration lasts before renewal: the same one-time filing cost buys protection for the full term, not an annual fee
 :::
 
 Government-set fees for the search, filing, and publication components are exactly that: government-set. They change periodically by gazette, the same way CAC's registration fees do, so treat any specific figure quoted (including elsewhere online) as a starting reference to confirm at the point of filing, not a locked-in number.

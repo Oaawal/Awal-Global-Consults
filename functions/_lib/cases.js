@@ -98,12 +98,12 @@ export function autoFollowUp(services, status, now) {
   if (status !== 'delivered') return null;
   const s = String(services || '');
   if (/cerpac|expatriate|residence permit/i.test(s)) {
-    return { at: addMonths(now, 11), note: 'CERPAC renewal coming up — offer to handle the renewal.' };
+    return { at: addMonths(now, 11), note: 'CERPAC renewal coming up: offer to handle the renewal.' };
   }
   if (/cac|business name|company|incorporat|trustee|annual return/i.test(s)) {
     return {
       at: addMonths(now, 11),
-      note: 'CAC annual returns coming up (business names yearly; a company\'s first return is due 18 months after incorporation) — offer to file.'
+      note: 'CAC annual returns coming up (business names yearly; a company\'s first return is due 18 months after incorporation): offer to file.'
     };
   }
   return null;
