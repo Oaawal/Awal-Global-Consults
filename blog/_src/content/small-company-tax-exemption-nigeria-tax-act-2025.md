@@ -1,5 +1,6 @@
 ---
 title: "The Small Company Tax Exemption Under the Nigeria Tax Act 2025: Who Qualifies"
+seo_title: Small Company Tax Exemption in Nigeria (NTA 2025)
 slug: small-company-tax-exemption-nigeria-tax-act-2025
 date: 2026-10-31
 topic: tax-and-tin

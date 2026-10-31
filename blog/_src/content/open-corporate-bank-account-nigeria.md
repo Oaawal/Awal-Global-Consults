@@ -1,5 +1,6 @@
 ---
 title: "Opening a Corporate Bank Account in Nigeria: What Banks Will Ask For"
+seo_title: Opening a Corporate Bank Account in Nigeria
 slug: open-corporate-bank-account-nigeria
 date: 2026-10-30
 topic: after-registration

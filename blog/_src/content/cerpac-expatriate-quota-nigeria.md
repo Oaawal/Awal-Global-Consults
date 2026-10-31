@@ -1,5 +1,6 @@
 ---
 title: "CERPAC and Expatriate Quota: A Guide for Nigerian Employers of Foreign Staff"
+seo_title: CERPAC and Expatriate Quota: Guide for Employers
 slug: cerpac-expatriate-quota-nigeria
 date: 2026-08-22
 topic: expatriates-and-cerpac

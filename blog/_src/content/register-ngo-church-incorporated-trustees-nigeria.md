@@ -1,5 +1,6 @@
 ---
 title: "How to Register an NGO, Church or Association in Nigeria (Incorporated Trustees)"
+seo_title: How to Register an NGO or Church in Nigeria
 slug: register-ngo-church-incorporated-trustees-nigeria
 date: 2026-10-30
 topic: ngos-and-trustees

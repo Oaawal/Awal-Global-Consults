@@ -1,5 +1,6 @@
 ---
 title: "SCUML for Real Estate Agents, Car Dealers and Jewellers: What Changes for You"
+seo_title: SCUML for Real Estate Agents, Car Dealers and Jewellers
 slug: scuml-real-estate-car-dealers-jewellers-nigeria
 date: 2026-10-31
 topic: aml-kyc-scuml

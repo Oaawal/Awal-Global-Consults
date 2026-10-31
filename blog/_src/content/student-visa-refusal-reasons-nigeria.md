@@ -1,5 +1,6 @@
 ---
 title: "Why Nigerian Student Visa Applications Get Refused (And How to Avoid It)"
+seo_title: Why Nigerian Student Visa Applications Get Refused
 slug: student-visa-refusal-reasons-nigeria
 date: 2026-09-26
 topic: study-abroad

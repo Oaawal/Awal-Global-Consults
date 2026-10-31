@@ -1,5 +1,6 @@
 ---
 title: Business Name vs Limited Company in Nigeria: Which Should You Register?
+seo_title: Business Name vs Limited Company in Nigeria
 slug: business-name-vs-limited-company-nigeria
 date: 2026-08-27
 topic: choosing-a-structure

@@ -1,5 +1,6 @@
 ---
 title: "Incorporated Trustees vs Company Limited by Guarantee: Which Should Your NGO Use?"
+seo_title: Incorporated Trustees vs Company Limited by Guarantee
 slug: incorporated-trustees-vs-company-limited-by-guarantee
 date: 2026-10-30
 topic: ngos-and-trustees

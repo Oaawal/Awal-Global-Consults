@@ -1,5 +1,6 @@
 ---
 title: "Can One Person Own and Run a Company in Nigeria? Single-Member Companies Under CAMA 2020"
+seo_title: Can One Person Own a Company in Nigeria? CAMA 2020
 slug: single-member-company-nigeria
 date: 2026-10-30
 topic: choosing-a-structure

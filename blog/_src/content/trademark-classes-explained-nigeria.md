@@ -1,5 +1,6 @@
 ---
 title: Trademark Classes in Nigeria Explained: How to Choose the Right One
+seo_title: Trademark Classes in Nigeria Explained
 slug: trademark-classes-explained-nigeria
 date: 2026-07-14
 topic: trademark-basics

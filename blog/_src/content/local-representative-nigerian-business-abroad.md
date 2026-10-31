@@ -1,5 +1,6 @@
 ---
 title: "Running a Nigerian Business From Abroad: Who Should Be Your Local Representative?"
+seo_title: Running a Nigerian Business from Abroad: Local Representative
 slug: local-representative-nigerian-business-abroad
 date: 2026-10-30
 topic: abroad-all

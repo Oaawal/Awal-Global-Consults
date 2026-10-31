@@ -1,5 +1,6 @@
 ---
 title: "How to Get Your Tax ID (TIN) in Nigeria: The 2026 Retrieval Process"
+seo_title: How to Get or Retrieve Your TIN in Nigeria (2026)
 slug: tin-retrieval-nigeria-2026
 date: 2026-08-04
 topic: tax-and-tin

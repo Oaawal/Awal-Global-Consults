@@ -1,5 +1,6 @@
 ---
 title: "Business Name, Partnership or Limited Company: How Each Is Taxed Under the Nigeria Tax Act 2025"
+seo_title: How Business Names and Companies Are Taxed in Nigeria (2026)
 slug: business-name-partnership-company-tax-nigeria
 date: 2026-10-31
 topic: tax-and-tin

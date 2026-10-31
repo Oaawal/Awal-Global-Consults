@@ -309,7 +309,7 @@ ${related.map(p => card(p, '../')).join('\n')}
   const rendered = fill(postTemplate, {
     ROOT: POST_ROOT,
     TITLE: post.title,
-    HEAD_TITLE: headTitle(post.title),
+    HEAD_TITLE: headTitle(post.seo_title || post.title),
     DESCRIPTION: post.description,
     META_DESCRIPTION: metaDescription(post.description),
     CANONICAL: canonical,
@@ -574,5 +574,50 @@ const blogUrlBlocks = [
 sitemap = sitemap.replace('</urlset>', `${blogUrlBlocks}\n</urlset>`);
 fs.writeFileSync(sitemapPath, sitemap, 'utf8');
 console.log('Updated sitemap.xml with blog URLs');
+
+
+// --- 7. "Helpful guides" on service pages -----------------------------------
+// Each service page carries a block between <!-- guides:start --> and
+// <!-- guides:end --> markers. It is regenerated here so titles stay in sync.
+const SERVICE_GUIDES = {
+  'cac-registration.html': ['cac-fees-2026-fee-table', 'how-long-cac-registration-takes', 'business-name-vs-limited-company-nigeria', 'business-name-registration-document-checklist', 'company-registration-document-checklist', 'share-capital-new-company-nigeria'],
+  'trademark-ip.html': ['trademark-search-nigeria', 'trademark-registration-cost-nigeria', 'trademark-registration-timeline-renewal-nigeria', 'trademark-classes-explained-nigeria', 'business-name-vs-trademark-nigeria', 'someone-registered-my-name-as-trademark'],
+  'corporate-regulatory.html': ['nigeria-business-compliance-calendar', 'cac-annual-returns-deadline-penalty', 'scuml-registration-nigeria', 'tax-clearance-certificate-nigeria', 'tin-retrieval-nigeria-2026', 'change-business-name-address-partners-cac'],
+  'business-advisory.html': ['business-name-partnership-company-tax-nigeria', 'small-company-tax-exemption-nigeria-tax-act-2025', 'licences-new-business-nigeria', 'single-member-company-nigeria', 'do-i-need-lawyer-register-company-nigeria', 'open-corporate-bank-account-nigeria'],
+  'legal-documentation.html': ['buying-property-nigeria-from-abroad', 'signing-cac-documents-from-abroad', 'cac-certified-true-copy', 'local-representative-nigerian-business-abroad', 'verify-company-cac-portal', 'privacy-policy-small-business-nigeria'],
+  'identity-documentation.html': ['nin-for-nigerians-abroad', 'nin-retrieval-correction-nigeria', 'renew-nigerian-passport-from-abroad', 'nigerian-international-passport-guide'],
+  'immigration-expatriate.html': ['cerpac-expatriate-quota-nigeria', 'expatriate-quota-how-many-foreign-staff-nigeria', 'cerpac-renewal-nigeria', 'foreigner-own-nigerian-company'],
+  'export-import-licensing.html': ['nepc-export-licence-nigeria', 'licences-new-business-nigeria', 'tax-clearance-certificate-nigeria', 'foreigner-own-nigerian-company'],
+  'student-visa.html': ['uk-vs-canada-vs-us-student-visa-nigeria', 'uk-student-visa-financial-proof-nigeria', 'canada-study-permit-proof-of-funds-nigeria', 'student-visa-refusal-reasons-nigeria'],
+  'cybersecurity-support.html': ['cybersecurity-levy-nigeria-businesses', 'business-email-compromise-payment-fraud-nigeria', 'whatsapp-business-account-security-nigeria', 'data-breach-response-nigeria-ndpa', 'ndpa-compliance-nigerian-business']
+};
+const bySlug = Object.fromEntries(posts.map(p => [p.slug, p]));
+for (const [file, slugs] of Object.entries(SERVICE_GUIDES)) {
+  const pagePath = path.join(ROOT_DIR, file);
+  if (!fs.existsSync(pagePath)) continue;
+  const html = fs.readFileSync(pagePath, 'utf8');
+  const start = html.indexOf('<!-- guides:start -->');
+  const end = html.indexOf('<!-- guides:end -->');
+  if (start === -1 || end === -1) { console.warn(`! ${file}: no guides markers, skipped`); continue; }
+  const live = slugs.map(s => bySlug[s]).filter(Boolean);
+  const cards = live.map(p => `          <a class="guide-link-card" href="/blog/${p.slug}/"><span class="guide-link-title">${esc(p.title)}</span><span class="guide-link-more">Read the guide &rarr;</span></a>`).join('\n');
+  const section = `<!-- guides:start -->
+  <section class="section service-guides">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Helpful guides</span>
+        <h2>Read before you start</h2>
+        <p>Plain-language answers to the questions clients ask us most about this service.</p>
+      </div>
+      <div class="guide-link-grid">
+${cards}
+      </div>
+      <p class="guide-link-all"><a href="/blog/">Browse all Awal Guides &rarr;</a></p>
+    </div>
+  </section>
+  `;
+  fs.writeFileSync(pagePath, html.slice(0, start) + section + html.slice(end));
+}
+console.log('Updated helpful-guides blocks on service pages');
 
 console.log(`\nDone: built ${posts.length} guide(s) across ${liveTopicList.length} topic${liveTopicList.length === 1 ? '' : 's'}.`);

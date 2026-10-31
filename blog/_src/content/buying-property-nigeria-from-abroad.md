@@ -1,5 +1,6 @@
 ---
 title: "Buying Property in Nigeria from Abroad: The Legal Documents to Check First"
+seo_title: Buying Property in Nigeria from Abroad: Documents to Check
 slug: buying-property-nigeria-from-abroad
 date: 2026-10-30
 topic: abroad-all

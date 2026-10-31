@@ -1,5 +1,6 @@
 ---
 title: "CAC Name Search: Why Names Get Rejected and How to Pick One That Passes"
+seo_title: CAC Name Search: Why Names Get Rejected
 slug: cac-name-search-rejection-reasons
 date: 2026-10-30
 topic: registering-with-cac

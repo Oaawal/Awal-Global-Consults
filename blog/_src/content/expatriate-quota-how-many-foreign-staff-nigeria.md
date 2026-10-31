@@ -1,5 +1,6 @@
 ---
 title: "Expatriate Quota: How Many Foreign Staff Can a Nigerian Company Employ?"
+seo_title: Expatriate Quota: How Many Foreign Staff Can You Hire?
 slug: expatriate-quota-how-many-foreign-staff-nigeria
 date: 2026-10-31
 topic: expatriates-and-cerpac

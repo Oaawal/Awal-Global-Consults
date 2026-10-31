@@ -1,5 +1,6 @@
 ---
 title: "Changing Your Business Name, Address or Partners After CAC Registration"
+seo_title: Change Business Name, Address or Partners with CAC
 slug: change-business-name-address-partners-cac
 date: 2026-10-30
 topic: after-registration

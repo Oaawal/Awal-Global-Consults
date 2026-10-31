@@ -1,5 +1,6 @@
 ---
 title: "Haven't Filed Annual Returns for Years? How to Get Your Company Back in Good Standing"
+seo_title: Unfiled CAC Annual Returns? How to Revive Your Company
 slug: revive-inactive-company-unfiled-annual-returns
 date: 2026-10-30
 topic: after-registration

@@ -1,5 +1,6 @@
 ---
 title: "UK vs Canada vs US Student Visa: Which Is Actually More Achievable for Nigerian Students?"
+seo_title: UK vs Canada vs US Student Visa for Nigerians
 slug: uk-vs-canada-vs-us-student-visa-nigeria
 date: 2026-09-29
 updated: 2026-10-31

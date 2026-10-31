@@ -1,5 +1,6 @@
 ---
 title: "Nigerian Business Compliance Calendar 2026–27: Every Filing Deadline in One Place"
+seo_title: Nigeria Business Compliance Calendar 2026–27
 slug: nigeria-business-compliance-calendar
 date: 2026-10-31
 topic: deadlines-and-calendars

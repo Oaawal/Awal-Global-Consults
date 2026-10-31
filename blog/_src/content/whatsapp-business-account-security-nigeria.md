@@ -1,5 +1,6 @@
 ---
 title: "WhatsApp Business Account Security: Protecting Your Business from Takeover"
+seo_title: WhatsApp Business Account Security for Nigerian Businesses
 slug: whatsapp-business-account-security-nigeria
 date: 2026-09-13
 topic: cybersecurity

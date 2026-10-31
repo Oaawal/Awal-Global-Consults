@@ -1,5 +1,6 @@
 ---
 title: "How Nigerian Businesses Get Scammed Out of Payments (And How to Stop It)"
+seo_title: How Nigerian Businesses Get Scammed Out of Payments
 slug: business-email-compromise-payment-fraud-nigeria
 date: 2026-09-16
 topic: cybersecurity

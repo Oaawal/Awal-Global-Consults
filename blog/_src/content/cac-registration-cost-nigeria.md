@@ -1,5 +1,6 @@
 ---
 title: How Much Does CAC Registration Cost in Nigeria? (2026 Price Guide)
+seo_title: CAC Registration Cost in Nigeria (2026 Price Guide)
 slug: cac-registration-cost-nigeria
 date: 2026-08-18
 updated: 2026-10-31

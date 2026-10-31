@@ -1,5 +1,6 @@
 ---
 title: "Business Name vs Trademark: Is CAC Registration Enough to Protect My Brand?"
+seo_title: Business Name vs Trademark: Is CAC Registration Enough?
 slug: business-name-vs-trademark-nigeria
 date: 2026-10-30
 topic: trademark-basics

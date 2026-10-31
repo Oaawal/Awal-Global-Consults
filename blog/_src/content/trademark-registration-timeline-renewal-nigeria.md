@@ -1,5 +1,6 @@
 ---
 title: "How Long Does Trademark Registration Take in Nigeria, and When Do You Renew?"
+seo_title: Trademark Registration Timeline and Renewal in Nigeria
 slug: trademark-registration-timeline-renewal-nigeria
 date: 2026-10-31
 updated: 2026-10-31

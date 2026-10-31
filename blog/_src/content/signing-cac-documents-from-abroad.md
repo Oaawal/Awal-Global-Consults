@@ -1,5 +1,6 @@
 ---
 title: "Signing CAC Documents from Abroad: E-Signatures, Notarisation and Power of Attorney"
+seo_title: Signing CAC Documents from Abroad: E-Sign, Notary, PoA
 slug: signing-cac-documents-from-abroad
 date: 2026-10-30
 topic: abroad-all

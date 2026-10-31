@@ -1,5 +1,6 @@
 ---
 title: CAC Annual Returns in Nigeria: Deadline, Process, and the Penalty for Missing It
+seo_title: CAC Annual Returns: Deadline, Process and Penalty
 slug: cac-annual-returns-deadline-penalty
 date: 2026-09-16
 updated: 2026-10-31

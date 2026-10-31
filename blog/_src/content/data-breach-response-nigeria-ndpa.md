@@ -1,5 +1,6 @@
 ---
 title: "Responding to a Data Breach in Nigeria: What the NDPA Actually Requires"
+seo_title: Data Breach Response in Nigeria: What the NDPA Requires
 slug: data-breach-response-nigeria-ndpa
 date: 2026-09-18
 topic: data-protection

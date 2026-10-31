@@ -1,5 +1,6 @@
 ---
 title: "CAC Fees 2026: Official Government Fees for Business Names and Companies"
+seo_title: CAC Fees 2026: Official Government Fee Table
 slug: cac-fees-2026-fee-table
 date: 2026-10-31
 topic: fees-and-costs

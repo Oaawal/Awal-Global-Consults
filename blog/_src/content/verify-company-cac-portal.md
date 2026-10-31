@@ -1,5 +1,6 @@
 ---
 title: "How to Check a Company Is Real: Verifying a Business on the CAC Portal"
+seo_title: How to Verify a Company on the CAC Portal
 slug: verify-company-cac-portal
 date: 2026-10-30
 topic: aml-kyc-scuml

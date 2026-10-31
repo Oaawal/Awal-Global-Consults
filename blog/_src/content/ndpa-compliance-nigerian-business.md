@@ -1,5 +1,6 @@
 ---
 title: "NDPA Compliance: Does Your Nigerian Business Need to Register with the NDPC?"
+seo_title: NDPA Compliance: Do You Need to Register with the NDPC?
 slug: ndpa-compliance-nigerian-business
 date: 2026-09-05
 topic: data-protection

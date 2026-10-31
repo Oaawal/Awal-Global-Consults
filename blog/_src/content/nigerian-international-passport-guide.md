@@ -1,5 +1,6 @@
 ---
 title: "Nigerian International Passport: New Application, Renewal, and What Actually Delays It"
+seo_title: Nigerian Passport: New Application and Renewal Guide
 slug: nigerian-international-passport-guide
 date: 2026-09-22
 topic: nin-and-passports

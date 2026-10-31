@@ -1,5 +1,6 @@
 ---
 title: "Canada Study Permit Proof of Funds: What Nigerian Applicants Need to Show"
+seo_title: Canada Study Permit Proof of Funds for Nigerians
 slug: canada-study-permit-proof-of-funds-nigeria
 date: 2026-10-31
 topic: study-abroad

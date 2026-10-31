@@ -1,5 +1,6 @@
 ---
 title: "How Long Does CAC Registration Take? Realistic Timelines and What Delays Approval"
+seo_title: How Long Does CAC Registration Take in Nigeria?
 slug: how-long-cac-registration-takes
 date: 2026-10-30
 topic: registering-with-cac

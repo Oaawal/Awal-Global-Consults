@@ -1,5 +1,6 @@
 ---
 title: "UK Student Visa Financial Proof: What Nigerian Applicants Actually Need to Show"
+seo_title: UK Student Visa Financial Proof for Nigerian Applicants
 slug: uk-student-visa-financial-proof-nigeria
 date: 2026-09-24
 topic: study-abroad

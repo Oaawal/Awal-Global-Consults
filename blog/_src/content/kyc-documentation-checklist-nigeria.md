@@ -1,5 +1,6 @@
 ---
 title: KYC Documentation in Nigeria: What Banks and Regulators Actually Ask For
+seo_title: KYC Documents in Nigeria: What Banks Ask For
 slug: kyc-documentation-checklist-nigeria
 date: 2026-07-14
 topic: aml-kyc-scuml
