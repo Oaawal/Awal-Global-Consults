@@ -272,14 +272,25 @@ function bookingDetailsHtml({ reference, typeLabel, whenText, modeLabel, feeText
     </table></div>`;
 }
 
-export function bookingClientEmail({ fullName, paid, cancelUrl, ...d }) {
+function paymentHtml(bank, reference) {
+  if (!bank) return '';
+  return `<div style="background:#ffffff;border:1px solid ${BORDER};border-left:3px solid ${GOLD};border-radius:8px;padding:14px 16px;margin:16px 0;font-size:13.5px;line-height:1.7;color:${TEXT};">
+    <strong style="color:${NAVY};">How to pay</strong><br>
+    Please wait until we confirm the exact fee for your matter, then pay by bank transfer to:<br>
+    <strong>${escapeHtml(bank.bank)}</strong> · ${escapeHtml(bank.accountName)} · <strong>${escapeHtml(bank.accountNumber)}</strong><br>
+    ${reference ? `Use <strong>${escapeHtml(reference)}</strong> as the payment description, and reply` : 'Reply'} to this email with your proof of payment.
+  </div>`;
+}
+
+export function bookingClientEmail({ fullName, paid, cancelUrl, bank = null, ...d }) {
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">${paid ? 'Your consultation request' : 'Your consultation is booked'}</h2>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(fullName || 'valued client')},</p>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${paid
-      ? 'Thank you for booking a paid consultation. We’ve reserved your time and will email the fee and payment details shortly. Your session is confirmed once payment is received.'
+      ? 'Thank you for booking a paid consultation. We’ve reserved your time. Paid consultations start from ₦20,000, depending on the scope of your matter. We’ll email you the exact fee shortly, and your session is confirmed once payment is received.'
       : 'Thank you for booking. Your free consultation is confirmed for the time below.'}</p>
     ${bookingDetailsHtml(d)}
+    ${paid ? paymentHtml(bank, d.reference) : ''}
     <p style="font-size:13.5px;line-height:1.7;color:${TEXT};margin:0 0 8px;">For a WhatsApp or phone call, we'll call the number you gave us. For a video call, we'll email the link before the session.</p>
     <p style="font-size:13px;line-height:1.7;color:${MUTED};margin:14px 0 0;">Can't make it? <a href="${escapeHtml(cancelUrl)}" style="color:${NAVY};font-weight:600;">Cancel this booking</a> and book another time, or reply to this email.</p>`;
   return shell(inner, { preheader: `${d.typeLabel}: ${d.whenText}` });
@@ -287,7 +298,7 @@ export function bookingClientEmail({ fullName, paid, cancelUrl, ...d }) {
 
 export function bookingAdminEmail({ fullName, email, phone, caseUrl, paid, ...d }) {
   const inner = `
-    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 6px;">New consultation booking${paid ? ' (paid: send fee and payment details)' : ''}</h2>
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 6px;">New consultation booking${paid ? ' (paid: confirm the exact fee with the client)' : ''}</h2>
     ${bookingDetailsHtml(d)}
     <p style="font-size:13.5px;line-height:1.7;color:${TEXT};margin:0;"><strong>${escapeHtml(fullName)}</strong><br>${escapeHtml(email)}${phone ? `<br>${escapeHtml(phone)}` : ''}</p>
     ${caseUrl ? `<p style="margin:16px 0 0;"><a href="${escapeHtml(caseUrl)}" style="color:${NAVY};font-weight:700;">Open in dashboard →</a></p>` : ''}`;

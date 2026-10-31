@@ -11,7 +11,7 @@
  */
 (function () {
   const CONSENT_KEY = 'agc_consent';
-  const TURNSTILE_SITE_KEY = '';
+  const TURNSTILE_SITE_KEY = '0x4AAAAAAFuEnG2UvobeO6uN';
   // Site root, worked out from this script's own URL so links work at any page depth
   const SITE_ROOT = (document.currentScript && document.currentScript.src || '/assets/js/site.js').replace(/assets\/js\/site\.js.*$/, '');
 

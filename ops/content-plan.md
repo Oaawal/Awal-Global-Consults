@@ -180,6 +180,10 @@ official CAC service times or fees — say so wherever they are quoted.
   CAC company annual return: 42 days after AGM, first AGM within 18 months of incorporation,
   none in the incorporation year. Incorporated trustees: 30 June to 31 December, not in the
   incorporation year.
+- **Consultations (owner, 31 Oct 2026):** free 20-min calls for registration/compliance and
+  passport/NIN; paid 45-min legal and advisory consultations from ₦20,000 depending on scope,
+  paid by transfer to Kuda Bank, AWAL GLOBAL CONSULTS LIMITED, 3003466189. Booking hours
+  Mon–Fri 10am–4pm, Sat 10am–1pm (Lagos).
 - **Services confirmed (30 Oct 2026):** NEPC export licences and other licences;
   property document checks and preparation (by our team of professional
   lawyers); tax registration and tax clearance certificates; passport

@@ -725,6 +725,8 @@ async function submitKYC() {
     document.getElementById('success-screen').style.display = 'block';
     window.scrollTo({top:0,behavior:'smooth'});
   } catch (err) {
+    // A Turnstile token works once; get a fresh one for the retry
+    if (window.turnstile) { try { window.turnstile.reset(); } catch (e) { /* widget not ready */ } }
     btn.disabled = false; btn.textContent = 'Submit Request ✓';
     submitErr.textContent = 'We could not submit your request. Please check your connection and try again, or send your details directly on WhatsApp: +234 703 833 6596.';
     submitErr.style.display = 'block';

@@ -50,6 +50,8 @@
       }
       setTimeout(go, 800);
     } catch (err) {
+      // A Turnstile token works once; get a fresh one for the retry
+      if (window.turnstile) { try { window.turnstile.reset(); } catch (e) { /* widget not ready */ } }
       msg.textContent = 'Something went wrong sending your message. Please try again, or reach us directly on WhatsApp.';
       msg.style.cssText = 'display:block;color:#c0392b;background:#fdf0f0;border:1px solid #e8c0c0;border-radius:6px;padding:10px 14px;margin:12px 0;font-size:13px;';
       if (btn) { btn.disabled = false; btn.textContent = originalText; }

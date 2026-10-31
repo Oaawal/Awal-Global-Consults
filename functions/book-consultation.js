@@ -9,7 +9,7 @@ import { bookingClientEmail, bookingAdminEmail } from './_lib/email-templates.js
 import { recordsEnabled, recordSubmission } from './_lib/records.js';
 import { adminEmails } from './_lib/admin-auth.js';
 import { SITE_URL } from './_lib/cases.js';
-import { CONSULT_TYPES, MODES, availableSlots, takenSlots, blockedSlots, fmtLagos, feeText, randomToken } from './_lib/booking.js';
+import { CONSULT_TYPES, MODES, PAYMENT_BANK, availableSlots, takenSlots, fmtLagos, feeText, randomToken } from './_lib/booking.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -84,7 +84,7 @@ export async function onRequestPost({ request, env }) {
     await sendBrevoEmail(env, {
       to: { email, name: fullName },
       subject: t.paid ? `Consultation request received: ${whenText}` : `Consultation booked: ${whenText}`,
-      html: bookingClientEmail({ fullName, paid: t.paid, cancelUrl, reference, ...details }),
+      html: bookingClientEmail({ fullName, paid: t.paid, cancelUrl, reference, bank: t.paid ? PAYMENT_BANK : null, ...details }),
       replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' }
     });
   } catch (err) {
@@ -103,5 +103,5 @@ export async function onRequestPost({ request, env }) {
     }
   }
 
-  return json({ ok: true, reference, when: whenText, paid: t.paid, fee: feeText(type) });
+  return json({ ok: true, reference, when: whenText, paid: t.paid, fee: feeText(type), bank: t.paid ? PAYMENT_BANK : null });
 }

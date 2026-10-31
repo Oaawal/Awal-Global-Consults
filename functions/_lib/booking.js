@@ -16,8 +16,15 @@ export const HOURS = {
   6: [10, 13]
 };
 
-// Fee for paid consultations, in naira. Leave as null to show "fee confirmed before your session".
-export const PAID_FEE_NGN = null;
+// Paid consultations start from this fee; the exact fee depends on the scope and is confirmed by email.
+export const PAID_FEE_FROM_NGN = 20000;
+
+// Where clients pay for paid consultations (bank transfer)
+export const PAYMENT_BANK = {
+  bank: 'Kuda Bank',
+  accountName: 'AWAL GLOBAL CONSULTS LIMITED',
+  accountNumber: '3003466189'
+};
 
 export const CONSULT_TYPES = {
   'free-registration': {
@@ -113,7 +120,7 @@ export function fmtLagos(iso, opts = {}) {
 
 export function feeText(type) {
   if (!CONSULT_TYPES[type].paid) return 'Free';
-  return PAID_FEE_NGN ? `₦${PAID_FEE_NGN.toLocaleString('en-NG')}` : 'Fee confirmed before your session';
+  return `From ₦${PAID_FEE_FROM_NGN.toLocaleString('en-NG')}, depending on scope`;
 }
 
 /** Taken slot starts (every 30-minute block a live booking occupies), from the bookings table. */

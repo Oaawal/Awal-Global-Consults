@@ -76,19 +76,25 @@
       .then(r => r.json().then(j => ({ status: r.status, j })))
       .then(({ status, j }) => {
         if (!j.ok) {
+          // A Turnstile token works once; get a fresh one for the retry
+          if (window.turnstile) { try { window.turnstile.reset(); } catch (e) { /* widget not ready */ } }
           setMsg(j.error || 'Something went wrong. Please try again.', 'err');
           if (j.refresh) load();
           return;
         }
         if (typeof gtag === 'function') gtag('event', 'generate_lead', { form: 'booking', consultation: type() });
-        form.innerHTML = '<div class="book-step book-done"><h2>' + (j.paid ? 'Request received' : 'You’re booked') + '</h2>' +
+        const payText = j.paid
+          ? 'We\u2019ve reserved this time. We\u2019ll email you the exact fee for your matter (from \u20a620,000). Once confirmed, pay by bank transfer to <strong>' +
+            (j.bank ? j.bank.bank + ', ' + j.bank.accountName + ', ' + j.bank.accountNumber : 'the account in your email') + '</strong>' +
+            (j.reference ? ', using ' + j.reference + ' as the payment description' : '') + '. Your session is confirmed once payment is received.'
+          : 'We\u2019ve emailed your confirmation, with a link to cancel if your plans change. We\u2019ll call you at the time you chose.';
+        form.innerHTML = '<div class="book-step book-done"><h2>' + (j.paid ? 'Request received' : 'You\u2019re booked') + '</h2>' +
           '<p><strong>' + j.when + '</strong> (Lagos time)' + (j.reference ? ' · Reference ' + j.reference : '') + '</p>' +
-          '<p>' + (j.paid ? 'We’ve reserved this time and will email the fee and payment details shortly. Your session is confirmed once payment is received.'
-                           : 'We’ve emailed your confirmation, with a link to cancel if your plans change. We’ll call you at the time you chose.') + '</p>' +
+          '<p>' + payText + '</p>' +
           '<p><a class="btn btn-secondary" href="/blog/">Read our guides while you wait</a></p></div>';
         window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
       })
-      .catch(() => setMsg('We couldn’t reach the server. Please check your connection and try again.', 'err'))
+      .catch(() => { if (window.turnstile) { try { window.turnstile.reset(); } catch (e) { /* widget not ready */ } } setMsg('We couldn’t reach the server. Please check your connection and try again.', 'err'); })
       .finally(() => { submit.disabled = false; submit.textContent = 'Book consultation'; });
   });
 
