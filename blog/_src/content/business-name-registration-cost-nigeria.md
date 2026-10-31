@@ -2,7 +2,6 @@
 title: "Business Name Registration Cost in Nigeria (2026)"
 slug: business-name-registration-cost-nigeria
 date: 2026-10-31
-draft: true
 topic: costs-and-timelines
 category: cac-registration
 description: What it costs to register a business name with CAC in 2026 — our ₦40,000 package with government fees included, what's covered, what can add to the cost, and the yearly costs to budget for after registration.
@@ -38,7 +37,7 @@ Every quote is itemised before you pay. A package can be higher if you add extra
 - **Bank account support documents** — see [opening a corporate bank account](/blog/open-corporate-bank-account-nigeria/).
 
 ::: callout
-The ₦40,000 is our package price — the firm's own price, not an official CAC fee. Government fees are already inside it, so there's nothing extra to pay CAC for a standard registration.
+The ₦40,000 is our package price — the firm's own price, not an official CAC fee. The official government fees — ₦1,000 name reservation and ₦20,000 registration, plus Remita charges — are already inside it, so there's nothing extra to pay CAC for a standard registration. See [CAC fees 2026](/blog/cac-fees-2026-fee-table/).
 :::
 
 ## Costs after registration

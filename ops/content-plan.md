@@ -39,7 +39,7 @@ High buyer intent, low risk of stale figures, and they open the new
 
 ### Choosing a structure
 - [x] 1. **Can a civil servant register a business name in Nigeria?** — P1 ⚠ (Public Service Rules position; confirm current CAC practice)
-- [ ] 2. **Business name, partnership or limited company: how each is taxed under the Nigeria Tax Act 2025** — P1 ⚠ (small-company thresholds)
+- [x] 2. **Business name, partnership or limited company: how each is taxed under the Nigeria Tax Act 2025** — P1 ⚠ (small-company thresholds)
 - [x] 3. **Can a foreigner own 100% of a Nigerian company?** — P1 ⚠ (NIPC registration, minimum share capital for foreign participation)
 - [x] 4. **Do I need a lawyer to register a company in Nigeria?** — P2
 
@@ -50,7 +50,7 @@ High buyer intent, low risk of stale figures, and they open the new
 - [x] 8. **Can one person own and run a company in Nigeria? Single-member companies under CAMA 2020** — P2
 
 ### Costs and timelines
-- [ ] 9. **Business name registration cost in Nigeria (2026)** — P1 ⚠ (owner to confirm current figures)
+- [x] 9. **Business name registration cost in Nigeria (2026)** — P1 ⚠ (owner to confirm current figures)
 - [x] 10. **How much share capital should a new Nigerian company register?** — P2 ⚠
 
 ### After registration
@@ -118,7 +118,7 @@ High buyer intent, low risk of stale figures, and they open the new
 
 ## Data and reference (new section — "free to cite", attracts links)
 
-- [ ] 43. **CAC fees 2026: the complete fee table** — P1 ⚠ (owner-verified figures only; dated, updated when CAC changes fees)
+- [x] 43. **CAC fees 2026: the complete fee table** — P1 ⚠ (owner-verified figures only; dated, updated when CAC changes fees)
 - [ ] 44. **Nigerian business compliance calendar 2026: every filing deadline in one place** — P1 ⚠ · deadlines-and-calendars
 - [ ] 45. **Business name registration: document checklist** — P2 · checklists-and-templates
 - [ ] 46. **Company registration: document checklist** — P2 · checklists-and-templates
@@ -169,6 +169,10 @@ official CAC service times or fees — say so wherever they are quoted.
   months. Expatriate quota: no share capital figure needed; we handle it digitally. We handle
   NAFDAC, SON, NEPC, NCC, SCUML and other licences. Canada study permit living costs: CAD
   23,448 from 1 Sept 2026 (IRCC page).
+- **Official CAC fees (owner, 31 Oct 2026):** BN name reservation ₦1,000 + Remita; BN
+  submission ₦20,000 + Remita. Company name reservation ₦1,000 + Remita; submission
+  ₦10,000 per ₦1m share capital + Remita; stamp duty 0.75% of share capital (₦7,500 per
+  ₦1m) + Remita. BN package ₦40,000 includes these.
 - **Services confirmed (30 Oct 2026):** NEPC export licences and other licences;
   property document checks and preparation (by our team of professional
   lawyers); tax registration and tax clearance certificates; passport
