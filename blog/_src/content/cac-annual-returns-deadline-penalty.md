@@ -2,6 +2,7 @@
 title: CAC Annual Returns in Nigeria: Deadline, Process, and the Penalty for Missing It
 slug: cac-annual-returns-deadline-penalty
 date: 2026-09-16
+updated: 2026-10-31
 topic: after-registration
 category: cac-registration
 description: When CAC annual returns are due for business names and limited companies in Nigeria, what filing actually involves, and what happens if you miss the deadline.
@@ -24,7 +25,7 @@ A business that never files an annual return looks, from the CAC's records, indi
 
 ## When it's due
 
-Annual returns for business names are due by **30 June** each year, covering the period since the last filing (or since registration, for a first return). Newly registered businesses get a grace period and don't file a return for the year they were actually registered in, the obligation starts from the following filing cycle. Limited companies follow their own filing rhythm tied to their incorporation anniversary and AGM cycle, with a defined window after each financial year end.
+Annual returns for business names are due by **30 June** each year, covering the period since the last filing (or since registration, for a first return). Newly registered businesses get a grace period and don't file a return for the year they were actually registered in, the obligation starts from the following filing cycle. Limited companies follow their own filing rhythm tied to their incorporation anniversary and AGM cycle, with a defined window after each financial year end: the return is due within 42 days after the AGM. See the [compliance calendar](/blog/nigeria-business-compliance-calendar/) for worked examples.
 
 ::: stat
 30 June
