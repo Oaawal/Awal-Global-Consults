@@ -20,7 +20,7 @@ Trademark registration in Nigeria is handled by the **Trademarks, Patents and De
 | 1. Search | Check whether similar marks are already registered or pending — see [trademark search](/blog/trademark-search-nigeria/) | **1–3 working days** |
 | 2. Filing | Application filed in the right class — see [trademark classes](/blog/trademark-classes-explained-nigeria/) | You get a filing date |
 | 3. Acknowledgement letter | The Registry acknowledges the application | **1–3 days** after filing |
-| 4. Acceptance letter | The Registry examines the mark and accepts it. At this point your mark is partly considered approved | Often **within 5 working days**, and up to **8 weeks** |
+| 4. Acceptance letter | The Registry examines the mark and accepts it. At this point your mark is partly considered approved | Typically **2–8 weeks**. For applications we handle, usually **within 5 working days** |
 | 5. Publication | The accepted mark is published in the Trademarks Journal for **60 days**, during which anyone can oppose it | Waiting for publication can take a long time |
 | 6. Final certificate | If unopposed, the Registry issues the official certificate | **12–18 months** from filing |
 
@@ -69,4 +69,4 @@ The first registration term, counted from the filing date. After that, each rene
 
 ## The short version
 
-Search takes 1–3 working days, acceptance often within 5 working days (up to 8 weeks), and the final certificate usually 12–18 months, mainly because of publication delays. File early, because protection runs from the filing date. The first term is 7 years, then 14 years per renewal — diary the date.
+Search takes 1–3 working days, acceptance typically 2–8 weeks (usually within 5 working days when we handle your application), and the final certificate usually 12–18 months, mainly because of publication delays. File early, because protection runs from the filing date. The first term is 7 years, then 14 years per renewal — diary the date.
