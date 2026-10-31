@@ -22,7 +22,7 @@ This folder is not publicly reachable (see `functions/ops/[[path]].js`).
 | `BREVO_API_KEY` | Secret | Sending emails |
 | `CRON_SECRET` | Secret | Must match the `awal-daily` Worker's `CRON_SECRET` |
 | `ADMIN_EMAILS` | Variable (optional) | Comma-separated dashboard logins; defaults to info@awalglobal.com.ng |
-| `TURNSTILE_SECRET_KEY` | Secret (optional) | Bot check on forms; set together with the site key in `assets/js/site.js` |
+| `TURNSTILE_SECRET_KEY` | Secret | Bot check on the contact, application and booking forms (added 31 Oct 2026); the matching site key is in `assets/js/site.js` |
 
 Changing a variable or secret only takes effect after the next deployment.
 
@@ -64,3 +64,9 @@ Changing a variable or secret only takes effect after the next deployment.
   bindings on the Pages project, then redeploy.
 - **Can't sign in to the dashboard:** codes go to the `ADMIN_EMAILS` addresses
   (or info@awalglobal.com.ng); 5 codes per hour at most, each valid 10 minutes.
+- **Forms say "Security check failed":** the Turnstile site key in `assets/js/site.js`
+  and `TURNSTILE_SECRET_KEY` must come from the same Turnstile widget, and the
+  widget's hostnames must include `awalglobal.com.ng` and `awalglobal.pages.dev`.
+  To switch the check off in an emergency, delete the secret and redeploy.
+- **Bookings or newsletter sign-ups fail:** they need the `DB` binding and
+  `BREVO_API_KEY`; the tables are in `db/migrations/0004_subscribers_bookings.sql`.
