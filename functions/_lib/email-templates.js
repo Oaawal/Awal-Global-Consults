@@ -216,16 +216,89 @@ function summarySection(title, rows, empty) {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">${body}</table>`;
 }
 
-export function dailySummaryEmail({ dateLabel, counts, newCases, waiting, inProgress, followUps, remindersSent, retentionDue, dashboardUrl }) {
+export function dailySummaryEmail({ dateLabel, counts, newCases, waiting, inProgress, followUps, remindersSent, retentionDue, dashboardUrl, consultations = [], digest = null }) {
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 4px;">Good morning</h2>
     <div style="font-size:13px;color:${MUTED};">${escapeHtml(dateLabel)} · in the last 24 hours: <strong>${counts.applications}</strong> new application${counts.applications === 1 ? '' : 's'}, <strong>${counts.enquiries}</strong> enquir${counts.enquiries === 1 ? 'y' : 'ies'}</div>
+    ${summarySection('Consultations today and tomorrow', consultations)}
     ${summarySection('Needs your reply', newCases)}
     ${summarySection('Follow-ups due', followUps)}
     ${summarySection('Waiting on the client', waiting)}
     ${summarySection('In progress', inProgress)}
     ${summarySection('Reminders sent to clients this morning', remindersSent)}
+    ${digest ? `<div style="font-size:12.5px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:6px;padding:10px 14px;margin-top:20px;">Weekly guides email sent to <strong>${digest.sent}</strong> subscriber${digest.sent === 1 ? '' : 's'}${digest.remaining ? ` (${digest.remaining} more tomorrow)` : ''}.</div>` : ''}
     ${retentionDue ? `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:10px 14px;margin-top:20px;"><strong>${retentionDue}</strong> record${retentionDue === 1 ? ' has' : 's have'} passed the retention period and should be reviewed for deletion.</div>` : ''}
     <div style="margin-top:24px;"><a href="${escapeHtml(dashboardUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Open dashboard</a></div>`;
   return shell(inner, { preheader: `${newCases.length} need a reply · ${followUps.length} follow-ups due · ${waiting.length} waiting on clients` });
+}
+
+// ── Newsletter ───────────────────────────────────────────────────
+function buttonHtml(href, label) {
+  return `<a href="${escapeHtml(href)}" style="display:inline-block;background:${GOLD};color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:12px 22px;border-radius:999px;">${escapeHtml(label)}</a>`;
+}
+
+export function subscribeConfirmEmail({ confirmUrl }) {
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Please confirm your subscription</h2>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 16px;">Thanks for signing up for Awal Guides updates: new guides and important legal, tax and compliance changes for Nigerian businesses, usually once a week. Tap the button to confirm.</p>
+    <p style="margin:0 0 18px;">${buttonHtml(confirmUrl, 'Confirm my subscription')}</p>
+    <p style="font-size:12.5px;line-height:1.7;color:${MUTED};margin:0;">If you didn't sign up, ignore this email and you won't hear from us again.</p>`;
+  return shell(inner, { preheader: 'One tap to confirm your Awal Guides updates.' });
+}
+
+export function digestEmail({ guides, moreCount = 0, unsubscribeUrl }) {
+  const items = guides.map(g => `
+    <div style="padding:14px 0;border-bottom:1px solid ${BORDER};">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};">${escapeHtml(g.topic)}</div>
+      <a href="${escapeHtml(g.url)}" style="display:block;font-family:Georgia,'Fraunces',serif;font-size:16.5px;font-weight:700;color:${NAVY};text-decoration:none;margin:4px 0 6px;">${escapeHtml(g.title)}</a>
+      <div style="font-size:13.5px;line-height:1.65;color:${TEXT};">${escapeHtml(g.description)}</div>
+    </div>`).join('');
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 6px;">New this week on Awal Guides</h2>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 6px;">The latest legal, tax and compliance guides for Nigerian businesses and Nigerians abroad.</p>
+    ${items}
+    ${moreCount ? `<p style="font-size:14px;margin:16px 0 0;"><a href="https://awalglobal.com.ng/blog/" style="color:${NAVY};font-weight:700;">See ${moreCount} more new guide${moreCount === 1 ? '' : 's'} on the blog →</a></p>` : ''}
+    <p style="margin:22px 0 6px;">${buttonHtml('https://awalglobal.com.ng/book', 'Book a free consultation')}</p>
+    <p style="font-size:12px;line-height:1.7;color:${MUTED};margin:18px 0 0;">You're receiving this because you subscribed on awalglobal.com.ng. <a href="${escapeHtml(unsubscribeUrl)}" style="color:${MUTED};">Unsubscribe</a></p>`;
+  return shell(inner, { preheader: guides.map(g => g.title).slice(0, 2).join(' · ') });
+}
+
+// ── Consultation bookings ────────────────────────────────────────
+function bookingDetailsHtml({ reference, typeLabel, whenText, modeLabel, feeText, topic }) {
+  const row = (k, v) => v ? `<tr><td style="padding:4px 12px 4px 0;font-size:12.5px;color:${MUTED};vertical-align:top;white-space:nowrap;">${k}</td><td style="padding:4px 0;font-size:13.5px;color:${TEXT};">${escapeHtml(v)}</td></tr>` : '';
+  return `<div style="background:${BG};border:1px solid ${BORDER};border-radius:8px;padding:14px 16px;margin:16px 0;">
+    <table role="presentation" cellpadding="0" cellspacing="0">
+      ${row('Reference', reference)}${row('Consultation', typeLabel)}${row('When', whenText + ' (Lagos time)')}${row('How', modeLabel)}${row('Fee', feeText)}${row('Topic', topic)}
+    </table></div>`;
+}
+
+export function bookingClientEmail({ fullName, paid, cancelUrl, ...d }) {
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">${paid ? 'Your consultation request' : 'Your consultation is booked'}</h2>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(fullName || 'valued client')},</p>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${paid
+      ? 'Thank you for booking a paid consultation. We’ve reserved your time and will email the fee and payment details shortly. Your session is confirmed once payment is received.'
+      : 'Thank you for booking. Your free consultation is confirmed for the time below.'}</p>
+    ${bookingDetailsHtml(d)}
+    <p style="font-size:13.5px;line-height:1.7;color:${TEXT};margin:0 0 8px;">For a WhatsApp or phone call, we'll call the number you gave us. For a video call, we'll email the link before the session.</p>
+    <p style="font-size:13px;line-height:1.7;color:${MUTED};margin:14px 0 0;">Can't make it? <a href="${escapeHtml(cancelUrl)}" style="color:${NAVY};font-weight:600;">Cancel this booking</a> and book another time, or reply to this email.</p>`;
+  return shell(inner, { preheader: `${d.typeLabel}: ${d.whenText}` });
+}
+
+export function bookingAdminEmail({ fullName, email, phone, caseUrl, paid, ...d }) {
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:18px;margin:0 0 6px;">New consultation booking${paid ? ' (paid: send fee and payment details)' : ''}</h2>
+    ${bookingDetailsHtml(d)}
+    <p style="font-size:13.5px;line-height:1.7;color:${TEXT};margin:0;"><strong>${escapeHtml(fullName)}</strong><br>${escapeHtml(email)}${phone ? `<br>${escapeHtml(phone)}` : ''}</p>
+    ${caseUrl ? `<p style="margin:16px 0 0;"><a href="${escapeHtml(caseUrl)}" style="color:${NAVY};font-weight:700;">Open in dashboard →</a></p>` : ''}`;
+  return shell(inner, { preheader: `${fullName}: ${d.whenText}` });
+}
+
+export function bookingReminderEmail({ fullName, cancelUrl, ...d }) {
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Reminder: your consultation is tomorrow</h2>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(fullName || 'valued client')}, this is a reminder of your consultation with Awal Global Consults.</p>
+    ${bookingDetailsHtml(d)}
+    <p style="font-size:13px;line-height:1.7;color:${MUTED};margin:14px 0 0;">Can't make it? <a href="${escapeHtml(cancelUrl)}" style="color:${NAVY};font-weight:600;">Cancel this booking</a> or reply to this email.</p>`;
+  return shell(inner, { preheader: `Tomorrow: ${d.whenText}` });
 }

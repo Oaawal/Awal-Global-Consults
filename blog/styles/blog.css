@@ -586,3 +586,5 @@ body:has(.guide-hero) { background: #fff; }
   .desk-lg .desk-meta { padding-left: 42px; margin-top: -8px; }
   .desk-lg .desk-meta::before { display: none; }
 }
+.blog-cta-book { position: relative; margin-top: 18px; font-size: 0.92rem; color: rgba(255,255,255,0.78); }
+.blog-cta-book a { color: var(--gold-300, #E3C77A); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }

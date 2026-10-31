@@ -91,9 +91,39 @@
     track('contact_click', { method: method, page_path: location.pathname, link_text: (link.textContent || '').trim().slice(0, 60) });
   });
 
+  // ── 4. Newsletter sign-up (any form.subscribe-form) ─────────────
+  document.querySelectorAll('form.subscribe-form').forEach(function (form) {
+    const msg = form.querySelector('.subscribe-msg');
+    const button = form.querySelector('button[type="submit"]');
+    function say(text, kind) { if (msg) { msg.textContent = text; msg.className = 'subscribe-msg' + (kind ? ' ' + kind : ''); } }
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const email = form.querySelector('input[name="email"]');
+      const consent = form.querySelector('input[name="consent"]');
+      if (!email.value || !email.checkValidity()) { say('Please enter a valid email address.', 'err'); email.focus(); return; }
+      if (consent && !consent.checked) { say('Please tick the box to agree to receive updates.', 'err'); return; }
+      const data = new FormData(form);
+      data.append('source', location.pathname);
+      button.disabled = true;
+      fetch('/subscribe', { method: 'POST', body: data })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (j.ok) {
+            say(j.already ? 'You\u2019re already subscribed. Thank you!' : 'Almost done: check your inbox and tap the link to confirm.', 'ok');
+            form.reset();
+            track('newsletter_signup', { page_path: location.pathname });
+          } else {
+            say(j.error || 'Something went wrong. Please try again.', 'err');
+          }
+        })
+        .catch(function () { say('We couldn\u2019t reach the server. Please try again.', 'err'); })
+        .finally(function () { button.disabled = false; });
+    });
+  });
+
   // ── 3. Cloudflare Turnstile (off until a site key is set) ───────
   if (TURNSTILE_SITE_KEY) {
-    const forms = document.querySelectorAll('form.form-grid, form#kyc-form');
+    const forms = document.querySelectorAll('form.form-grid, form#kyc-form, form[data-turnstile]');
     if (forms.length) {
       forms.forEach(function (form) {
         if (form.querySelector('.cf-turnstile')) return;

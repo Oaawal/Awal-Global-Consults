@@ -54,6 +54,33 @@ export async function sendBrevoEmail(env, { to, subject, html, replyTo, attachme
 }
 
 /**
+ * Send one email to many recipients in a single Brevo call, each with their own
+ * HTML (for personal unsubscribe links). Brevo accepts up to 1000 versions per call.
+ * @param {Array<{to:{email:string,name?:string}, html:string}>} versions
+ */
+export async function sendBrevoBatch(env, { subject, versions, headers }) {
+  if (!env.BREVO_API_KEY) throw new Error('BREVO_API_KEY is not configured in this environment');
+  if (!versions.length) return null;
+  const body = {
+    sender: SENDER,
+    subject,
+    htmlContent: versions[0].html,
+    messageVersions: versions.map(v => ({ to: [v.to], htmlContent: v.html, ...(v.headers ? { headers: v.headers } : {}) }))
+  };
+  if (headers) body.headers = headers;
+  const res = await fetch(`${env.BREVO_API_BASE || 'https://api.brevo.com'}/v3/smtp/email`, {
+    method: 'POST',
+    headers: { 'api-key': env.BREVO_API_KEY, 'content-type': 'application/json', 'accept': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    throw new Error(`Brevo API error (${res.status}): ${errText}`);
+  }
+  return res.json();
+}
+
+/**
  * Convert a File (from FormData) to a base64 string, capped at maxBytes.
  * Returns null if the file is missing, empty, or exceeds maxBytes.
  */

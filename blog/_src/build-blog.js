@@ -522,7 +522,7 @@ usedCategorySlugs.forEach(slug => {
 // --- 5. Search index and RSS feed -------------------------------------------
 
 fs.writeFileSync(path.join(BLOG_DIR, 'search-index.json'), JSON.stringify(posts.map(p => ({
-  t: p.title, d: p.description, c: p.topic.label, u: `${p.slug}/`
+  t: p.title, d: p.description, c: p.topic.label, u: `${p.slug}/`, p: p.date
 }))), 'utf8');
 console.log('Built /blog/search-index.json');
 

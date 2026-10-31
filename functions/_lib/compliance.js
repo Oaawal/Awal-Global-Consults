@@ -53,6 +53,8 @@ export async function eraseCase(env, c, { actor, reason, ip }) {
       .bind(c.id, now, isOpen(c.status) ? (c.kind === 'enquiry' ? 'closed' : 'cancelled') : c.status),
     // Notes and messages can contain personal details
     env.DB.prepare('UPDATE case_events SET note = NULL WHERE case_id = ?1').bind(c.id),
+    // A consultation booking linked to the case holds the same personal details
+    env.DB.prepare("UPDATE bookings SET full_name = 'Erased client', email = '', phone = NULL, topic = NULL, status = 'cancelled', cancelled_at = COALESCE(cancelled_at, ?2) WHERE case_id = ?1").bind(c.id, now),
     env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'erased', ?2, ?3, ?4)")
       .bind(c.id, `Personal data and ${docs.length} document${docs.length === 1 ? '' : 's'} erased: ${reason}`, actor, now),
     env.DB.prepare("INSERT INTO audit_log (at, actor, action, entity_type, entity_id, detail, ip) VALUES (?1, ?2, 'case.erased', 'case', ?3, ?4, ?5)")
@@ -78,9 +80,10 @@ export async function exportClient(env, clientId) {
 
   const out = [];
   for (const c of cases) {
-    const [docs, events] = await env.DB.batch([
+    const [docs, events, bookings] = await env.DB.batch([
       env.DB.prepare('SELECT file_name, size_bytes, uploaded_at, deleted_at FROM documents WHERE case_id = ?1 ORDER BY uploaded_at').bind(c.id),
-      env.DB.prepare('SELECT event, from_status, to_status, note, created_at FROM case_events WHERE case_id = ?1 ORDER BY id').bind(c.id)
+      env.DB.prepare('SELECT event, from_status, to_status, note, created_at FROM case_events WHERE case_id = ?1 ORDER BY id').bind(c.id),
+      env.DB.prepare('SELECT type, slot_start, minutes, mode, status, topic, created_at, cancelled_at FROM bookings WHERE case_id = ?1').bind(c.id)
     ]);
     let formData = {};
     try { formData = JSON.parse(c.form_data || '{}'); } catch (e) { /* keep empty */ }
@@ -88,20 +91,25 @@ export async function exportClient(env, clientId) {
       reference: c.reference, type: c.kind, services: c.services, status: c.status,
       submitted: c.created_at, lastUpdated: c.updated_at, closed: c.closed_at, keepUntil: c.retain_until,
       erased: c.purged_at, consent: { informationAccurate: !!c.consent_accuracy, processingConsent: !!c.consent_processing },
-      submittedDetails: formData, documents: docs.results || [], history: events.results || []
+      submittedDetails: formData, documents: docs.results || [], history: events.results || [],
+      consultations: bookings.results || []
     });
   }
+  const subscription = client.email
+    ? await env.DB.prepare('SELECT status, source, created_at, confirmed_at, unsubscribed_at FROM subscribers WHERE email = ?1').bind(client.email).first()
+    : null;
   return {
     exportedAt: new Date().toISOString(),
     controller: 'Awal Global Consults Limited (RC-9282103), info@awalglobal.com.ng',
     client: { name: client.full_name, email: client.email, phone: client.phone, firstContact: client.created_at, erased: client.anonymised_at },
-    cases: out
+    cases: out,
+    newsletter: subscription || null
   };
 }
 
 /** Nightly backup of the database to private storage; old backups are removed. */
 export async function backupDatabase(env, runDate) {
-  const tables = ['clients', 'cases', 'documents', 'case_events', 'data_requests', 'counters', 'job_runs', 'audit_log'];
+  const tables = ['clients', 'cases', 'documents', 'case_events', 'data_requests', 'counters', 'job_runs', 'audit_log', 'subscribers', 'bookings'];
   const results = await env.DB.batch(tables.map(t => env.DB.prepare(`SELECT * FROM ${t}`)));
   const dump = { createdAt: new Date().toISOString(), database: 'awal-cases', tables: {} };
   tables.forEach((t, i) => { dump.tables[t] = results[i].results || []; });
