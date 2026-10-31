@@ -120,8 +120,8 @@ High buyer intent, low risk of stale figures, and they open the new
 
 - [x] 43. **CAC fees 2026: the complete fee table** — P1 ⚠ (owner-verified figures only; dated, updated when CAC changes fees)
 - [ ] 44. **Nigerian business compliance calendar 2026: every filing deadline in one place** — P1 ⚠ · deadlines-and-calendars
-- [ ] 45. **Business name registration: document checklist** — P2 · checklists-and-templates
-- [ ] 46. **Company registration: document checklist** — P2 · checklists-and-templates
+- [x] 45. **Business name registration: document checklist** — P2 · checklists-and-templates
+- [x] 46. **Company registration: document checklist** — P2 · checklists-and-templates
 
 ---
 
@@ -173,6 +173,9 @@ official CAC service times or fees — say so wherever they are quoted.
   submission ₦20,000 + Remita. Company name reservation ₦1,000 + Remita; submission
   ₦10,000 per ₦1m share capital + Remita; stamp duty 0.75% of share capital (₦7,500 per
   ₦1m) + Remita. BN package ₦40,000 includes these.
+- **Checklists (owner, 31 Oct 2026):** ID = international passport, NIN, Nigerian driver's
+  licence or voter's card. PSC is worked out from shareholders and shareholding. A utility
+  bill (proof of address) is needed for NRS tax registration and by banks, not for CAC.
 - **Services confirmed (30 Oct 2026):** NEPC export licences and other licences;
   property document checks and preparation (by our team of professional
   lawyers); tax registration and tax clearance certificates; passport

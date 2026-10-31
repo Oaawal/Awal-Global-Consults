@@ -2,7 +2,6 @@
 title: "Company Registration: Document Checklist"
 slug: company-registration-document-checklist
 date: 2026-10-31
-draft: true
 topic: checklists-and-templates
 category: cac-registration
 description: A complete checklist for registering a private limited company with CAC — proposed names, objects, address, share capital and shareholding, and each director's and shareholder's details, ID, photograph and signature — plus extra items for foreign shareholders and corporate shareholders.
@@ -26,7 +25,7 @@ Decide the share capital and who owns what **before** you file. These are the ha
 - [ ] **Shareholding** — how many shares each shareholder holds
 - [ ] **Directors** — at least one for a small company, two for others — see [single-member companies](/blog/single-member-company-nigeria/)
 - [ ] **Company secretary**, if the company isn't a small company
-- [ ] **Persons with significant control** — anyone who ultimately owns or controls the company
+- [ ] **Persons with significant control** — worked out from the shareholders and their shareholding, so get the shareholding right first
 - [ ] **Company email and phone number**
 
 ## For each director and shareholder
@@ -59,6 +58,10 @@ Decide the share capital and who owns what **before** you file. These are the ha
 - [ ] Every director and shareholder has ID, photograph and signature ready
 - [ ] The objects cover everything the company will do
 - [ ] Partners have agreed what happens if someone leaves — consider a shareholders' agreement
+
+## For tax registration and your bank account
+
+- [ ] **Recent utility bill for the business address** — needed as proof of address for tax registration with the Nigeria Revenue Service (NRS) and when opening your bank account
 
 ## After registration
 

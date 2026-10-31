@@ -2,7 +2,6 @@
 title: "Business Name Registration: Document Checklist"
 slug: business-name-registration-document-checklist
 date: 2026-10-31
-draft: true
 topic: checklists-and-templates
 category: cac-registration
 description: A tick-box checklist of everything you need to register a business name with CAC — proposed names, business description, address, and each proprietor's details, ID, photograph and signature — plus the common reasons applications get queried.
@@ -54,6 +53,10 @@ Make sure every name, date of birth and ID number matches **exactly** across you
 - [ ] The business description matches what you'll actually do
 - [ ] The address is complete and in Nigeria
 
+## For tax registration and your bank account
+
+- [ ] **Recent utility bill for the business address** — needed as proof of address for tax registration with the Nigeria Revenue Service (NRS) and when opening your bank account
+
 ## After registration
 
 Keep these safe: your **certificate**, **registration details or status report**, and **payment receipts**. You'll need them for your bank account, TIN and annual returns — see [opening a business bank account](/blog/open-corporate-bank-account-nigeria/) and [CAC annual returns](/blog/cac-annual-returns-deadline-penalty/).
@@ -61,7 +64,7 @@ Keep these safe: your **certificate**, **registration details or status report**
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Do I need a utility bill?</p>
-<p class="blog-faq-a">Not usually for registration, but banks often ask for proof of the business address when you open an account.</p>
+<p class="blog-faq-a">Not for CAC registration itself. But you'll need a recent utility bill as proof of address for tax registration with the NRS and for opening your bank account, so have one ready.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can I use a phone photo for my passport picture?</p>
