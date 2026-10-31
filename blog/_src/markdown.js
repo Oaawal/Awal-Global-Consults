@@ -203,7 +203,12 @@ function parseMarkdown(md) {
         items.push(lines[i].replace(/^[-*]\s+/, ''));
         i++;
       }
-      html.push(`<ul>${items.map(it => `<li>${inline(it)}</li>`).join('')}</ul>`);
+      // "- [ ] item" lines render as a printable tick-box checklist
+      if (items.every(it => /^\[[ xX]\]\s+/.test(it))) {
+        html.push(`<ul class="checklist">${items.map(it => `<li><span class="check-box" aria-hidden="true"></span>${inline(it.replace(/^\[[ xX]\]\s+/, ''))}</li>`).join('')}</ul>`);
+      } else {
+        html.push(`<ul>${items.map(it => `<li>${inline(it)}</li>`).join('')}</ul>`);
+      }
       continue;
     }
 

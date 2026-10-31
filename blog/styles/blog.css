@@ -229,6 +229,18 @@
   border-radius: 50%;
   background: var(--gold-500);
 }
+.blog-article ul.checklist li::before { content: none; }
+.blog-article ul.checklist li { padding-left: 34px; }
+.blog-article .check-box {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--gold-500);
+  border-radius: 4px;
+  background: #fff;
+}
 .blog-article ol { counter-reset: agc-ol; }
 .blog-article ol li { counter-increment: agc-ol; }
 .blog-article ol li::before {
