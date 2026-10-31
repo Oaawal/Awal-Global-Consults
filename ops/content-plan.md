@@ -164,7 +164,7 @@ official CAC service times or fees — say so wherever they are quoted.
   month after. The ₦50,000/₦25,000 figure some sources quote for filing is the old law.
 - **More owner answers (31 Oct 2026):** VAT threshold ₦100m turnover. SCUML registration is
   officially free; our professional fee is ₦70,000. Trademark estimates: search 1–3 working
-  days; acknowledgement 1–3 days after filing; acceptance 2–8 weeks (mark partly approved);
+  days; acknowledgement 1–3 days after filing; acceptance often within 5 working days, up to 8 weeks (mark partly approved);
   publication 60 days in the Journal but long wait to be published; final certificate 12–18
   months. Expatriate quota: no share capital figure needed; we handle it digitally. We handle
   NAFDAC, SON, NEPC, NCC, SCUML and other licences. Canada study permit living costs: CAD
