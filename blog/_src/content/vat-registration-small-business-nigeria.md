@@ -1,12 +1,11 @@
 ---
 title: "VAT Registration for Small Businesses in Nigeria: When It Applies"
 slug: vat-registration-small-business-nigeria
-date: 2026-10-30
-draft: true
+date: 2026-10-31
 topic: tax-and-tin
 category: tax-compliance
-description: When a small Nigerian business must register for, charge and file VAT under the 2025 tax laws — the 7.5% rate, the small-business threshold, exempt and zero-rated items, monthly returns and the mistakes that lead to penalties.
-excerpt: VAT in Nigeria is 7.5%, but small businesses below the threshold don't have to charge it. Here's how to tell whether you're in, what changes when you cross the line, and how VAT returns work.
+description: When a small Nigerian business must register for, charge and file VAT under the 2025 tax laws — the 7.5% rate, the ₦100m threshold, exempt and zero-rated items, monthly returns and the mistakes that lead to penalties.
+excerpt: VAT in Nigeria is 7.5%, but businesses with turnover of ₦100 million or less don't have to charge it. Here's how to tell whether you're in, what changes when you cross the line, and how VAT returns work.
 cta_text: Awal Global Consults handles TIN registration and tax clearance certificates — and helps businesses understand their VAT position before it becomes a penalty.
 whatsapp_topic: VAT registration
 ---
@@ -15,10 +14,15 @@ Value added tax (VAT) is charged on most goods and services sold in Nigeria. The
 
 ## Do small businesses have to charge VAT?
 
-Not always. The 2025 tax laws keep a **small-business threshold**: businesses whose turnover is below it don't have to charge VAT or file VAT returns.
+Not always. Under the 2025 tax laws, a business with annual turnover of **₦100 million or less** doesn't have to charge VAT or file VAT returns.
+
+::: stat
+₦100m
+The VAT threshold under the 2025 tax laws. Once your turnover goes above it, you must register, charge 7.5% VAT and file monthly returns.
+:::
 
 ::: callout
-Commentary on the 2025 tax laws quotes different figures for the VAT threshold. Confirm the current threshold with the Nigeria Revenue Service (formerly FIRS), or ask us, before you decide not to charge VAT. Getting it wrong means owing VAT you never collected.
+Watch your turnover through the year. If you cross ₦100 million and don't start charging VAT, you can end up owing VAT you never collected from customers.
 :::
 
 ## When you're above the threshold
@@ -67,4 +71,4 @@ Large companies and government bodies may deduct VAT at source from what they pa
 
 ## The short version
 
-VAT is 7.5%. Below the small-business threshold you don't charge it; above it you register, charge, file monthly and remit. Confirm the current threshold and exempt lists before relying on them, and never charge VAT without paying it over.
+VAT is 7.5%. With turnover of ₦100 million or less you don't charge it; above that you register, charge, file monthly and remit. Check the current exempt lists, watch your turnover, and never charge VAT without paying it over.

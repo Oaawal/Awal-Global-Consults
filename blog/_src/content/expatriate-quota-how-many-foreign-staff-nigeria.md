@@ -1,8 +1,7 @@
 ---
 title: "Expatriate Quota: How Many Foreign Staff Can a Nigerian Company Employ?"
 slug: expatriate-quota-how-many-foreign-staff-nigeria
-date: 2026-10-30
-draft: true
+date: 2026-10-31
 topic: expatriates-and-cerpac
 category: identity-immigration
 description: There's no fixed number of foreigners a Nigerian company can employ — each position must be approved under an expatriate quota. Here's how quota positions are granted, what the Ministry looks at, understudy expectations and renewals.

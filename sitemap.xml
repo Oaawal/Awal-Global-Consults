@@ -104,7 +104,7 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -140,25 +140,25 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/topic/licences-and-permits/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/topic/tax-and-tin/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/topic/aml-kyc-scuml/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/topic/data-protection/</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -170,7 +170,7 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/topic/trademark-basics/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -188,13 +188,13 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/topic/expatriates-and-cerpac/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/topic/study-abroad/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -223,13 +223,37 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://awalglobal.com.ng/blog/category/cac-registration/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <loc>https://awalglobal.com.ng/blog/category/identity-immigration/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/category/regulatory-licensing/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/category/kyc-compliance/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/category/tax-compliance/</loc>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/category/trademarks-ip/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/category/cac-registration/</loc>
     <lastmod>2026-10-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -253,32 +277,8 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://awalglobal.com.ng/blog/category/tax-compliance/</loc>
-    <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://awalglobal.com.ng/blog/category/kyc-compliance/</loc>
-    <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://awalglobal.com.ng/blog/category/identity-immigration/</loc>
-    <lastmod>2026-10-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://awalglobal.com.ng/blog/category/cybersecurity/</loc>
     <lastmod>2026-09-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://awalglobal.com.ng/blog/category/regulatory-licensing/</loc>
-    <lastmod>2026-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -287,6 +287,54 @@
     <lastmod>2026-08-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/canada-study-permit-proof-of-funds-nigeria/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/expatriate-quota-how-many-foreign-staff-nigeria/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/licences-new-business-nigeria/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/privacy-policy-small-business-nigeria/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/scuml-real-estate-car-dealers-jewellers-nigeria/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/small-company-tax-exemption-nigeria-tax-act-2025/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/trademark-registration-timeline-renewal-nigeria/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/vat-registration-small-business-nigeria/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/add-remove-director-shareholder-cac/</loc>
@@ -488,7 +536,7 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/uk-vs-canada-vs-us-student-visa-nigeria/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -548,7 +596,7 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/scuml-registration-nigeria/</loc>
-    <lastmod>2026-09-05</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -590,7 +638,7 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/nigeria-tax-act-2025-compliance-guide/</loc>
-    <lastmod>2026-07-16</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

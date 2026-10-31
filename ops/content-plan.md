@@ -67,22 +67,22 @@ High buyer intent, low risk of stale figures, and they open the new
 
 ### Licences and permits
 - [x] 19. **Export licence in Nigeria: NEPC registration explained** — P1 ⚠ (we handle NEPC and other export licences)
-- [ ] 20. **Which licences does a new Nigerian business actually need?** — P2
+- [x] 20. **Which licences does a new Nigerian business actually need?** — P2
 
 ## Tax, compliance and data
 
 ### Tax and TIN
-- [ ] 21. **The small company tax exemption under the Nigeria Tax Act 2025: who qualifies** — P1 (thresholds confirmed: see owner answers)
+- [x] 21. **The small company tax exemption under the Nigeria Tax Act 2025: who qualifies** — P1 (thresholds confirmed: see owner answers)
 - [x] 22. **How to get a tax clearance certificate (TCC) in Nigeria** — P1 ⚠ (current NRS process; we handle tax registration and TCCs)
 - [x] 23. **Does a business that made no profit still need to file tax returns?** — P2
-- [ ] 24. **VAT registration for small businesses in Nigeria: when it applies** — P2 ⚠
+- [x] 24. **VAT registration for small businesses in Nigeria: when it applies** — P2 ⚠
 
 ### AML, KYC and SCUML
-- [ ] 25. **SCUML for real estate agents, car dealers and jewellers: what changes for you** — P2
+- [x] 25. **SCUML for real estate agents, car dealers and jewellers: what changes for you** — P2
 - [x] 26. **How to check a company is real: verifying a business on the CAC portal** — P1
 
 ### Data protection
-- [ ] 27. **Does my small business need a privacy policy in Nigeria?** — P2
+- [x] 27. **Does my small business need a privacy policy in Nigeria?** — P2
 
 ## Protect your brand
 
@@ -92,7 +92,7 @@ High buyer intent, low risk of stale figures, and they open the new
 - [x] 30. **Business name vs trademark: is CAC registration enough to protect my brand?** — P1
 
 ### Trademark costs and timelines
-- [ ] 31. **How long does trademark registration take in Nigeria, and when do you renew?** — P2 ⚠
+- [x] 31. **How long does trademark registration take in Nigeria, and when do you renew?** — P2 ⚠
 
 ## Identity, immigration and study
 
@@ -101,10 +101,10 @@ High buyer intent, low risk of stale figures, and they open the new
 - [x] 33. **How Nigerians abroad can get a NIN** — P1 ⚠ (we provide NIN services for people abroad)
 
 ### Expatriates and CERPAC
-- [ ] 34. **Expatriate quota: how many foreign staff can a Nigerian company employ?** — P2 ⚠
+- [x] 34. **Expatriate quota: how many foreign staff can a Nigerian company employ?** — P2 ⚠
 
 ### Study abroad
-- [ ] 35. **Canada study permit proof of funds: what Nigerian applicants need to show** — P2 ⚠
+- [x] 35. **Canada study permit proof of funds: what Nigerian applicants need to show** — P2 ⚠
 
 ## Nigerians abroad (new section — appears once its first guide is live)
 
@@ -162,6 +162,13 @@ official CAC service times or fees — say so wherever they are quoted.
   ≤ ₦100m AND fixed assets < ₦250m (professional services excluded), 0% CIT. A nil
   return is required by law. Failure to file: ₦100,000 first month + ₦50,000 each
   month after. The ₦50,000/₦25,000 figure some sources quote for filing is the old law.
+- **More owner answers (31 Oct 2026):** VAT threshold ₦100m turnover. SCUML registration is
+  officially free; our professional fee is ₦70,000. Trademark estimates: search 1–3 working
+  days; acknowledgement 1–3 days after filing; acceptance 2–8 weeks (mark partly approved);
+  publication 60 days in the Journal but long wait to be published; final certificate 12–18
+  months. Expatriate quota: no share capital figure needed; we handle it digitally. We handle
+  NAFDAC, SON, NEPC, NCC, SCUML and other licences. Canada study permit living costs: CAD
+  23,448 from 1 Sept 2026 (IRCC page).
 - **Services confirmed (30 Oct 2026):** NEPC export licences and other licences;
   property document checks and preparation (by our team of professional
   lawyers); tax registration and tax clearance certificates; passport

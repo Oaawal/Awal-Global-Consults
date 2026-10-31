@@ -1,13 +1,12 @@
 ---
 title: "Which Licences Does a New Nigerian Business Actually Need?"
 slug: licences-new-business-nigeria
-date: 2026-10-30
-draft: true
+date: 2026-10-31
 topic: licences-and-permits
 category: regulatory-licensing
 description: CAC registration lets your business exist — it doesn't always let it operate. Here's how to work out which federal, state and local licences, permits and registrations your Nigerian business needs, sector by sector.
 excerpt: Your CAC certificate is not a licence to trade in every sector. Depending on what you sell and where, you may also need a regulator's licence, a product registration, or state and local permits. Here's how to work it out.
-cta_text: Awal Global Consults handles CAC registration, NEPC export licences and other business licences and registrations — and tells you upfront which ones your business needs.
+cta_text: Awal Global Consults handles CAC registration and business licences — including NAFDAC, SON, NEPC, NCC, SCUML and other regulatory registrations — and tells you upfront which ones your business needs.
 whatsapp_topic: licences for my business
 ---
 
@@ -28,21 +27,26 @@ Think of it in three layers: **everyone** (CAC, tax), **your sector** (a regulat
 
 ## Layer 2: sector licences and registrations
 
-Common examples — always check the regulator's current rules:
+Common examples:
 
-| If your business… | You may need… |
-|---|---|
-| Makes, imports or sells food, drinks, drugs, cosmetics or chemicals | **NAFDAC** product registration |
-| Makes or imports regulated products | **SON** product certification and standards |
-| Exports goods | **NEPC** exporter registration — see [NEPC export licence](/blog/nepc-export-licence-nigeria/) |
-| Offers telecoms, internet or communications services | **NCC** licence |
-| Offers financial services, lending or payments | **CBN** or other financial regulator licence |
-| Runs a school | State ministry of education approval |
-| Runs a clinic, pharmacy or lab | Health ministry and professional-body approvals |
-| Runs logistics, haulage or courier services | Sector registrations, including courier licensing where it applies |
-| Operates in oil and gas | Upstream or midstream regulator permits |
-| Deals in real estate, cars, jewellery or other designated businesses | **SCUML** registration — see [SCUML for real estate agents, car dealers and jewellers](/blog/scuml-real-estate-car-dealers-jewellers-nigeria/) |
-| Is an NGO, church or association | SCUML — see [SCUML registration](/blog/scuml-registration-nigeria/) |
+| If your business… | You may need… | Regulator |
+|---|---|---|
+| Makes, imports or sells packaged food, drinks, drugs, cosmetics, medical devices, chemicals or packaged water | Product registration and, for makers, premises inspection | **NAFDAC** (National Agency for Food and Drug Administration and Control) |
+| Makes regulated products in Nigeria | Product certification under the **MANCAP** scheme | **SON** (Standards Organisation of Nigeria) |
+| Imports regulated products | Product certificates under the **SONCAP** scheme | **SON** |
+| Exports goods | Exporter registration (export licence) — see [NEPC export licence](/blog/nepc-export-licence-nigeria/) | **NEPC** (Nigerian Export Promotion Council) |
+| Offers telecoms, internet or communications services | A licence for the relevant service category | **NCC** (Nigerian Communications Commission) |
+| Runs a bank, microfinance bank, payment or money-transfer service | A banking or payments licence | **CBN** (Central Bank of Nigeria) |
+| Offers digital lending to consumers | Registration as a digital lender | **FCCPC** (Federal Competition and Consumer Protection Commission) |
+| Runs a courier or delivery business | A courier operator's licence | **NIPOST** courier regulatory department |
+| Runs a pharmacy or sells medicines | Premises registration and a superintendent pharmacist | **PCN** (Pharmacy Council of Nigeria) |
+| Runs a school | Approval to operate | State ministry of education |
+| Runs a hospital, clinic or laboratory | Registration of the facility | State ministry of health, plus the relevant professional bodies |
+| Operates in oil and gas | Upstream permits, or midstream and downstream licences | **NUPRC** (upstream) or **NMDPRA** (midstream and downstream) |
+| Deals in real estate, cars, jewellery or other designated businesses | AML registration — see [SCUML for real estate agents, car dealers and jewellers](/blog/scuml-real-estate-car-dealers-jewellers-nigeria/) | **SCUML** |
+| Is an NGO, church or association | AML registration — see [SCUML registration](/blog/scuml-registration-nigeria/) | **SCUML** |
+
+Requirements, categories and fees change, so confirm each regulator's current rules before you apply — or ask us.
 
 ## Layer 3: state and local permits
 

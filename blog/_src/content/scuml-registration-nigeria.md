@@ -2,6 +2,7 @@
 title: "SCUML Registration in Nigeria: Who Needs It and How to Get It"
 slug: scuml-registration-nigeria
 date: 2026-09-05
+updated: 2026-10-31
 topic: aml-kyc-scuml
 category: kyc-compliance
 description: What SCUML certification actually is, which businesses in Nigeria are legally required to get one, and what happens to your bank account if you skip it.
@@ -54,7 +55,7 @@ By the time SCUML comes up, it's usually not a paperwork conversation anymore. I
 
 ## What registering actually involves
 
-Broadly, SCUML registration follows a similar shape to other regulatory registrations: confirming your business falls into a designated category, preparing the required corporate documentation (typically your CAC certificate, business description, and ownership details), and submitting through the official SCUML registration channel. Because it's a government process with its own current requirements and processing timeline, it's worth confirming the exact current documentation list and any applicable fee at the point of application rather than relying on a checklist from somewhere online that may already be out of date.
+Broadly, SCUML registration follows a similar shape to other regulatory registrations: confirming your business falls into a designated category, preparing the required corporate documentation (typically your CAC certificate, business description, and ownership details), and submitting through the official SCUML registration channel. Because it's a government process with its own current requirements and processing timeline, it's worth confirming the exact current documentation list at the point of application rather than relying on a checklist from somewhere online that may already be out of date. Official SCUML registration is free; if you'd like us to handle the application, our professional fee is ₦70,000.
 
 ## SCUML doesn't stand alone — it's tied to ongoing KYC
 

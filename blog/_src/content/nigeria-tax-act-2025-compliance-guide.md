@@ -2,6 +2,7 @@
 title: Nigeria Tax Act 2025: TIN, Filing, and Penalties Explained
 slug: nigeria-tax-act-2025-compliance-guide
 date: 2026-07-16
+updated: 2026-10-31
 topic: tax-and-tin
 category: tax-compliance
 description: A complete guide to Nigeria's 2025 tax reform. What the NTA and NTAA actually changed, who has to register and file, the deadlines that apply to your business, and the penalties for getting it wrong.
@@ -39,7 +40,7 @@ In practice, this is what applies to different types of businesses:
 | Entity type | What applies | Key rate or threshold |
 |---|---|---|
 | Individual / employee | PAYE (via employer) or direct personal income tax | First ₦800,000 of annual income is tax-free, then 15% to 25% progressively |
-| Small company (turnover ≤₦100m, fixed assets under ₦250m, non-professional services) | Companies Income Tax | 0% CIT, but VAT still applies where taxable supplies are made |
+| Small company (turnover ≤₦100m, fixed assets under ₦250m, non-professional services) | Companies Income Tax | 0% CIT; businesses with turnover of ₦100m or less don't charge VAT |
 | Standard company | Companies Income Tax, VAT, WHT, Development Levy | 30% CIT, 7.5% VAT, 4% development levy on assessable profits |
 | Large company / MNE group | CIT plus a minimum effective tax rate | 15% minimum ETR once turnover crosses a high threshold, to stop profit-shifting |
 | Non-resident supplying into Nigeria | VAT registration, withholding tax, permanent establishment rules | Taxed on Nigeria-sourced income and significant economic presence |

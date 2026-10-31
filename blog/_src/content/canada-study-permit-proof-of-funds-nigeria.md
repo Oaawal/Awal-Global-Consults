@@ -1,8 +1,7 @@
 ---
 title: "Canada Study Permit Proof of Funds: What Nigerian Applicants Need to Show"
 slug: canada-study-permit-proof-of-funds-nigeria
-date: 2026-10-30
-draft: true
+date: 2026-10-31
 topic: study-abroad
 category: identity-immigration
 description: How much money Nigerian students need to show for a Canadian study permit — tuition, the living-cost requirement that rose from 1 September 2026, travel — and which documents IRCC accepts, plus the mistakes that lead to refusals.
@@ -17,7 +16,7 @@ To get a Canadian study permit, you must show Immigration, Refugees and Citizens
 
 ::: stat
 CAD 23,448
-The living-cost amount reported for a single applicant outside Quebec, for applications from 1 September 2026 (up from CAD 22,895). Tuition and travel are on top.
+IRCC's first-year living-cost amount for one person applying on or after 1 September 2026, anywhere in Canada except Quebec (up from CAD 22,895). Tuition and travel are on top.
 :::
 
 | Cost | What to show |
@@ -30,15 +29,15 @@ The living-cost amount reported for a single applicant outside Quebec, for appli
 
 ## Documents IRCC accepts
 
-- **Bank statements** showing your funds over time — recent months, not a sudden deposit.
+- **Bank statements for the past six months**, including the month you apply or the month before, showing where the money came from.
 - A **Guaranteed Investment Certificate (GIC)** from a participating Canadian bank.
 - Proof of **tuition already paid** to the school.
 - A **scholarship or funding letter**.
 - Proof of a **student or education loan** from a financial institution.
-- If a sponsor pays: their bank statements, **proof of income**, and a **letter of support** explaining the relationship.
+- If a sponsor pays: their bank statements, **proof of income**, and a **letter of support** stating their occupation, relationship to you and the amount of support, with proof of the relationship and their ID.
 
 ::: callout
-Large, unexplained deposits shortly before you apply are a major red flag. Officers want to see where the money came from and that it's genuinely available to you. Recent guidance recommends showing a longer history — six months of statements is safer than four.
+Large, unexplained deposits shortly before you apply are a major red flag. Officers are now expected to assess where the funds came from in every application, so be ready to explain the source of any significant deposit.
 :::
 
 ## Common reasons Nigerian applications are refused
@@ -71,4 +70,4 @@ Each country assesses funds differently. See [UK vs Canada vs US student visas](
 
 ## The short version
 
-Show first-year tuition, IRCC's current living-cost figure (reported at CAD 23,448 from 1 September 2026, outside Quebec) and travel — with a clear, verifiable history of where the money came from. Check IRCC's page on the day you apply.
+Show first-year tuition, IRCC's living-cost figure (CAD 23,448 for one person from 1 September 2026, outside Quebec) and travel — with a clear, verifiable history of where the money came from. Check IRCC's page on the day you apply.

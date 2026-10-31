@@ -2,6 +2,7 @@
 title: "UK vs Canada vs US Student Visa: Which Is Actually More Achievable for Nigerian Students?"
 slug: uk-vs-canada-vs-us-student-visa-nigeria
 date: 2026-09-29
+updated: 2026-10-31
 topic: study-abroad
 category: identity-immigration
 description: A practical comparison of UK, Canada, and US student visa requirements for Nigerian applicants in 2026, focused on financial thresholds, approval odds, and what each country actually scrutinises.
@@ -32,7 +33,7 @@ What the UK scrutinises hardest is **exact compliance with its financial documen
 The approximate approval rate for Nigerian study permit applications in Canada between January and April 2026
 :::
 
-Canada's approval rate for Nigerian applicants has fallen sharply, and financial documentation has become both stricter and more heavily scrutinised: six months of bank statements are now recommended (up from four), a previously accepted proof-of-funds document (a convertible bank draft) was removed from the accepted list, and the baseline living-cost requirement sits around **$22,895 CAD** for a single student.
+Canada's approval rate for Nigerian applicants has fallen sharply, and financial documentation has become both stricter and more heavily scrutinised: IRCC now asks for six months of bank statements, a previously accepted proof-of-funds document (a convertible bank draft) was removed from the accepted list, and the living-cost requirement for a single student outside Quebec is **CAD 23,448** for applications from 1 September 2026 (up from CAD 22,895).
 
 ::: callout
 Canada also places real weight on a well-written Letter of Explanation addressing ties to Nigeria and post-study intentions. A generic template letter is a common, avoidable weak point specifically for Canadian applications, more so than for the UK's more purely document-driven process.
@@ -55,7 +56,7 @@ This makes the US a different kind of challenge: less about hitting an exact fin
 | Factor | UK | Canada | US |
 |---|---|---|---|
 | Primary scrutiny | Exact financial documentation rules | Financial evidence + ties-to-home letter | In-person interview + ties to home |
-| Financial threshold | Fixed monthly figure (rising to £14,130 from Nov 2026) | ~$22,895 CAD baseline, rising documentation standard | Tied to institution's cost of attendance |
+| Financial threshold | Fixed monthly figure (rising to £14,130 from Nov 2026) | CAD 23,448 living costs (from 1 Sept 2026), plus tuition and travel | Tied to institution's cost of attendance |
 | Current difficulty trend | Stable, rule-based | Approval rates falling for Nigerian applicants | Interview outcome varies by individual |
 | Where applicants most often fail | Documentation timing/format errors | Insufficient funds evidence, weak explanation letter | Weak or inconsistent interview answers |
 

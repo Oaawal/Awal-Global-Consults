@@ -1,8 +1,7 @@
 ---
 title: "The Small Company Tax Exemption Under the Nigeria Tax Act 2025: Who Qualifies"
 slug: small-company-tax-exemption-nigeria-tax-act-2025
-date: 2026-10-30
-draft: true
+date: 2026-10-31
 topic: tax-and-tin
 category: tax-compliance
 description: Under the Nigeria Tax Act 2025, a small company pays 0% company income tax. Here's the two-part test (turnover of ₦100m or less and fixed assets under ₦250m), who is excluded, what you still have to file, and what happens if you grow past it.
@@ -41,7 +40,7 @@ Fail either test and the company is not a small company for that year.
 - **File annual tax returns** — a 0% rate is not an exemption from filing, and a nil return is required by law. Missing one attracts ₦100,000 for the first month and ₦50,000 for each month after. See [no profit — do I still file?](/blog/no-profit-still-file-tax-returns-nigeria/)
 - **Deduct and remit PAYE** on staff salaries.
 - **Withholding tax** obligations on qualifying payments, where they apply.
-- **VAT** rules — see [VAT for small businesses](/blog/vat-registration-small-business-nigeria/).
+- **VAT** — below ₦100 million turnover you don't charge VAT, but watch the threshold. See [VAT for small businesses](/blog/vat-registration-small-business-nigeria/).
 - **CAC annual returns** — see [CAC annual returns](/blog/cac-annual-returns-deadline-penalty/).
 
 ::: callout

@@ -1,8 +1,7 @@
 ---
 title: "SCUML for Real Estate Agents, Car Dealers and Jewellers: What Changes for You"
 slug: scuml-real-estate-car-dealers-jewellers-nigeria
-date: 2026-10-30
-draft: true
+date: 2026-10-31
 topic: aml-kyc-scuml
 category: kyc-compliance
 description: Real estate agents, car dealers, jewellers and other designated non-financial businesses must register with SCUML and follow anti-money-laundering rules. Here's what that means day to day — customer checks, cash transaction reports, suspicious activity and record keeping.
@@ -70,8 +69,8 @@ Banks increasingly ask DNFBPs for their **SCUML certificate** before opening or 
 <p class="blog-faq-a">The law applies to the type of business, not its size. Small agents and dealers are covered too.</p>
 </div>
 <div class="blog-faq-item">
-<p class="blog-faq-q">How do I register with SCUML?</p>
-<p class="blog-faq-a">Registration is done online with your CAC documents and the details of your business and its owners. See <a href="/blog/scuml-registration-nigeria/">SCUML registration</a> for the steps.</p>
+<p class="blog-faq-q">Does SCUML registration cost money?</p>
+<p class="blog-faq-a">Official SCUML registration is free. If you'd like us to prepare and handle the application for you, our professional fee is ₦70,000. See <a href="/blog/scuml-registration-nigeria/">SCUML registration</a> for the steps.</p>
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">What if I accept bank transfers, not cash?</p>

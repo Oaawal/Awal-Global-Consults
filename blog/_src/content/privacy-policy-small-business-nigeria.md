@@ -1,8 +1,7 @@
 ---
 title: "Does My Small Business Need a Privacy Policy in Nigeria?"
 slug: privacy-policy-small-business-nigeria
-date: 2026-10-30
-draft: true
+date: 2026-10-31
 topic: data-protection
 category: regulatory-licensing
 description: If your business collects names, phone numbers, emails or any other personal data, the Nigeria Data Protection Act 2023 expects you to tell people how you use it. Here's what a privacy policy must cover, where to put it, and why a copied template can hurt you.
