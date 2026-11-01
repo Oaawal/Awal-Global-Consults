@@ -1,12 +1,12 @@
 ---
 title: How Much Does CAC Registration Cost in Nigeria? (2026 Price Guide)
-seo_title: CAC Registration Cost in Nigeria (2026 Price Guide)
+seo_title: CAC Registration Cost in Nigeria (2026): Fees and Prices
 slug: cac-registration-cost-nigeria
 date: 2026-08-18
 updated: 2026-10-31
 topic: costs-and-timelines
 category: cac-registration
-description: What actually determines the cost of CAC business registration in Nigeria in 2026: statutory fees, share capital, structure, and the add-ons people forget to budget for.
+description: CAC government fees in 2026: ₦21,000 for a business name, from ₦18,500 for a ₦1m company, plus stamp duty. What else to budget for.
 excerpt: There's no single "CAC registration price." Here's what actually drives the cost, structure by structure, and the extras most people forget to budget for.
 cta_text: Awal Global Consults quotes every CAC registration as one itemized total upfront, government fees and service charge included, before you commit to anything.
 whatsapp_topic: CAC registration cost

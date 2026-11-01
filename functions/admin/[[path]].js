@@ -265,7 +265,7 @@ export async function onRequest(context) {
         await sendBrevoEmail(env, {
           to: { email: c.email, name: c.full_name },
           subject: `Update on your request ${c.reference}: ${info.label}`,
-          html: caseStatusEmail({ fullName: c.full_name, reference: c.reference, statusLabel: info.label, statusMessage: info.client, note: message }),
+          html: caseStatusEmail({ fullName: c.full_name, reference: c.reference, statusLabel: info.label, statusMessage: info.client, note: message, askForReview: status === 'delivered' }),
           replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' }
         });
         await env.DB.prepare("INSERT INTO case_events (case_id, event, to_status, note, actor, created_at) VALUES (?1, 'client_notified', ?2, ?3, ?4, ?5)")

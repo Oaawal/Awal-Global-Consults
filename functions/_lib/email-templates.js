@@ -7,6 +7,8 @@ const BG = '#F4F8FC';
 const BORDER = '#D7E6F2';
 const TEXT = '#222222';
 const MUTED = '#555555';
+// Opens the Google Business Profile, where clients can read and write reviews
+const GOOGLE_REVIEW_URL = 'https://share.google/ExlF7WWv5qhm81tYq';
 
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
@@ -159,7 +161,7 @@ export function adminLoginCodeEmail({ code }) {
 }
 
 // ── Case status update email to the client ──────────────────────
-export function caseStatusEmail({ fullName, reference, statusLabel, statusMessage, note }) {
+export function caseStatusEmail({ fullName, reference, statusLabel, statusMessage, note, askForReview = false }) {
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Update on your request</h2>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(fullName || 'valued client')},</p>
@@ -170,6 +172,9 @@ export function caseStatusEmail({ fullName, reference, statusLabel, statusMessag
     ${statusMessage ? `<p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${escapeHtml(statusMessage)}</p>` : ''}
     ${note ? `<div style="margin:14px 0;padding:12px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13.5px;line-height:1.7;color:${TEXT};white-space:pre-line;">${escapeHtml(note)}</div>` : ''}
     ${trackLinkHtml(reference)}
+    ${askForReview ? `<div style="margin:18px 0;padding:14px 16px;background:${BG};border:1px solid ${BORDER};border-radius:8px;font-size:13.5px;line-height:1.7;color:${TEXT};">
+      Happy with our service? A short Google review helps other business owners find us.<br>
+      <a href="${GOOGLE_REVIEW_URL}" style="color:${NAVY};font-weight:700;">Leave a review on Google →</a></div>` : ''}
     <div style="margin-top:22px;padding-top:18px;border-top:1px solid ${BORDER};font-size:13px;color:${TEXT};">
       Questions? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>, quoting your reference number.
     </div>`;

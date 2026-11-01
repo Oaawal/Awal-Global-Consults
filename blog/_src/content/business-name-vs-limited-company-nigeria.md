@@ -1,11 +1,11 @@
 ---
 title: Business Name vs Limited Company in Nigeria: Which Should You Register?
-seo_title: Business Name vs Limited Company in Nigeria
+seo_title: Business Name vs Limited Company in Nigeria: Key Differences
 slug: business-name-vs-limited-company-nigeria
 date: 2026-08-27
 topic: choosing-a-structure
 category: business-advisory
-description: A decision framework for choosing between a CAC business name and a limited company in Nigeria: liability, funding, tax, perception, and how to tell which stage you're actually at.
+description: The difference between a business name and a limited company in Nigeria: liability, tax, cost, banks and growth, and how to choose.
 excerpt: The two options look similar on a CAC form. They're not similar in what happens if things go wrong, or in how far they can take your business. Here's how to actually decide.
 cta_text: Awal Global Consults advises on structure before you file, not after, so you're not paying to convert or fix a mismatched registration later.
 whatsapp_topic: business structure advice
