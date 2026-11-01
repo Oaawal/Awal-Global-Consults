@@ -1113,3 +1113,4 @@ button { font-family: inherit; }
 .hero-book { margin-top: 14px; font-size: 0.95rem; }
 .hero-book a { color: var(--gold-300); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .reviews-cta { text-align: center; margin-top: 28px; }
+.reviews-read { display: inline-block; margin-left: 14px; font-weight: 600; color: var(--navy-900); text-decoration: underline; text-underline-offset: 3px; }

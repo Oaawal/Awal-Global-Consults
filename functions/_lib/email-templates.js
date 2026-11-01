@@ -8,7 +8,7 @@ const BORDER = '#D7E6F2';
 const TEXT = '#222222';
 const MUTED = '#555555';
 // Opens the Google Business Profile, where clients can read and write reviews
-const GOOGLE_REVIEW_URL = 'https://share.google/ExlF7WWv5qhm81tYq';
+const GOOGLE_REVIEW_URL = 'https://g.page/r/CQ6BtpQaC03DEAE/review';
 
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
