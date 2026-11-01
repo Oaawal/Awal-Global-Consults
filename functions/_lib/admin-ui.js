@@ -362,6 +362,9 @@ export function shell({ title, active, body, admin, badges = {} }) {
 }
 
 /** Bare HTML document (used by the shell and the sign-in page). */
+// The email_off markers stop Cloudflare's Email Address Obfuscation from rewriting
+// addresses on these pages: its decoder script is blocked by the dashboard's
+// Content-Security-Policy, which left email links pointing at a Cloudflare notice.
 export function htmlDocument(title, body) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -373,7 +376,7 @@ export function htmlDocument(title, body) {
 <title>${esc(title)} · Awal Case Manager</title>
 <style>${STYLE}</style>
 </head>
-<body>${body}</body>
+<body><!--email_off-->${body}<!--/email_off--></body>
 </html>`;
 }
 

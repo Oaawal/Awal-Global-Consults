@@ -41,7 +41,7 @@ p{margin:0 0 14px}
 </head>
 <body>
 <header><a href="/"><img src="/assets/images/logo-mark.png" alt="">Awal Global Consults</a></header>
-<main><div class="card"><h1>${esc(heading)}</h1>${body}<div class="btns">${buttons}</div></div></main>
+<!--email_off--><main><div class="card"><h1>${esc(heading)}</h1>${body}<div class="btns">${buttons}</div></div></main><!--/email_off-->
 </body>
 </html>`;
   return new Response(html, { status, headers: PAGE_HEADERS });

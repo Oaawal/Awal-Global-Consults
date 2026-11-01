@@ -60,10 +60,10 @@ button,.btn{display:inline-block;font:inherit;font-weight:700;padding:11px 18px;
 a{color:var(--navy)}
 </style>
 </head>
-<body>
-<header><a href="/"><img src="/assets/images/logo-white.png" alt="">Awal Global Consults</a></header>
+<body><!--email_off-->
+<header><a href="/"><img src="/assets/images/logo-mark.png" alt="">Awal Global Consults</a></header>
 <main>${body}</main>
-</body>
+<!--/email_off--></body>
 </html>`;
 }
 
