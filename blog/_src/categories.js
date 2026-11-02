@@ -46,7 +46,7 @@ module.exports = {
     },
     'regulatory-licensing': {
       label: 'Regulatory & Licensing',
-      description: 'NDPR/data protection, NIPC, business permits, and regulatory compliance.',
+      description: 'NDPA data protection, NIPC, business permits, and regulatory compliance.',
       relatedService: { href: 'corporate-regulatory', label: 'Talk to an Advisor' }
     },
     'identity-documents': {
