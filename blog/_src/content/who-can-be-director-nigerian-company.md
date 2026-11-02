@@ -2,7 +2,6 @@
 title: "Who Can Be a Director of a Nigerian Company?"
 slug: who-can-be-director-nigerian-company
 date: 2026-11-02
-draft: true
 topic: choosing-a-structure
 category: cac-registration
 description: Who can and can't be a director of a Nigerian company under CAMA 2020: age, disqualifications, foreigners, civil servants, how many directors you need, and directors' duties.

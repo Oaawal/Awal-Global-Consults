@@ -3,7 +3,6 @@ title: "CAC Registration Online: What the Portal Involves and What to Expect"
 seo_title: CAC Registration Online in Nigeria (2026 Guide)
 slug: cac-registration-online-nigeria
 date: 2026-11-02
-draft: true
 topic: registering-with-cac
 category: cac-registration
 description: How CAC online registration works in 2026: creating an account, name reservation, forms, uploads, Remita payments, queries and downloading your certificate.

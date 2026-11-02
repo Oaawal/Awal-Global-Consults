@@ -2,7 +2,6 @@
 title: "Business Name vs Company Name: Are They the Same Thing?"
 slug: business-name-vs-company-name-nigeria
 date: 2026-11-02
-draft: true
 topic: choosing-a-structure
 category: cac-registration
 description: In Nigeria, "business name" is both a type of registration and a trading name. Here's the difference between a business name, a company name and a trading name, and which one you need.

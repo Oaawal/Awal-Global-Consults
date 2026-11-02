@@ -109,9 +109,6 @@ export async function onRequestPost(context) {
       }
     }
 
-    const attachmentsNote = skippedFiles.length > 0
-      ? `These documents were NOT received (unsupported file type or too large). Ask the client to resend them on WhatsApp: ${skippedFiles.join(', ')}`
-      : (attachments.length === 0 ? 'No documents were attached to this submission.' : '');
 
     const subjectServices = services.slice(0, 3).join(', ') || 'New Submission';
 
@@ -142,12 +139,21 @@ export async function onRequestPost(context) {
       }
     }
 
+    // Documents stay in private storage and are opened from the dashboard; the email
+    // carries a link only. If the records could not be saved, attach them so nothing is lost.
+    const linkOnly = recordStatus === 'saved';
+    const notes = [];
+    if (skippedFiles.length > 0) notes.push(`These documents were NOT received (unsupported file type or too large). Ask the client to resend them on WhatsApp: ${skippedFiles.join(', ')}`);
+    if (attachments.length === 0) notes.push('No documents were attached to this submission.');
+    else if (linkOnly) notes.push(`${attachments.length} document${attachments.length === 1 ? '' : 's'} saved securely. Open the case in the dashboard to view ${attachments.length === 1 ? 'it' : 'them'}.`);
+    const attachmentsNote = notes.join(' ');
+
     await sendBrevoEmail(env, {
       to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
       subject: `${reference ? `[${reference}] ` : ''}Client Intake Received: ${subjectServices}`,
-      html: kycAdminEmail({ fields, services, attachmentsNote, reference, recordStatus, caseUrl }),
+      html: kycAdminEmail({ fields, services, attachmentsNote, reference, recordStatus, caseUrl, documentsSaved: linkOnly && attachments.length > 0 }),
       replyTo: { email, name: fullName },
-      attachments
+      attachments: linkOnly ? [] : attachments
     });
 
     await sendBrevoEmail(env, {

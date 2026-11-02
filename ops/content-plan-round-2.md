@@ -21,16 +21,16 @@ Round 1 (46 guides) is complete; see `ops/content-plan.md`, which still holds th
 Status: [x] published · [d] drafted, awaiting owner review · [ ] to write · [?] needs owner input or a source
 
 ### Starting a business (pillar and local)
-- [d] R1. How to start a company in Nigeria: the complete 2026 roadmap (pillar; links every step)
-- [d] R2. CAC registration online: what the portal involves and what to expect
-- [d] R3. Business name registration in Lagos: cost, documents and timeline (local)
+- [x] R1. How to start a company in Nigeria: the complete 2026 roadmap (pillar; links every step)
+- [x] R2. CAC registration online: what the portal involves and what to expect
+- [x] R3. Business name registration in Lagos: cost, documents and timeline (local)
 - [ ] R4. Company registration in Lagos: Ikeja, Lekki, Island and Mainland (local)
-- [d] R5. Business name vs company name: are they the same thing?
-- [d] R6. Who can be a director of a Nigerian company?
-- [d] R7. Does CAC registration expire? How long a certificate is valid
+- [x] R5. Business name vs company name: are they the same thing?
+- [x] R6. Who can be a director of a Nigerian company?
+- [x] R7. Does CAC registration expire? How long a certificate is valid
 
 ### After registration
-- [d] R8. CAC post-registration services explained (changes, CTCs, status reports, returns)
+- [x] R8. CAC post-registration services explained (changes, CTCs, status reports, returns)
 - [?] R9. CAC annual returns fees and late-filing penalties 2026 (needs official figures from the owner)
 - [ ] R10. How to download your CAC certificate and status report
 
@@ -40,7 +40,7 @@ Status: [x] published · [d] drafted, awaiting owner review · [ ] to write · [
 - [ ] R13. What is a TIN and does every business need one?
 
 ### Advisory
-- [d] R14. Business advisory for small businesses in Nigeria: what an adviser actually does
+- [x] R14. Business advisory for small businesses in Nigeria: what an adviser actually does
 - [ ] R15. How to write a simple business plan for a bank or grant in Nigeria
 - [ ] R16. Partnership agreements and shareholder agreements: why you need one
 

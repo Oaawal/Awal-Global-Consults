@@ -101,7 +101,7 @@ export function kycClientEmail({ fullName, services, attachedCount = 0, skippedF
 }
 
 // ── Application: admin notification email ───────────────────────
-export function kycAdminEmail({ fields, services, attachmentsNote, reference = null, recordStatus = 'off', caseUrl = null }) {
+export function kycAdminEmail({ fields, services, attachmentsNote, reference = null, recordStatus = 'off', caseUrl = null, documentsSaved = false }) {
   const rows = Object.entries(fields)
     .filter(([, v]) => v !== '' && v !== undefined && v !== null)
     .map(([k, v]) => `<tr><td style="padding:6px 10px;border-bottom:1px solid ${BORDER};font-size:12px;color:${MUTED};white-space:nowrap;vertical-align:top;">${escapeHtml(k)}</td><td style="padding:6px 10px;border-bottom:1px solid ${BORDER};font-size:12.5px;color:${TEXT};">${escapeHtml(v)}</td></tr>`)
@@ -113,7 +113,8 @@ export function kycAdminEmail({ fields, services, attachmentsNote, reference = n
     ${recordStatusHtml(reference, recordStatus, caseUrl)}
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:10px;">Services Requested</div>
     ${serviceListHtml(services)}
-    ${attachmentsNote ? `<div style="font-size:12px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:8px 12px;margin-bottom:12px;">${escapeHtml(attachmentsNote)}</div>` : ''}
+    ${attachmentsNote ? `<div style="font-size:12px;color:${documentsSaved ? NAVY : '#a05a00'};background:${documentsSaved ? BG : GOLD_PALE};border:1px solid ${documentsSaved ? BORDER : GOLD_PALE};border-radius:6px;padding:8px 12px;margin-bottom:12px;">${escapeHtml(attachmentsNote)}</div>` : ''}
+    ${documentsSaved && caseUrl ? `<p style="margin:0 0 14px;"><a href="${escapeHtml(caseUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13.5px;">View documents in dashboard</a></p>` : ''}
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:16px;margin-bottom:8px;">Submitted Details</div>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">${rows}</table>`;
   return shell(inner, { preheader: 'New client intake submission received.' });

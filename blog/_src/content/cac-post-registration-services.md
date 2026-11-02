@@ -2,7 +2,6 @@
 title: "CAC Post-Registration Services Explained"
 slug: cac-post-registration-services
 date: 2026-11-02
-draft: true
 topic: after-registration
 category: cac-registration
 description: The CAC filings you may need after registration: annual returns, changes of directors, shareholders, address or name, increase in share capital, status reports and certified true copies.

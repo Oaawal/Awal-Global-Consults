@@ -3,7 +3,6 @@ title: "Business Name Registration in Lagos: Cost, Documents and Timeline"
 seo_title: Business Name Registration in Lagos (2026)
 slug: business-name-registration-lagos
 date: 2026-11-02
-draft: true
 topic: costs-and-timelines
 category: cac-registration
 description: Registering a business name in Lagos in 2026: what it costs, the documents you need, how long it takes, and what Lagos businesses need after registration.

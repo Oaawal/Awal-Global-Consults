@@ -2,7 +2,6 @@
 title: "Does CAC Registration Expire? How Long Your Certificate Is Valid"
 slug: does-cac-registration-expire
 date: 2026-11-02
-draft: true
 topic: after-registration
 category: cac-registration
 description: A CAC certificate doesn't expire, but a business can become inactive or be struck off for not filing annual returns. Here's how to keep your registration alive and what to do if it lapsed.

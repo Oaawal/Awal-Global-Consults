@@ -3,7 +3,6 @@ title: "Business Advisory for Small Businesses in Nigeria: What an Adviser Actua
 seo_title: Business Advisory Services in Nigeria for Small Businesses
 slug: business-advisory-small-business-nigeria
 date: 2026-11-02
-draft: true
 topic: choosing-a-structure
 category: business-advisory
 description: What business advisory services cover for small businesses in Nigeria: structure, tax set-up, licences, contracts, growth and compliance, when it's worth paying for, and how to choose an adviser.

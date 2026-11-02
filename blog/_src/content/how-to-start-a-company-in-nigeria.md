@@ -3,7 +3,6 @@ title: "How to Start a Company in Nigeria: The Complete 2026 Roadmap"
 seo_title: How to Start a Company in Nigeria (2026 Roadmap)
 slug: how-to-start-a-company-in-nigeria
 date: 2026-11-02
-draft: true
 topic: registering-with-cac
 category: cac-registration
 description: Every step to start a company in Nigeria in 2026, in order: choosing a structure, name, share capital, CAC registration, TIN, bank account, licences and yearly compliance.
@@ -15,7 +14,7 @@ whatsapp_topic: starting a company
 Starting a company in Nigeria isn't one big task. It's about ten smaller ones, and most problems come from doing them in the wrong order: registering before deciding who owns what, or opening a bank account before the CAC record is right. This roadmap puts every step in order, with a detailed guide for each.
 
 ::: callout
-Most people can complete steps 1 to 6 in about a week. A limited company is usually approved within 48 to 72 hours once complete details are filed, if CAC raises no queries.
+Steps 1 to 6 can often be done within a week. A limited company is usually approved within 48 to 72 hours once complete details are filed, if CAC raises no queries.
 :::
 
 ## Step 1: Decide if you need a company at all
