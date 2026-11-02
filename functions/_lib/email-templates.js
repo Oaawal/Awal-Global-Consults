@@ -286,7 +286,8 @@ function paymentHtml(bank, reference) {
     <strong style="color:${NAVY};">How to pay</strong><br>
     Please wait until we confirm the exact fee for your matter, then pay by bank transfer to:<br>
     <strong>${escapeHtml(bank.bank)}</strong> · ${escapeHtml(bank.accountName)} · <strong>${escapeHtml(bank.accountNumber)}</strong><br>
-    ${reference ? `Use <strong>${escapeHtml(reference)}</strong> as the payment description, and reply` : 'Reply'} to this email with your proof of payment.
+    ${reference ? `Use <strong>${escapeHtml(reference)}</strong> as the payment description, and reply` : 'Reply'} to this email with your proof of payment.<br>
+    <span style="font-size:12.5px;color:${MUTED};">You can reschedule once with at least 24 hours' notice. Cancelling with less notice, missing the session, or missing a rescheduled session forfeits the fee.</span>
   </div>`;
 }
 
