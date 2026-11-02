@@ -2,6 +2,7 @@
 title: "Can a Civil Servant Register a Business Name in Nigeria?"
 slug: can-civil-servant-register-business-name-nigeria
 date: 2026-10-30
+updated: 2026-11-02
 topic: choosing-a-structure
 category: cac-registration
 description: What the Constitution's Code of Conduct says about public officers running private businesses, the farming exception, owning shares versus managing a business, and safe ways for civil servants to start one.
@@ -27,6 +28,11 @@ Three things follow from that wording:
 3. **It applies to full-time officers.** Part-time officers are outside this particular restriction.
 
 The Code is enforced by the Code of Conduct Bureau and Tribunal, and breaches can also lead to disciplinary action under your service rules.
+
+<div class="lead-magnet">
+<div class="lead-magnet-copy"><span class="lead-magnet-tag">Free PDF</span><h3>Get the full Code of Conduct for Public Officers</h3><p>The complete Fifth Schedule (Parts I and II) of the 1999 Constitution, with a one-page note on what it means for civil servants who want to start a business. Enter your email and we'll send you the download link.</p></div>
+<form class="subscribe-form lead-magnet-form" action="/subscribe" method="post" novalidate><input type="hidden" name="source" value="code-of-conduct"><div class="subscribe-row"><label class="sr-only" for="lm-email">Email address</label><input id="lm-email" type="email" name="email" placeholder="Your email address" autocomplete="email" required maxlength="200"><button type="submit" class="btn btn-primary">Send me the PDF</button></div><label class="subscribe-consent"><input type="checkbox" name="consent" value="yes" required> Send me the PDF and Awal Guides updates. See our <a href="/privacy-policy">privacy policy</a>.</label><div aria-hidden="true" class="hp-field"><label>Leave this field empty<input type="text" name="company_website" tabindex="-1" autocomplete="off"></label></div><p class="subscribe-msg" role="status" aria-live="polite"></p></form>
+</div>
 
 ## Why a business name is the tricky case
 

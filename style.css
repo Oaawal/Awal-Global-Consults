@@ -970,14 +970,6 @@ button { font-family: inherit; }
 .back-to-top:hover { background: var(--navy-800); }
 @media (max-width: 560px) { .back-to-top { left: 14px; bottom: 14px; width: 42px; height: 42px; } }
 
-/* ---------- Scroll progress ---------- */
-.scroll-progress {
-  position: fixed; top: 0; left: 0;
-  height: 3px; width: 0%;
-  background: var(--gold-500);
-  z-index: 1100;
-}
-
 /* ---------- Thank you page ---------- */
 .thank-you-card { max-width: 640px; margin: 0 auto; text-align: center; padding: 48px 36px; }
 .thank-you-lead { font-family: var(--display); font-weight: 600; font-size: 1.4rem; color: var(--navy-900); margin-bottom: 12px; }
@@ -1100,9 +1092,9 @@ button { font-family: inherit; }
 .subscribe-row { display: flex; gap: 10px; }
 .subscribe-row input { flex: 1; min-width: 0; font: inherit; padding: 13px 16px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.96); color: #111; }
 .subscribe-row .btn { white-space: nowrap; }
-.subscribe-consent { display: flex; gap: 8px; align-items: flex-start; margin-top: 12px; font-size: 0.84rem; color: rgba(255, 255, 255, 0.75); }
+.subscribe-consent { display: block; padding-left: 24px; text-indent: -24px; margin-top: 12px; font-size: 0.84rem; color: rgba(255, 255, 255, 0.75); }
 .subscribe-consent a { color: var(--gold-300); text-decoration: underline; }
-.subscribe-consent input { margin-top: 3px; }
+.subscribe-consent input { width: 16px; margin: 0 8px 0 0; vertical-align: -2px; text-indent: 0; }
 .subscribe-msg { margin: 10px 0 0; font-weight: 600; min-height: 1.2em; }
 .subscribe-msg.ok { color: #9be7b5; }
 .subscribe-msg.err { color: #ffb4a8; }
@@ -1114,3 +1106,32 @@ button { font-family: inherit; }
 .hero-book a { color: var(--gold-300); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .reviews-cta { text-align: center; margin-top: 28px; }
 .reviews-read { display: inline-block; margin-left: 14px; font-weight: 600; color: var(--navy-900); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Homepage hero: quick-start options */
+.hero-quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 6px 0 26px; max-width: 640px; }
+.hero-quick a { display: flex; flex-direction: column; gap: 3px; padding: 14px 16px; border-radius: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); color: var(--white); text-decoration: none; transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease; }
+.hero-quick a:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-gold); transform: translateY(-2px); }
+.hero-quick strong { font-size: 0.95rem; font-weight: 600; }
+.hero-quick .q-price { font-family: var(--display); font-size: 1.25rem; font-weight: 600; color: var(--accent-gold); }
+.hero-quick .q-note { font-size: 0.76rem; color: rgba(255,255,255,0.62); }
+.hero-actions .btn-ghost-light { background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.4); }
+.hero-actions .btn-ghost-light:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+.hero-wa { margin: 14px 0 0; font-size: 0.92rem; color: rgba(255,255,255,0.7); }
+.hero-wa a { color: #7ee2a8; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.hero-founder-card { position: absolute; left: -14px; bottom: -20px; background: var(--white); color: var(--navy-900); border-radius: var(--radius-sm); padding: 14px 18px; box-shadow: var(--shadow-md); max-width: 270px; }
+.hero-founder-card strong { display: block; font-size: 0.95rem; }
+.hero-founder-card span { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+@media (max-width: 760px) {
+  .hero-quick { grid-template-columns: 1fr; }
+  .hero-quick a { flex-direction: row; flex-wrap: wrap; align-items: baseline; column-gap: 10px; }
+  .hero-quick .q-note { flex-basis: 100%; }
+}
+
+/* CAC page: Lagos section */
+.lagos-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 36px; align-items: start; }
+.lagos-list { padding-left: 18px; margin: 14px 0 0; }
+.lagos-list li { margin-bottom: 8px; }
+.lagos-card h3 { margin-top: 0; }
+.lagos-card a { font-weight: 600; }
+.lagos-note { font-size: 0.86rem; color: var(--muted); }
+@media (max-width: 860px) { .lagos-grid { grid-template-columns: 1fr; } }

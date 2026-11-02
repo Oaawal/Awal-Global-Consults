@@ -12,3 +12,6 @@
 
 /kyc/*
   X-Robots-Tag: noindex
+
+/downloads/*
+  X-Robots-Tag: noindex

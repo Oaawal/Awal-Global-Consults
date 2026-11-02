@@ -242,11 +242,13 @@ function buttonHtml(href, label) {
   return `<a href="${escapeHtml(href)}" style="display:inline-block;background:${GOLD};color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:12px 22px;border-radius:999px;">${escapeHtml(label)}</a>`;
 }
 
-export function subscribeConfirmEmail({ confirmUrl }) {
+export function subscribeConfirmEmail({ confirmUrl, magnetTitle = null }) {
   const inner = `
-    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Please confirm your subscription</h2>
-    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 16px;">Thanks for signing up for Awal Guides updates: new guides and important legal, tax and compliance changes for Nigerian businesses, usually once a week. Tap the button to confirm.</p>
-    <p style="margin:0 0 18px;">${buttonHtml(confirmUrl, 'Confirm my subscription')}</p>
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">${magnetTitle ? 'Confirm your email to get your download' : 'Please confirm your subscription'}</h2>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 16px;">${magnetTitle
+      ? `Tap the button to confirm your email and download <strong>${escapeHtml(magnetTitle)}</strong>. You'll also get Awal Guides updates: new guides and important legal, tax and compliance changes, usually once a week. You can unsubscribe at any time.`
+      : 'Thanks for signing up for Awal Guides updates: new guides and important legal, tax and compliance changes for Nigerian businesses, usually once a week. Tap the button to confirm.'}</p>
+    <p style="margin:0 0 18px;">${buttonHtml(confirmUrl, magnetTitle ? 'Confirm and download' : 'Confirm my subscription')}</p>
     <p style="font-size:12.5px;line-height:1.7;color:${MUTED};margin:0;">If you didn't sign up, ignore this email and you won't hear from us again.</p>`;
   return shell(inner, { preheader: 'One tap to confirm your Awal Guides updates.' });
 }

@@ -1,9 +1,10 @@
 /** GET /subscribe-confirm?t=…: confirms a newsletter sign-up from the emailed link. */
 import { publicPage } from './_lib/public-page.js';
+import { LEAD_MAGNETS } from './_lib/lead-magnets.js';
 
 export async function onRequestGet({ request, env }) {
   const token = new URL(request.url).searchParams.get('t') || '';
-  const row = env.DB && token ? await env.DB.prepare('SELECT id, status FROM subscribers WHERE token = ?1').bind(token).first() : null;
+  const row = env.DB && token ? await env.DB.prepare('SELECT id, status, source FROM subscribers WHERE token = ?1').bind(token).first() : null;
   if (!row) {
     return publicPage({ title: 'Link not recognised', heading: 'This link isn’t valid', body: '<p>The confirmation link may be incomplete or out of date. You can sign up again on any Awal Guides page.</p>', actions: [{ href: '/blog/', label: 'Go to Awal Guides' }] }, 404);
   }
@@ -14,6 +15,14 @@ export async function onRequestGet({ request, env }) {
       env.DB.prepare("INSERT INTO audit_log (at, actor, action, entity_type, entity_id, detail, ip) VALUES (?1, 'system:newsletter', 'subscriber.confirmed', 'subscriber', ?2, NULL, ?3)")
         .bind(now, row.id, request.headers.get('CF-Connecting-IP'))
     ]);
+  }
+  const magnet = LEAD_MAGNETS[row.source] || null;
+  if (magnet) {
+    return publicPage({
+      title: 'Your download', heading: 'Your download is ready',
+      body: `<p>Thank you for confirming. Download <strong>${magnet.title}</strong> below. You\u2019ll also get Awal Guides updates by email, usually once a week, and every email has an unsubscribe link.</p>`,
+      actions: [{ href: magnet.url, label: 'Download the PDF' }, { href: '/book', label: 'Book a free consultation' }]
+    });
   }
   return publicPage({
     title: 'Subscription confirmed', heading: 'You’re subscribed',

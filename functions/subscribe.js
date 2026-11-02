@@ -7,6 +7,7 @@ import { sendBrevoEmail } from './_lib/brevo.js';
 import { subscribeConfirmEmail } from './_lib/email-templates.js';
 import { randomToken } from './_lib/booking.js';
 import { SITE_URL } from './_lib/cases.js';
+import { LEAD_MAGNETS } from './_lib/lead-magnets.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MAX_PER_IP_PER_HOUR = 5;
@@ -36,7 +37,8 @@ export async function onRequestPost({ request, env }) {
   if (recent && recent.n >= MAX_PER_IP_PER_HOUR) return json({ error: 'Too many sign-ups from this connection. Please try again later.' }, 429);
 
   const existing = await env.DB.prepare('SELECT id, status, token FROM subscribers WHERE email = ?1').bind(email).first();
-  if (existing && existing.status === 'confirmed') return json({ ok: true, already: true });
+  const magnet = LEAD_MAGNETS[String(form.get('source') || '')] || null;
+  if (existing && existing.status === 'confirmed') return json({ ok: true, already: true, download: magnet ? magnet.url : null });
 
   const token = existing ? existing.token : randomToken();
   const id = existing ? existing.id : crypto.randomUUID();
@@ -53,12 +55,12 @@ export async function onRequestPost({ request, env }) {
   try {
     await sendBrevoEmail(env, {
       to: { email },
-      subject: 'Confirm your Awal Guides updates',
-      html: subscribeConfirmEmail({ confirmUrl: `${SITE_URL}/subscribe-confirm?t=${encodeURIComponent(token)}` })
+      subject: magnet ? `Confirm your email to download: ${magnet.title}` : 'Confirm your Awal Guides updates',
+      html: subscribeConfirmEmail({ confirmUrl: `${SITE_URL}/subscribe-confirm?t=${encodeURIComponent(token)}`, magnetTitle: magnet ? magnet.title : null })
     });
   } catch (err) {
     console.error('subscribe: confirmation email failed:', err && err.message);
     return json({ error: 'We couldn’t send the confirmation email. Please try again shortly.' }, 502);
   }
-  return json({ ok: true });
+  return json({ ok: true, magnet: !!magnet });
 }

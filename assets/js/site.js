@@ -109,7 +109,14 @@
         .then(function (r) { return r.json(); })
         .then(function (j) {
           if (j.ok) {
-            say(j.already ? 'You\u2019re already subscribed. Thank you!' : 'Almost done: check your inbox and tap the link to confirm.', 'ok');
+            if (j.already && j.download) {
+              msg.innerHTML = 'You\u2019re already subscribed. <a href="' + j.download + '">Download the PDF</a>';
+              msg.className = 'subscribe-msg ok';
+            } else {
+              say(j.already ? 'You\u2019re already subscribed. Thank you!'
+                : j.magnet ? 'Almost done: check your inbox and tap the link to confirm and download.'
+                : 'Almost done: check your inbox and tap the link to confirm.', 'ok');
+            }
             form.reset();
             track('newsletter_signup', { page_path: location.pathname });
           } else {
