@@ -589,7 +589,7 @@ const SERVICE_GUIDES = {
   'immigration-expatriate.html': ['cerpac-expatriate-quota-nigeria', 'expatriate-quota-how-many-foreign-staff-nigeria', 'cerpac-renewal-nigeria', 'foreigner-own-nigerian-company'],
   'export-import-licensing.html': ['nepc-export-licence-nigeria', 'licences-new-business-nigeria', 'tax-clearance-certificate-nigeria', 'foreigner-own-nigerian-company'],
   'student-visa.html': ['uk-vs-canada-vs-us-student-visa-nigeria', 'uk-student-visa-financial-proof-nigeria', 'canada-study-permit-proof-of-funds-nigeria', 'student-visa-refusal-reasons-nigeria'],
-  'cybersecurity-support.html': ['cybersecurity-levy-nigeria-businesses', 'business-email-compromise-payment-fraud-nigeria', 'whatsapp-business-account-security-nigeria', 'data-breach-response-nigeria-ndpa', 'ndpa-compliance-nigerian-business']
+  'cybersecurity-support.html': ['small-business-cybersecurity-checklist-nigeria', 'secure-business-email-social-media-accounts', 'business-email-compromise-payment-fraud-nigeria', 'whatsapp-business-account-security-nigeria', 'staff-cybersecurity-training-small-business', 'security-policies-small-business-nigeria', 'data-breach-response-nigeria-ndpa', 'cybersecurity-levy-nigeria-businesses', 'ndpa-compliance-nigerian-business']
 };
 const bySlug = Object.fromEntries(posts.map(p => [p.slug, p]));
 for (const [file, slugs] of Object.entries(SERVICE_GUIDES)) {

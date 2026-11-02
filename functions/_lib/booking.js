@@ -41,6 +41,13 @@ export const CONSULT_TYPES = {
     paid: false,
     covers: 'Passport applications and renewals, NIN enrolment and corrections, including from abroad'
   },
+  'free-cyber': {
+    label: 'Free 20-minute call: cybersecurity check',
+    short: 'Free cybersecurity check',
+    minutes: 20,
+    paid: false,
+    covers: 'Account takeover protection, payment fraud prevention, staff training, security health checks, breach plans and policies'
+  },
   'paid-advisory': {
     label: 'Paid 45-minute consultation: legal and advisory',
     short: 'Paid advisory consultation',
