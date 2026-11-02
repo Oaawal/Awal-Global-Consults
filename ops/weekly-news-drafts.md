@@ -37,7 +37,12 @@ anything you cannot confirm from two sources, and anything older than 14 days.
 ## 3. Choose 1 to 3 stories
 
 Only stories that a client of a CAC registration, compliance, tax and identity
-consultancy would act on. If nothing qualifies, draft nothing and say so.
+consultancy would act on.
+
+**If no news story qualifies this week**, don't stop: draft **two guides** from the next
+`[ ]` items in `ops/content-plan-round-2.md` instead (skip items marked `[?]`, which need
+the owner's input), and mark them `[d]` in that file. The owner always gets something to
+review.
 Don't duplicate an existing guide; if an existing guide is now out of date,
 list it in the report instead (don't edit published guides).
 
@@ -85,7 +90,7 @@ TZ=Africa/Lagos node build-blog.js    # live build: drafts stay hidden
 
 ## 6. Commit and report
 
-Commit only the new draft files (and nothing else) to `main` with the message
+Commit only the new draft files (plus the `[d]` marks in `ops/content-plan-round-2.md`, if you used it) to `main` with the message
 `Add weekly news drafts for owner review (not published)` and push.
 Commit messages must not include any model name.
 
