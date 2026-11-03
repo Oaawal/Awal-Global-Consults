@@ -3,3 +3,4 @@
 .env.local
 node_modules/
 .wrangler/
+ops/grc-portfolio/out/
