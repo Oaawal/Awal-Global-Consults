@@ -48,6 +48,13 @@ export const CONSULT_TYPES = {
     paid: false,
     covers: 'Account takeover protection, payment fraud prevention, staff training, security health checks, breach plans and policies'
   },
+  'free-fintech': {
+    label: 'Free 20-minute call: fintech and startup compliance',
+    short: 'Free fintech compliance call',
+    minutes: 20,
+    paid: false,
+    covers: 'CAC objects (MEMART) gaps, CBN licensing pathways, banking-as-a-service partner contracts and ongoing compliance'
+  },
   'paid-advisory': {
     label: 'Paid 45-minute consultation: legal and advisory',
     short: 'Paid advisory consultation',

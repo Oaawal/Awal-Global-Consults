@@ -1136,4 +1136,4 @@ button { font-family: inherit; }
 .lagos-note { font-size: 0.86rem; color: var(--muted); }
 @media (max-width: 860px) { .lagos-grid { grid-template-columns: 1fr; } }
 .service-grid.service-grid-3 { grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
-.service-card .card-link { color: var(--navy-900); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.card-link { color: var(--navy-900); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
