@@ -113,16 +113,15 @@ band_rows = ''.join(f'<tr><th scope="row">{lo}–{hi}</th><td>{pill(nm)}</td><td
 portfolio_main = f'''  <section class="hero service-hero">
     <div class="container hero-grid">
       <div class="hero-text">
-        <span class="eyebrow">GRC Portfolio</span>
+        <span class="eyebrow">Our GRC Method</span>
         <h1>How we assess governance, risk and compliance</h1>
         <p>
-          The methods, scoring and working documents behind every GRC Review, published openly so clients,
-          partners and employers can see exactly how the work is done. Prepared by A.O. Abdullateef,
-          founder of Awal Global Consults.
+          The method, risk scoring and sample reports behind our gap assessments, risk registers and
+          GRC Reviews, published so you can see exactly what you will get before you engage us.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#samples">See the work samples</a>
-          <a class="btn btn-secondary" href="/trust">Our own security programme</a>
+          <a class="btn btn-secondary" href="/grc#assessments">See the services</a>
         </div>
       </div>
       <div class="hero-card">
@@ -131,49 +130,19 @@ portfolio_main = f'''  <section class="hero service-hero">
           <ul>
             <li><strong>Frameworks:</strong> NIST CSF 2.0, ISO/IEC 27001:2022, ISO 31000, NDPA 2023</li>
             <li><strong>Artefacts:</strong> gap assessment, risk assessment, risk register, policy, NDPA checklist</li>
-            <li><strong>Live programme:</strong> the controls running this firm's client portal</li>
+            <li><strong>Proof in practice:</strong> the same controls protect our own client portal</li>
           </ul>
-          <p class="hero-note">Work samples use a fictional company, Example Foods Ltd. No client information is published.</p>
+          <p class="hero-note">Sample reports use a fictional company, Example Foods Ltd. We never publish client information.</p>
         </div>
       </div>
     </div>
   </section>
 
   <nav class="container page-toc" aria-label="On this page">
-    <a href="#profile">Profile</a><a href="#frameworks">Frameworks</a><a href="#method">Method</a><a href="#scoring">Risk scoring</a><a href="#samples">Work samples</a><a href="#results">Sample results</a><a href="#live">Live programme</a>
+    <a href="#frameworks">Frameworks</a><a href="#method">Method</a><a href="#scoring">Risk scoring</a><a href="#samples">Sample reports</a><a href="#results">Sample results</a><a href="#live">Our own controls</a>
   </nav>
 
-  <section class="section" id="profile">
-    <div class="container two-col">
-      <div>
-        <span class="eyebrow">Practitioner</span>
-        <h2>A.O. Abdullateef</h2>
-        <p>Founder of Awal Global Consults Limited (RC-9282103), Lagos. A legal professional whose daily work is Nigerian regulatory compliance:
-          CAC filings and corporate records, tax registration, SCUML/AML, data protection, sector licences and fintech partner contracts.
-          That regulatory grounding is joined with information security practice: assessing controls, scoring risk, writing policy
-          and running a security programme for the firm's own client portal.</p>
-        <p><strong>Professional development:</strong> cybersecurity training and certificates; preparing for the ICSAN examinations; working toward
-          CompTIA certification; Broadbeach 3-in-1 Internal Auditor training.</p>
-      </div>
-      <div class="content-card">
-        <h3>What this portfolio demonstrates</h3>
-        <ul>
-          <li>Gap assessment against NIST CSF 2.0 with current and target profiles</li>
-          <li>Risk identification, analysis, evaluation and treatment (ISO 31000)</li>
-          <li>Risk register design and maintenance</li>
-          <li>Control mapping to ISO/IEC 27001:2022 Annex A</li>
-          <li>Policy writing and document control</li>
-          <li>Data protection compliance under the NDPA 2023 and GAID 2025</li>
-          <li>Incident and breach response planning (72-hour NDPC notification)</li>
-          <li>Third-party and supplier risk, including fintech partner agreements</li>
-          <li>Security awareness training for staff</li>
-          <li>Audit evidence, record retention and regulatory filings</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="section alt-bg" id="frameworks">
+  <section class="section" id="frameworks">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Frameworks</span>
@@ -187,7 +156,7 @@ portfolio_main = f'''  <section class="hero service-hero">
     </div>
   </section>
 
-  <section class="section" id="method">
+  <section class="section alt-bg" id="method">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Method</span>
@@ -208,7 +177,7 @@ portfolio_main = f'''  <section class="hero service-hero">
     </div>
   </section>
 
-  <section class="section alt-bg" id="scoring">
+  <section class="section" id="scoring">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Risk scoring</span>
@@ -238,11 +207,11 @@ portfolio_main = f'''  <section class="hero service-hero">
     </div>
   </section>
 
-  <section class="section" id="samples">
+  <section class="section alt-bg" id="samples">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow">Work samples</span>
-        <h2>The documents a GRC engagement produces</h2>
+        <span class="eyebrow">Sample reports</span>
+        <h2>What you receive</h2>
         <p>One fictional company, Example Foods Ltd, assessed end to end. Each document is complete and consistent with the others: the gaps drive the risks, the risks drive the controls, and the controls appear in the policy.</p>
       </div>
       <div class="service-grid service-grid-3 portfolio-grid">{cards}
@@ -256,7 +225,7 @@ portfolio_main = f'''  <section class="hero service-hero">
     </div>
   </section>
 
-  <section class="section alt-bg" id="results">
+  <section class="section" id="results">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Sample results</span>
@@ -290,11 +259,11 @@ portfolio_main = f'''  <section class="hero service-hero">
     </div>
   </section>
 
-  <section class="section" id="live">
+  <section class="section alt-bg" id="live">
     <div class="container">
       <div class="content-card live-card">
         <div>
-          <span class="eyebrow">Practising what we assess</span>
+          <span class="eyebrow">We do this ourselves</span>
           <h2>A real programme, not just templates</h2>
           <p>Awal Global Consults holds clients' identity documents and personal data, so it runs its own security and privacy programme: one-time-code sign-in, an append-only audit log, retention and erasure rules, nightly backups and a breach plan. The Trust page sets out each control and an honest NIST CSF 2.0 self-assessment, gaps included.</p>
         </div>
@@ -311,13 +280,13 @@ portfolio_main = f'''  <section class="hero service-hero">
       <div class="cta-box">
         <div class="cta-content">
           <span class="eyebrow">Get in touch</span>
-          <h2>Want this done for your business, or want to discuss the work?</h2>
-          <p>Businesses can book a free 20-minute call. Employers and partners can reach A.O. Abdullateef directly by email or WhatsApp.</p>
+          <h2>Want this done for your business?</h2>
+          <p>Book a free 20-minute call. We will tell you which assessment fits and send a fixed, itemised quote.</p>
         </div>
         <div class="cta-actions">
           <a href="/book" class="btn btn-primary">Book a Free Call</a>
-          <!--email_off--><a href="mailto:info@awalglobal.com.ng?subject=GRC%20portfolio" class="btn btn-secondary">Email info@awalglobal.com.ng</a><!--/email_off-->
-          <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20saw%20your%20GRC%20portfolio" class="btn btn-secondary" target="_blank" rel="noopener">Chat on WhatsApp</a>
+          <!--email_off--><a href="mailto:info@awalglobal.com.ng?subject=GRC%20assessment" class="btn btn-secondary">Email info@awalglobal.com.ng</a><!--/email_off-->
+          <a href="https://wa.me/2347038336596?text=Hello%2C%20I%20need%20a%20GRC%20assessment" class="btn btn-secondary" target="_blank" rel="noopener">Chat on WhatsApp</a>
         </div>
       </div>
     </div>
@@ -327,23 +296,16 @@ portfolio_main = f'''  <section class="hero service-hero">
 # Remove the newsletter-band duplicate? It lives after <!-- Footer --> and is shared; keep it.
 portfolio_schema = '''{
   "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  "name": "GRC Portfolio: Methods and Work Samples",
-  "url": "https://awalglobal.com.ng/grc-portfolio",
+  "@type": "WebPage",
+  "name": "Our GRC Method and Sample Reports",
+  "url": "https://awalglobal.com.ng/grc-method",
   "dateModified": "2026-11-03",
-  "mainEntity": {
-    "@id": "https://awalglobal.com.ng/#founder",
-    "@type": "Person",
-    "name": "A.O. Abdullateef",
-    "jobTitle": "Founder, Governance, Risk and Compliance",
-    "worksFor": { "@id": "https://awalglobal.com.ng/#organization" },
-    "knowsAbout": ["Governance, risk and compliance", "NIST Cybersecurity Framework 2.0", "ISO/IEC 27001:2022", "Risk assessment", "Gap assessment", "Nigeria Data Protection Act 2023", "Regulatory compliance in Nigeria"]
-  }
+  "publisher": { "@id": "https://awalglobal.com.ng/#organization" }
 }'''
-open(os.path.join(ROOT, 'grc-portfolio.html'), 'w').write(page(
-    'grc-portfolio', 'GRC Portfolio: Gap Assessment, Risk Assessment and Policy Samples | Awal Global Consults',
-    'GRC method and work samples by A.O. Abdullateef: NIST CSF 2.0 gap assessment, ISO 31000 risk assessment and register, ISO 27001 policy and NDPA 2023 checklist.',
-    portfolio_schema, portfolio_main, 'Hello%2C%20I%20saw%20your%20GRC%20portfolio'))
+open(os.path.join(ROOT, 'grc-method.html'), 'w').write(page(
+    'grc-method', 'Gap Assessment and Risk Register: Our Method and Sample Reports | Awal Global Consults',
+    'How we run cybersecurity and data protection gap assessments and risk assessments for Nigerian businesses, with sample reports: NIST CSF 2.0, ISO 27001, ISO 31000 and NDPA 2023.',
+    portfolio_schema, portfolio_main, 'Hello%2C%20I%20need%20a%20GRC%20assessment'))
 
 # ---------------- /trust ----------------
 CONTROLS = [
@@ -473,10 +435,10 @@ trust_main = f'''  <section class="hero service-hero">
         <div class="cta-content">
           <span class="eyebrow">Governance · Risk · Compliance</span>
           <h2>Want the same for your business?</h2>
-          <p>We assess and build security and data protection programmes for small businesses. See the method and samples in our GRC portfolio.</p>
+          <p>We assess and build security and data protection programmes for small businesses, with sample reports you can read first.</p>
         </div>
         <div class="cta-actions">
-          <a href="/grc-portfolio" class="btn btn-primary">View the GRC Portfolio</a>
+          <a href="/grc#assessments" class="btn btn-primary">See the Assessment Services</a>
           <a href="/book" class="btn btn-secondary">Book a Free Call</a>
         </div>
       </div>

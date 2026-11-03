@@ -46,7 +46,7 @@ export const CONSULT_TYPES = {
     short: 'Free cybersecurity check',
     minutes: 20,
     paid: false,
-    covers: 'Account takeover protection, payment fraud prevention, staff training, security health checks, breach plans and policies'
+    covers: 'Account takeover protection, payment fraud prevention, staff training, security health checks, gap assessments, risk registers, breach plans and policies'
   },
   'free-fintech': {
     label: 'Free 20-minute call: fintech and startup compliance',

@@ -1204,3 +1204,5 @@ button { font-family: inherit; }
   .heatmap th { font-size: .58rem; word-break: break-word; }
   .heatmap th[scope="row"] { white-space: normal; width: 58px; padding-right: 2px; }
 }
+.service-meta { font-size: .88rem; color: var(--muted); margin: 0 0 10px; }
+.portfolio-card .card-link { margin-top: 4px; }
