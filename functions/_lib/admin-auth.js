@@ -2,9 +2,10 @@
  * Admin dashboard sign-in: a 6-digit code is emailed to an authorised address,
  * and a correct code starts a session held in a secure cookie.
  *
- * Authorised addresses come from the ADMIN_EMAILS environment variable
- * (comma-separated) and default to info@awalglobal.com.ng. Codes and session
- * tokens are stored only as SHA-256 hashes.
+ * Owners come from the ADMIN_EMAILS environment variable (comma-separated,
+ * default info@awalglobal.com.ng); other team members are added on the Team
+ * page (staff table) with a role. Codes and session tokens are stored only as
+ * SHA-256 hashes.
  */
 
 const DEFAULT_ADMIN_EMAILS = ['info@awalglobal.com.ng'];
@@ -21,6 +22,27 @@ export function adminEmails(env) {
 
 export function isAdminEmail(env, email) {
   return adminEmails(env).includes(String(email || '').trim().toLowerCase());
+}
+
+/**
+ * The person's role, or null if they may not sign in. ADMIN_EMAILS addresses
+ * are always owners; everyone else needs an active row in the staff table
+ * (managed on Team & settings). Works before the staff table exists.
+ */
+export async function roleFor(env, email) {
+  email = String(email || '').trim().toLowerCase();
+  if (!email) return null;
+  if (isAdminEmail(env, email)) return 'owner';
+  try {
+    const row = await env.DB.prepare('SELECT role FROM staff WHERE email = ?1 AND active = 1').bind(email).first();
+    return row ? row.role : null;
+  } catch (err) {
+    return null; // staff table not created yet (migration 0005 not applied)
+  }
+}
+
+export async function canSignIn(env, email) {
+  return !!(await roleFor(env, email));
 }
 
 async function sha256Hex(text) {
@@ -50,7 +72,7 @@ function minutesFromNow(minutes) {
  */
 export async function createLoginCode(env, email) {
   email = String(email || '').trim().toLowerCase();
-  if (!isAdminEmail(env, email)) return null;
+  if (!(await canSignIn(env, email))) return null;
 
   const hourAgo = new Date(Date.now() - 3600000).toISOString();
   const recent = await env.DB
@@ -71,7 +93,7 @@ export async function createLoginCode(env, email) {
 export async function verifyLoginCode(env, email, code) {
   email = String(email || '').trim().toLowerCase();
   code = String(code || '').replace(/\D/g, '');
-  if (!isAdminEmail(env, email) || code.length !== 6) return false;
+  if (code.length !== 6 || !(await canSignIn(env, email))) return false;
 
   const row = await env.DB
     .prepare('SELECT id, code_hash, attempts FROM admin_login_codes WHERE email = ?1 AND used_at IS NULL AND expires_at > ?2 ORDER BY created_at DESC LIMIT 1')
@@ -107,14 +129,30 @@ function readCookie(request, name) {
   return null;
 }
 
-/** The signed-in admin's email, or null. Sessions for addresses no longer authorised are ignored. */
-export async function currentAdmin(env, request) {
+/**
+ * The signed-in person as { email, role }, or null. Sessions for people who
+ * have been removed or deactivated stop working straight away.
+ */
+export async function currentUser(env, request) {
   const token = readCookie(request, SESSION_COOKIE);
   if (!token) return null;
   const row = await env.DB
     .prepare('SELECT email FROM admin_sessions WHERE token_hash = ?1 AND expires_at > ?2')
     .bind(await sha256Hex(token), new Date().toISOString()).first();
-  return row && isAdminEmail(env, row.email) ? row.email : null;
+  if (!row) return null;
+  const role = await roleFor(env, row.email);
+  return role ? { email: row.email, role } : null;
+}
+
+/** The signed-in person's email, or null. */
+export async function currentAdmin(env, request) {
+  const user = await currentUser(env, request);
+  return user ? user.email : null;
+}
+
+/** Sign someone out everywhere (used when they are deactivated). */
+export async function endSessionsFor(env, email) {
+  await env.DB.prepare('DELETE FROM admin_sessions WHERE email = ?1').bind(String(email).toLowerCase()).run();
 }
 
 /** End the current session; returns the Set-Cookie header value that clears it. */

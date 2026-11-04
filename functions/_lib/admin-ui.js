@@ -69,7 +69,30 @@ const ICON_PATHS = {
   trash: '<path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/>',
   bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
   database: '<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
-  inbox: '<path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M5 5h14l2 8v6H3v-6z"/>'
+  inbox: '<path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M5 5h14l2 8v6H3v-6z"/>',
+  billing: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M7 15h4"/>',
+  tasks: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8 12 3 3 5-6"/>',
+  register: '<path d="M4 4h12l4 4v12H4z"/><path d="M8 9h6"/><path d="M8 13h8"/><path d="M8 17h5"/>',
+  library: '<path d="M4 5h4v15H4z"/><path d="M10 5h4v15h-4z"/><path d="m16.5 5.5 3.6-.9 3 14.6-3.6.8z"/>',
+  contacts: '<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7.5 17a5 5 0 0 1 9 0"/>',
+  office: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4"/><path d="M16 3v4"/>',
+  team: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/>',
+  settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="m4.9 4.9 2.1 2.1"/><path d="m17 17 2.1 2.1"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="m4.9 19.1 2.1-2.1"/><path d="m17 7 2.1-2.1"/>',
+  plus: '<path d="M12 5v14"/><path d="M5 12h14"/>',
+  upload: '<path d="M12 20V9"/><path d="m7 14 5-5 5 5"/><path d="M5 4h14"/>',
+  more: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
+  print: '<path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
+  send: '<path d="M21 3 10 14"/><path d="M21 3 14 21l-4-7-7-4z"/>',
+  money: '<rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9.5v5"/><path d="M18 9.5v5"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
+  arrowIn: '<path d="M20 4 9 15"/><path d="M9 7v8h8"/>',
+  arrowOut: '<path d="M4 20 15 9"/><path d="M15 17V9H7"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18"/><path d="M12 3a14 14 0 0 0 0 18"/>',
+  wifi: '<path d="M2 9a15 15 0 0 1 20 0"/><path d="M5.5 12.5a10 10 0 0 1 13 0"/><path d="M9 16a5 5 0 0 1 6 0"/><path d="M12 19.5h.01"/>',
+  key: '<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9"/><path d="m17 6 3 3"/>',
+  building: '<path d="M4 21V5l8-3 8 3v16"/><path d="M9 21v-5h6v5"/><path d="M8 8h.01M12 8h.01M16 8h.01M8 12h.01M12 12h.01M16 12h.01"/>'
 };
 
 export function icon(name, size = 20) {
@@ -286,6 +309,76 @@ details.more[open] summary::before{content:'– '}
 .login h1{font:700 24px var(--serif);color:var(--navy);margin:16px 0 6px}
 .code-input{font-size:26px;letter-spacing:10px;text-align:center;font-weight:700}
 
+
+/* Practice modules */
+.nav-group{font-size:10.5px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:#7f9bb6;padding:16px 12px 6px}
+.nav-group:first-child{padding-top:0}
+.side{overflow-y:auto;scrollbar-width:none}
+.side .nav a{padding:8px 12px}
+.fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
+.fgrid .full{grid-column:1/-1}
+.fgrid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.hint{font-size:12px;color:var(--muted);margin-top:4px}
+.req::after{content:' *';color:var(--red)}
+.money{font-variant-numeric:tabular-nums;white-space:nowrap}
+.num{text-align:right!important}
+.big-money{font:700 28px/1.1 var(--serif);color:var(--navy);font-variant-numeric:tabular-nums}
+.seg{display:inline-flex;background:var(--grey-50);border-radius:10px;padding:3px;gap:2px}
+.seg a,.seg label{padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;margin:0;cursor:pointer}
+.seg a.on{background:#fff;color:var(--navy);box-shadow:0 1px 2px rgba(15,58,95,.12)}
+.items{width:100%;border-collapse:collapse;font-size:14px}
+.items th{font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+.items td{padding:6px;border-bottom:1px solid var(--line-2);vertical-align:top}
+.items input,.items select{padding:8px 10px}
+.items .c-desc{width:50%}
+.items .c-kind{width:18%}
+.items .c-qty{width:9%}
+.items .c-amt{width:23%}
+.totals{margin-left:auto;max-width:340px;font-size:14px}
+.totals div{display:flex;justify-content:space-between;gap:16px;padding:5px 0}
+.totals .grand{border-top:2px solid var(--navy);margin-top:6px;padding-top:10px;font-weight:700;font-size:16px;color:var(--navy)}
+.cards-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.tile{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;text-decoration:none;color:inherit}
+.tile:hover{border-color:#c9d8e8;transform:translateY(-1px)}
+.tile .stat-ic{width:42px;height:42px;flex:none}
+.tile-title{font-weight:700;color:var(--navy)}
+.tile-sub{font-size:13px;color:var(--muted);margin-top:2px}
+.dir{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none}
+.dir.in{background:var(--violet-50);color:var(--violet)}
+.dir.out{background:var(--green-50);color:var(--green)}
+.agenda-day{font:700 13px var(--sans);color:var(--navy);padding:14px 18px 6px;border-top:1px solid var(--line);background:#FAFCFE;position:sticky;top:0}
+.agenda-day:first-child{border-top:0;border-radius:var(--radius) var(--radius) 0 0}
+.agenda-day .muted{font-weight:500}
+.task-row{display:flex;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid var(--line-2)}
+.task-row:first-child{border-top:0}
+.task-row form{margin:0}
+.tick{width:24px;height:24px;border-radius:50%;border:2px solid #c3d1df;background:#fff;display:grid;place-items:center;cursor:pointer;padding:0;color:transparent;flex:none}
+.tick:hover{border-color:var(--green);color:var(--green)}
+.tick.done{background:var(--green);border-color:var(--green);color:#fff}
+.task-row.done .row-title{text-decoration:line-through;color:var(--muted)}
+.prio{width:8px;height:8px;border-radius:50%;flex:none;background:#c3d1df}
+.prio.high{background:var(--red)}
+.prio.low{background:#e3eaf2}
+.section-title{font:700 12px var(--sans);text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:22px 0 10px}
+.file-drop{border:1.5px dashed #c3d1df;border-radius:12px;padding:14px;background:#FAFCFE}
+.file-drop input[type=file]{border:0;padding:4px 0;background:transparent}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.bar{height:8px;border-radius:999px;background:var(--grey-50);overflow:hidden;margin-top:10px}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),#6FB2F5);border-radius:999px}
+.search-group h3{font:600 13px var(--sans);color:var(--muted);margin:0;padding:14px 18px 4px;text-transform:uppercase;letter-spacing:.5px}
+mark{background:#FFF3B0;border-radius:3px;padding:0 1px}
+@media (max-width:860px){
+  .fgrid,.fgrid-3,.cards-3,.kpis{grid-template-columns:minmax(0,1fr)}
+  .items thead{display:none}
+  .items tr{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .items td{border:0;padding:0}
+  .items .c-desc{grid-column:1/-1;width:auto}
+  .items .c-kind,.items .c-qty,.items .c-amt{width:auto}
+  .totals{max-width:none}
+  .agenda-day{padding:12px 14px 6px}
+  .task-row{padding:12px 14px}
+}
+
 /* Phones */
 @media (max-width:860px){
   .side{display:none}
@@ -320,15 +413,37 @@ details.more[open] summary::before{content:'– '}
 `;
 
 export const NAV = [
+  { group: 'Work' },
   { key: 'overview', label: 'Overview', href: '/admin/', icon: 'home' },
-  { key: 'cases', label: 'Cases', href: '/admin/cases', icon: 'cases' },
+  { key: 'cases', label: 'Matters', href: '/admin/cases', icon: 'cases' },
+  { key: 'tasks', label: 'Tasks', href: '/admin/tasks', icon: 'tasks' },
+  { key: 'calendar', label: 'Calendar', href: '/admin/calendar', icon: 'calendar' },
+  { group: 'Clients' },
   { key: 'clients', label: 'Clients', href: '/admin/clients', icon: 'clients' },
+  { key: 'billing', label: 'Billing', href: '/admin/billing', icon: 'billing' },
+  { group: 'Firm' },
+  { key: 'register', label: 'Register', href: '/admin/register', icon: 'register' },
+  { key: 'library', label: 'Library', href: '/admin/library', icon: 'library' },
+  { key: 'contacts', label: 'Contacts', href: '/admin/contacts', icon: 'contacts' },
+  { key: 'office', label: 'Office & IT', href: '/admin/office', icon: 'office' },
+  { group: 'Governance' },
   { key: 'records', label: 'Records', href: '/admin/records', icon: 'shield' },
-  { key: 'activity', label: 'Activity', href: '/admin/activity', icon: 'activity' }
+  { key: 'activity', label: 'Activity', href: '/admin/activity', icon: 'activity' },
+  { key: 'team', label: 'Team & settings', href: '/admin/team', icon: 'settings' }
 ];
 
+// Phones show four sections and a "More" page with the rest
+const BOTTOM_NAV = [
+  { key: 'overview', label: 'Overview', href: '/admin/', icon: 'home' },
+  { key: 'cases', label: 'Matters', href: '/admin/cases', icon: 'cases' },
+  { key: 'tasks', label: 'Tasks', href: '/admin/tasks', icon: 'tasks' },
+  { key: 'billing', label: 'Billing', href: '/admin/billing', icon: 'billing' },
+  { key: 'more', label: 'More', href: '/admin/more', icon: 'more' }
+];
+const BOTTOM_KEYS = new Set(BOTTOM_NAV.map(n => n.key));
+
 function brand() {
-  return `<a class="brand" href="/admin/"><span class="brand-mark">A</span><span><div class="brand-name">Awal Global</div><div class="brand-sub">Case Manager</div></span></a>`;
+  return `<a class="brand" href="/admin/"><span class="brand-mark">A</span><span><div class="brand-name">Awal Global</div><div class="brand-sub">Practice System</div></span></a>`;
 }
 
 /**
@@ -341,12 +456,17 @@ function brand() {
  * @param {object} [o.badges] - counts shown on nav items, e.g. { cases: 3 }
  */
 export function shell({ title, active, body, admin, badges = {} }) {
-  const navLinks = NAV.map(n => `<a href="${n.href}" class="${n.key === active ? 'on' : ''}">${icon(n.icon)}<span>${n.label}</span>${badges[n.key] ? `<span class="count">${badges[n.key]}</span>` : ''}</a>`).join('');
+  const navLinks = NAV.map(n => n.group
+    ? `<div class="nav-group">${esc(n.group)}</div>`
+    : `<a href="${n.href}" class="${n.key === active ? 'on' : ''}">${icon(n.icon)}<span>${n.label}</span>${badges[n.key] ? `<span class="count">${badges[n.key]}</span>` : ''}</a>`).join('');
   const logout = '<form method="post" action="/admin/logout"><button type="submit">' + icon('logout', 18) + '<span>Log out</span></button></form>';
+  const moreBadge = NAV.filter(n => n.key && !BOTTOM_KEYS.has(n.key)).reduce((sum, n) => sum + (badges[n.key] || 0), 0);
+  const bottomActive = BOTTOM_KEYS.has(active) ? active : (active ? 'more' : '');
   return htmlDocument(title, `
 <div class="app">
   <aside class="side">
     ${brand()}
+    <form method="get" action="/admin/search" class="search" style="margin:0 2px 14px;min-width:0"><span style="color:#9fb7cd">${icon('search', 16)}</span><input name="q" type="search" placeholder="Search everything" aria-label="Search everything" style="background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1);color:#fff;padding:8px 10px 8px 34px;font-size:14px"></form>
     <nav class="nav">${navLinks}</nav>
     <div class="side-foot">
       <div class="who">${avatar(admin)}<span>${esc(admin)}</span></div>
@@ -354,11 +474,26 @@ export function shell({ title, active, body, admin, badges = {} }) {
     </div>
   </aside>
   <div class="main">
-    <div class="topbar">${brand()}${logout}</div>
+    <div class="topbar">${brand()}<div style="display:flex;gap:6px"><a href="/admin/search" aria-label="Search" style="display:flex;align-items:center;background:rgba(255,255,255,.08);color:#d9e6f2;border-radius:9px;padding:7px 9px">${icon('search', 18)}</a>${logout}</div></div>
     <main class="content">${body}</main>
   </div>
 </div>
-<nav class="bottom-nav">${NAV.map(n => `<a href="${n.href}" class="${n.key === active ? 'on' : ''}">${icon(n.icon, 22)}<span>${n.label}</span>${badges[n.key] ? `<span class="count">${badges[n.key]}</span>` : ''}</a>`).join('')}</nav>`);
+<nav class="bottom-nav">${BOTTOM_NAV.map(n => {
+    const count = n.key === 'more' ? moreBadge : badges[n.key];
+    return `<a href="${n.href}" class="${n.key === bottomActive ? 'on' : ''}">${icon(n.icon, 22)}<span>${n.label}</span>${count ? `<span class="count">${count}</span>` : ''}</a>`;
+  }).join('')}</nav>`);
+}
+
+/** Phone menu listing every section (desktop shows them in the sidebar). */
+export function morePage({ admin, badges }) {
+  const groups = [];
+  for (const n of NAV) {
+    if (n.group) groups.push({ name: n.group, items: [] });
+    else groups[groups.length - 1].items.push(n);
+  }
+  return shell({ title: 'More', active: 'more', admin, badges, body: `
+    ${pageHead('Everything', 'Every part of the practice system')}
+    ${groups.map(g => `<div class="section-title">${esc(g.name)}</div><div class="card"><div class="rows">${g.items.map(n => `<a class="row" href="${n.href}"><span class="stat-ic tone-blue" style="width:36px;height:36px">${icon(n.icon, 18)}</span><div class="row-main"><div class="row-title">${esc(n.label)}</div></div>${badges[n.key] ? `<span class="pill red">${badges[n.key]}</span>` : ''}${icon('arrow', 16)}</a>`).join('')}</div></div>`).join('')}` });
 }
 
 /** Bare HTML document (used by the shell and the sign-in page). */
@@ -373,7 +508,7 @@ export function htmlDocument(title, body) {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0A2C48">
-<title>${esc(title)} · Awal Case Manager</title>
+<title>${esc(title)} · Awal Practice System</title>
 <style>${STYLE}</style>
 </head>
 <body><!--email_off-->${body}<!--/email_off--></body>
