@@ -3,7 +3,6 @@ title: "How to Secure Your Business Email and Social Media Accounts"
 seo_title: Secure Your Business Email and Social Media Accounts
 slug: secure-business-email-social-media-accounts
 date: 2026-11-02
-draft: true
 topic: cybersecurity
 category: cybersecurity
 description: Step-by-step protection for business Gmail and Outlook, Instagram, Facebook and TikTok accounts: two-step verification, recovery details, admin access and what to do if you're locked out.

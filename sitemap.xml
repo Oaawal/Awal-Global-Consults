@@ -37,12 +37,6 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://awalglobal.com.ng/cac-client-form</loc>
-    <lastmod>2026-07-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://awalglobal.com.ng/trademark-ip</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
@@ -109,6 +103,12 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://awalglobal.com.ng/digital-setup</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://awalglobal.com.ng/grc-method</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>monthly</changefreq>
@@ -134,7 +134,7 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/</loc>
-    <lastmod>2026-11-02</lastmod>
+    <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -170,7 +170,7 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/topic/licences-and-permits/</loc>
-    <lastmod>2026-10-31</lastmod>
+    <lastmod>2026-11-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -194,7 +194,7 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/topic/cybersecurity/</loc>
-    <lastmod>2026-09-16</lastmod>
+    <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -271,6 +271,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://awalglobal.com.ng/blog/category/regulatory-licensing/</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://awalglobal.com.ng/blog/category/business-advisory/</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
@@ -283,6 +289,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://awalglobal.com.ng/blog/category/cybersecurity/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://awalglobal.com.ng/blog/category/tax-compliance/</loc>
     <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
@@ -290,12 +302,6 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/category/identity-immigration/</loc>
-    <lastmod>2026-10-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://awalglobal.com.ng/blog/category/regulatory-licensing/</loc>
     <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -331,10 +337,10 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://awalglobal.com.ng/blog/category/cybersecurity/</loc>
-    <lastmod>2026-09-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://awalglobal.com.ng/blog/baas-licensing-warranty-nigerian-fintech/</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/business-advisory-small-business-nigeria/</loc>
@@ -374,6 +380,30 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/how-to-start-a-company-in-nigeria/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/secure-business-email-social-media-accounts/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/security-policies-small-business-nigeria/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/small-business-cybersecurity-checklist-nigeria/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/staff-cybersecurity-training-small-business/</loc>
     <lastmod>2026-11-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

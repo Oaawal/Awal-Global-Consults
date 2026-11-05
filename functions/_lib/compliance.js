@@ -121,7 +121,7 @@ export async function backupDatabase(env, runDate) {
   const listed = await env.DOCS.list({ prefix: BACKUP_PREFIX });
   const old = (listed.objects || []).filter(o => o.key.slice(BACKUP_PREFIX.length, BACKUP_PREFIX.length + 10) < cutoff);
   for (const o of old) await env.DOCS.delete(o.key);
-  return { bytes: body.length, removed: old.length };
+  return { bytes: body.length, removed: old.length, tables: tables.length };
 }
 
 export async function listBackups(env) {

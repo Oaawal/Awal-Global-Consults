@@ -25,6 +25,7 @@ import {
   notFoundPage, simplePage, flashFor, CASE_VIEWS, ACTIVITY_FILTERS
 } from '../_lib/admin-views.js';
 import { statusesFor, statusInfo, retentionFor, documentContentType, autoFollowUp } from '../_lib/cases.js';
+import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
 import { adminLoginCodeEmail, caseStatusEmail } from '../_lib/email-templates.js';
@@ -124,11 +125,16 @@ export async function onRequest(context) {
 
       if (form.get('action') === 'verify') {
         if (await verifyLoginCode(env, email, form.get('code'))) {
+          const fresh = await isNewDevice(env, email, request);
           const cookie = await createSession(env, request, email);
-          await audit(env, request, `admin:${email}`, 'login.success', 'admin', email);
+          await audit(env, request, `admin:${email}`, 'login.success', 'admin', email, signInDetail(request));
+          if (fresh) await alertNewSignIn(env, email, request);
           return redirect(next, { 'Set-Cookie': cookie });
         }
-        if (isAdminEmail(env, email)) await audit(env, request, `admin:${email}`, 'login.failed', 'admin', email);
+        if (isAdminEmail(env, email)) {
+          await audit(env, request, `admin:${email}`, 'login.failed', 'admin', email, signInDetail(request));
+          await noteFailedCode(env, email, request);
+        }
         return html(loginPage({ step: 'code', email, next, error: 'That code is wrong or has expired. Check the latest email, or get a new code.' }), 401);
       }
 
@@ -158,6 +164,12 @@ export async function onRequest(context) {
   const flash = flashFor(url.searchParams.get('done'));
 
   if (route === '/logout' && method === 'POST') {
+    const form = await request.formData();
+    if (form.get('scope') === 'all') {
+      const ended = await revokeAllSessions(env, admin);
+      await audit(env, request, actor, 'logout.all', 'admin', admin, { sessionsEnded: ended });
+      return redirect('/admin/login', { 'Set-Cookie': await endSession(env, request) });
+    }
     const cookie = await endSession(env, request);
     await audit(env, request, actor, 'logout', 'admin', admin);
     return redirect('/admin/login', { 'Set-Cookie': cookie });
@@ -474,7 +486,11 @@ export async function onRequest(context) {
       env.DB.prepare('SELECT SUM(purged_at IS NULL) AS kept, SUM(purged_at IS NOT NULL) AS erased FROM cases')
     ]);
     const s = (stats.results || [])[0] || {};
+    const lastRun = await env.DB.prepare("SELECT run_date, detail FROM job_runs WHERE job = 'daily' AND detail IS NOT NULL ORDER BY run_date DESC LIMIT 1").first();
+    let backupStatus = null;
+    try { backupStatus = lastRun ? { date: lastRun.run_date, ...JSON.parse(lastRun.detail) } : null; } catch (e) {}
     return html(recordsPage({
+      signIns: await recentSignIns(env, new Date(Date.now() - 14 * 86400000).toISOString(), 8), backupStatus,
       admin, badges: await navBadges(env), due: due.results || [], holds: holds.results || [], requests: requests.results || [],
       backups: await listBackups(env), stats: { kept: s.kept || 0, erased: s.erased || 0 }, flash
     }));

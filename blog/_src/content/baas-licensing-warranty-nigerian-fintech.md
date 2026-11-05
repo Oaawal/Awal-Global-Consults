@@ -3,7 +3,6 @@ title: "What a BaaS Partner's Licensing Warranty Means for Your Nigerian Fintech
 seo_title: BaaS Licensing Warranty Clauses for Nigerian Fintechs
 slug: baas-licensing-warranty-nigerian-fintech
 date: 2026-11-03
-draft: true
 topic: licences-and-permits
 category: regulatory-licensing
 description: Banking-as-a-service agreements often ask Nigerian fintech founders to warrant their licensing position. Here's what that clause means, why it matters, and what to check before you sign.

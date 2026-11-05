@@ -3,7 +3,6 @@ title: "Cybersecurity Training for Staff: What Small Businesses Should Cover"
 seo_title: Staff Cybersecurity Training for Small Businesses
 slug: staff-cybersecurity-training-small-business
 date: 2026-11-02
-draft: true
 topic: cybersecurity
 category: cybersecurity
 description: What a practical cybersecurity training session for small business staff in Nigeria should cover: phishing, scams, passwords, WhatsApp, payments and data, plus how often to train.

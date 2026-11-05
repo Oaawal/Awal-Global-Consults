@@ -18,6 +18,8 @@ import { sendBrevoBatch } from './brevo.js';
 import { CONSULT_TYPES, MODES, fmtLagos, feeText } from './booking.js';
 import { statusInfo, SITE_URL } from './cases.js';
 import { backupDatabase } from './compliance.js';
+import { backupDocuments, verifyBackups, recentSignIns } from './security.js';
+import { securityAlertEmail } from './email-templates.js';
 
 const DAY_MS = 86400000;
 const REMINDER_DAYS = [3, 7];          // reminder 1 after 3 days, reminder 2 after 7
@@ -241,12 +243,14 @@ export async function runDailyJob(env, request, { now = new Date() } = {}) {
   const counts = { applications: (countRes.results || [])[0]?.applications || 0, enquiries: (countRes.results || [])[0]?.enquiries || 0 };
   const retentionDue = (retentionRes.results || [])[0]?.n || 0;
 
-  const hasNews = consultations.length || digest || newCases.length || followUps.length || waiting.length || inProgress.length || remindersSent.length || retentionDue
+  const signIns24 = await recentSignIns(env, dayAgo, 50);
+  const security = { signIns: signIns24.filter(r => r.ok).length, failed: signIns24.filter(r => !r.ok).length };
+  const hasNews = security.failed || consultations.length || digest || newCases.length || followUps.length || waiting.length || inProgress.length || remindersSent.length || retentionDue
     || counts.applications || counts.enquiries;
   let summarySent = false;
   if (hasNews) {
     const dateLabel = new Date(now).toLocaleDateString('en-GB', { timeZone: 'Africa/Lagos', weekday: 'long', day: 'numeric', month: 'long' });
-    const html = dailySummaryEmail({ dateLabel, counts, newCases, waiting, inProgress, followUps, remindersSent, retentionDue, consultations, digest, dashboardUrl: `${SITE_URL}/admin/` });
+    const html = dailySummaryEmail({ dateLabel, security, counts, newCases, waiting, inProgress, followUps, remindersSent, retentionDue, consultations, digest, dashboardUrl: `${SITE_URL}/admin/` });
     for (const email of adminEmails(env)) {
       try {
         await sendBrevoEmail(env, {
@@ -269,7 +273,28 @@ export async function runDailyJob(env, request, { now = new Date() } = {}) {
     console.error('daily job: backup failed:', err && err.message);
   }
 
+  let docBackup = null, verify = null;
+  try { docBackup = await backupDocuments(env); } catch (err) { console.error('daily job: document backup failed:', err && err.message); docBackup = { enabled: true, error: true }; }
+  try { verify = await verifyBackups(env, runDate, backup ? { bytes: backup.bytes, tables: backup.tables } : null); } catch (err) { verify = { ok: false, problems: ['The backup check could not run.'] }; }
+  if (!backup) verify = { ok: false, problems: ['Tonight\'s database backup failed.'] };
+  if (docBackup && docBackup.error) verify.problems = [...(verify.problems || []), 'Document backup failed.'], verify.ok = false;
+
+  const backupProblems = [...((verify && !verify.ok && verify.problems) || [])];
+  if (docBackup && docBackup.missing) backupProblems.push(`${docBackup.missing} document${docBackup.missing === 1 ? ' is' : 's are'} recorded but missing from storage.`);
+  if (backupProblems.length) {
+    const alertHtml = securityAlertEmail({
+      title: 'Backup problem found', intro: 'The nightly backup check found a problem:',
+      rows: backupProblems.map((p, i) => [`Issue ${i + 1}`, p]),
+      action: 'Open the Records page to see the backup status. Backups are kept for 30 days, so earlier copies are still available.',
+      buttonUrl: `${SITE_URL}/admin/records#security`, buttonLabel: 'Open Records'
+    });
+    for (const email of adminEmails(env)) {
+      try { await sendBrevoEmail(env, { to: { email }, subject: 'Security alert: backup problem found', html: alertHtml }); } catch (err) { console.error('backup alert failed:', err && err.message); }
+    }
+  }
+
   const detail = {
+    docBackup, verify,
     backupBytes: backup ? backup.bytes : null, backupsRemoved: backup ? backup.removed : 0,
     remindersSent: remindersSent.length, newCases: newCases.length, followUps: followUps.length,
     waiting: waiting.length, inProgress: inProgress.length, retentionDue, summarySent,

@@ -3,7 +3,6 @@ title: "Cybersecurity Checklist for Small Businesses in Nigeria (2026)"
 seo_title: Small Business Cybersecurity Checklist for Nigeria
 slug: small-business-cybersecurity-checklist-nigeria
 date: 2026-11-02
-draft: true
 topic: cybersecurity
 category: cybersecurity
 description: A practical cybersecurity checklist for Nigerian small businesses: accounts, passwords, WhatsApp, payments, devices, backups, staff and customer data. Tick it off in an afternoon.

@@ -482,7 +482,7 @@ export function clientPage({ admin, badges, client, cases, requests, eraseCheck,
 }
 
 // ── Records (compliance) ────────────────────────────────────────
-export function recordsPage({ admin, badges, due, holds, requests, backups, stats, flash }) {
+export function recordsPage({ admin, badges, due, holds, requests, backups, stats, flash, signIns = [], backupStatus = null }) {
   const dueList = due.length ? `<div class="rows">${due.map(c => `<a class="row" href="/admin/case/${esc(c.id)}?tab=records">${avatar(c.full_name)}
       <div class="row-main"><div class="row-title">${esc(c.full_name)}</div><div class="row-sub">${esc(c.reference)} · kept until ${esc(fmtDay(c.retain_until))}</div></div>
       <div class="row-side">${pill('Review', 'amber')}</div></a>`).join('')}</div>`
@@ -505,6 +505,20 @@ export function recordsPage({ admin, badges, due, holds, requests, backups, stat
       <a class="btn ghost sm" href="/admin/backup/${esc(b.date)}">${icon('download', 16)}Download</a></div>`).join('')}</div>`
     : `<div class="card-body">${emptyState('database', 'No backups yet', 'The first one is made by the next 8am run.')}</div>`;
 
+  const signInList = signIns.length ? `<div class="rows">${signIns.map(r => `<div class="row"><span class="tl-dot">${icon('lock', 15)}</span>
+      <div class="row-main"><div class="row-title">${esc(r.email)}</div><div class="row-sub">${esc(fmtDay(r.at))} · ${esc([r.browser, r.country, r.ip].filter(Boolean).join(' · '))}</div></div>
+      <div class="row-side">${pill(r.ok ? 'Signed in' : 'Wrong code', r.ok ? 'green' : 'red')}</div></div>`).join('')}</div>`
+    : `<div class="card-body">${emptyState('lock', 'No sign-ins in the last 14 days')}</div>`;
+  const b = backupStatus || {};
+  const docLine = b.docBackup === undefined || b.docBackup === null ? 'Not run yet'
+    : !b.docBackup.enabled ? 'Not switched on: add the DOCS_BACKUP storage binding in Cloudflare'
+    : `${b.docBackup.live} documents protected${b.docBackup.copied ? ` · ${b.docBackup.copied} copied last night` : ''}${b.docBackup.pending ? ` · ${b.docBackup.pending} waiting` : ''}${b.docBackup.missing ? ` · ${b.docBackup.missing} missing from storage` : ''}`;
+  const verifyLine = !b.verify ? 'Not run yet' : b.verify.ok ? `Passed on ${esc(fmtDay(b.date + 'T12:00:00Z'))}${b.verify.documentsChecked ? ` · ${b.verify.documentsChecked} document copies checked` : ''}` : `Failed: ${esc((b.verify.problems || []).join(' '))}`;
+  const security = `<div class="card" id="security"><div class="card-head"><h2>Security</h2><span class="small muted">Alerts go to every admin email</span></div>
+      <div class="card-body"><p class="small"><strong>Document backups:</strong> ${esc(docLine)}</p><p class="small"><strong>Backup check:</strong> ${verifyLine}</p>
+      <form method="post" action="/admin/logout" onsubmit="return confirm('Sign out every device, including this one?')"><input type="hidden" name="scope" value="all"><button class="btn ghost sm" type="submit">${icon('logout', 16)}Sign out all devices</button></form></div>
+      ${signInList}</div>`;
+
   return shell({ title: 'Records', active: 'records', admin, badges, body: `
     ${pageHead('Records', 'Retention, legal holds, client data requests and backups')}
     ${flashHtml(flash)}
@@ -519,6 +533,7 @@ export function recordsPage({ admin, badges, due, holds, requests, backups, stat
       <div class="card"><div class="card-head"><h2>Open client requests</h2></div>${reqList}</div>
       <div class="card"><div class="card-head"><h2>Legal holds</h2></div>${holdList}</div>
       <div class="card"><div class="card-head"><h2>Backups</h2><span class="small muted">Kept 30 days</span></div>${backupList}</div>
+      ${security}
     </div>
     <div class="note">${icon('shield', 18)}<span>Retention: applications are kept 6 years after closing (12 months if cancelled before any work); enquiries 12 months after last activity. Nothing is erased automatically: you approve every erasure, and each one is logged permanently.</span></div>` });
 }
@@ -538,7 +553,7 @@ const ACTION_LABELS = {
   'case.note_added': 'Note added', 'case.follow_up_set': 'Follow-up updated', 'case.reminder_sent': 'Automatic reminder sent',
   'case.tracked': 'Client checked status online', 'case.legal_hold': 'Legal hold changed', 'case.erased': 'Case erased',
   'document.viewed': 'Document opened', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
-  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
+  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
   'client.viewed': 'Client opened', 'client.updated': 'Client details corrected', 'client.exported': 'Client data exported', 'client.erased': 'Client erased',
   'client.request_logged': 'Data request recorded', 'client.request_done': 'Data request completed', 'backup.downloaded': 'Backup downloaded'
 };

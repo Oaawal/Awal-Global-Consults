@@ -161,6 +161,19 @@ export function adminLoginCodeEmail({ code }) {
   return shell(inner, { preheader: `Your login code is ${code}` });
 }
 
+
+// ── Security alert to admins ─────────────────────────────────────
+export function securityAlertEmail({ title, intro, rows = [], action, buttonUrl, buttonLabel }) {
+  const table = rows.map(([k, v]) => `<tr><td style="padding:6px 12px 6px 0;color:${MUTED};font-size:13px;white-space:nowrap;">${escapeHtml(k)}</td><td style="padding:6px 0;font-size:13px;color:${NAVY};font-weight:600;">${escapeHtml(v || 'unknown')}</td></tr>`).join('');
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:#8a1212;font-size:19px;margin:0 0 10px;">${escapeHtml(title)}</h2>
+    <p style="font-size:14px;line-height:1.7;color:${NAVY};margin:0 0 12px;">${escapeHtml(intro)}</p>
+    <table style="border-collapse:collapse;margin:0 0 14px;">${table}</table>
+    <p style="font-size:13px;line-height:1.7;color:${MUTED};margin:0 0 18px;">${escapeHtml(action)}</p>
+    ${buttonUrl ? `<a href="${escapeHtml(buttonUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">${escapeHtml(buttonLabel || 'Open dashboard')}</a>` : ''}`;
+  return shell(inner, { preheader: title });
+}
+
 // ── Case status update email to the client ──────────────────────
 export function caseStatusEmail({ fullName, reference, statusLabel, statusMessage, note, askForReview = false }) {
   const inner = `
@@ -222,7 +235,7 @@ function summarySection(title, rows, empty) {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">${body}</table>`;
 }
 
-export function dailySummaryEmail({ dateLabel, counts, newCases, waiting, inProgress, followUps, remindersSent, retentionDue, dashboardUrl, consultations = [], digest = null }) {
+export function dailySummaryEmail({ dateLabel, security = null, counts, newCases, waiting, inProgress, followUps, remindersSent, retentionDue, dashboardUrl, consultations = [], digest = null }) {
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 4px;">Good morning</h2>
     <div style="font-size:13px;color:${MUTED};">${escapeHtml(dateLabel)} · in the last 24 hours: <strong>${counts.applications}</strong> new application${counts.applications === 1 ? '' : 's'}, <strong>${counts.enquiries}</strong> enquir${counts.enquiries === 1 ? 'y' : 'ies'}</div>
@@ -233,6 +246,7 @@ export function dailySummaryEmail({ dateLabel, counts, newCases, waiting, inProg
     ${summarySection('In progress', inProgress)}
     ${summarySection('Reminders sent to clients this morning', remindersSent)}
     ${digest ? `<div style="font-size:12.5px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:6px;padding:10px 14px;margin-top:20px;">Weekly guides email sent to <strong>${digest.sent}</strong> subscriber${digest.sent === 1 ? '' : 's'}${digest.remaining ? ` (${digest.remaining} more tomorrow)` : ''}.</div>` : ''}
+    ${security && (security.signIns || security.failed) ? `<div style="font-size:12.5px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:6px;padding:10px 14px;margin-top:20px;">Dashboard sign-ins in the last 24 hours: <strong>${security.signIns}</strong>${security.failed ? ` · <strong style="color:#8a1212;">${security.failed} wrong code${security.failed === 1 ? '' : 's'}</strong>` : ''}.</div>` : ''}
     ${retentionDue ? `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:10px 14px;margin-top:20px;"><strong>${retentionDue}</strong> record${retentionDue === 1 ? ' has' : 's have'} passed the retention period and should be reviewed for deletion.</div>` : ''}
     <div style="margin-top:24px;"><a href="${escapeHtml(dashboardUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Open dashboard</a></div>`;
   return shell(inner, { preheader: `${newCases.length} need a reply · ${followUps.length} follow-ups due · ${waiting.length} waiting on clients` });

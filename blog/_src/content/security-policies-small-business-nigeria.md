@@ -2,7 +2,6 @@
 title: "Security Policies Every Nigerian Small Business Should Have"
 slug: security-policies-small-business-nigeria
 date: 2026-11-02
-draft: true
 topic: cybersecurity
 category: cybersecurity
 description: The short security policies a Nigerian small business needs: passwords, acceptable use, devices, remote work, payments and incident response. What each covers and why banks, clients and tenders ask for them.

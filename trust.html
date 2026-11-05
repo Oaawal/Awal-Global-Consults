@@ -80,6 +80,7 @@
       <nav class="nav">
         <a href="/">Home</a>
         <a href="services">Services</a>
+        <a href="grc">GRC</a>
         <a href="about">About</a>
         <a href="blog/">Blog</a>
         <a href="contact">Contact</a>
@@ -94,6 +95,7 @@
     <nav class="mobile-nav" id="mobileNav">
       <a href="/" onclick="closeMobileNav()">Home</a>
       <a href="services" onclick="closeMobileNav()">Services</a>
+      <a href="grc" onclick="closeMobileNav()">GRC</a>
       <a href="about" onclick="closeMobileNav()">About</a>
       <a href="blog/" onclick="closeMobileNav()">Blog</a>
       <a href="contact" onclick="closeMobileNav()">Contact</a>
@@ -151,15 +153,15 @@
         </div>
         <div class="feature-card">
           <span class="grc-tag">Detect</span>
-          <ul class="control-list"><li><strong>Append-only audit log</strong><span>Every sign-in, status change, export and erasure is recorded. The database refuses any edit or deletion of the log.</span></li><li><strong>Daily summary</strong><span>An automated daily check reports new activity, upcoming bookings and records due for review.</span></li></ul>
+          <ul class="control-list"><li><strong>Append-only audit log</strong><span>Every sign-in, status change, export and erasure is recorded. The database refuses any edit or deletion of the log.</span></li><li><strong>Sign-in alerts</strong><span>Every administrator is emailed when someone signs in from a new device or country, and when a wrong code is entered three times in 30 minutes.</span></li><li><strong>Daily summary</strong><span>An automated daily check reports new activity, sign-ins, upcoming bookings and records due for review.</span></li></ul>
         </div>
         <div class="feature-card">
           <span class="grc-tag">Respond</span>
-          <ul class="control-list"><li><strong>Breach response</strong><span>Suspected incidents are contained first (revoke sessions, rotate keys), then assessed. Where personal data is at risk we notify the NDPC within 72 hours and tell the people affected.</span></li><li><strong>Your rights handled on request</strong><span>Requests to access, correct or erase your data are logged and answered; records the law requires us to keep are retained until their date.</span></li></ul>
+          <ul class="control-list"><li><strong>Sign out all devices</strong><span>One click ends every dashboard session for an account, for use if a device is lost or a sign-in looks wrong.</span></li><li><strong>Breach response</strong><span>Suspected incidents are contained first (revoke sessions, rotate keys), then assessed. Where personal data is at risk we notify the NDPC within 72 hours and tell the people affected.</span></li><li><strong>Your rights handled on request</strong><span>Requests to access, correct or erase your data are logged and answered; records the law requires us to keep are retained until their date.</span></li></ul>
         </div>
         <div class="feature-card">
           <span class="grc-tag">Recover</span>
-          <ul class="control-list"><li><strong>Nightly backups</strong><span>The database is backed up every night to private storage and backups are kept for 30 days, so erased data leaves backups within that time.</span></li></ul>
+          <ul class="control-list"><li><strong>Nightly backups</strong><span>The database is backed up every night to private storage and backups are kept for 30 days, so erased data leaves backups within that time.</span></li><li><strong>Backups checked every night</strong><span>Each backup is read back and checked against what was written. Any problem is emailed to every administrator straight away.</span></li></ul>
         </div>
       </div>
     </div>
@@ -174,10 +176,10 @@
       </div>
       <div class="table-wrap"><table class="data-table">
         <thead><tr><th scope="col">Function</th><th scope="col">Maturity</th><th scope="col">In place</th><th scope="col">Open gap</th></tr></thead>
-        <tbody><tr><th scope="row">Govern</th><td><div class="maturity-bar" role="img" aria-label="3 out of 5"><i style="width:60%"></i></div><span class="table-sub">3 of 5, Defined</span></td><td>Policies, retention rules and accountability are written and enforced in the system.</td><td>No formal board-level risk register yet for the firm itself.</td></tr><tr><th scope="row">Identify</th><td><div class="maturity-bar" role="img" aria-label="3 out of 5"><i style="width:60%"></i></div><span class="table-sub">3 of 5, Defined</span></td><td>Data inventory and locations are known; collection is limited to need.</td><td>Supplier security reviews (hosting, email provider) are informal.</td></tr><tr><th scope="row">Protect</th><td><div class="maturity-bar" role="img" aria-label="3 out of 5"><i style="width:60%"></i></div><span class="table-sub">3 of 5, Defined</span></td><td>Strong sign-in, hashed secrets, private storage, security headers and bot protection.</td><td>Single administrator: key-person risk. No independent penetration test yet.</td></tr><tr><th scope="row">Detect</th><td><div class="maturity-bar" role="img" aria-label="2 out of 5"><i style="width:40%"></i></div><span class="table-sub">2 of 5, Repeatable</span></td><td>Append-only audit log and daily automated summary.</td><td>No real-time alerting on unusual sign-in activity.</td></tr><tr><th scope="row">Respond</th><td><div class="maturity-bar" role="img" aria-label="2 out of 5"><i style="width:40%"></i></div><span class="table-sub">2 of 5, Repeatable</span></td><td>Breach steps and 72-hour NDPC duty understood and documented.</td><td>Response plan not yet tested with a tabletop exercise.</td></tr><tr><th scope="row">Recover</th><td><div class="maturity-bar" role="img" aria-label="2 out of 5"><i style="width:40%"></i></div><span class="table-sub">2 of 5, Repeatable</span></td><td>Nightly database backups kept 30 days.</td><td>Document storage is not separately backed up; restore not yet tested on a schedule.</td></tr></tbody>
+        <tbody><tr><th scope="row">Govern</th><td><div class="maturity-bar" role="img" aria-label="3 out of 5"><i style="width:60%"></i></div><span class="table-sub">3 of 5, Defined</span></td><td>Policies, retention rules and accountability are written and enforced in the system.</td><td>No formal board-level risk register yet for the firm itself.</td></tr><tr><th scope="row">Identify</th><td><div class="maturity-bar" role="img" aria-label="3 out of 5"><i style="width:60%"></i></div><span class="table-sub">3 of 5, Defined</span></td><td>Data inventory and locations are known; collection is limited to need.</td><td>Supplier security reviews (hosting, email provider) are informal.</td></tr><tr><th scope="row">Protect</th><td><div class="maturity-bar" role="img" aria-label="3 out of 5"><i style="width:60%"></i></div><span class="table-sub">3 of 5, Defined</span></td><td>Strong sign-in, hashed secrets, private storage, security headers and bot protection.</td><td>Single administrator: key-person risk. No independent penetration test yet.</td></tr><tr><th scope="row">Detect</th><td><div class="maturity-bar" role="img" aria-label="3 out of 5"><i style="width:60%"></i></div><span class="table-sub">3 of 5, Defined</span></td><td>Append-only audit log; email alerts on new-device sign-ins and repeated wrong codes; daily sign-in summary.</td><td>Alerts are by email only; no round-the-clock monitoring service.</td></tr><tr><th scope="row">Respond</th><td><div class="maturity-bar" role="img" aria-label="2 out of 5"><i style="width:40%"></i></div><span class="table-sub">2 of 5, Repeatable</span></td><td>Breach steps and 72-hour NDPC duty understood and documented.</td><td>Response plan not yet tested with a tabletop exercise.</td></tr><tr><th scope="row">Recover</th><td><div class="maturity-bar" role="img" aria-label="2 out of 5"><i style="width:40%"></i></div><span class="table-sub">2 of 5, Repeatable</span></td><td>Nightly database backups kept 30 days, read back and checked every night.</td><td>Separate backup of client documents being switched on; full restore drill not yet carried out.</td></tr></tbody>
       </table></div>
       <div class="content-card" style="margin-top:22px;">
-        <p style="margin:0;"><strong>Next steps:</strong> a second authorised administrator with recovery procedures, alerts on unusual sign-ins, a tabletop breach exercise, a scheduled backup restore test, backups of document storage, and a written supplier review of our hosting and email providers.</p>
+        <p style="margin:0;"><strong>Next steps:</strong> a second authorised administrator with recovery procedures, a separate nightly backup of client documents, a tabletop breach exercise, a full restore drill, and a written supplier review of our hosting and email providers.</p>
       </div>
     </div>
   </section>

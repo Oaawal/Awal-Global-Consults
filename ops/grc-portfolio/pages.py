@@ -329,23 +329,26 @@ CONTROLS = [
     ]),
     ('Detect', [
         ('Append-only audit log', 'Every sign-in, status change, export and erasure is recorded. The database refuses any edit or deletion of the log.'),
-        ('Daily summary', 'An automated daily check reports new activity, upcoming bookings and records due for review.'),
+        ('Sign-in alerts', 'Every administrator is emailed when someone signs in from a new device or country, and when a wrong code is entered three times in 30 minutes.'),
+        ('Daily summary', 'An automated daily check reports new activity, sign-ins, upcoming bookings and records due for review.'),
     ]),
     ('Respond', [
+        ('Sign out all devices', 'One click ends every dashboard session for an account, for use if a device is lost or a sign-in looks wrong.'),
         ('Breach response', 'Suspected incidents are contained first (revoke sessions, rotate keys), then assessed. Where personal data is at risk we notify the NDPC within 72 hours and tell the people affected.'),
         ('Your rights handled on request', 'Requests to access, correct or erase your data are logged and answered; records the law requires us to keep are retained until their date.'),
     ]),
     ('Recover', [
         ('Nightly backups', 'The database is backed up every night to private storage and backups are kept for 30 days, so erased data leaves backups within that time.'),
+        ('Backups checked every night', 'Each backup is read back and checked against what was written. Any problem is emailed to every administrator straight away.'),
     ]),
 ]
 SELF = [
     ('Govern', 3, 'Policies, retention rules and accountability are written and enforced in the system.', 'No formal board-level risk register yet for the firm itself.'),
     ('Identify', 3, 'Data inventory and locations are known; collection is limited to need.', 'Supplier security reviews (hosting, email provider) are informal.'),
     ('Protect', 3, 'Strong sign-in, hashed secrets, private storage, security headers and bot protection.', 'Single administrator: key-person risk. No independent penetration test yet.'),
-    ('Detect', 2, 'Append-only audit log and daily automated summary.', 'No real-time alerting on unusual sign-in activity.'),
+    ('Detect', 3, 'Append-only audit log; email alerts on new-device sign-ins and repeated wrong codes; daily sign-in summary.', 'Alerts are by email only; no round-the-clock monitoring service.'),
     ('Respond', 2, 'Breach steps and 72-hour NDPC duty understood and documented.', 'Response plan not yet tested with a tabletop exercise.'),
-    ('Recover', 2, 'Nightly database backups kept 30 days.', 'Document storage is not separately backed up; restore not yet tested on a schedule.'),
+    ('Recover', 2, 'Nightly database backups kept 30 days, read back and checked every night.', 'Separate backup of client documents being switched on; full restore drill not yet carried out.'),
 ]
 ctrl_html = ''.join(f'''
         <div class="feature-card">
@@ -406,7 +409,7 @@ trust_main = f'''  <section class="hero service-hero">
         <tbody>{self_rows}</tbody>
       </table></div>
       <div class="content-card" style="margin-top:22px;">
-        <p style="margin:0;"><strong>Next steps:</strong> a second authorised administrator with recovery procedures, alerts on unusual sign-ins, a tabletop breach exercise, a scheduled backup restore test, backups of document storage, and a written supplier review of our hosting and email providers.</p>
+        <p style="margin:0;"><strong>Next steps:</strong> a second authorised administrator with recovery procedures, a separate nightly backup of client documents, a tabletop breach exercise, a full restore drill, and a written supplier review of our hosting and email providers.</p>
       </div>
     </div>
   </section>
