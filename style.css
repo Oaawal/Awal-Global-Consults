@@ -1228,3 +1228,6 @@ button { font-family: inherit; }
 .testimonial-grid-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
 @media (max-width: 980px) { .testimonial-grid-3 { grid-template-columns: 1fr; } }
 .path-links a { white-space: normal; }
+.credentials-label { font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--navy-800); }
+.credentials-note { text-align: center; font-size: .74rem; color: var(--muted); margin: 0 auto; padding-bottom: 12px; }
+@media (max-width: 560px) { .credentials-label { width: 100%; text-align: center; } .credential-sep { display: none; } }
