@@ -4,7 +4,7 @@ The sample company is fictional and labelled as such everywhere it appears.
 Rebuild everything with:  python3 ops/grc-portfolio/build.py && node ops/grc-portfolio/pdf.js
 """
 
-PREPARER = "A.O. Abdullateef, Awal Global Consults Limited (RC-9282103)"
+PREPARER = "Abdullateef Olamilekan Abdulwaheed, Awal Global Consults Limited (RC-9282103)"
 VERSION_DATE = "3 November 2026"
 
 SAMPLE_CO = {

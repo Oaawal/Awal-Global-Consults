@@ -159,7 +159,7 @@ one tested backup restore; breach plan approved and walked through; average matu
 
 <div style="break-inside:avoid"><h2>7. Management response and sign-off</h2>
 <table class="sig"><thead><tr><th>Role</th><th>Name</th><th>Signature</th><th>Date</th></tr></thead><tbody>
-<tr><td>Managing Director (risk owner)</td><td></td><td></td><td></td></tr><tr><td>Security and data protection lead</td><td></td><td></td><td></td></tr><tr><td>Assessor</td><td>A.O. Abdullateef</td><td></td><td></td></tr></tbody></table>
+<tr><td>Managing Director (risk owner)</td><td></td><td></td><td></td></tr><tr><td>Security and data protection lead</td><td></td><td></td><td></td></tr><tr><td>Assessor</td><td>Abdullateef Olamilekan Abdulwaheed</td><td></td><td></td></tr></tbody></table>
 <p class="small">Limitations: this assessment relied on interviews, walkthroughs and documents provided at the time. It did not include technical testing
 such as penetration testing or vulnerability scanning. Companion documents: risk assessment and register; information security policy.</p></div>
 """

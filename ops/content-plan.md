@@ -201,5 +201,5 @@ official CAC service times or fees — say so wherever they are quoted.
   readiness) ₦60,000–₦100,000+. Separate from NEPC's own fee.
 - **NGOs** must register with SCUML. **Business name owners** get their TCC from
   the State Internal Revenue Service.
-- **Bylines:** every guide carries "Reviewed by A.O. Abdullateef" — so every
+- **Bylines:** every guide carries "Reviewed by Abdullateef Olamilekan Abdulwaheed" — so every
   guide must be read by the owner before `draft: true` is removed.

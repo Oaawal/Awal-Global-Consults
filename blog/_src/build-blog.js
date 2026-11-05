@@ -49,8 +49,8 @@ const ORG = 'Awal Global Consults';
 // Every guide is reviewed by the founder before it is published. A guide can
 // opt out with `reviewed_by: none`; `reviewed:` (YYYY-MM-DD) dates the review.
 const REVIEWER = {
-  name: 'A.O. Abdullateef',
-  role: 'Legal Professional, Founder of Awal Global Consults',
+  name: 'Abdullateef Olamilekan Abdulwaheed',
+  role: 'Founder of Awal Global Consults, compliance consultant (LLB)',
   path: 'about#founder'
 };
 
@@ -262,7 +262,7 @@ ${post.toc.map(t => `          <li><a href="#${t.id}">${t.text}</a></li>`).join(
       '@type': 'WebPage',
       '@id': canonical,
       ...(post.reviewed_by !== 'none' ? {
-        reviewedBy: { '@type': 'Person', name: REVIEWER.name, jobTitle: 'Legal Professional', url: `${SITE_URL}/about#founder`, worksFor: { '@type': 'Organization', name: ORG } },
+        reviewedBy: { '@type': 'Person', name: REVIEWER.name, jobTitle: 'Compliance Consultant', url: `${SITE_URL}/about#founder`, worksFor: { '@type': 'Organization', name: ORG } },
         lastReviewed: new Date((post.reviewed || post.updated || post.date) + 'T00:00:00').toISOString()
       } : {})
     },
