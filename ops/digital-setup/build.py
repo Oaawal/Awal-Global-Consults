@@ -38,10 +38,12 @@ FAQ = [('Do I own my website and accounts?', 'Yes. Your domain, email, Google pr
        ('Do I need to be registered with CAC first?', 'No, but it helps. A registered name makes it easier to get a .com.ng domain and to verify your Google profile. We can handle your CAC registration too.'),
        ('Can you update my website later?', 'Yes. Updates and ongoing support are available on request, quoted separately.')]
 
+PRICES = {'Business website': 'From ₦200,000 (plus hosting and domain)', 'Domain and business email': 'From ₦40,000 (plus yearly domain and email costs)', 'Google Business Profile': 'From ₦25,000', 'WhatsApp Business': 'From ₦15,000', 'Social media pages': 'From ₦20,000', 'Online forms and payment links': 'Quoted after a short call'}
 cards = ''.join(f'''
         <div class="service-card portfolio-card">
           <span class="grc-tag">{e(tag)}</span>
           <h3>{e(t)}</h3>
+          <p class="price-from">{e(PRICES[t])}</p>
           <p>{e(d)}</p>
           <ul class="grc-list">{''.join(f'<li>{e(i)}</li>' for i in items)}</ul>
         </div>''' for tag, t, d, items in SERVICES)
@@ -84,10 +86,11 @@ main = f'''  <section class="hero service-hero">
       <div class="section-head">
         <span class="eyebrow">What We Set Up</span>
         <h2>Pick what you need, or all of it</h2>
-        <p>Each item can be done on its own. Fixed, itemised quote before any work starts.</p>
+        <p>Each item can be done on its own, or get everything as a full digital setup from ₦300,000. Fixed, itemised quote before any work starts.</p>
       </div>
       <div class="service-grid service-grid-3 portfolio-grid">{cards}
       </div>
+      <p class="price-note-line">Starting prices for a small business. Your exact fee is confirmed in an itemised quote before any work starts; domain, hosting and email subscription costs are extra.</p>
     </div>
   </section>
 

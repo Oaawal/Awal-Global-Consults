@@ -20,8 +20,9 @@ or accreditations we can't evidence.
 | Security policies | Up to six short policies, ready to adopt | Documents |
 | Cybersecurity levy guidance | Short written advice | Call or note |
 
-Prices: quote per job (itemised before payment). Set "from" prices here once decided and add them
-to the website page.
+Starting prices (shown on the website, small business; final quote itemised before payment):
+account takeover protection ₦30,000 · payment fraud procedure ₦40,000 · staff training ₦75,000 per session (up to 15 staff) ·
+health check ₦80,000 · breach response plan ₦80,000 · policies ₦30,000 each or ₦120,000 for six · levy guidance within a paid consultation (from ₦20,000).
 
 ## 1. Free 20-minute check (the sales call)
 

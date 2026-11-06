@@ -1241,3 +1241,5 @@ button { font-family: inherit; }
 .hero-founder-card { max-width: 320px; }
 .hero-founder-card .grc-title li { white-space: nowrap; font-size: .76rem; }
 @media (max-width: 560px) { .hero-founder-card .grc-title li { white-space: normal; } }
+.price-from { font-weight: 700; color: var(--navy-800); font-size: .95rem; margin: 2px 0 10px; }
+.price-note-line { font-size: .85rem; color: var(--muted); margin: 18px 0 0; text-align: center; }
