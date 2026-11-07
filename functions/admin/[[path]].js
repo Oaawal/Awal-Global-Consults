@@ -22,12 +22,13 @@
 import { createLoginCode, verifyLoginCode, createSession, currentAdmin, endSession, isAdminEmail } from '../_lib/admin-auth.js';
 import {
   loginPage, overviewPage, casesPage, casePage, clientsPage, clientPage, recordsPage, activityPage,
-  notFoundPage, simplePage, flashFor, CASE_VIEWS, ACTIVITY_FILTERS
+  notFoundPage, simplePage, flashFor, CASE_VIEWS, ACTIVITY_FILTERS, importPage
 } from '../_lib/admin-views.js';
 import { statusesFor, statusInfo, retentionFor, documentContentType, autoFollowUp } from '../_lib/cases.js';
 import { MANIFEST, SERVICE_WORKER, APP_SCRIPT } from '../_lib/admin-app.js';
 import { vapidKeys, notifyAdmins } from '../_lib/webpush.js';
 import { bounceSettings, ensureBounceWebhook } from '../_lib/bounces.js';
+import { CHANNELS, PAST_STATUSES, validatePast, savePast, importCsv, csvTemplate, dataSubjectCount } from '../_lib/past-records.js';
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
@@ -175,6 +176,31 @@ export async function onRequest(context) {
   const actor = `admin:${admin}`;
   const ip = request.headers.get('CF-Connecting-IP');
   const flash = flashFor(url.searchParams.get('done'));
+
+  // ── Past clients (before the website records) ──────────────
+  if (route === '/import' && method === 'GET') {
+    return html(importPage({ admin, badges: await navBadges(env), flash, channels: CHANNELS, statuses: PAST_STATUSES }));
+  }
+  if (route === '/import/template.csv' && method === 'GET') {
+    return new Response(csvTemplate(), { headers: { ...SECURITY_HEADERS, 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="awal-past-clients-template.csv"' } });
+  }
+  if (route === '/import/one' && method === 'POST') {
+    const f = Object.fromEntries((await request.formData()).entries());
+    const v = validatePast(f);
+    if (v.error) return html(importPage({ admin, badges: await navBadges(env), flash: null, error: v.error, form: f, channels: CHANNELS, statuses: PAST_STATUSES }), 400);
+    const r = await savePast(env, request, actor, v.record);
+    return redirect(r.duplicate ? '/admin/import?done=import_dup' : `/admin/case/${r.caseId}?done=imported`);
+  }
+  if (route === '/import/csv' && method === 'POST') {
+    const form = await request.formData();
+    const file = form.get('file');
+    let error = null, result = null;
+    if (!file || typeof file === 'string' || !file.size) error = 'Choose a CSV file to upload.';
+    else if (file.size > 2 * 1024 * 1024) error = 'That file is over 2MB. Split it into smaller files.';
+    else if (!/\.csv$/i.test(file.name || '')) error = 'Save the spreadsheet as CSV first (File, Download, CSV in Google Sheets; Save As, CSV in Excel).';
+    else result = await importCsv(env, request, actor, await file.text(), form.get('kind') === 'enquiry' ? 'enquiry' : 'application');
+    return html(importPage({ admin, badges: await navBadges(env), flash: null, error, result, channels: CHANNELS, statuses: PAST_STATUSES }), error ? 400 : 200);
+  }
 
   if (route === '/bounce-alerts' && method === 'POST') {
     try {
@@ -547,6 +573,7 @@ export async function onRequest(context) {
     return html(recordsPage({
       signIns: await recentSignIns(env, new Date(Date.now() - 14 * 86400000).toISOString(), 8), backupStatus,
       bounceOn: !!(await bounceSettings(env).catch(() => null)),
+      subjects: { recent: await dataSubjectCount(env, new Date(Date.now() - 183 * 86400000).toISOString()), all: await dataSubjectCount(env) },
       admin, badges: await navBadges(env), due: due.results || [], holds: holds.results || [], requests: requests.results || [],
       backups: await listBackups(env), stats: { kept: s.kept || 0, erased: s.erased || 0 }, flash
     }));

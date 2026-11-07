@@ -125,6 +125,8 @@ export async function runDailyJob(env, request, { now = new Date() } = {}) {
                AND e.created_at >= c.status_changed_at) AS reminders
      FROM cases c JOIN clients cl ON cl.id = c.client_id
      WHERE c.kind = 'application' AND c.status IN ('quote_sent', 'awaiting_documents')
+       -- Past clients added by hand get no automatic reminders until you change their stage yourself
+       AND (c.source_page IS NULL OR c.source_page NOT LIKE 'manual:%' OR c.status_changed_at > c.created_at)
      ORDER BY c.status_changed_at`
   ).all()).results || [];
 

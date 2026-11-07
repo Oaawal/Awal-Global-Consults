@@ -13,6 +13,8 @@ export { esc };
 
 // Messages shown after an action (?done=key)
 const FLASH = {
+  imported: ['ok', 'Past client added.'],
+  import_dup: ['ok', 'That client and service on that date is already recorded, so nothing was added.'],
   bounces: ['ok', 'Bounce alerts are on. You will be alerted when an email to a client cannot be delivered.'],
   bounces_failed: ['err', 'Bounce alerts could not be turned on: Brevo did not accept the request. Try again later.'],
   status: ['ok', 'Status updated.'],
@@ -183,7 +185,7 @@ function eventIcon(event) {
 
 function eventLabel(e, kind) {
   switch (e.event) {
-    case 'created': return 'Received from the website';
+    case 'created': return e.note && e.note.startsWith('Added from') ? 'Added from earlier records' : 'Received from the website';
     case 'status_changed': return e.from_status === e.to_status ? `Message sent at ${statusInfo(kind, e.to_status).label}` : `Moved to ${statusInfo(kind, e.to_status).label}`;
     case 'client_notified': return 'Client emailed about the update';
     case 'reminder_sent': return 'Automatic reminder emailed to the client';
@@ -406,7 +408,7 @@ export function clientsPage({ admin, badges, rows, q }) {
       <div class="row-side"><span class="small muted">${r.cases} case${r.cases === 1 ? '' : 's'}</span><span class="small muted">${esc(ago(r.last_activity))}</span></div></a>`).join('')}</div>`
     : `<div class="card-body">${emptyState('clients', q ? 'No clients match your search' : 'No clients yet')}</div>`;
   return shell({ title: 'Clients', active: 'clients', admin, badges, body: `
-    ${pageHead('Clients', 'Everyone who has applied or enquired, matched by email address')}
+    ${pageHead('Clients', 'Everyone who has applied or enquired, matched by email address', '<a class="btn sm" href="/admin/import">Add past clients</a>')}
     <form class="toolbar" method="get" action="/admin/clients">
       <div class="search">${icon('search', 18)}<input name="q" type="search" placeholder="Search name, email or phone" value="${esc(q)}"></div>
       <button class="btn ghost" type="submit">Search</button>
@@ -485,7 +487,7 @@ export function clientPage({ admin, badges, client, cases, requests, eraseCheck,
 }
 
 // ── Records (compliance) ────────────────────────────────────────
-export function recordsPage({ admin, badges, due, holds, requests, backups, stats, flash, signIns = [], backupStatus = null, bounceOn = false }) {
+export function recordsPage({ admin, badges, due, holds, requests, backups, stats, flash, signIns = [], backupStatus = null, bounceOn = false, subjects = null }) {
   const dueList = due.length ? `<div class="rows">${due.map(c => `<a class="row" href="/admin/case/${esc(c.id)}?tab=records">${avatar(c.full_name)}
       <div class="row-main"><div class="row-title">${esc(c.full_name)}</div><div class="row-sub">${esc(c.reference)} · kept until ${esc(fmtDay(c.retain_until))}</div></div>
       <div class="row-side">${pill('Review', 'amber')}</div></a>`).join('')}</div>`
@@ -534,6 +536,13 @@ export function recordsPage({ admin, badges, due, holds, requests, backups, stat
       <div class="stat"><div class="stat-top"><span>Legal holds</span><span class="stat-ic tone-red">${icon('lock', 18)}</span></div><div class="stat-num">${holds.length}</div><div class="stat-note">Never erased</div></div>
       <div class="stat"><div class="stat-top"><span>Records kept</span><span class="stat-ic tone-green">${icon('shield', 18)}</span></div><div class="stat-num">${stats.kept}</div><div class="stat-note">${stats.erased} erased so far</div></div>
     </div>
+    ${subjects ? `<div class="card" id="ndpc-count"><div class="card-head"><h2>People whose data we hold (NDPC count)</h2><a class="btn ghost sm" href="/admin/import">Add past clients</a></div><div class="card-body">
+      <div class="stats" style="margin:0 0 12px">
+        <div class="stat"><div class="stat-top"><span>Last 6 months</span><span class="stat-ic ${subjects.recent.total >= 200 ? 'tone-red' : subjects.recent.total >= 150 ? 'tone-amber' : 'tone-green'}">${icon('clients', 18)}</span></div><div class="stat-num">${subjects.recent.total}</div><div class="stat-note">${subjects.recent.total >= 200 ? 'Over 200: NDPC registration needed' : subjects.recent.total >= 150 ? 'Getting close to 200' : 'Under the 200 threshold'}</div></div>
+        <div class="stat"><div class="stat-top"><span>Held in total</span><span class="stat-ic tone-blue">${icon('database', 18)}</span></div><div class="stat-num">${subjects.all.total}</div><div class="stat-note">All records kept</div></div>
+      </div>
+      <p class="small muted" style="margin:0">Last 6 months: ${subjects.recent.clients} clients, ${subjects.recent.others} other people named on their files (directors, shareholders, partners, next of kin) and ${subjects.recent.subscribers} newsletter sign-ups. Records added from before the website count from their service date. Staff are not included: add them to your own count.</p>
+    </div></div>` : ''}
     <div class="grid grid-2">
       <div class="card"><div class="card-head"><h2>Due for review</h2></div>${dueList}</div>
       <div class="card"><div class="card-head"><h2>Open client requests</h2></div>${reqList}</div>
@@ -542,6 +551,64 @@ export function recordsPage({ admin, badges, due, holds, requests, backups, stat
       ${security}
     </div>
     <div class="note">${icon('shield', 18)}<span>Retention: applications are kept 6 years after closing (12 months if cancelled before any work); enquiries 12 months after last activity. Nothing is erased automatically: you approve every erasure, and each one is logged permanently.</span></div>` });
+}
+
+// ── Add past clients (records from before the website) ─────────
+export function importPage({ admin, badges, flash, error = null, result = null, form = {}, channels, statuses }) {
+  const opt = (list, val) => list.map(o => typeof o === 'string'
+    ? `<option${o === val ? ' selected' : ''}>${esc(o)}</option>`
+    : `<option value="${esc(o.key)}"${o.key === val ? ' selected' : ''}>${esc(o.label)}</option>`).join('');
+  const res = result ? `<div class="card"><div class="card-head"><h2>Import result</h2></div><div class="card-body">
+      <p><strong>${result.added.length}</strong> added · <strong>${result.skipped.length}</strong> already recorded · <strong>${result.errors.length}</strong> with problems</p>
+      ${result.errors.length ? `<p class="small"><strong>Rows to fix and upload again:</strong></p><ul class="small">${result.errors.map(e => `<li>Row ${e.line}: ${esc(e.error)}</li>`).join('')}</ul>` : ''}
+      ${result.added.length ? `<p class="small muted">Added: ${result.added.slice(0, 30).map(a => esc(`${a.reference} ${a.name}`)).join(', ')}${result.added.length > 30 ? '…' : ''}</p>` : ''}
+    </div></div>` : '';
+  return shell({ title: 'Add past clients', active: 'clients', admin, badges, body: `
+    ${pageHead('Add past clients', 'Record clients you served by email, WhatsApp, phone or in person before the website records', '', { href: '/admin/clients', label: 'Clients' })}
+    ${flashHtml(flash)}${error ? flashHtml(['err', error]) : ''}
+    ${res}
+    <div class="grid grid-2">
+      <div class="card"><div class="card-head"><h2>Add one client</h2></div><div class="card-body">
+        <form method="post" action="/admin/import/one">
+          <label for="i-kind">Type</label>
+          <select id="i-kind" name="kind"><option value="application"${form.kind === 'enquiry' ? '' : ' selected'}>Paid job (application)</option><option value="enquiry"${form.kind === 'enquiry' ? ' selected' : ''}>Enquiry only (did not become a job)</option></select>
+          <label for="i-name">Full name</label>
+          <input id="i-name" name="fullName" required maxlength="120" value="${esc(form.fullName || '')}" placeholder="First and last name">
+          <label for="i-phone">Phone / WhatsApp</label>
+          <input id="i-phone" name="phone" type="tel" maxlength="40" value="${esc(form.phone || '')}">
+          <label for="i-email">Email (if you have it)</label>
+          <input id="i-email" name="email" type="email" maxlength="254" value="${esc(form.email || '')}">
+          <label for="i-service">Service</label>
+          <input id="i-service" name="service" required maxlength="200" value="${esc(form.service || '')}" placeholder="e.g. Business Name Registration">
+          <label for="i-date">Date of the service</label>
+          <input id="i-date" name="date" type="date" required value="${esc(form.date || '')}">
+          <label for="i-status">Where it stands</label>
+          <select id="i-status" name="status">${opt(statuses, form.status || 'closed')}</select>
+          <label for="i-channel">How they came to you</label>
+          <select id="i-channel" name="channel">${opt(channels, form.channel || 'WhatsApp')}</select>
+          <label for="i-people">Other people named on the file (directors, shareholders, partners, trustees, next of kin), one per line</label>
+          <textarea id="i-people" name="people" maxlength="2000" placeholder="Ngozi Okafor&#10;Emeka Okafor">${esc(form.people || '')}</textarea>
+          <label for="i-notes">Notes (optional)</label>
+          <textarea id="i-notes" name="notes" maxlength="2000">${esc(form.notes || '')}</textarea>
+          <div class="btn-row"><button class="btn" type="submit">Add client</button></div>
+        </form>
+      </div></div>
+      <div class="card"><div class="card-head"><h2>Import many from a spreadsheet</h2></div><div class="card-body">
+        <ol class="small" style="padding-left:18px;line-height:1.7;margin-top:0">
+          <li><a href="/admin/import/template.csv">Download the template</a> and open it in Excel or Google Sheets.</li>
+          <li>Add one row per job. Dates as <strong>YYYY-MM-DD</strong> (e.g. 2025-08-14). Separate other people&rsquo;s names with a semicolon.</li>
+          <li>Save or download it as <strong>CSV</strong>, then upload it here.</li>
+        </ol>
+        <form method="post" action="/admin/import/csv" enctype="multipart/form-data">
+          <label for="i-kind2">These rows are</label>
+          <select id="i-kind2" name="kind"><option value="application">Paid jobs (applications)</option><option value="enquiry">Enquiries only</option></select>
+          <label for="i-file">CSV file</label>
+          <input id="i-file" name="file" type="file" accept=".csv,text/csv" required>
+          <div class="btn-row"><button class="btn" type="submit">Import</button></div>
+        </form>
+        <p class="small muted">Uploading the same file twice is safe: rows already recorded are skipped. Only record what you need (name, contact, service, date and names on the file); keep ID documents out unless the job is still open.</p>
+      </div></div>
+    </div>` });
 }
 
 // ── Activity (audit log) ────────────────────────────────────────
@@ -559,7 +626,7 @@ const ACTION_LABELS = {
   'case.note_added': 'Note added', 'case.follow_up_set': 'Follow-up updated', 'case.reminder_sent': 'Automatic reminder sent',
   'case.tracked': 'Client checked status online', 'case.legal_hold': 'Legal hold changed', 'case.erased': 'Case erased',
   'document.viewed': 'Document opened', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
-  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'email.bounced': 'Email bounced', 'bounces.enabled': 'Turned on bounce alerts', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
+  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'email.bounced': 'Email bounced', 'case.imported': 'Past client added', 'bounces.enabled': 'Turned on bounce alerts', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
   'client.viewed': 'Client opened', 'client.updated': 'Client details corrected', 'client.exported': 'Client data exported', 'client.erased': 'Client erased',
   'client.request_logged': 'Data request recorded', 'client.request_done': 'Data request completed', 'backup.downloaded': 'Backup downloaded'
 };
