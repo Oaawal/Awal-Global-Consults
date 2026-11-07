@@ -1,7 +1,8 @@
 import { checkEmail } from './_lib/email-check.js';
 import { verifyTurnstile, reportBlockedSubmission } from './_lib/turnstile.js';
 import { sendBrevoEmail } from './_lib/brevo.js';
-import { contactAdminEmail, contactClientEmail, blockedSubmissionEmail } from './_lib/email-templates.js';
+import { contactAdminEmail, contactClientEmail, blockedSubmissionEmail, adminNoticeEmail } from './_lib/email-templates.js';
+import { notifyAdmins } from './_lib/webpush.js';
 import { recordsEnabled, recordSubmission } from './_lib/records.js';
 
 const HIDDEN_FIELDS = new Set(['Service', 'company_website', 'cf-turnstile-response']);
@@ -102,11 +103,25 @@ export async function onRequestPost(context) {
       }
     }
 
-    await sendBrevoEmail(env, {
-      to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
-      subject: `${reference ? `[${reference}] ` : ''}New Enquiry: ${service || 'Website Contact Form'}`,
-      html: contactAdminEmail({ fields: humanFields, service, reference, recordStatus, caseUrl }),
-      replyTo: email ? { email, name: fullName } : undefined
+    if (recordStatus === 'saved') {
+      await sendBrevoEmail(env, {
+        to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
+        subject: `[${reference}] New enquiry: ${service || 'Website contact form'}`,
+        html: adminNoticeEmail({ heading: 'New enquiry', reference, services: service ? [service] : [], caseUrl })
+      });
+    } else {
+      await sendBrevoEmail(env, {
+        to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
+        subject: `${reference ? `[${reference}] ` : ''}New Enquiry: ${service || 'Website Contact Form'}`,
+        html: contactAdminEmail({ fields: humanFields, service, reference, recordStatus, caseUrl }),
+        replyTo: email ? { email, name: fullName } : undefined
+      });
+    }
+    await notifyAdmins(env, {
+      title: `New enquiry${reference ? ` ${reference}` : ''}`,
+      body: service || 'Website contact form',
+      url: caseUrl ? new URL(caseUrl).pathname : '/admin/cases',
+      tag: reference || undefined
     });
 
     if (email) {

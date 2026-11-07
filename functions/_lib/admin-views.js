@@ -516,7 +516,8 @@ export function recordsPage({ admin, badges, due, holds, requests, backups, stat
   const verifyLine = !b.verify ? 'Not run yet' : b.verify.ok ? `Passed on ${esc(fmtDay(b.date + 'T12:00:00Z'))}${b.verify.documentsChecked ? ` · ${b.verify.documentsChecked} document copies checked` : ''}` : `Failed: ${esc((b.verify.problems || []).join(' '))}`;
   const security = `<div class="card" id="security"><div class="card-head"><h2>Security</h2><span class="small muted">Alerts go to every admin email</span></div>
       <div class="card-body"><p class="small"><strong>Document backups:</strong> ${esc(docLine)}</p><p class="small"><strong>Backup check:</strong> ${verifyLine}</p>
-      <form method="post" action="/admin/logout" onsubmit="return confirm('Sign out every device, including this one?')"><input type="hidden" name="scope" value="all"><button class="btn ghost sm" type="submit">${icon('logout', 16)}Sign out all devices</button></form></div>
+      <div id="push-settings" style="margin-bottom:12px;"></div>
+      <form method="post" action="/admin/logout" data-confirm="Sign out every device, including this one?"><input type="hidden" name="scope" value="all"><button class="btn ghost sm" type="submit">${icon('logout', 16)}Sign out all devices</button></form></div>
       ${signInList}</div>`;
 
   return shell({ title: 'Records', active: 'records', admin, badges, body: `
@@ -553,7 +554,7 @@ const ACTION_LABELS = {
   'case.note_added': 'Note added', 'case.follow_up_set': 'Follow-up updated', 'case.reminder_sent': 'Automatic reminder sent',
   'case.tracked': 'Client checked status online', 'case.legal_hold': 'Legal hold changed', 'case.erased': 'Case erased',
   'document.viewed': 'Document opened', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
-  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
+  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
   'client.viewed': 'Client opened', 'client.updated': 'Client details corrected', 'client.exported': 'Client data exported', 'client.erased': 'Client erased',
   'client.request_logged': 'Data request recorded', 'client.request_done': 'Data request completed', 'backup.downloaded': 'Backup downloaded'
 };

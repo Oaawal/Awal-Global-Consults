@@ -25,6 +25,8 @@ import {
   notFoundPage, simplePage, flashFor, CASE_VIEWS, ACTIVITY_FILTERS
 } from '../_lib/admin-views.js';
 import { statusesFor, statusInfo, retentionFor, documentContentType, autoFollowUp } from '../_lib/cases.js';
+import { MANIFEST, SERVICE_WORKER, APP_SCRIPT } from '../_lib/admin-app.js';
+import { vapidKeys, notifyAdmins } from '../_lib/webpush.js';
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
@@ -36,7 +38,7 @@ const SECURITY_HEADERS = {
   'X-Frame-Options': 'DENY',
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'same-origin', // not no-referrer: that makes browsers send "Origin: null" on form posts
-  'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
+  'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; script-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
 };
 
 const OPEN_SQL = "c.status NOT IN ('closed', 'cancelled', 'converted')";
@@ -107,6 +109,16 @@ export async function onRequest(context) {
   const route = '/' + parts.join('/');
   const method = request.method;
 
+  // App files (public: they contain no case data)
+  if (method === 'GET' && route === '/manifest.webmanifest') {
+    return new Response(MANIFEST, { headers: { 'Content-Type': 'application/manifest+json', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' } });
+  }
+  if (method === 'GET' && (route === '/sw.js' || route === '/app.js')) {
+    return new Response(route === '/sw.js' ? SERVICE_WORKER : APP_SCRIPT, {
+      headers: { 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff', 'Service-Worker-Allowed': '/admin/' }
+    });
+  }
+
   // Form posts must come from this site (blocks cross-site request forgery)
   if (method === 'POST' && request.headers.get('Origin') !== url.origin) {
     return html(simplePage('Blocked', 'This request was blocked for security reasons. Please go back and try again.'), 403);
@@ -162,6 +174,37 @@ export async function onRequest(context) {
   const actor = `admin:${admin}`;
   const ip = request.headers.get('CF-Connecting-IP');
   const flash = flashFor(url.searchParams.get('done'));
+
+  // ── App notifications (this device) ─────────────────────────
+  if (route === '/push/key' && method === 'GET') {
+    const keys = await vapidKeys(env);
+    return new Response(JSON.stringify({ publicKey: keys.publicKey }), { headers: { ...SECURITY_HEADERS, 'Content-Type': 'application/json' } });
+  }
+  if (route.startsWith('/push/') && method === 'POST') {
+    const jsonOut = (o, st = 200) => new Response(JSON.stringify(o), { status: st, headers: { ...SECURITY_HEADERS, 'Content-Type': 'application/json' } });
+    let body = {};
+    try { body = await request.json(); } catch (e) { /* empty body */ }
+    if (route === '/push/subscribe') {
+      const endpoint = String(body.endpoint || '');
+      const keys = body.keys || {};
+      if (!/^https:\/\//.test(endpoint) || endpoint.length > 1000 || !keys.p256dh || !keys.auth) return jsonOut({ error: 'Invalid subscription' }, 400);
+      await env.DB.prepare(`INSERT INTO push_subscriptions (id, email, endpoint, p256dh, auth, user_agent, created_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+        ON CONFLICT(endpoint) DO UPDATE SET email = ?2, p256dh = ?4, auth = ?5, user_agent = ?6`)
+        .bind(crypto.randomUUID(), admin, endpoint, String(keys.p256dh).slice(0, 200), String(keys.auth).slice(0, 100), (request.headers.get('User-Agent') || '').slice(0, 200), new Date().toISOString()).run();
+      await audit(env, request, actor, 'push.enabled', 'admin', admin, null);
+      return jsonOut({ ok: true });
+    }
+    if (route === '/push/unsubscribe') {
+      await env.DB.prepare('DELETE FROM push_subscriptions WHERE endpoint = ?1 AND email = ?2').bind(String(body.endpoint || ''), admin).run();
+      await audit(env, request, actor, 'push.disabled', 'admin', admin, null);
+      return jsonOut({ ok: true });
+    }
+    if (route === '/push/test') {
+      const r = await notifyAdmins(env, { title: 'Notifications are working', body: 'You will get an alert like this for new applications, enquiries and bookings.', url: '/admin/', tag: 'test' }, { email: admin });
+      return jsonOut({ ok: true, sent: r.sent || 0 });
+    }
+    return jsonOut({ error: 'Not found' }, 404);
+  }
 
   if (route === '/logout' && method === 'POST') {
     const form = await request.formData();

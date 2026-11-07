@@ -6,7 +6,8 @@ import { checkEmail } from './_lib/email-check.js';
  */
 import { verifyTurnstile, reportBlockedSubmission } from './_lib/turnstile.js';
 import { sendBrevoEmail } from './_lib/brevo.js';
-import { bookingClientEmail, bookingAdminEmail, blockedSubmissionEmail } from './_lib/email-templates.js';
+import { bookingClientEmail, bookingAdminEmail, blockedSubmissionEmail, adminNoticeEmail } from './_lib/email-templates.js';
+import { notifyAdmins } from './_lib/webpush.js';
 import { recordsEnabled, recordSubmission } from './_lib/records.js';
 import { adminEmails } from './_lib/admin-auth.js';
 import { SITE_URL } from './_lib/cases.js';
@@ -105,13 +106,23 @@ export async function onRequestPost({ request, env }) {
       await sendBrevoEmail(env, {
         to: { email: to },
         subject: `${reference ? `[${reference}] ` : ''}New booking: ${t.short}, ${whenText}`,
-        html: bookingAdminEmail({ fullName, email, phone, paid: t.paid, reference, caseUrl: caseId ? `${SITE_URL}/admin/case/${caseId}` : null, ...details }),
-        replyTo: { email, name: fullName }
+        html: caseId
+          ? adminNoticeEmail({ heading: t.paid ? 'New paid consultation request' : 'New consultation booking', reference, services: [t.label],
+              lines: [`When: ${whenText} (Lagos time)`, `How: ${MODES[mode]}`, t.paid ? 'Waiting for payment.' : 'Confirmed automatically.'], caseUrl: `${SITE_URL}/admin/case/${caseId}` })
+          : bookingAdminEmail({ fullName, email, phone, paid: t.paid, reference, caseUrl: null, ...details }),
+        replyTo: caseId ? undefined : { email, name: fullName }
       });
     } catch (err) {
       console.error('booking: admin email failed:', err && err.message);
     }
   }
+
+  await notifyAdmins(env, {
+    title: `New booking${reference ? ` ${reference}` : ''}`,
+    body: `${t.short}, ${whenText}`,
+    url: caseId ? `/admin/case/${caseId}` : '/admin/',
+    tag: reference || undefined
+  });
 
   return json({ ok: true, reference, when: whenText, paid: t.paid, fee: feeText(type), bank: t.paid ? PAYMENT_BANK : null });
 }

@@ -3,7 +3,8 @@ import { verifyTurnstile, reportBlockedSubmission } from './_lib/turnstile.js';
 import { sendBrevoEmail, bytesToBase64 } from './_lib/brevo.js';
 import { recordsEnabled, recordSubmission } from './_lib/records.js';
 import { documentContentType } from './_lib/cases.js';
-import { kycAdminEmail, kycClientEmail, blockedSubmissionEmail } from './_lib/email-templates.js';
+import { kycAdminEmail, kycClientEmail, blockedSubmissionEmail, adminNoticeEmail } from './_lib/email-templates.js';
+import { notifyAdmins } from './_lib/webpush.js';
 
 // "Documents" supports multiple files (the new lean intake form uses one
 // multi-file dropzone instead of several single-purpose upload fields).
@@ -115,7 +116,7 @@ export async function onRequestPost(context) {
         to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
         subject: 'Action needed: an application was blocked by the security check',
         html: blockedSubmissionEmail({ formLabel: 'An application', rows })
-      }));
+      }).then(() => notifyAdmins(env, { title: 'Application blocked by the security check', body: 'Check your email for the visitor\u2019s contact details.', url: '/admin/' })));
       return jsonResponse({ error: 'The security check did not complete. Please refresh the page and submit again, or message us on WhatsApp: +234 703 833 6596.' }, 400);
     }
 
@@ -213,12 +214,30 @@ export async function onRequestPost(context) {
     else if (linkOnly) notes.push(`${attachments.length} document${attachments.length === 1 ? '' : 's'} saved securely. Open the case in the dashboard to view ${attachments.length === 1 ? 'it' : 'them'}.`);
     const attachmentsNote = notes.join(' ');
 
-    await sendBrevoEmail(env, {
-      to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
-      subject: `${reference ? `[${reference}] ` : ''}Client Intake Received: ${subjectServices}`,
-      html: kycAdminEmail({ fields: maskIds(fields), services, attachmentsNote, reference, recordStatus, caseUrl, documentsSaved: linkOnly && attachments.length > 0 }),
-      replyTo: { email, name: fullName },
-      attachments: linkOnly ? [] : attachments
+    // Saved to the dashboard: send a short alert only. Not saved: send everything so nothing is lost.
+    if (linkOnly) {
+      await sendBrevoEmail(env, {
+        to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
+        subject: `[${reference}] New application: ${subjectServices}`,
+        html: adminNoticeEmail({
+          heading: 'New application', reference, services, caseUrl,
+          lines: [`${attachments.length} document${attachments.length === 1 ? '' : 's'} received${skippedFiles.length ? `; ${skippedFiles.length} could not be received` : ''}.`]
+        })
+      });
+    } else {
+      await sendBrevoEmail(env, {
+        to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
+        subject: `${reference ? `[${reference}] ` : ''}Client Intake Received: ${subjectServices}`,
+        html: kycAdminEmail({ fields: maskIds(fields), services, attachmentsNote, reference, recordStatus, caseUrl, documentsSaved: false }),
+        replyTo: { email, name: fullName },
+        attachments
+      });
+    }
+    await notifyAdmins(env, {
+      title: `New application${reference ? ` ${reference}` : ''}`,
+      body: subjectServices,
+      url: caseUrl ? new URL(caseUrl).pathname : '/admin/cases',
+      tag: reference || undefined
     });
 
     await sendBrevoEmail(env, {

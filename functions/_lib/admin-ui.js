@@ -106,6 +106,12 @@ export function flashHtml(flash) {
 
 // ── Styles ──────────────────────────────────────────────────────
 const STYLE = `
+.app-panel { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; background: #EAF2F8; border: 1px solid #c9dcec; border-radius: 14px; padding: 14px 16px; margin: 0 0 18px; }
+.app-panel[hidden] { display: none; }
+.app-panel-text { display: flex; flex-direction: column; gap: 2px; font-size: 14px; color: #0A2C48; }
+.app-panel-text span { font-size: 13px; color: #4a5a6a; }
+.app-panel-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
 :root{
   --navy:#0F3A5F;--navy-900:#0A2C48;--navy-800:#0d3556;--blue:#2F80ED;--blue-50:#EAF3FE;
   --bg:#F3F6FA;--card:#fff;--line:#E3EAF2;--line-2:#EEF2F7;--text:#1C2733;--muted:#677585;
@@ -355,7 +361,7 @@ export function shell({ title, active, body, admin, badges = {} }) {
   </aside>
   <div class="main">
     <div class="topbar">${brand()}${logout}</div>
-    <main class="content">${body}</main>
+    <main class="content"><div id="app-panel" class="app-panel" hidden></div>${body}</main>
   </div>
 </div>
 <nav class="bottom-nav">${NAV.map(n => `<a href="${n.href}" class="${n.key === active ? 'on' : ''}">${icon(n.icon, 22)}<span>${n.label}</span>${badges[n.key] ? `<span class="count">${badges[n.key]}</span>` : ''}</a>`).join('')}</nav>`);
@@ -373,8 +379,16 @@ export function htmlDocument(title, body) {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0A2C48">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Awal Admin">
+<link rel="manifest" href="/admin/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/images/app/icon-192.png">
+<link rel="apple-touch-icon" href="/assets/images/app/apple-touch-icon.png">
 <title>${esc(title)} · Awal Case Manager</title>
 <style>${STYLE}</style>
+<script src="/admin/app.js" defer></script>
 </head>
 <body><!--email_off-->${body}<!--/email_off--></body>
 </html>`;

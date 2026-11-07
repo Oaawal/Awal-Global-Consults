@@ -186,6 +186,19 @@ export function blockedSubmissionEmail({ formLabel, rows }) {
   });
 }
 
+
+// ── Short admin alert: no client details, just a link to the dashboard ──
+export function adminNoticeEmail({ heading, reference, services = [], lines = [], caseUrl }) {
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:19px;margin:0 0 6px;">${escapeHtml(heading)}</h2>
+    <div style="font-size:13px;color:${MUTED};margin-bottom:14px;">Reference <strong style="color:${NAVY};">${escapeHtml(reference)}</strong></div>
+    ${serviceListHtml(services)}
+    ${lines.map(l => `<p style="font-size:13px;color:${TEXT};margin:0 0 8px;">${escapeHtml(l)}</p>`).join('')}
+    <p style="margin:18px 0 10px;"><a href="${escapeHtml(caseUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Open in dashboard</a></p>
+    <p style="font-size:12px;color:${MUTED};margin:0;">Client details and documents are kept only in the dashboard. Remember to reply within 1 working day.</p>`;
+  return shell(inner, { preheader: `${heading} (${reference})` });
+}
+
 // ── Case status update email to the client ──────────────────────
 export function caseStatusEmail({ fullName, reference, statusLabel, statusMessage, note, askForReview = false }) {
   const inner = `
