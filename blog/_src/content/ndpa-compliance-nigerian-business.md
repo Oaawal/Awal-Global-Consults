@@ -3,10 +3,11 @@ title: "NDPA Compliance: Does Your Nigerian Business Need to Register with the N
 seo_title: NDPA Compliance: Do You Need to Register with the NDPC?
 slug: ndpa-compliance-nigerian-business
 date: 2026-09-05
+updated: 2026-11-07
 topic: data-protection
 category: regulatory-licensing
-description: Whether your Nigerian business needs to register as a data controller or processor under the NDPA, what the GAID's registration tiers actually mean, and the compliance basics most businesses get wrong.
-excerpt: A specific number of data subjects is the real trigger for NDPC registration, not company size or industry. Here's the threshold, the tiers, and what compliance actually requires beyond a privacy policy.
+description: Whether your Nigerian business must register with the NDPC as a data controller or processor of major importance, the official tiers and fees, and the compliance basics most businesses get wrong.
+excerpt: Processing data of more than 200 people in six months, or working in one of 13 designated sectors, makes you a data controller of major importance. Here are the triggers, the tiers and official fees, and what compliance requires beyond a privacy policy.
 cta_text: Awal Global Consults reviews your data handling against the NDPA's actual requirements and manages NDPC registration where it applies, rather than a generic privacy policy template.
 whatsapp_topic: NDPA compliance
 ---
@@ -26,7 +27,13 @@ If you've seen "NDPR" referenced somewhere and are wondering how it relates to t
 The number of data subjects, processed within any rolling six-month window, that triggers mandatory NDPC registration as a data controller or processor
 :::
 
-If your business processes personal data (customer records, employee data, user accounts, anything tied to an identifiable person) for **200 or more people within a rolling six-month period**, you're required to register with the NDPC as a data controller or data processor. This isn't about your revenue, your staff count, or your industry. It's about how many people's data actually passes through your systems.
+The NDPC's Guidance Notice on registration says you are a data controller or processor **of major importance**, and must register, if you keep or have access to a filing system of personal data (paper or digital) and any one of these applies:
+
+- you process the personal data of **more than 200 people in six months** (customers, staff, students, patients, users); or
+- you provide **commercial ICT services on devices that belong to other people**, such as phone or computer repair; or
+- you operate in a **designated sector**: aviation, communication, education, electric power, export and import, financial, health, hospitality, insurance, oil and gas, tourism, e-commerce or public service.
+
+So for most businesses the number of people is the trigger, but in those sectors registration applies whatever your numbers.
 
 ::: callout
 A small business can cross this threshold faster than its owner expects. A retailer with an online store, a clinic with a patient list, a school with enrolled students, or a consultancy running WhatsApp-based client intake can all reach 200 data subjects well before they'd describe themselves as a "big" business.
@@ -34,13 +41,19 @@ A small business can cross this threshold faster than its owner expects. A retai
 
 ## The tiers above the threshold
 
-Once you're above the 200 threshold, the GAID sorts registered controllers and processors into tiers based on data volume and sector, each with its own compliance load:
+Once you're of major importance, the NDPC sorts you into one of three tiers by data volume and sector, each with its own fee and duties:
 
-| Tier | Who it covers | What it requires |
+| Tier | Who it covers | NDPC fee (yearly) |
 |---|---|---|
-| Entry-level (OHL) | Businesses processing roughly 200–999 data subjects in six months; schools, training providers, primary health centres, and similar | Baseline registration and compliance obligations |
-| Mid-tier (EHL) | Roughly 1,000–5,000 data subjects in six months; government agencies, microfinance/mortgage banks, higher institutions, tertiary/secondary hospitals | Heavier compliance obligations tied to sector and volume |
-| Ultra-high level (UHL) | The highest-volume and most sensitive processing | Mandatory Data Protection Impact Assessments (DPIAs), a qualified Data Protection Officer (DPO), and an annual Compliance Audit Return (CAR) |
+| Ordinary-High Level (OHL) | 200 to 1,000 data subjects in six months; primary and secondary schools, corporate training providers, primary health centres, independent laboratories, hotels and guest houses with fewer than 50 rooms | ₦10,000 |
+| Extra-High Level (EHL) | 1,000 to 5,000 data subjects in six months; government agencies, microfinance and mortgage banks, higher institutions, secondary and tertiary hospitals | ₦100,000 |
+| Ultra-High Level (UHL) | More than 5,000 data subjects in six months; commercial banks, telecoms, insurers, multinationals, electricity distribution, oil and gas, payment gateways and fintechs, public social media and email apps, device manufacturers | ₦250,000 |
+
+Ultra-High Level controllers also pay ₦5,000 a year for each data processor they engage. Ultra-High and Extra-High Level organisations file an annual **Compliance Audit Return** by 31 March, and every filing must carry a verification statement from a licensed Data Protection Compliance Organisation (DPCO).
+
+**Who does not need to register:** traders and artisans who don't pass personal data on as part of their trade; traders with fewer than 15 employees, and artisans, who keep no customer filing system beyond routine contacts and receipts. The NDPC also exempts community-based associations, faith-based organisations, embassies, courts and tribunals, and multigovernmental organisations. The NDPC's registration period has now closed, so registrations attract a **50% late penalty** on top of the fee; newly incorporated companies (six months or less) can ask the NDPC to waive it, by letter with their Certificate of Incorporation.
+
+*Source: NDPC Guidance Notice on Registration of Data Controllers and Data Processors of Major Importance, NDPC/HQ/GN/VOL.03/B/24 (19 December 2024).* See our [NDPC registration service](/data-protection).
 
 A **Data Protection Officer** becomes mandatory specifically for data controllers or processors "of major importance", broadly, organisations at the higher tiers, or those in a regulated sector, and that person is expected to have genuine expertise in data protection law and practice, not just a title added to someone's existing role.
 

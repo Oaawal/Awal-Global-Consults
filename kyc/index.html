@@ -325,7 +325,9 @@
         <div class="service-grid">
           <label class="svc-btn"><input type="checkbox" name="svc" value="Business Permits & Regulatory Licensing" onchange="onSvcChange()"><div><div class="svc-btn-text">Business Permits &amp; Regulatory Licensing</div><div class="svc-btn-sub">NIPC, operational permits &amp; general compliance</div></div></label>
           <label class="svc-btn"><input type="checkbox" name="svc" value="Expatriate Quota / CERPAC" onchange="onSvcChange()"><div><div class="svc-btn-text">Expatriate Quota / CERPAC</div><div class="svc-btn-sub">Foreign staff compliance</div></div></label>
-          <label class="svc-btn"><input type="checkbox" name="svc" value="NDPA / Data Protection" onchange="onSvcChange()"><div><div class="svc-btn-text">NDPA / Data Protection</div><div class="svc-btn-sub">Compliance &amp; audit</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="NDPC Registration (Data Controller / Processor)" onchange="onSvcChange()"><div><div class="svc-btn-text">NDPC Registration (DC/DP)</div><div class="svc-btn-sub">Data controller or processor of major importance</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="NDPC Compliance Audit Return" onchange="onSvcChange()"><div><div class="svc-btn-text">NDPC Compliance Audit Return</div><div class="svc-btn-sub">Annual return, due 31 March</div></div></label>
+          <label class="svc-btn"><input type="checkbox" name="svc" value="DPCO Licence Application" onchange="onSvcChange()"><div><div class="svc-btn-text">DPCO Licence Application</div><div class="svc-btn-sub">Become a Data Protection Compliance Organisation</div></div></label>
         </div>
       </div>
 
@@ -594,7 +596,9 @@ const SERVICE_HINTS = {
   "SCUML Registration": ["CAC certificate", "NIN of each director or proprietor, and of the compliance officer", "BVN", "DNFBP business category", "Compliance officer details"],
   "Business Permits & Regulatory Licensing": ["CAC certificate", "TIN number", "Type of permit or registration required", "MEMART & proof of investment capital, if a foreign investor (NIPC)"],
   "Expatriate Quota / CERPAC": ["CAC certificate", "Valid passport of expatriate", "Employment letter/contract"],
-  "NDPA / Data Protection": ["CAC certificate", "Description of data processing activities", "Current privacy policy, if any"],
+  "NDPC Registration (Data Controller / Processor)": ["CAC certificate, RC/BN number and incorporation date (new companies may get the late penalty waived)", "Sector, and what personal data you collect, why and from whom", "Roughly how many people's data you handled in the last 6 months", "Data Protection Officer's name, contact and qualifications", "Details of a representative (director or manager)", "Security measures you use (passwords, access control, backups, encryption)", "Current privacy policy, if any"],
+  "NDPC Compliance Audit Return": ["NDPC registration details", "Your privacy notice and data protection policy", "List of systems and suppliers that hold personal data", "Staff training records and any breach log"],
+  "DPCO Licence Application": ["CAC certificate", "Evidence of tax clearance", "Qualifications or certificates of at least 2 staff in data protection, information security or a related field", "Valid ID of one director", "Your website on a .ng domain"],
   "Intellectual Property Registration": ["The word, name, logo, or work to be registered", "Trademark class (we can advise) or the work's creation year/author", "Applicant or creator's name & address", "Logo file or a sample of the work, if applicable"],
   "Legal Advisory": ["Brief description of the issue", "Any existing related documents"],
   "Legal Documentation": ["Type of document needed (affidavit, agreement, MOU, employment contract, or privacy policy/terms)", "Parties involved & their roles", "Key terms or purpose to be captured"],

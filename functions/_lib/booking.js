@@ -32,7 +32,7 @@ export const CONSULT_TYPES = {
     short: 'Free registration call',
     minutes: 20,
     paid: false,
-    covers: 'CAC registration (business name, company, incorporated trustees), trademarks, annual returns, TIN, SCUML, NEPC export licence and other licences'
+    covers: 'CAC registration (business name, company, incorporated trustees), trademarks, annual returns, TIN, SCUML, NDPC data protection registration, NEPC export licence and other licences'
   },
   'free-identity': {
     label: 'Free 20-minute call: passport, NIN and identity',
