@@ -20,6 +20,7 @@ import { statusInfo, SITE_URL } from './cases.js';
 import { backupDatabase } from './compliance.js';
 import { backupDocuments, verifyBackups, recentSignIns } from './security.js';
 import { securityAlertEmail } from './email-templates.js';
+import { ensureBounceWebhook } from './bounces.js';
 
 const DAY_MS = 86400000;
 const REMINDER_DAYS = [3, 7];          // reminder 1 after 3 days, reminder 2 after 7
@@ -272,6 +273,9 @@ export async function runDailyJob(env, request, { now = new Date() } = {}) {
   } catch (err) {
     console.error('daily job: backup failed:', err && err.message);
   }
+
+  // Bounce alerts: make sure Brevo is set up to tell us about undeliverable emails
+  try { await ensureBounceWebhook(env); } catch (err) { console.error('daily job: bounce webhook not set up:', err && err.message); }
 
   let docBackup = null, verify = null;
   try { docBackup = await backupDocuments(env); } catch (err) { console.error('daily job: document backup failed:', err && err.message); docBackup = { enabled: true, error: true }; }

@@ -27,6 +27,7 @@ import {
 import { statusesFor, statusInfo, retentionFor, documentContentType, autoFollowUp } from '../_lib/cases.js';
 import { MANIFEST, SERVICE_WORKER, APP_SCRIPT } from '../_lib/admin-app.js';
 import { vapidKeys, notifyAdmins } from '../_lib/webpush.js';
+import { bounceSettings, ensureBounceWebhook } from '../_lib/bounces.js';
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
@@ -174,6 +175,17 @@ export async function onRequest(context) {
   const actor = `admin:${admin}`;
   const ip = request.headers.get('CF-Connecting-IP');
   const flash = flashFor(url.searchParams.get('done'));
+
+  if (route === '/bounce-alerts' && method === 'POST') {
+    try {
+      await ensureBounceWebhook(env, url.origin);
+      await audit(env, request, actor, 'bounces.enabled', 'admin', admin, null);
+      return redirect('/admin/records?done=bounces#security');
+    } catch (err) {
+      console.error('bounce webhook:', err && err.message);
+      return redirect('/admin/records?done=bounces_failed#security');
+    }
+  }
 
   // ── App notifications (this device) ─────────────────────────
   if (route === '/push/key' && method === 'GET') {
@@ -534,6 +546,7 @@ export async function onRequest(context) {
     try { backupStatus = lastRun ? { date: lastRun.run_date, ...JSON.parse(lastRun.detail) } : null; } catch (e) {}
     return html(recordsPage({
       signIns: await recentSignIns(env, new Date(Date.now() - 14 * 86400000).toISOString(), 8), backupStatus,
+      bounceOn: !!(await bounceSettings(env).catch(() => null)),
       admin, badges: await navBadges(env), due: due.results || [], holds: holds.results || [], requests: requests.results || [],
       backups: await listBackups(env), stats: { kept: s.kept || 0, erased: s.erased || 0 }, flash
     }));

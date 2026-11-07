@@ -13,6 +13,8 @@ export { esc };
 
 // Messages shown after an action (?done=key)
 const FLASH = {
+  bounces: ['ok', 'Bounce alerts are on. You will be alerted when an email to a client cannot be delivered.'],
+  bounces_failed: ['err', 'Bounce alerts could not be turned on: Brevo did not accept the request. Try again later.'],
   status: ['ok', 'Status updated.'],
   status_emailed: ['ok', 'Status updated and the client was emailed.'],
   status_email_failed: ['err', 'Status updated, but the email to the client could not be sent.'],
@@ -176,7 +178,7 @@ export function casesPage({ admin, badges, rows, view, q, counts }) {
 
 // ── Case detail ─────────────────────────────────────────────────
 function eventIcon(event) {
-  return { created: 'inbox', status_changed: 'arrow', client_notified: 'mail', reminder_sent: 'bell', note: 'doc', follow_up: 'clock', legal_hold: 'lock', erased: 'trash' }[event] || 'activity';
+  return { created: 'inbox', status_changed: 'arrow', client_notified: 'mail', reminder_sent: 'bell', note: 'doc', follow_up: 'clock', legal_hold: 'lock', erased: 'trash', email_bounced: 'mail' }[event] || 'activity';
 }
 
 function eventLabel(e, kind) {
@@ -189,6 +191,7 @@ function eventLabel(e, kind) {
     case 'follow_up': return 'Follow-up updated';
     case 'legal_hold': return 'Legal hold changed';
     case 'erased': return 'Personal data erased';
+    case 'email_bounced': return 'Email to the client bounced';
     default: return e.event;
   }
 }
@@ -482,7 +485,7 @@ export function clientPage({ admin, badges, client, cases, requests, eraseCheck,
 }
 
 // ── Records (compliance) ────────────────────────────────────────
-export function recordsPage({ admin, badges, due, holds, requests, backups, stats, flash, signIns = [], backupStatus = null }) {
+export function recordsPage({ admin, badges, due, holds, requests, backups, stats, flash, signIns = [], backupStatus = null, bounceOn = false }) {
   const dueList = due.length ? `<div class="rows">${due.map(c => `<a class="row" href="/admin/case/${esc(c.id)}?tab=records">${avatar(c.full_name)}
       <div class="row-main"><div class="row-title">${esc(c.full_name)}</div><div class="row-sub">${esc(c.reference)} · kept until ${esc(fmtDay(c.retain_until))}</div></div>
       <div class="row-side">${pill('Review', 'amber')}</div></a>`).join('')}</div>`
@@ -517,6 +520,8 @@ export function recordsPage({ admin, badges, due, holds, requests, backups, stat
   const security = `<div class="card" id="security"><div class="card-head"><h2>Security</h2><span class="small muted">Alerts go to every admin email</span></div>
       <div class="card-body"><p class="small"><strong>Document backups:</strong> ${esc(docLine)}</p><p class="small"><strong>Backup check:</strong> ${verifyLine}</p>
       <div id="push-settings" style="margin-bottom:12px;"></div>
+      <p class="small"><strong>Bounce alerts:</strong> ${bounceOn ? 'on: you are alerted when an email to a client cannot be delivered' : 'off'}</p>
+      ${bounceOn ? '' : '<form method="post" action="/admin/bounce-alerts" style="margin-bottom:12px;"><button class="btn primary sm" type="submit">Turn on bounce alerts</button></form>'}
       <form method="post" action="/admin/logout" data-confirm="Sign out every device, including this one?"><input type="hidden" name="scope" value="all"><button class="btn ghost sm" type="submit">${icon('logout', 16)}Sign out all devices</button></form></div>
       ${signInList}</div>`;
 
@@ -554,7 +559,7 @@ const ACTION_LABELS = {
   'case.note_added': 'Note added', 'case.follow_up_set': 'Follow-up updated', 'case.reminder_sent': 'Automatic reminder sent',
   'case.tracked': 'Client checked status online', 'case.legal_hold': 'Legal hold changed', 'case.erased': 'Case erased',
   'document.viewed': 'Document opened', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
-  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
+  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'email.bounced': 'Email bounced', 'bounces.enabled': 'Turned on bounce alerts', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
   'client.viewed': 'Client opened', 'client.updated': 'Client details corrected', 'client.exported': 'Client data exported', 'client.erased': 'Client erased',
   'client.request_logged': 'Data request recorded', 'client.request_done': 'Data request completed', 'backup.downloaded': 'Backup downloaded'
 };
