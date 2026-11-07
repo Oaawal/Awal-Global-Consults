@@ -174,6 +174,18 @@ export function securityAlertEmail({ title, intro, rows = [], action, buttonUrl,
   return shell(inner, { preheader: title });
 }
 
+
+// ── A form submission was rejected by the bot check ─────────────
+export function blockedSubmissionEmail({ formLabel, rows }) {
+  return securityAlertEmail({
+    title: `${formLabel} could not be submitted`,
+    intro: 'Someone filled in this form but the security check did not complete in their browser, so it was not saved and no documents were kept. If these details look genuine, contact them directly.',
+    rows,
+    action: 'The visitor was asked to try again or message you on WhatsApp. If this keeps happening with real clients, tell your web developer.',
+    buttonUrl: null
+  });
+}
+
 // ── Case status update email to the client ──────────────────────
 export function caseStatusEmail({ fullName, reference, statusLabel, statusMessage, note, askForReview = false }) {
   const inner = `

@@ -760,9 +760,21 @@ async function submitKYC() {
 
   try {
     const form = document.getElementById('kyc-form');
+    // Wait up to 15 seconds for the security check to finish before sending
+    if (typeof window.agcRenderTurnstile === 'function') {
+      window.agcRenderTurnstile();
+      for (let i = 0; i < 30 && !window.agcTurnstileToken(form); i++) {
+        btn.textContent = 'Running security check…';
+        await new Promise(r => setTimeout(r, 500));
+      }
+      btn.textContent = 'Submitting…';
+    }
     const fd = new FormData(form);
     const res = await fetch('/submit-kyc', { method: 'POST', body: fd });
-    if (!res.ok) throw new Error('Submission failed');
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      const e = new Error('Submission failed'); e.userMessage = errBody.error; throw e;
+    }
     const result = await res.json().catch(() => ({}));
 
     document.getElementById('s-name').textContent = name;
@@ -794,7 +806,7 @@ async function submitKYC() {
     // A Turnstile token works once; get a fresh one for the retry
     if (window.turnstile) { try { window.turnstile.reset(); } catch (e) { /* widget not ready */ } }
     btn.disabled = false; btn.textContent = 'Submit Request ✓';
-    submitErr.textContent = 'We could not submit your request. Please check your connection and try again, or send your details directly on WhatsApp: +234 703 833 6596.';
+    submitErr.textContent = (err && err.userMessage) || 'We could not submit your request. Please check your connection and try again, or send your details directly on WhatsApp: +234 703 833 6596.';
     submitErr.style.display = 'block';
     window.scrollTo({top:document.getElementById('stage-review').offsetTop - 20, behavior:'smooth'});
   }

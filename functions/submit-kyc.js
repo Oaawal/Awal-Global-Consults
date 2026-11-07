@@ -1,8 +1,8 @@
-import { verifyTurnstile } from './_lib/turnstile.js';
+import { verifyTurnstile, reportBlockedSubmission } from './_lib/turnstile.js';
 import { sendBrevoEmail, bytesToBase64 } from './_lib/brevo.js';
 import { recordsEnabled, recordSubmission } from './_lib/records.js';
 import { documentContentType } from './_lib/cases.js';
-import { kycAdminEmail, kycClientEmail } from './_lib/email-templates.js';
+import { kycAdminEmail, kycClientEmail, blockedSubmissionEmail } from './_lib/email-templates.js';
 
 // "Documents" supports multiple files (the new lean intake form uses one
 // multi-file dropzone instead of several single-purpose upload fields).
@@ -55,7 +55,15 @@ export async function onRequestPost(context) {
 
     // Bot check (only active once TURNSTILE_SECRET_KEY is configured)
     if (!(await verifyTurnstile(env, formData, request))) {
-      return jsonResponse({ error: 'Security check failed. Please refresh the page and try again.' }, 400);
+      await reportBlockedSubmission(env, request, 'application', {
+        'Name': formData.get('Full_Name'), 'Phone': formData.get('Phone'), 'Email': formData.get('Email'),
+        'Services': formData.get('Services_Requested')
+      }, rows => sendBrevoEmail(env, {
+        to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
+        subject: 'Action needed: an application was blocked by the security check',
+        html: blockedSubmissionEmail({ formLabel: 'An application', rows })
+      }));
+      return jsonResponse({ error: 'The security check did not complete. Please refresh the page and submit again, or message us on WhatsApp: +234 703 833 6596.' }, 400);
     }
 
     // Group text fields (handles repeated keys like multi-checked checkboxes)

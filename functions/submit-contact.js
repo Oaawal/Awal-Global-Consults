@@ -1,6 +1,6 @@
-import { verifyTurnstile } from './_lib/turnstile.js';
+import { verifyTurnstile, reportBlockedSubmission } from './_lib/turnstile.js';
 import { sendBrevoEmail } from './_lib/brevo.js';
-import { contactAdminEmail, contactClientEmail } from './_lib/email-templates.js';
+import { contactAdminEmail, contactClientEmail, blockedSubmissionEmail } from './_lib/email-templates.js';
 import { recordsEnabled, recordSubmission } from './_lib/records.js';
 
 const HIDDEN_FIELDS = new Set(['Service', 'company_website', 'cf-turnstile-response']);
@@ -39,7 +39,17 @@ export async function onRequestPost(context) {
 
     // Bot check (only active once TURNSTILE_SECRET_KEY is configured)
     if (!(await verifyTurnstile(env, formData, request))) {
-      return jsonResponse({ error: 'Security check failed. Please refresh the page and try again.' }, 400);
+      await reportBlockedSubmission(env, request, 'enquiry', {
+        'Name': formData.get('Full Name') || formData.get('Full_Name') || formData.get('Name'),
+        'Phone': formData.get('Phone Number') || formData.get('Phone_Number') || formData.get('Phone'),
+        'Email': formData.get('Email Address') || formData.get('Email_Address') || formData.get('Email'),
+        'Service': formData.get('Service')
+      }, rows => sendBrevoEmail(env, {
+        to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
+        subject: 'Action needed: an enquiry was blocked by the security check',
+        html: blockedSubmissionEmail({ formLabel: 'An enquiry', rows })
+      }));
+      return jsonResponse({ error: 'The security check did not complete. Please refresh the page and submit again, or message us on WhatsApp: +234 703 833 6596.' }, 400);
     }
 
     const fields = {};

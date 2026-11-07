@@ -3,9 +3,9 @@
  * Saves the booking, records it as an enquiry in the client records (so it
  * shows in the dashboard), and emails the client and the office.
  */
-import { verifyTurnstile } from './_lib/turnstile.js';
+import { verifyTurnstile, reportBlockedSubmission } from './_lib/turnstile.js';
 import { sendBrevoEmail } from './_lib/brevo.js';
-import { bookingClientEmail, bookingAdminEmail } from './_lib/email-templates.js';
+import { bookingClientEmail, bookingAdminEmail, blockedSubmissionEmail } from './_lib/email-templates.js';
 import { recordsEnabled, recordSubmission } from './_lib/records.js';
 import { adminEmails } from './_lib/admin-auth.js';
 import { SITE_URL } from './_lib/cases.js';
@@ -24,7 +24,15 @@ export async function onRequestPost({ request, env }) {
   try { form = await request.formData(); } catch { return json({ error: 'Invalid request' }, 400); }
   if (field(form, 'company_website')) return json({ ok: true });
   if (!(await verifyTurnstile(env, form, request))) {
-    return json({ error: 'Security check failed. Please refresh the page and try again.' }, 400);
+    await reportBlockedSubmission(env, request, 'booking', {
+      'Name': field(form, 'full_name', 120), 'Phone': field(form, 'phone', 40), 'Email': field(form, 'email', 200),
+      'Consultation': field(form, 'type', 40), 'Requested time': field(form, 'slot', 40)
+    }, rows => sendBrevoEmail(env, {
+      to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
+      subject: 'Action needed: a booking was blocked by the security check',
+      html: blockedSubmissionEmail({ formLabel: 'A consultation booking', rows })
+    }));
+    return json({ error: 'The security check did not complete. Please refresh the page and submit again, or message us on WhatsApp: +234 703 833 6596.' }, 400);
   }
 
   const type = field(form, 'type', 40);

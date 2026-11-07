@@ -129,21 +129,46 @@
   });
 
   // ── 3. Cloudflare Turnstile (off until a site key is set) ───────
+  // Rendered explicitly: widgets on visible forms render as soon as the script
+  // loads; the application form's widget sits on its last step, so it renders
+  // only when that step becomes visible (a widget rendered while hidden may never
+  // produce a token).
   if (TURNSTILE_SITE_KEY) {
     const forms = document.querySelectorAll('form.form-grid, form#kyc-form, form[data-turnstile]');
     if (forms.length) {
+      const pending = [];
       forms.forEach(function (form) {
-        if (form.querySelector('.cf-turnstile')) return;
+        if (form.querySelector('.agc-turnstile')) return;
         const widget = document.createElement('div');
-        widget.className = 'cf-turnstile';
-        widget.setAttribute('data-sitekey', TURNSTILE_SITE_KEY);
+        widget.className = 'agc-turnstile';
         widget.style.margin = '12px 0';
         const anchor = form.querySelector('#decl-error') || form.querySelector('.form-actions') || form.querySelector('button[type="submit"]');
         if (anchor) anchor.insertAdjacentElement('beforebegin', widget);
         else form.appendChild(widget);
+        pending.push(widget);
       });
+      const isVisible = function (el) { return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length); };
+      const render = function (el) {
+        if (el.dataset.rendered || !window.turnstile || !isVisible(el)) return;
+        el.dataset.rendered = '1';
+        try {
+          window.turnstile.render(el, { sitekey: TURNSTILE_SITE_KEY, 'refresh-expired': 'auto', 'retry': 'auto' });
+        } catch (e) { delete el.dataset.rendered; }
+      };
+      window.agcRenderTurnstile = function () { pending.forEach(render); };
+      window.agcTurnstileToken = function (form) {
+        const el = form && form.querySelector('.agc-turnstile');
+        if (!el || !window.turnstile || !el.dataset.rendered) return '';
+        try { return window.turnstile.getResponse(el) || ''; } catch (e) { return ''; }
+      };
+      window.agcTurnstileOnload = function () {
+        window.agcRenderTurnstile();
+        // Render hidden widgets (the application form's last step) once they appear
+        const obs = new MutationObserver(function () { window.agcRenderTurnstile(); });
+        obs.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['class', 'style'] });
+      };
       const s = document.createElement('script');
-      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=agcTurnstileOnload';
       s.async = true;
       s.defer = true;
       document.head.appendChild(s);
