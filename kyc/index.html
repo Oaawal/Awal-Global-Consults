@@ -343,6 +343,7 @@
       <div class="service-category">
         <div class="cat-label">Identity, Immigration &amp; Digital</div>
         <div class="service-grid">
+          <label class="svc-btn"><input type="checkbox" name="svc" value="International Passport (E-passport)" onchange="onSvcChange()"><div><div class="svc-btn-text">International Passport (E-passport)</div><div class="svc-btn-sub">New passport, renewal or replacement</div></div></label>
           <label class="svc-btn"><input type="checkbox" name="svc" value="NIN Registration & Correction" onchange="onSvcChange()"><div><div class="svc-btn-text">NIN Registration &amp; Correction</div><div class="svc-btn-sub">New NIN, retrieval, or record update</div></div></label>
           <label class="svc-btn"><input type="checkbox" name="svc" value="Export / Import Licensing" onchange="onSvcChange()"><div><div class="svc-btn-text">Export / Import Licensing</div><div class="svc-btn-sub">Trade documentation</div></div></label>
           <label class="svc-btn"><input type="checkbox" name="svc" value="Student Visa & Relocation" onchange="onSvcChange()"><div><div class="svc-btn-text">Student Visa &amp; Relocation</div><div class="svc-btn-sub">Application &amp; profile support</div></div></label>
@@ -413,6 +414,45 @@
       <div class="people-error" id="people-error"></div>
     </div>
     <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter"></span><button type="button" class="btn btn-next" onclick="goNext('people')">Continue →</button></div>
+  </div>
+</div>
+
+<!-- ═══ STAGE 2c — E-PASSPORT APPLICATION ═══ -->
+<div class="stage" id="stage-passport">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num">3</div><div><div class="stage-title">E-Passport Application Form</div><div class="stage-sub">Exactly as it appears on your NIN record</div></div></div>
+    <div class="stage-body">
+      <div class="notice blue">Enter your details exactly as they appear on your NIN record. A mismatch between your NIN and passport details is the most common cause of delay. <button type="button" class="copy-me" onclick="copyMyPassportDetails()" style="margin-left:6px;">Use my details from step 2</button></div>
+      <div class="sec-label">Applicant</div>
+      <div class="field-row"><div class="field" id="pw-pp-surname"><label>Surname <span class="req">*</span></label><input type="text" name="Passport_Surname" id="pp-surname" placeholder="" /><span class="err-msg">Required</span></div><div class="field" id="pw-pp-first"><label>First name <span class="req">*</span></label><input type="text" name="Passport_First_Name" id="pp-first" placeholder="" /><span class="err-msg">Required</span></div></div>
+      <div class="field-row"><div class="field" id="pw-pp-middle"><label>Middle name <span class="opt">(optional)</span></label><input type="text" name="Passport_Middle_Name" id="pp-middle" placeholder="" /><span class="err-msg">Required</span></div><div class="field" id="pw-pp-sex"><label>Sex <span class="req">*</span></label><select name="Passport_Sex" id="pp-sex"><option value="">Select</option><option>Female</option><option>Male</option></select><span class="err-msg">Required</span></div></div>
+      <div class="field-row"><div class="field" id="pw-pp-dob"><label>Date of birth <span class="req">*</span></label><input type="date" name="Passport_Date_of_Birth" id="pp-dob" placeholder="" /><span class="err-msg">Required</span></div><div class="field" id="pw-pp-pob"><label>Place of birth <span class="req">*</span></label><input type="text" name="Passport_Place_of_Birth" id="pp-pob" placeholder="Town or city" /><span class="err-msg">Required</span></div></div>
+      <div class="field-row"><div class="field" id="pw-pp-nin"><label>National ID No (NIN) <span class="req">*</span></label><input type="text" name="Passport_NIN" id="pp-nin" placeholder="11-digit NIN" inputmode="numeric" maxlength="11"/><span class="err-msg">Enter the 11-digit NIN</span></div><div class="field" id="pw-pp-marital"><label>Marital status <span class="req">*</span></label><select name="Passport_Marital_Status" id="pp-marital"><option value="">Select</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option></select><span class="err-msg">Required</span></div></div>
+      <div class="field-row"><div class="field" id="pw-pp-occupation"><label>Occupation <span class="req">*</span></label><input type="text" name="Passport_Occupation" id="pp-occupation" placeholder="" /><span class="err-msg">Required</span></div><div class="field" id="pw-pp-hometown"><label>Home town <span class="req">*</span></label><input type="text" name="Passport_Home_Town" id="pp-hometown" placeholder="" /><span class="err-msg">Required</span></div></div>
+      <div class="field-row"><div class="field" id="pw-pp-origin"><label>State of origin <span class="req">*</span></label><select name="Passport_State_of_Origin" id="pp-origin"><option value="">Select state</option><option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option><option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option><option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option><option>Ekiti</option><option>Enugu</option><option>FCT (Abuja)</option><option>Gombe</option><option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option><option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option><option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option><option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option><option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option><option>Zamfara</option></select><span class="err-msg">Required</span></div><div class="field" id="pw-pp-lga"><label>Local government area (of origin) <span class="req">*</span></label><input type="text" name="Passport_LGA_of_Origin" id="pp-lga" placeholder="" /><span class="err-msg">Required</span></div></div>
+      <div class="field-row one"><div class="field" id="pw-pp-address"><label>Address <span class="req">*</span></label><input type="text" name="Passport_Address" id="pp-address" placeholder="House number, street, town" /><span class="err-msg">Required</span></div></div>
+      <div class="field-row"><div class="field" id="pw-pp-addrlga"><label>Local government of address <span class="req">*</span></label><input type="text" name="Passport_LGA_of_Address" id="pp-addrlga" placeholder="" /><span class="err-msg">Required</span></div><div class="field" id="pw-pp-residence"><label>State of residence <span class="req">*</span></label><select name="Passport_State_of_Residence" id="pp-residence"><option value="">Select state</option><option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option><option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option><option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option><option>Ekiti</option><option>Enugu</option><option>FCT (Abuja)</option><option>Gombe</option><option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option><option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option><option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option><option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option><option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option><option>Zamfara</option></select><span class="err-msg">Required</span></div></div>
+      <div class="field-row"><div class="field" id="pw-pp-phone"><label>Phone number <span class="req">*</span></label><input type="tel" name="Passport_Phone" id="pp-phone" placeholder="" maxlength="17"/><span class="err-msg">Enter a valid phone number</span></div><div class="field" id="pw-pp-email"><label>Email address <span class="req">*</span></label><input type="email" name="Passport_Email" id="pp-email" placeholder="name@email.com"/><span class="err-msg">Enter a valid email</span><span class="email-note"></span></div></div>
+      <div class="sec-label" style="margin-top:8px;">Previous passport</div>
+      <div class="field-row"><div class="field" id="pw-pp-had"><label>Have you obtained an e-passport before? <span class="req">*</span></label><select name="Passport_Previous_E_Passport" id="pp-had"><option value="">Select</option><option>No</option><option>Yes</option></select><span class="err-msg">Required</span></div><div class="field" id="pw-pp-booklet"><label>Passport booklet wanted <span class="opt">(optional)</span></label><select name="Passport_Booklet" id="pp-booklet"><option value="">Not sure</option><option>32 pages, 5 years</option><option>64 pages, 10 years</option></select><span class="err-msg">Required</span></div></div>
+      <div id="pp-prev" style="display:none;">
+        <div class="field-row"><div class="field" id="pw-pp-ppno"><label>Passport number <span class="req">*</span></label><input type="text" name="Passport_Existing_Passport_Number" id="pp-ppno" placeholder="" /><span class="err-msg">Enter the passport number</span></div><div class="field" id="pw-pp-ppplace"><label>Place of issue <span class="req">*</span></label><input type="text" name="Passport_Existing_Place_of_Issue" id="pp-ppplace" placeholder="" /><span class="err-msg">Required</span></div></div>
+        <div class="field-row"><div class="field" id="pw-pp-ppissue"><label>Date of issue <span class="req">*</span></label><input type="date" name="Passport_Existing_Date_of_Issue" id="pp-ppissue" placeholder="" /><span class="err-msg">Required</span></div><div class="field" id="pw-pp-ppexpiry"><label>Expiry date <span class="req">*</span></label><input type="date" name="Passport_Existing_Expiry_Date" id="pp-ppexpiry" placeholder="" /><span class="err-msg">Required</span></div></div>
+      </div>
+      <div class="sec-label" style="margin-top:8px;">Next of kin</div>
+      <div class="field-row"><div class="field" id="pw-pp-nokname"><label>Next of kin (full name) <span class="req">*</span></label><input type="text" name="Passport_Next_of_Kin_Name" id="pp-nokname" placeholder="" /><span class="err-msg">Required</span></div><div class="field" id="pw-pp-nokrel"><label>Relationship with next of kin <span class="req">*</span></label><select name="Passport_Next_of_Kin_Relationship" id="pp-nokrel"><option value="">Select</option><option>Spouse</option><option>Father</option><option>Mother</option><option>Son</option><option>Daughter</option><option>Brother</option><option>Sister</option><option>Uncle</option><option>Aunt</option><option>Cousin</option><option>Guardian</option><option>Other relative</option></select><span class="err-msg">Required</span></div></div>
+      <div class="field-row one"><div class="field" id="pw-pp-nokaddr"><label>Address of next of kin <span class="req">*</span></label><input type="text" name="Passport_Next_of_Kin_Address" id="pp-nokaddr" placeholder="House number, street, town" /><span class="err-msg">Required</span></div></div>
+      <div class="field-row"><div class="field" id="pw-pp-noklga"><label>Local government of address <span class="req">*</span></label><input type="text" name="Passport_Next_of_Kin_LGA" id="pp-noklga" placeholder="" /><span class="err-msg">Required</span></div><div class="field" id="pw-pp-nokstate"><label>State of residence <span class="req">*</span></label><select name="Passport_Next_of_Kin_State" id="pp-nokstate"><option value="">Select state</option><option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option><option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option><option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option><option>Ekiti</option><option>Enugu</option><option>FCT (Abuja)</option><option>Gombe</option><option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option><option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option><option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option><option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option><option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option><option>Zamfara</option></select><span class="err-msg">Required</span></div></div>
+      <div class="field-row"><div class="field" id="pw-pp-nokphone"><label>Next of kin phone number <span class="req">*</span></label><input type="tel" name="Passport_Next_of_Kin_Phone" id="pp-nokphone" placeholder="" maxlength="17"/><span class="err-msg">Enter a valid phone number</span></div><div class="field"></div></div>
+      <div class="sec-label" style="margin-top:8px;">Supporting documents</div>
+      <div class="field-row one"><div class="field" id="pw-pp-lgacert"><label>Certificate of Local Government of Origin <span class="req">*</span></label>
+        <input type="file" name="LGA_Certificate" id="pp-lgacert" accept=".pdf,.jpg,.jpeg,.png"/>
+        <label class="chk-inline" style="text-transform:none;font-weight:500;letter-spacing:0;margin-top:8px;"><input type="checkbox" id="pp-lgalater" name="Passport_LGA_Certificate_Later" value="Yes"/> I will send it on WhatsApp later</label>
+        <span class="err-msg">Upload the certificate, or tick that you will send it later</span></div></div>
+      <div class="chk-field"><input type="checkbox" id="pp-doa" name="Passport_Declaration_of_Age_Requested" value="Yes"/><label for="pp-doa">Please procure a <strong>Declaration of Age</strong> for me (if you don&rsquo;t have a birth certificate). This is added to your quote.</label></div>
+      <div class="people-error" id="pp-error"></div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter"></span><button type="button" class="btn btn-next" onclick="goNext('passport')">Continue →</button></div>
   </div>
 </div>
 
@@ -602,6 +642,7 @@ const SERVICE_HINTS = {
   "Intellectual Property Registration": ["The word, name, logo, or work to be registered", "Trademark class (we can advise) or the work's creation year/author", "Applicant or creator's name & address", "Logo file or a sample of the work, if applicable"],
   "Legal Advisory": ["Brief description of the issue", "Any existing related documents"],
   "Legal Documentation": ["Type of document needed (affidavit, agreement, MOU, employment contract, or privacy policy/terms)", "Parties involved & their roles", "Key terms or purpose to be captured"],
+  "International Passport (E-passport)": ["NIN (your passport details must match your NIN record)", "Certificate of Local Government of Origin", "Birth certificate, or we can procure a Declaration of Age for you", "Passport photograph", "Old passport data page, if renewing", "Next of kin's name, address and phone number"],
   "NIN Registration & Correction": ["Valid ID (birth certificate, old passport, or voter's card) for new registration, or existing NIN for a correction", "Passport photograph", "Supporting document, if requesting a correction"],
   "Export / Import Licensing": ["CAC certificate", "TIN number", "Nature of goods & trade route"],
   "Student Visa & Relocation": ["Valid international passport", "Academic certificates/transcripts", "Preferred country & institutions"],
@@ -625,14 +666,15 @@ function onSvcChange() {
 // ═══ FLOW ═══
 const REG_SERVICES = ['Business Name Registration', 'Limited Company Registration', 'Incorporated Trustees / NGO'];
 const NIN_SERVICES = REG_SERVICES.concat(['SCUML Registration']);
-const STAGE_LABELS = {services:'Services',details:'Your Details',people:'People',docs:'Documents',review:'Review'};
+const STAGE_LABELS = {services:'Services',details:'Your Details',people:'People',passport:'Passport',docs:'Documents',review:'Review'};
 let ALL_STAGES = ['services','details','docs','review'];
 let currentIdx = 0;
 
 function needsPeople() { return selectedServices.some(s => NIN_SERVICES.includes(s)); }
 function needsSignatures() { return selectedServices.some(s => REG_SERVICES.includes(s)); }
+function needsPassport() { return selectedServices.includes('International Passport (E-passport)'); }
 function computeStages() {
-  ALL_STAGES = needsPeople() ? ['services','details','people','docs','review'] : ['services','details','docs','review'];
+  ALL_STAGES = ['services','details'].concat(needsPeople() ? ['people'] : [], needsPassport() ? ['passport'] : [], ['docs','review']);
 }
 
 function buildProgressBar() {
@@ -666,7 +708,7 @@ function updateProgress() {
 }
 
 function showStage(stageId) {
-  ['services','details','people','docs','review'].forEach(s => document.getElementById('stage-' + s).classList.remove('active'));
+  ['services','details','people','passport','docs','review'].forEach(s => document.getElementById('stage-' + s).classList.remove('active'));
   document.getElementById('stage-' + stageId).classList.add('active');
   currentIdx = ALL_STAGES.indexOf(stageId);
   updateProgress();
@@ -698,6 +740,7 @@ function buildSummary() {
     html += `<div class="summary-title" style="margin-top:14px;">${escapeHtml(peopleConfig().title)}</div>` +
       people.map(p => `<div class="summary-line"><strong>✓</strong> ${escapeHtml(p.name)}: ${escapeHtml(p.role)}${p.shares ? ` (${escapeHtml(p.shares)}%)` : ''}${p.signed ? ', signed' : ''}</div>`).join('');
   }
+  if (needsPassport()) html += `<div class="summary-title" style="margin-top:14px;">E-passport applicant</div><div class="summary-line"><strong>✓</strong> ${escapeHtml(ppv('surname') + ' ' + ppv('first'))}, NIN ending ${escapeHtml(ppv('nin').slice(-4))}${document.getElementById('pp-doa').checked ? ', Declaration of Age requested' : ''}</div>`;
   lines.innerHTML = html;
 }
 
@@ -978,6 +1021,45 @@ function validatePeople() {
   return ok && problems.length === 0;
 }
 
+// ═══ E-PASSPORT ═══
+function ppv(id) { return ((document.getElementById('pp-' + id) || {}).value || '').trim(); }
+function ppErr(id, bad) {
+  const w = document.getElementById('pw-pp-' + id), el = document.getElementById('pp-' + id);
+  if (w) w.classList.toggle('has-err', bad); if (el) el.classList.toggle('err', bad);
+  return !bad;
+}
+function copyMyPassportDetails() {
+  const parts = document.getElementById('fullname').value.trim().split(/\s+/);
+  if (parts.length > 1 && !ppv('surname')) { document.getElementById('pp-first').value = parts[0]; document.getElementById('pp-surname').value = parts[parts.length - 1]; if (parts.length > 2) document.getElementById('pp-middle').value = parts.slice(1, -1).join(' '); }
+  document.getElementById('pp-phone').value = document.getElementById('phone').value;
+  document.getElementById('pp-email').value = document.getElementById('email').value;
+  checkEmailField(document.getElementById('pp-email'));
+}
+document.addEventListener('change', e => {
+  if (e.target && e.target.id === 'pp-had') document.getElementById('pp-prev').style.display = e.target.value === 'Yes' ? '' : 'none';
+});
+function validatePassport() {
+  let ok = true;
+  ['surname','first','sex','pob','occupation','hometown','origin','lga','addrlga','residence','had','nokname','nokrel','noklga','nokstate'].forEach(id => { ok = ppErr(id, !ppv(id)) && ok; });
+  ok = ppErr('address', ppv('address').length < 8) && ok;
+  ok = ppErr('nokaddr', ppv('nokaddr').length < 8) && ok;
+  const dob = new Date(ppv('dob')), age = (Date.now() - dob) / (365.25 * 86400000);
+  ok = ppErr('dob', !ppv('dob') || isNaN(age) || age < 0 || age > 110) && ok;
+  ok = ppErr('nin', !/^\d{11}$/.test(ppv('nin'))) && ok;
+  ok = ppErr('phone', ppv('phone').replace(/\D/g, '').length < 10) && ok;
+  ok = ppErr('nokphone', ppv('nokphone').replace(/\D/g, '').length < 10) && ok;
+  const em = document.getElementById('pp-email');
+  ok = ppErr('email', !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(ppv('email')) || em.dataset.bad === '1') && ok;
+  if (ppv('had') === 'Yes') { ['ppno','ppplace','ppissue','ppexpiry'].forEach(id => { ok = ppErr(id, !ppv(id)) && ok; }); }
+  const cert = document.getElementById('pp-lgacert'), later = document.getElementById('pp-lgalater');
+  const certOk = (cert.files && cert.files.length > 0 && cert.files[0].size <= 7 * 1024 * 1024) || later.checked;
+  document.getElementById('pw-pp-lgacert').classList.toggle('has-err', !certOk); ok = certOk && ok;
+  const box = document.getElementById('pp-error');
+  box.textContent = ok ? '' : 'Please complete the highlighted fields.'; box.style.display = ok ? 'none' : 'block';
+  if (!ok) (document.querySelector('#stage-passport .has-err') || box).scrollIntoView({ behavior: 'smooth', block: 'center' });
+  return ok;
+}
+
 // ═══ EMAIL CHECKS (live, as visitors type) ═══
 const emailCache = {};
 async function checkEmailField(input) {
@@ -1038,6 +1120,7 @@ function validateStage(stageId) {
     return nameOk && phoneOk && emailOk;
   }
   if (stageId === 'people') return validatePeople();
+  if (stageId === 'passport') return validatePassport();
   return true;
 }
 

@@ -9,7 +9,7 @@ import { notifyAdmins } from './_lib/webpush.js';
 // "Documents" supports multiple files (the new lean intake form uses one
 // multi-file dropzone instead of several single-purpose upload fields).
 // Signatures come first so the size budget never squeezes them out.
-const MULTI_FILE_FIELDS = ['Signatures', 'Documents'];
+const MULTI_FILE_FIELDS = ['Signatures', 'LGA_Certificate', 'Documents'];
 
 const HIDDEN_FIELDS = new Set([
   'svc', 'Services_Requested', 'Subject', 'People_Count'
@@ -56,6 +56,27 @@ async function peopleProblem(formData, services, signatureNames) {
     if (Math.abs(shareTotal - 100) > 0.01) return 'Shareholdings must add up to 100%.';
     if (!String(formData.get('Share_Capital') || '').trim()) return 'Please choose the proposed share capital.';
   }
+  return null;
+}
+
+/** Check the e-passport section. Returns an error message for the visitor, or null. */
+async function passportProblem(formData, services, hasLgaCert) {
+  if (!services.includes('International Passport (E-passport)')) return null;
+  const g = k => String(formData.get(`Passport_${k}`) || '').trim();
+  const required = { Surname: 'surname', First_Name: 'first name', Sex: 'sex', Date_of_Birth: 'date of birth', Place_of_Birth: 'place of birth',
+    Address: 'address', LGA_of_Address: 'local government of address', State_of_Residence: 'state of residence', State_of_Origin: 'state of origin',
+    LGA_of_Origin: 'local government area of origin', Home_Town: 'home town', Occupation: 'occupation', Marital_Status: 'marital status',
+    Previous_E_Passport: 'whether you have had an e-passport', Next_of_Kin_Name: 'next of kin', Next_of_Kin_Relationship: 'relationship with next of kin',
+    Next_of_Kin_Address: 'next of kin address', Next_of_Kin_LGA: 'next of kin local government', Next_of_Kin_State: 'next of kin state of residence' };
+  for (const [k, label] of Object.entries(required)) if (!g(k)) return `Passport form: please enter your ${label}.`;
+  if (!/^\d{11}$/.test(g('NIN'))) return 'Passport form: your NIN must be exactly 11 digits.';
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(g('Date_of_Birth'))) return 'Passport form: please enter a valid date of birth.';
+  if (g('Phone').replace(/\D/g, '').length < 10 || g('Next_of_Kin_Phone').replace(/\D/g, '').length < 10) return 'Passport form: please enter valid phone numbers for you and your next of kin.';
+  const ec = await checkEmail(g('Email'));
+  if (!ec.ok) return `Passport form: ${ec.reason}`;
+  if (g('Previous_E_Passport') === 'Yes' && !(g('Existing_Passport_Number') && g('Existing_Date_of_Issue') && g('Existing_Expiry_Date') && g('Existing_Place_of_Issue')))
+    return 'Passport form: please give your previous passport number, dates and place of issue.';
+  if (!hasLgaCert && g('LGA_Certificate_Later') !== 'Yes') return 'Passport form: please upload your Certificate of Local Government of Origin, or tick that you will send it later.';
   return null;
 }
 
@@ -156,7 +177,7 @@ export async function onRequestPost(context) {
         .filter(f => typeof f !== 'string' && f.size > 0)
         .slice(0, MAX_FILES);
       for (const file of files) {
-        const name = safeFileName(file.name, fieldName);
+        const name = fieldName === 'LGA_Certificate' ? `lga-certificate-${safeFileName(file.name, 'certificate')}` : safeFileName(file.name, fieldName);
         // Reject anything that is not a PDF/JPG/PNG, and anything over the size budget
         if (!hasAllowedExtension(name) || file.size > MAX_PER_FILE_BYTES || runningBytes + file.size > MAX_TOTAL_ATTACH_BYTES) {
           skippedFiles.push(name);
@@ -175,6 +196,8 @@ export async function onRequestPost(context) {
       .map(f => safeFileName(f.name, 'signature')).filter(name => !skippedFiles.includes(name));
     const peopleError = await peopleProblem(formData, services, signatureNames);
     if (peopleError) return jsonResponse({ error: peopleError, field: 'people' }, 400);
+    const passportError = await passportProblem(formData, services, storedFiles.some(f => f.name.startsWith('lga-certificate-')));
+    if (passportError) return jsonResponse({ error: passportError, field: 'passport' }, 400);
 
     const subjectServices = services.slice(0, 3).join(', ') || 'New Submission';
 
