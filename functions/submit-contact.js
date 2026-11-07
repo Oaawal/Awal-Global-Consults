@@ -1,3 +1,4 @@
+import { checkEmail } from './_lib/email-check.js';
 import { verifyTurnstile, reportBlockedSubmission } from './_lib/turnstile.js';
 import { sendBrevoEmail } from './_lib/brevo.js';
 import { contactAdminEmail, contactClientEmail, blockedSubmissionEmail } from './_lib/email-templates.js';
@@ -68,8 +69,9 @@ export async function onRequestPost(context) {
     if (!fullName || !phone) {
       return jsonResponse({ error: 'Missing required contact details' }, 400);
     }
-    if (email && !EMAIL_RE.test(email.trim())) {
-      return jsonResponse({ error: 'Please enter a valid email address' }, 400);
+    if (email) {
+      const ec = await checkEmail(email);
+      if (!ec.ok) return jsonResponse({ error: ec.reason, field: 'email' }, 400);
     }
 
     const humanFields = {};

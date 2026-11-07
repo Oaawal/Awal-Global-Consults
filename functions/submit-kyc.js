@@ -1,3 +1,4 @@
+import { checkEmail } from './_lib/email-check.js';
 import { verifyTurnstile, reportBlockedSubmission } from './_lib/turnstile.js';
 import { sendBrevoEmail, bytesToBase64 } from './_lib/brevo.js';
 import { recordsEnabled, recordSubmission } from './_lib/records.js';
@@ -6,11 +7,63 @@ import { kycAdminEmail, kycClientEmail, blockedSubmissionEmail } from './_lib/em
 
 // "Documents" supports multiple files (the new lean intake form uses one
 // multi-file dropzone instead of several single-purpose upload fields).
-const MULTI_FILE_FIELDS = ['Documents'];
+// Signatures come first so the size budget never squeezes them out.
+const MULTI_FILE_FIELDS = ['Signatures', 'Documents'];
 
 const HIDDEN_FIELDS = new Set([
-  'svc', 'Services_Requested', 'Subject'
+  'svc', 'Services_Requested', 'Subject', 'People_Count'
 ]);
+
+// Registrations need every person's details and signature; SCUML needs every person's NIN.
+const REG_SERVICES = ['Business Name Registration', 'Limited Company Registration', 'Incorporated Trustees / NGO'];
+const NIN_SERVICES = [...REG_SERVICES, 'SCUML Registration'];
+const MAX_PEOPLE = 10;
+
+/** Check the people section. Returns an error message for the visitor, or null. */
+async function peopleProblem(formData, services, signatureNames) {
+  if (!services.some(s => NIN_SERVICES.includes(s))) return null;
+  const needSig = services.some(s => REG_SERVICES.includes(s));
+  const n = Number(formData.get('People_Count'));
+  if (!Number.isInteger(n) || n < 1 || n > MAX_PEOPLE) return 'Please add the directors, shareholders or proprietors.';
+  if (services.includes('Incorporated Trustees / NGO') && !services.includes('Limited Company Registration') && n < 2) return 'CAC requires at least two trustees.';
+  const get = (i, k) => String(formData.get(`Person_${i}_${k}`) || '').trim();
+  const ids = new Set();
+  let directors = 0, holders = 0, shareTotal = 0;
+  for (let i = 1; i <= n; i++) {
+    const label = get(i, 'Full_Name') || `Person ${i}`;
+    if (get(i, 'Full_Name').split(/\s+/).length < 2) return `Please enter the full name of person ${i}.`;
+    if (!get(i, 'Role')) return `Please choose a role for ${label}.`;
+    const nin = get(i, 'NIN'), passport = get(i, 'Passport_Number');
+    if (get(i, 'Nationality') === 'Other') { if (passport.length < 5) return `Please enter the passport number for ${label}.`; }
+    else if (!/^\d{11}$/.test(nin)) return `The NIN for ${label} must be exactly 11 digits.`;
+    const id = nin || passport;
+    if (ids.has(id)) return 'The same NIN or passport number appears for two people.';
+    ids.add(id);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(get(i, 'Date_of_Birth'))) return `Please enter the date of birth for ${label}.`;
+    if (!get(i, 'Gender')) return `Please choose the gender for ${label}.`;
+    if (get(i, 'Phone').replace(/\D/g, '').length < 10) return `Please enter a valid phone number for ${label}.`;
+    if (!get(i, 'Occupation') || get(i, 'Residential_Address').length < 8) return `Please complete the occupation and address for ${label}.`;
+    const ec = await checkEmail(get(i, 'Email'));
+    if (!ec.ok) return `${label}: ${ec.reason}`;
+    if (/Director/.test(get(i, 'Role'))) directors++;
+    if (/Shareholder/.test(get(i, 'Role'))) { holders++; shareTotal += Number(get(i, 'Shareholding_Percent')) || 0; }
+    if (needSig && !signatureNames.some(name => name.startsWith(`signature-${i}-`))) return `A signature is required for ${label}.`;
+  }
+  if (services.includes('Limited Company Registration')) {
+    if (!directors) return 'A company needs at least one director.';
+    if (!holders) return 'A company needs at least one shareholder.';
+    if (Math.abs(shareTotal - 100) > 0.01) return 'Shareholdings must add up to 100%.';
+    if (!String(formData.get('Share_Capital') || '').trim()) return 'Please choose the proposed share capital.';
+  }
+  return null;
+}
+
+/** NINs and passport numbers are shown in full only in the dashboard, never in email. */
+function maskIds(fields) {
+  const out = {};
+  for (const [k, v] of Object.entries(fields)) out[k] = /\b(NIN|Passport Number)\b/.test(k) ? `${'*'.repeat(Math.max(0, String(v).length - 4))}${String(v).slice(-4)}` : v;
+  return out;
+}
 
 const MAX_PER_FILE_BYTES = 7 * 1024 * 1024;   // matches the 7MB per-file limit shown to users in the form
 const MAX_TOTAL_ATTACH_BYTES = 14 * 1024 * 1024; // raw-byte budget; base64 inflates ~1.33x, keeping the encoded payload safely under Brevo's 20MB total cap
@@ -21,7 +74,7 @@ function humanize(key) {
 
 // Only these document types are accepted (matches the accept= list on the form).
 const ALLOWED_EXTENSIONS = new Set(['pdf', 'jpg', 'jpeg', 'png']);
-const MAX_FILES = 12;
+const MAX_FILES = 12; // per upload field
 const MAX_FIELD_LENGTH = 2000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -89,9 +142,8 @@ export async function onRequestPost(context) {
     if (!fullName || !email) {
       return jsonResponse({ error: 'Missing required contact details' }, 400);
     }
-    if (!EMAIL_RE.test(email)) {
-      return jsonResponse({ error: 'Please enter a valid email address' }, 400);
-    }
+    const ec = await checkEmail(email);
+    if (!ec.ok) return jsonResponse({ error: ec.reason, field: 'email' }, 400);
 
     // Build attachments from every uploaded file, capped so the email stays within Brevo's size limits
     let runningBytes = 0;
@@ -117,6 +169,11 @@ export async function onRequestPost(context) {
       }
     }
 
+
+    const signatureNames = formData.getAll('Signatures').filter(f => typeof f !== 'string' && f.size > 0)
+      .map(f => safeFileName(f.name, 'signature')).filter(name => !skippedFiles.includes(name));
+    const peopleError = await peopleProblem(formData, services, signatureNames);
+    if (peopleError) return jsonResponse({ error: peopleError, field: 'people' }, 400);
 
     const subjectServices = services.slice(0, 3).join(', ') || 'New Submission';
 
@@ -159,7 +216,7 @@ export async function onRequestPost(context) {
     await sendBrevoEmail(env, {
       to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
       subject: `${reference ? `[${reference}] ` : ''}Client Intake Received: ${subjectServices}`,
-      html: kycAdminEmail({ fields, services, attachmentsNote, reference, recordStatus, caseUrl, documentsSaved: linkOnly && attachments.length > 0 }),
+      html: kycAdminEmail({ fields: maskIds(fields), services, attachmentsNote, reference, recordStatus, caseUrl, documentsSaved: linkOnly && attachments.length > 0 }),
       replyTo: { email, name: fullName },
       attachments: linkOnly ? [] : attachments
     });

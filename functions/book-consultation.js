@@ -1,3 +1,4 @@
+import { checkEmail } from './_lib/email-check.js';
 /**
  * POST /book-consultation: books a consultation slot.
  * Saves the booking, records it as an enquiry in the client records (so it
@@ -47,7 +48,8 @@ export async function onRequestPost({ request, env }) {
   if (!t) return json({ error: 'Please choose a consultation type.' }, 400);
   if (!MODES[mode]) return json({ error: 'Please choose how you’d like to talk.' }, 400);
   if (!fullName || !phone) return json({ error: 'Please enter your name and phone number.' }, 400);
-  if (!EMAIL_RE.test(email)) return json({ error: 'Please enter a valid email address.' }, 400);
+  const ec = await checkEmail(email);
+  if (!ec.ok) return json({ error: ec.reason, field: 'email' }, 400);
   if (form.get('consent') !== 'yes') return json({ error: 'Please tick the box to agree to how we use your details.' }, 400);
 
   // The slot must still be free (someone may have taken it since the page loaded)

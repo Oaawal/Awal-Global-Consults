@@ -1,3 +1,4 @@
+import { checkEmail } from './_lib/email-check.js';
 /**
  * POST /subscribe: newsletter sign-up with double opt-in.
  * Saves the address as "pending" and emails a confirmation link; nothing is
@@ -25,7 +26,8 @@ export async function onRequestPost({ request, env }) {
   if (String(form.get('company_website') || '').trim()) return json({ ok: true });
 
   const email = String(form.get('email') || '').trim().toLowerCase().slice(0, 200);
-  if (!EMAIL_RE.test(email)) return json({ error: 'Please enter a valid email address.' }, 400);
+  const ec = await checkEmail(email);
+  if (!ec.ok) return json({ error: ec.reason }, 400);
   if (form.get('consent') !== 'yes') return json({ error: 'Please tick the box to agree to receive updates.' }, 400);
 
   const ip = request.headers.get('CF-Connecting-IP');

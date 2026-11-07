@@ -1243,3 +1243,6 @@ button { font-family: inherit; }
 @media (max-width: 560px) { .hero-founder-card .grc-title li { white-space: normal; } }
 .price-from { font-weight: 700; color: var(--navy-800); font-size: .95rem; margin: 2px 0 10px; }
 .price-note-line { font-size: .85rem; color: var(--muted); margin: 18px 0 0; text-align: center; }
+.email-check-note { display: block; font-size: .82rem; color: #b42318; margin-top: 4px; }
+.email-check-note:empty { display: none; }
+.email-check-note button { font: inherit; font-weight: 700; color: var(--navy-800); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; }

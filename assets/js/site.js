@@ -128,6 +128,31 @@
     });
   });
 
+  // ── 4. Live email check on site forms (the application form has its own) ──
+  document.querySelectorAll('form input[type="email"]').forEach(function (input) {
+    if (input.closest('#kyc-form')) return;
+    const note = document.createElement('span');
+    note.className = 'email-check-note';
+    note.setAttribute('role', 'status');
+    input.insertAdjacentElement('afterend', note);
+    let last = '';
+    input.addEventListener('blur', function () {
+      const v = input.value.trim();
+      if (!v || v === last || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) { if (!v) note.textContent = ''; return; }
+      last = v;
+      fetch('/validate-email?email=' + encodeURIComponent(v)).then(function (r) { return r.json(); }).then(function (r) {
+        if (input.value.trim() !== v) return;
+        note.textContent = r.ok ? '' : (r.reason || 'Please check this email address.');
+        if (r.suggestion) {
+          const b = document.createElement('button');
+          b.type = 'button'; b.textContent = 'Use ' + r.suggestion;
+          b.addEventListener('click', function () { input.value = r.suggestion; note.textContent = ''; last = r.suggestion; });
+          note.appendChild(document.createTextNode(' ')); note.appendChild(b);
+        }
+      }).catch(function () {});
+    });
+  });
+
   // ── 3. Cloudflare Turnstile (off until a site key is set) ───────
   // Rendered explicitly: widgets on visible forms render as soon as the script
   // loads; the application form's widget sits on its last step, so it renders
