@@ -247,6 +247,13 @@
     .email-note.bad { display: block; color: var(--error); }
     .email-note.ok { display: block; color: #1E6B3A; }
     .email-note button { font: inherit; font-weight: 700; color: var(--navy-mid); background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; }
+
+    .req-upload { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; background: #fff; }
+    .req-upload-name { font-size: 13.5px; font-weight: 600; color: var(--navy); flex: 1 1 220px; }
+    .req-upload-files { display: block; font-size: 12px; font-weight: 500; color: #1E6B3A; margin-top: 3px; }
+    .req-upload label.pick { font-size: 12px; font-weight: 700; color: var(--navy-mid); border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; cursor: pointer; white-space: nowrap; }
+    .req-upload input[type=file] { display: none; }
+    .req-upload-svc { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 14px 0 8px; }
   </style>
 </head>
 <body>
@@ -423,6 +430,7 @@
     <div class="stage-head"><div class="stage-num">3</div><div><div class="stage-title">E-Passport Application Form</div><div class="stage-sub">Exactly as it appears on your NIN record</div></div></div>
     <div class="stage-body">
       <div class="notice blue">Enter your details exactly as they appear on your NIN record. A mismatch between your NIN and passport details is the most common cause of delay. <button type="button" class="copy-me" onclick="copyMyPassportDetails()" style="margin-left:6px;">Use my details from step 2</button></div>
+<div class="field-row"><div class="field" id="pw-pp-booklet"><label>Passport booklet <span class="req">*</span></label><select name="Passport_Booklet" id="pp-booklet"><option value="">Select booklet</option><option>32 pages, 5 years validity</option><option>64 pages, 10 years validity</option></select><span class="err-msg">Choose a booklet</span></div><div class="field"></div></div>
       <div class="sec-label">Applicant</div>
       <div class="field-row"><div class="field" id="pw-pp-surname"><label>Surname <span class="req">*</span></label><input type="text" name="Passport_Surname" id="pp-surname" placeholder="" /><span class="err-msg">Required</span></div><div class="field" id="pw-pp-first"><label>First name <span class="req">*</span></label><input type="text" name="Passport_First_Name" id="pp-first" placeholder="" /><span class="err-msg">Required</span></div></div>
       <div class="field-row"><div class="field" id="pw-pp-middle"><label>Middle name <span class="opt">(optional)</span></label><input type="text" name="Passport_Middle_Name" id="pp-middle" placeholder="" /><span class="err-msg">Required</span></div><div class="field" id="pw-pp-sex"><label>Sex <span class="req">*</span></label><select name="Passport_Sex" id="pp-sex"><option value="">Select</option><option>Female</option><option>Male</option></select><span class="err-msg">Required</span></div></div>
@@ -434,7 +442,7 @@
       <div class="field-row"><div class="field" id="pw-pp-addrlga"><label>Local government of address <span class="req">*</span></label><input type="text" name="Passport_LGA_of_Address" id="pp-addrlga" placeholder="" /><span class="err-msg">Required</span></div><div class="field" id="pw-pp-residence"><label>State of residence <span class="req">*</span></label><select name="Passport_State_of_Residence" id="pp-residence"><option value="">Select state</option><option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option><option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option><option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option><option>Ekiti</option><option>Enugu</option><option>FCT (Abuja)</option><option>Gombe</option><option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option><option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option><option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option><option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option><option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option><option>Zamfara</option></select><span class="err-msg">Required</span></div></div>
       <div class="field-row"><div class="field" id="pw-pp-phone"><label>Phone number <span class="req">*</span></label><input type="tel" name="Passport_Phone" id="pp-phone" placeholder="" maxlength="17"/><span class="err-msg">Enter a valid phone number</span></div><div class="field" id="pw-pp-email"><label>Email address <span class="req">*</span></label><input type="email" name="Passport_Email" id="pp-email" placeholder="name@email.com"/><span class="err-msg">Enter a valid email</span><span class="email-note"></span></div></div>
       <div class="sec-label" style="margin-top:8px;">Previous passport</div>
-      <div class="field-row"><div class="field" id="pw-pp-had"><label>Have you obtained an e-passport before? <span class="req">*</span></label><select name="Passport_Previous_E_Passport" id="pp-had"><option value="">Select</option><option>No</option><option>Yes</option></select><span class="err-msg">Required</span></div><div class="field" id="pw-pp-booklet"><label>Passport booklet wanted <span class="opt">(optional)</span></label><select name="Passport_Booklet" id="pp-booklet"><option value="">Not sure</option><option>32 pages, 5 years</option><option>64 pages, 10 years</option></select><span class="err-msg">Required</span></div></div>
+      <div class="field-row"><div class="field" id="pw-pp-had"><label>Have you obtained an e-passport before? <span class="req">*</span></label><select name="Passport_Previous_E_Passport" id="pp-had"><option value="">Select</option><option>No</option><option>Yes</option></select><span class="err-msg">Required</span></div><div class="field"></div></div>
       <div id="pp-prev" style="display:none;">
         <div class="field-row"><div class="field" id="pw-pp-ppno"><label>Passport number <span class="req">*</span></label><input type="text" name="Passport_Existing_Passport_Number" id="pp-ppno" placeholder="" /><span class="err-msg">Enter the passport number</span></div><div class="field" id="pw-pp-ppplace"><label>Place of issue <span class="req">*</span></label><input type="text" name="Passport_Existing_Place_of_Issue" id="pp-ppplace" placeholder="" /><span class="err-msg">Required</span></div></div>
         <div class="field-row"><div class="field" id="pw-pp-ppissue"><label>Date of issue <span class="req">*</span></label><input type="date" name="Passport_Existing_Date_of_Issue" id="pp-ppissue" placeholder="" /><span class="err-msg">Required</span></div><div class="field" id="pw-pp-ppexpiry"><label>Expiry date <span class="req">*</span></label><input type="date" name="Passport_Existing_Expiry_Date" id="pp-ppexpiry" placeholder="" /><span class="err-msg">Required</span></div></div>
@@ -465,17 +473,19 @@
       <div class="checklist-box" id="checklist-box" style="display:none;">
         <div class="checklist-title">📋 What's typically needed for your selected services</div>
         <div id="checklist-content"></div>
-        <div class="checklist-note">This is just a guide: you don't need everything ready right now. Upload what you have below, and we'll confirm exactly what's still needed once we review your request.</div>
+        <div class="checklist-note">Upload what you have in the boxes below. Anything you don't have yet can follow later: you can still submit.</div>
       </div>
+
+      <div id="req-uploads"></div>
 
       <div class="field-row one">
         <div class="field">
-          <label>Upload Documents <span class="opt">(optional: ID, passport photo, signature, CAC docs, logo, etc.)</span></label>
+          <label>Other documents</label>
           <div class="upload-zone">
             <input type="file" name="Documents" id="docupload" accept=".pdf,.jpg,.jpeg,.png" multiple onchange="handleFiles(this)"/>
             <div class="upload-icon">📎</div>
             <p><strong>Click to upload</strong> one or more files</p>
-            <p>PDF, JPG, or PNG: max 7MB per file, 14MB total</p>
+            <p>PDF, JPG, or PNG: max 7MB per file, 25MB in total</p>
           </div>
           <div class="file-list" id="file-list"></div>
         </div>
@@ -653,6 +663,112 @@ const SERVICE_HINTS = {
   "Digital & Business Setup": ["Valid ID & business name (registered or proposed)", "3+ preferred domain names, if registering a domain", "Type of website needed & reference sites you like, if building one"]
 };
 
+const DOC_REQUIREMENTS = {
+ "Business Name Registration": [
+  "Valid ID of each proprietor (NIN slip, national ID, international passport or driver's licence)",
+  "Passport photograph of each proprietor"
+ ],
+ "Limited Company Registration": [
+  "Valid ID of each director and shareholder",
+  "Passport photograph of each director and shareholder"
+ ],
+ "Incorporated Trustees / NGO": [
+  "Valid ID of each trustee",
+  "Passport photograph of each trustee",
+  "Constitution of the organisation, if drafted"
+ ],
+ "Business Name Renewal": [
+  "Business name certificate",
+  "Valid ID of the proprietor"
+ ],
+ "Post-Incorporation Changes & Compliance": [
+  "CAC certificate",
+  "Status report or CAC documents",
+  "Valid ID of any new director, shareholder or secretary"
+ ],
+ "TIN Registration & Validation": [
+  "NIN slip or valid ID",
+  "CAC certificate, if registered"
+ ],
+ "Tax Clearance & VAT Filing": [
+  "CAC certificate",
+  "TIN certificate",
+  "Recent tax payment receipts"
+ ],
+ "Payroll Processing": [
+  "Employee list with salaries"
+ ],
+ "SCUML Registration": [
+  "CAC certificate",
+  "Valid ID of each director or proprietor",
+  "Proof of business address (utility bill)"
+ ],
+ "Business Permits & Regulatory Licensing": [
+  "CAC certificate",
+  "TIN certificate",
+  "MEMART"
+ ],
+ "Expatriate Quota / CERPAC": [
+  "CAC certificate",
+  "Expatriate's passport data page",
+  "Employment letter or contract"
+ ],
+ "NDPC Registration (Data Controller / Processor)": [
+  "CAC certificate",
+  "Current privacy policy"
+ ],
+ "NDPC Compliance Audit Return": [
+  "NDPC registration certificate",
+  "Privacy notice and data protection policy"
+ ],
+ "DPCO Licence Application": [
+  "CAC certificate",
+  "Tax clearance certificate",
+  "Staff qualifications or certificates",
+  "Valid ID of one director"
+ ],
+ "Intellectual Property Registration": [
+  "Logo or sample of the work",
+  "Valid ID of the applicant"
+ ],
+ "Legal Advisory": [
+  "Any related documents"
+ ],
+ "Legal Documentation": [
+  "Any existing related documents"
+ ],
+ "International Passport (E-passport)": [
+  "NIN slip",
+  "Birth certificate",
+  "Passport photograph",
+  "Old passport data page, if renewing"
+ ],
+ "NIN Registration & Correction": [
+  "Birth certificate, old passport or voter's card",
+  "Passport photograph",
+  "Supporting document for a correction"
+ ],
+ "Export / Import Licensing": [
+  "CAC certificate",
+  "TIN certificate"
+ ],
+ "Student Visa & Relocation": [
+  "International passport data page",
+  "Academic certificates and transcripts"
+ ],
+ "GRC Review": [
+  "CAC certificate and status report",
+  "Licences or certificates you hold"
+ ],
+ "Fintech & Startup Compliance": [
+  "CAC certificate and MEMART",
+  "Banking or payments partner agreement"
+ ],
+ "Digital & Business Setup": [
+  "Valid ID",
+  "Logo, if you have one"
+ ]
+};
 let selectedServices = [];
 
 function onSvcChange() {
@@ -673,8 +789,19 @@ let currentIdx = 0;
 function needsPeople() { return selectedServices.some(s => NIN_SERVICES.includes(s)); }
 function needsSignatures() { return selectedServices.some(s => REG_SERVICES.includes(s)); }
 function needsPassport() { return selectedServices.includes('International Passport (E-passport)'); }
+// A passport-only application needs no separate "Your Details" step: the passport form has everything
+function skipDetails() { return needsPassport() && selectedServices.length === 1; }
 function computeStages() {
-  ALL_STAGES = ['services','details'].concat(needsPeople() ? ['people'] : [], needsPassport() ? ['passport'] : [], ['docs','review']);
+  ALL_STAGES = ['services'].concat(skipDetails() ? [] : ['details'], needsPeople() ? ['people'] : [], needsPassport() ? ['passport'] : [], ['docs','review']);
+  const btn = document.querySelector('#stage-passport .copy-me');
+  if (btn) btn.style.display = skipDetails() ? 'none' : '';
+}
+// Fill the basic contact fields from the passport form when the details step was skipped
+function syncDetailsFromPassport() {
+  if (!skipDetails()) return;
+  document.getElementById('fullname').value = [ppv('first'), ppv('middle'), ppv('surname')].filter(Boolean).join(' ');
+  document.getElementById('phone').value = ppv('phone');
+  document.getElementById('email').value = ppv('email');
 }
 
 function buildProgressBar() {
@@ -713,7 +840,7 @@ function showStage(stageId) {
   currentIdx = ALL_STAGES.indexOf(stageId);
   updateProgress();
   if (stageId === 'people') setupPeopleStage();
-  if (stageId === 'docs') renderChecklist('checklist-box', 'checklist-content');
+  if (stageId === 'docs') { renderChecklist('checklist-box', 'checklist-content'); renderReqUploads(); }
   if (stageId === 'review') buildSummary();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -738,7 +865,7 @@ function buildSummary() {
   if (needsPeople()) {
     const people = collectPeople();
     html += `<div class="summary-title" style="margin-top:14px;">${escapeHtml(peopleConfig().title)}</div>` +
-      people.map(p => `<div class="summary-line"><strong>✓</strong> ${escapeHtml(p.name)}: ${escapeHtml(p.role)}${p.shares ? ` (${escapeHtml(p.shares)}%)` : ''}${p.signed ? ', signed' : ''}</div>`).join('');
+      people.map(p => `<div class="summary-line"><strong>✓</strong> ${escapeHtml(p.name)}: ${escapeHtml(p.role)}${p.shares ? ` (${escapeHtml(p.shares)}%)` : ''}${p.signed ? ', signed' : (p.later ? ', signature to follow' : '')}</div>`).join('');
   }
   if (needsPassport()) html += `<div class="summary-title" style="margin-top:14px;">E-passport applicant</div><div class="summary-line"><strong>✓</strong> ${escapeHtml(ppv('surname') + ' ' + ppv('first'))}, NIN ending ${escapeHtml(ppv('nin').slice(-4))}${document.getElementById('pp-doa').checked ? ', Declaration of Age requested' : ''}</div>`;
   lines.innerHTML = html;
@@ -799,7 +926,7 @@ function setupPeopleStage() {
   const cfg = peopleConfig();
   document.getElementById('people-title').textContent = needsSignatures() ? cfg.title.replace(' & ', ', ') + ' & Signatures' : cfg.title;
   document.getElementById('people-sub').textContent = needsSignatures() ? 'Details, NIN and signature for each person' : 'Details and NIN for each person';
-  document.getElementById('people-intro').textContent = cfg.intro + (needsSignatures() ? ' Each person must sign: draw the signature below or upload a clear photo of it on white paper.' : '');
+  document.getElementById('people-intro').textContent = cfg.intro + (needsSignatures() ? ' Each person should sign: draw the signature below, upload a clear photo of it on white paper, or tick that it will be provided later.' : '');
   document.getElementById('people-count-label').innerHTML = escapeHtml(cfg.countLabel) + ' <span class="req">*</span>';
   document.getElementById('people-count-hint').textContent = cfg.countHint;
   document.getElementById('fw-share-capital').style.display = cfg.kind === 'company' ? '' : 'none';
@@ -820,7 +947,7 @@ function personCardHtml(i, cfg) {
     ? `<div class="field" id="pw-${i}-shares"><label>Shareholding (%) <span class="req">*</span></label><input type="number" min="0.01" max="100" step="0.01" name="Person_${i}_Shareholding_Percent" id="p${i}-shares" placeholder="e.g. 50"/><span class="err-msg">Enter this person's share of the company</span></div>`
     : '<div class="field"></div>';
   return `<div class="person-card" id="person-${i}">
-    <div class="person-head"><div class="person-title">Person ${i}</div>${i === 1 ? '<button type="button" class="copy-me" onclick="copyMyDetails()">Use my details from step 2</button>' : ''}</div>
+    <div class="person-head"><div class="person-title">Person ${i}</div>${skipDetails() ? '' : `<button type="button" class="copy-me" onclick="copyMyDetails(${i})">Use my details from step 2</button>`}</div>
     <div class="field-row">
       <div class="field" id="pw-${i}-name"><label>Full name (as on ID) <span class="req">*</span></label><input type="text" name="Person_${i}_Full_Name" id="p${i}-name" placeholder="Surname, first name, other names"/><span class="err-msg">Required</span></div>
       <div class="field" id="pw-${i}-role"><label>Role <span class="req">*</span></label><select name="Person_${i}_Role" id="p${i}-role" onchange="onRoleChange(${i})">${roleOpts}</select><span class="err-msg">Choose a role</span></div>
@@ -847,7 +974,8 @@ function personCardHtml(i, cfg) {
     ${needsSignatures() ? `<div class="field-row one"><div class="field" id="pw-${i}-sig"><label>Signature <span class="req">*</span></label>
       <div class="sig-wrap" id="p${i}-sigwrap"><canvas class="sig-pad" id="p${i}-sig"></canvas><div class="sig-line"></div><img class="sig-preview" id="p${i}-sigimg" alt="Uploaded signature"/></div>
       <div class="sig-tools"><button type="button" onclick="clearSig(${i})">Clear</button><label>Upload a photo instead<input type="file" accept=".png,.jpg,.jpeg" onchange="uploadSig(${i}, this)"/></label><span class="field-hint" style="margin:0;">Sign inside the box with your finger or mouse.</span></div>
-      <span class="err-msg">A signature is required</span></div></div>` : ''}
+      <label class="chk-inline" style="text-transform:none;font-weight:500;letter-spacing:0;margin-top:8px;"><input type="checkbox" name="Person_${i}_Signature_Later" id="p${i}-siglater" value="Yes" onchange="onSigLater(${i})"/> I will provide this signature later</label>
+      <span class="err-msg">Sign, upload a photo of the signature, or tick that it will be provided later</span></div></div>` : ''}
   </div>`;
 }
 
@@ -889,11 +1017,12 @@ function onNationalityChange(i) {
   document.getElementById(`p${i}-nin-err`).textContent = foreign ? 'Enter the passport number' : 'Enter the 11-digit NIN';
 }
 
-function copyMyDetails() {
-  document.getElementById('p1-name').value = document.getElementById('fullname').value;
-  document.getElementById('p1-phone').value = document.getElementById('phone').value;
-  document.getElementById('p1-email').value = document.getElementById('email').value;
-  checkEmailField(document.getElementById('p1-email'));
+function copyMyDetails(i) {
+  i = i || 1;
+  document.getElementById(`p${i}-name`).value = document.getElementById('fullname').value;
+  document.getElementById(`p${i}-phone`).value = document.getElementById('phone').value;
+  document.getElementById(`p${i}-email`).value = document.getElementById('email').value;
+  checkEmailField(document.getElementById(`p${i}-email`));
 }
 
 function initSigPad(i) {
@@ -934,13 +1063,15 @@ function uploadSig(i, input) {
   document.getElementById(`p${i}-sigwrap`).classList.remove('err'); document.getElementById(`pw-${i}-sig`).classList.remove('has-err');
 }
 function hasSignature(i) { const p = sigPads[i]; return !!(p && (p.upload || p.drawn)); }
+function sigLater(i) { const el = document.getElementById(`p${i}-siglater`); return !!(el && el.checked); }
+function onSigLater(i) { if (sigLater(i)) { document.getElementById(`p${i}-sigwrap`).classList.remove('err'); document.getElementById(`pw-${i}-sig`).classList.remove('has-err'); } }
 
 function collectPeople() {
   const n = Number(document.getElementById('people-count').value) || 0;
   const out = [];
   for (let i = 1; i <= n; i++) {
     const v = id => ((document.getElementById(`p${i}-${id}`) || {}).value || '').trim();
-    out.push({ i, name: v('name'), role: v('role'), shares: /Shareholder/.test(v('role')) ? v('shares') : '', signed: hasSignature(i) });
+    out.push({ i, name: v('name'), role: v('role'), shares: /Shareholder/.test(v('role')) ? v('shares') : '', signed: hasSignature(i), later: sigLater(i) });
   }
   return out;
 }
@@ -995,7 +1126,7 @@ function validatePeople() {
     ok = markErr(i, 'address', v('address').length < 8) && ok;
     if (cfg.kind === 'company' && /Shareholder/.test(p.role)) ok = markErr(i, 'shares', !(Number(v('shares')) > 0 && Number(v('shares')) <= 100)) && ok;
     if (needsSignatures()) {
-      const signed = hasSignature(i);
+      const signed = hasSignature(i) || sigLater(i);
       document.getElementById(`p${i}-sigwrap`).classList.toggle('err', !signed);
       document.getElementById(`pw-${i}-sig`).classList.toggle('has-err', !signed);
       ok = signed && ok;
@@ -1021,6 +1152,45 @@ function validatePeople() {
   return ok && problems.length === 0;
 }
 
+// ═══ ONE UPLOAD BOX PER REQUIRED DOCUMENT ═══
+const reqFiles = {}; // key -> File[]
+function reqKey(label) { return label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50); }
+function reqFilesTotal() { return Object.values(reqFiles).flat().reduce((t, f) => t + f.size, 0); }
+function renderReqUploads() {
+  const box = document.getElementById('req-uploads');
+  const seen = new Set(); let html = '';
+  selectedServices.filter(s => DOC_REQUIREMENTS[s]).forEach(svc => {
+    const items = DOC_REQUIREMENTS[svc].filter(l => !seen.has(reqKey(l)));
+    if (!items.length) return;
+    html += `<div class="req-upload-svc">${escapeHtml(svc)}</div>`;
+    items.forEach(label => {
+      const k = reqKey(label); seen.add(k);
+      const files = reqFiles[k] || [];
+      html += `<div class="req-upload"><div class="req-upload-name">${escapeHtml(label)}<span class="req-upload-files" id="rf-${k}">${files.map(f => '✓ ' + escapeHtml(f.name)).join(', ')}</span></div>
+        <label class="pick">${files.length ? 'Change' : 'Upload'}<input type="file" accept=".pdf,.jpg,.jpeg,.png" multiple onchange="pickReq('${k}', this)"/></label></div>`;
+    });
+  });
+  box.innerHTML = html;
+}
+function pickReq(k, input) {
+  const picked = Array.from(input.files || []);
+  const others = reqFilesTotal() - (reqFiles[k] || []).reduce((t, f) => t + f.size, 0) + allFiles.reduce((t, f) => t + f.size, 0);
+  let total = others; const keep = [];
+  for (const f of picked) {
+    if (!/\.(pdf|jpe?g|png)$/i.test(f.name)) { showToast(`${f.name}: use PDF, JPG or PNG`); continue; }
+    if (f.size > MAX_FILE_BYTES) { showToast(`${f.name} is over 7MB`); continue; }
+    if (total + f.size > MAX_TOTAL_BYTES) { showToast(`${f.name} would put you over the 25MB total`); continue; }
+    total += f.size; keep.push(f);
+  }
+  reqFiles[k] = keep;
+  renderReqUploads();
+}
+function requirementFiles() {
+  const out = [];
+  Object.entries(reqFiles).forEach(([k, files]) => files.forEach(f => out.push(new File([f], `${k}--${f.name}`, { type: f.type }))));
+  return out;
+}
+
 // ═══ E-PASSPORT ═══
 function ppv(id) { return ((document.getElementById('pp-' + id) || {}).value || '').trim(); }
 function ppErr(id, bad) {
@@ -1040,7 +1210,7 @@ document.addEventListener('change', e => {
 });
 function validatePassport() {
   let ok = true;
-  ['surname','first','sex','pob','occupation','hometown','origin','lga','addrlga','residence','had','nokname','nokrel','noklga','nokstate'].forEach(id => { ok = ppErr(id, !ppv(id)) && ok; });
+  ['booklet','surname','first','sex','pob','occupation','hometown','origin','lga','addrlga','residence','had','nokname','nokrel','noklga','nokstate'].forEach(id => { ok = ppErr(id, !ppv(id)) && ok; });
   ok = ppErr('address', ppv('address').length < 8) && ok;
   ok = ppErr('nokaddr', ppv('nokaddr').length < 8) && ok;
   const dob = new Date(ppv('dob')), age = (Date.now() - dob) / (365.25 * 86400000);
@@ -1120,14 +1290,14 @@ function validateStage(stageId) {
     return nameOk && phoneOk && emailOk;
   }
   if (stageId === 'people') return validatePeople();
-  if (stageId === 'passport') return validatePassport();
+  if (stageId === 'passport') { const ok = validatePassport(); if (ok) syncDetailsFromPassport(); return ok; }
   return true;
 }
 
 // ═══ FILE UPLOAD ═══
 let allFiles = [];
 const MAX_FILE_BYTES = 7 * 1024 * 1024;
-const MAX_TOTAL_BYTES = 14 * 1024 * 1024;
+const MAX_TOTAL_BYTES = 25 * 1024 * 1024;
 
 function formatFileSize(bytes) {
   return bytes >= 1024 * 1024 ? `${(bytes / (1024 * 1024)).toFixed(1)} MB` : `${Math.round(bytes / 1024)} KB`;
@@ -1135,7 +1305,7 @@ function formatFileSize(bytes) {
 
 function handleFiles(input) {
   const newFiles = Array.from(input.files || []);
-  let runningTotal = allFiles.reduce((sum, f) => sum + f.size, 0);
+  let runningTotal = allFiles.reduce((sum, f) => sum + f.size, 0) + reqFilesTotal();
   const rejected = [];
 
   for (const f of newFiles) {
@@ -1144,7 +1314,7 @@ function handleFiles(input) {
       continue;
     }
     if (runningTotal + f.size > MAX_TOTAL_BYTES) {
-      rejected.push(`${f.name} would put you over the 14MB total`);
+      rejected.push(`${f.name} would put you over the 25MB total`);
       continue;
     }
     runningTotal += f.size;
@@ -1192,6 +1362,7 @@ async function submitKYC() {
     return;
   }
   document.getElementById('decl-error').style.display = 'none';
+  syncDetailsFromPassport();
   const name = document.getElementById('fullname').value;
   document.getElementById('h-subject').value = `Client Intake | ${name} | ${selectedServices.slice(0,2).join(', ')}`;
 
@@ -1216,6 +1387,7 @@ async function submitKYC() {
       fd.append('People_Count', document.getElementById('people-count').value);
       for (const f of await signatureFiles()) fd.append('Signatures', f, f.name);
     }
+    for (const f of requirementFiles()) fd.append('Documents', f, f.name);
     const res = await fetch('/submit-kyc', { method: 'POST', body: fd });
     if (!res.ok) {
       const errBody = await res.json().catch(() => ({}));

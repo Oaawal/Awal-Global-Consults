@@ -48,7 +48,7 @@ async function peopleProblem(formData, services, signatureNames) {
     if (!ec.ok) return `${label}: ${ec.reason}`;
     if (/Director/.test(get(i, 'Role'))) directors++;
     if (/Shareholder/.test(get(i, 'Role'))) { holders++; shareTotal += Number(get(i, 'Shareholding_Percent')) || 0; }
-    if (needSig && !signatureNames.some(name => name.startsWith(`signature-${i}-`))) return `A signature is required for ${label}.`;
+    if (needSig && !signatureNames.some(name => name.startsWith(`signature-${i}-`)) && get(i, 'Signature_Later') !== 'Yes') return `Please add a signature for ${label}, or tick that it will be provided later.`;
   }
   if (services.includes('Limited Company Registration')) {
     if (!directors) return 'A company needs at least one director.';
@@ -63,7 +63,7 @@ async function peopleProblem(formData, services, signatureNames) {
 async function passportProblem(formData, services, hasLgaCert) {
   if (!services.includes('International Passport (E-passport)')) return null;
   const g = k => String(formData.get(`Passport_${k}`) || '').trim();
-  const required = { Surname: 'surname', First_Name: 'first name', Sex: 'sex', Date_of_Birth: 'date of birth', Place_of_Birth: 'place of birth',
+  const required = { Booklet: 'passport booklet', Surname: 'surname', First_Name: 'first name', Sex: 'sex', Date_of_Birth: 'date of birth', Place_of_Birth: 'place of birth',
     Address: 'address', LGA_of_Address: 'local government of address', State_of_Residence: 'state of residence', State_of_Origin: 'state of origin',
     LGA_of_Origin: 'local government area of origin', Home_Town: 'home town', Occupation: 'occupation', Marital_Status: 'marital status',
     Previous_E_Passport: 'whether you have had an e-passport', Next_of_Kin_Name: 'next of kin', Next_of_Kin_Relationship: 'relationship with next of kin',
@@ -88,7 +88,8 @@ function maskIds(fields) {
 }
 
 const MAX_PER_FILE_BYTES = 7 * 1024 * 1024;   // matches the 7MB per-file limit shown to users in the form
-const MAX_TOTAL_ATTACH_BYTES = 14 * 1024 * 1024; // raw-byte budget; base64 inflates ~1.33x, keeping the encoded payload safely under Brevo's 20MB total cap
+const MAX_TOTAL_ATTACH_BYTES = 25 * 1024 * 1024; // total stored per application (matches the form)
+const MAX_EMAIL_ATTACH_BYTES = 14 * 1024 * 1024; // fallback email only: base64 inflates ~1.33x, Brevo caps at 20MB
 
 function humanize(key) {
   return key.replace(/_/g, ' ');
@@ -96,7 +97,7 @@ function humanize(key) {
 
 // Only these document types are accepted (matches the accept= list on the form).
 const ALLOWED_EXTENSIONS = new Set(['pdf', 'jpg', 'jpeg', 'png']);
-const MAX_FILES = 12; // per upload field
+const MAX_FILES = 30; // per upload field
 const MAX_FIELD_LENGTH = 2000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -253,7 +254,7 @@ export async function onRequestPost(context) {
         subject: `${reference ? `[${reference}] ` : ''}Client Intake Received: ${subjectServices}`,
         html: kycAdminEmail({ fields: maskIds(fields), services, attachmentsNote, reference, recordStatus, caseUrl, documentsSaved: false }),
         replyTo: { email, name: fullName },
-        attachments
+        attachments: (() => { let t = 0; return attachments.filter(a => (t += a.content.length * 0.75) <= MAX_EMAIL_ATTACH_BYTES); })()
       });
     }
     await notifyAdmins(env, {
