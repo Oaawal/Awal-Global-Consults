@@ -43,7 +43,7 @@ function form(c, message = '') {
         <input type="file" name="files" multiple required accept=".pdf,.jpg,.jpeg,.png" style="display:block;margin-bottom:16px;">
         <button type="submit" style="background:#0F3A5F;color:#fff;border:0;border-radius:10px;padding:12px 20px;font-weight:700;font:inherit;cursor:pointer;">Upload</button>
       </form>
-      <p style="font-size:13px;color:#666;margin-top:18px;">This link is private to your request. For your security we do not accept documents on WhatsApp.</p>`
+      <p style="font-size:13px;color:#666;margin-top:18px;">This link is private to your request.</p>`
   };
 }
 
