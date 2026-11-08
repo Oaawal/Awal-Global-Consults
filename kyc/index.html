@@ -865,7 +865,7 @@ function buildSummary() {
   if (needsPeople()) {
     const people = collectPeople();
     html += `<div class="summary-title" style="margin-top:14px;">${escapeHtml(peopleConfig().title)}</div>` +
-      people.map(p => `<div class="summary-line"><strong>✓</strong> ${escapeHtml(p.name)}: ${escapeHtml(p.role)}${p.shares ? ` (${escapeHtml(p.shares)}%)` : ''}${p.signed ? ', signed' : (p.later ? ', signature to follow' : '')}</div>`).join('');
+      people.map(p => `<div class="summary-line"><strong>✓</strong> ${escapeHtml(p.name)}: ${escapeHtml(p.role)}${p.shares ? ` (${escapeHtml(p.shares)}%)` : ''}${p.signed ? ', signed' : ''}</div>`).join('');
   }
   if (needsPassport()) html += `<div class="summary-title" style="margin-top:14px;">E-passport applicant</div><div class="summary-line"><strong>✓</strong> ${escapeHtml(ppv('surname') + ' ' + ppv('first'))}, NIN ending ${escapeHtml(ppv('nin').slice(-4))}${document.getElementById('pp-doa').checked ? ', Declaration of Age requested' : ''}</div>`;
   lines.innerHTML = html;
@@ -926,7 +926,7 @@ function setupPeopleStage() {
   const cfg = peopleConfig();
   document.getElementById('people-title').textContent = needsSignatures() ? cfg.title.replace(' & ', ', ') + ' & Signatures' : cfg.title;
   document.getElementById('people-sub').textContent = needsSignatures() ? 'Details, NIN and signature for each person' : 'Details and NIN for each person';
-  document.getElementById('people-intro').textContent = cfg.intro + (needsSignatures() ? ' Each person should sign: draw the signature below, upload a clear photo of it on white paper, or tick that it will be provided later.' : '');
+  document.getElementById('people-intro').textContent = cfg.intro + (needsSignatures() ? ' Each person must sign: draw the signature in the box below with a finger or mouse, or upload a clear photo of it signed on white paper.' : '');
   document.getElementById('people-count-label').innerHTML = escapeHtml(cfg.countLabel) + ' <span class="req">*</span>';
   document.getElementById('people-count-hint').textContent = cfg.countHint;
   document.getElementById('fw-share-capital').style.display = cfg.kind === 'company' ? '' : 'none';
@@ -974,8 +974,7 @@ function personCardHtml(i, cfg) {
     ${needsSignatures() ? `<div class="field-row one"><div class="field" id="pw-${i}-sig"><label>Signature <span class="req">*</span></label>
       <div class="sig-wrap" id="p${i}-sigwrap"><canvas class="sig-pad" id="p${i}-sig"></canvas><div class="sig-line"></div><img class="sig-preview" id="p${i}-sigimg" alt="Uploaded signature"/></div>
       <div class="sig-tools"><button type="button" onclick="clearSig(${i})">Clear</button><label>Upload a photo instead<input type="file" accept=".png,.jpg,.jpeg" onchange="uploadSig(${i}, this)"/></label><span class="field-hint" style="margin:0;">Sign inside the box with your finger or mouse.</span></div>
-      <label class="chk-inline" style="text-transform:none;font-weight:500;letter-spacing:0;margin-top:8px;"><input type="checkbox" name="Person_${i}_Signature_Later" id="p${i}-siglater" value="Yes" onchange="onSigLater(${i})"/> I will provide this signature later</label>
-      <span class="err-msg">Sign, upload a photo of the signature, or tick that it will be provided later</span></div></div>` : ''}
+      <span class="err-msg">A signature is required: sign in the box, or upload a photo of the signature</span></div></div>` : ''}
   </div>`;
 }
 
@@ -1063,15 +1062,14 @@ function uploadSig(i, input) {
   document.getElementById(`p${i}-sigwrap`).classList.remove('err'); document.getElementById(`pw-${i}-sig`).classList.remove('has-err');
 }
 function hasSignature(i) { const p = sigPads[i]; return !!(p && (p.upload || p.drawn)); }
-function sigLater(i) { const el = document.getElementById(`p${i}-siglater`); return !!(el && el.checked); }
-function onSigLater(i) { if (sigLater(i)) { document.getElementById(`p${i}-sigwrap`).classList.remove('err'); document.getElementById(`pw-${i}-sig`).classList.remove('has-err'); } }
+
 
 function collectPeople() {
   const n = Number(document.getElementById('people-count').value) || 0;
   const out = [];
   for (let i = 1; i <= n; i++) {
     const v = id => ((document.getElementById(`p${i}-${id}`) || {}).value || '').trim();
-    out.push({ i, name: v('name'), role: v('role'), shares: /Shareholder/.test(v('role')) ? v('shares') : '', signed: hasSignature(i), later: sigLater(i) });
+    out.push({ i, name: v('name'), role: v('role'), shares: /Shareholder/.test(v('role')) ? v('shares') : '', signed: hasSignature(i) });
   }
   return out;
 }
@@ -1087,7 +1085,12 @@ async function signatureFiles() {
       const ext = (pad.upload.name.match(/\.(png|jpe?g)$/i) || ['.png'])[0].toLowerCase();
       files.push(new File([pad.upload], `signature-${p.i}-${slug}${ext}`, { type: pad.upload.type || 'image/png' }));
     } else if (pad.drawn) {
-      const blob = await new Promise(r => pad.canvas.toBlob(r, 'image/png'));
+      const out = document.createElement('canvas');
+      out.width = pad.canvas.width; out.height = pad.canvas.height;
+      const octx = out.getContext('2d');
+      octx.fillStyle = '#ffffff'; octx.fillRect(0, 0, out.width, out.height);
+      octx.drawImage(pad.canvas, 0, 0);
+      const blob = await new Promise(r => out.toBlob(r, 'image/png'));
       if (blob) files.push(new File([blob], `signature-${p.i}-${slug}.png`, { type: 'image/png' }));
     }
   }
@@ -1126,7 +1129,7 @@ function validatePeople() {
     ok = markErr(i, 'address', v('address').length < 8) && ok;
     if (cfg.kind === 'company' && /Shareholder/.test(p.role)) ok = markErr(i, 'shares', !(Number(v('shares')) > 0 && Number(v('shares')) <= 100)) && ok;
     if (needsSignatures()) {
-      const signed = hasSignature(i) || sigLater(i);
+      const signed = hasSignature(i);
       document.getElementById(`p${i}-sigwrap`).classList.toggle('err', !signed);
       document.getElementById(`pw-${i}-sig`).classList.toggle('has-err', !signed);
       ok = signed && ok;

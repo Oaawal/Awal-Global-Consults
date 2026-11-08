@@ -48,7 +48,7 @@ async function peopleProblem(formData, services, signatureNames) {
     if (!ec.ok) return `${label}: ${ec.reason}`;
     if (/Director/.test(get(i, 'Role'))) directors++;
     if (/Shareholder/.test(get(i, 'Role'))) { holders++; shareTotal += Number(get(i, 'Shareholding_Percent')) || 0; }
-    if (needSig && !signatureNames.some(name => name.startsWith(`signature-${i}-`)) && get(i, 'Signature_Later') !== 'Yes') return `Please add a signature for ${label}, or tick that it will be provided later.`;
+    if (needSig && !signatureNames.some(name => name.startsWith(`signature-${i}-`))) return `A signature is required for ${label}: sign in the box or upload a photo of the signature.`;
   }
   if (services.includes('Limited Company Registration')) {
     if (!directors) return 'A company needs at least one director.';
