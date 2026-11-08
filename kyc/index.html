@@ -512,6 +512,13 @@
         <div id="summary-lines"></div>
       </div>
 
+      <div class="summary-card" id="estimate-card">
+        <div class="summary-title">Estimated Cost</div>
+        <div id="estimate-lines"></div>
+        <div class="field-hint" style="margin-top:10px;color:rgba(255,255,255,.78);">Starting prices. Your exact amount is confirmed in your quotation within 1 working day, before you pay anything. Company fees vary with share capital.</div>
+      </div>
+      <input type="hidden" name="Estimated_Amount" id="h-estimate" value="">
+
       <div class="sec-label">What Happens Next</div>
       <div class="next-steps">
         <div class="next-step"><div class="next-step-num">1</div><div class="next-step-text">We review your request and documents <strong>within 1 working day</strong>.</div></div>
@@ -769,6 +776,16 @@ const DOC_REQUIREMENTS = {
   "Logo, if you have one"
  ]
 };
+// Starting prices shown as an estimate on the Review step. Services not listed are quoted after review.
+const START_PRICES = {
+  'Business Name Registration': 40000,
+  'Limited Company Registration': 75000,
+  'Incorporated Trustees / NGO': 150000,
+  'SCUML Registration': 70000,
+  'GRC Review': 250000,
+  'Legal Advisory': 20000
+};
+const naira = n => '₦' + Number(n).toLocaleString('en-NG');
 let selectedServices = [];
 
 function onSvcChange() {
@@ -869,6 +886,21 @@ function buildSummary() {
   }
   if (needsPassport()) html += `<div class="summary-title" style="margin-top:14px;">E-passport applicant</div><div class="summary-line"><strong>✓</strong> ${escapeHtml(ppv('surname') + ' ' + ppv('first'))}, NIN ending ${escapeHtml(ppv('nin').slice(-4))}${document.getElementById('pp-doa').checked ? ', Declaration of Age requested' : ''}</div>`;
   lines.innerHTML = html;
+  buildEstimate();
+}
+
+function buildEstimate() {
+  let total = 0, quoted = 0;
+  const rows = selectedServices.map(svc => {
+    const price = START_PRICES[svc];
+    if (price) total += price; else quoted++;
+    return `<div class="summary-line" style="display:flex;justify-content:space-between;gap:12px;"><span>${escapeHtml(svc)}</span><strong style="white-space:nowrap;">${price ? 'From ' + naira(price) : 'Quote after review'}</strong></div>`;
+  });
+  const totalLine = total
+    ? `<div class="summary-line" style="display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--border);margin-top:8px;padding-top:8px;"><span><strong>Estimated total</strong>${quoted ? ` <span style="color:rgba(255,255,255,.75);font-weight:400;">(plus ${quoted} service${quoted === 1 ? '' : 's'} quoted separately)</span>` : ''}</span><strong style="white-space:nowrap;">From ${naira(total)}</strong></div>`
+    : '<div class="summary-line" style="color:rgba(255,255,255,.85);">We will send you a quotation for these services within 1 working day.</div>';
+  document.getElementById('estimate-lines').innerHTML = rows.join('') + totalLine;
+  document.getElementById('h-estimate').value = total ? `From ${naira(total)}${quoted ? ` + ${quoted} quoted separately` : ''}` : 'Quote after review';
 }
 
 function startForm() {

@@ -13,6 +13,8 @@ export { esc };
 
 // Messages shown after an action (?done=key)
 const FLASH = {
+  missing_sent: ['ok', 'The client was emailed the list of missing items with their upload link.'],
+  missing_failed: ['err', 'The email to the client could not be sent. Please try again.'],
   imported: ['ok', 'Past client added.'],
   import_dup: ['ok', 'That client and service on that date is already recorded, so nothing was added.'],
   bounces: ['ok', 'Bounce alerts are on. You will be alerted when an email to a client cannot be delivered.'],
@@ -180,7 +182,7 @@ export function casesPage({ admin, badges, rows, view, q, counts }) {
 
 // ── Case detail ─────────────────────────────────────────────────
 function eventIcon(event) {
-  return { created: 'inbox', status_changed: 'arrow', client_notified: 'mail', reminder_sent: 'bell', note: 'doc', follow_up: 'clock', legal_hold: 'lock', erased: 'trash', email_bounced: 'mail', documents_added: 'doc' }[event] || 'activity';
+  return { created: 'inbox', status_changed: 'arrow', client_notified: 'mail', reminder_sent: 'bell', note: 'doc', follow_up: 'clock', legal_hold: 'lock', erased: 'trash', email_bounced: 'mail', documents_added: 'doc', info_requested: 'mail' }[event] || 'activity';
 }
 
 function eventLabel(e, kind) {
@@ -195,6 +197,7 @@ function eventLabel(e, kind) {
     case 'erased': return 'Personal data erased';
     case 'email_bounced': return 'Email to the client bounced';
     case 'documents_added': return 'Client uploaded documents';
+    case 'info_requested': return 'Missing items requested from the client';
     default: return e.event;
   }
 }
@@ -206,7 +209,7 @@ const CASE_TABS = [
   { key: 'records', label: 'Records' }
 ];
 
-export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLink = null }) {
+export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLink = null, missing = null }) {
   const wa = whatsappLink(c.phone);
   const purged = !!c.purged_at;
   const tabs = CASE_TABS.map(t => `<a class="${t.key === tab ? 'on' : ''}" href="/admin/case/${esc(c.id)}${t.key === 'summary' ? '' : `?tab=${t.key}`}">${esc(t.label)}${t.key === 'documents' && docs.length ? ` (${docs.length})` : ''}</a>`).join('');
@@ -233,7 +236,7 @@ export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLin
   if (tab === 'documents') body = caseDocuments(c, docs, uploadLink);
   else if (tab === 'activity') body = caseActivity(c, events);
   else if (tab === 'records') body = caseRecords(c);
-  else body = caseSummary(c, uploadLink);
+  else body = caseSummary(c, uploadLink, missing);
 
   return shell({ title: c.reference, active: 'cases', admin, badges, body: `
     <a class="crumb" href="/admin/cases">${icon('back', 16)}Cases</a>
@@ -244,7 +247,7 @@ export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLin
     ${body}` });
 }
 
-function caseSummary(c, uploadLink = null) {
+function caseSummary(c, uploadLink = null, missing = null) {
   let fields = {};
   try { fields = JSON.parse(c.form_data || '{}'); } catch (e) { /* show nothing */ }
   const SHOWN_ELSEWHERE = /^(full name|name|email|email address|phone|phone number|phone \/ whatsapp number|declaration accurate|declaration consent)$/i;
@@ -311,7 +314,24 @@ function caseSummary(c, uploadLink = null) {
       </dl>
     </div></div>`;
 
-  return `<div class="grid grid-3"><div>${progress}${details}</div><div>${followUp}${uploadCard(uploadLink)}</div></div>`;
+  return `<div class="grid grid-3"><div>${progress}${details}</div><div>${missingCard(c, missing)}${followUp}${uploadCard(uploadLink)}</div></div>`;
+}
+
+function missingCard(c, m) {
+  if (!m || c.purged_at || !isOpen(c.status)) return '';
+  const total = m.details.length + m.documents.length;
+  const list = (title, items) => items.length ? `<p class="small" style="margin:10px 0 4px"><strong>${esc(title)}</strong></p><ul class="small" style="margin:0;padding-left:18px;line-height:1.6">${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>` : '';
+  const body = total || m.actions.length
+    ? `${list('Details missing', m.details)}${list('Documents not uploaded', m.documents)}${list('For you to do', m.actions)}
+       ${m.unlabelled ? `<p class="small muted" style="margin:10px 0 0">${m.unlabelled} uploaded file${m.unlabelled === 1 ? ' is' : 's are'} not labelled; check the Documents tab in case ${m.unlabelled === 1 ? 'it covers' : 'they cover'} one of these.</p>` : ''}
+       ${total && c.email ? `<form method="post" action="/admin/case/${esc(c.id)}/request-missing" style="margin-top:12px">
+          <label for="rm-note">Message to the client (optional)</label>
+          <textarea id="rm-note" name="note" maxlength="1000" placeholder="e.g. We can start once we have these."></textarea>
+          <label class="check"><input type="checkbox" name="wait" value="1"${c.kind === 'application' ? ' checked' : ''}> Move the case to &ldquo;Awaiting documents&rdquo; (sends automatic reminders)</label>
+          <div class="btn-row"><button class="btn" type="submit">Email the client this list</button></div></form>`
+        : (total ? '<p class="small muted" style="margin-top:10px">No email on file: ask the client on WhatsApp and send them the upload link below.</p>' : '')}`
+    : `<p class="small muted" style="margin:0">${icon('check', 16)} Nothing missing for the services requested.</p>`;
+  return `<div class="card" id="missing"><div class="card-head"><h2>Still needed${total ? ` (${total})` : ''}</h2></div><div class="card-body">${body}</div></div>`;
 }
 
 function uploadCard(uploadLink) {

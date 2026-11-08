@@ -29,11 +29,12 @@ import { MANIFEST, SERVICE_WORKER, APP_SCRIPT } from '../_lib/admin-app.js';
 import { vapidKeys, notifyAdmins } from '../_lib/webpush.js';
 import { bounceSettings, ensureBounceWebhook } from '../_lib/bounces.js';
 import { uploadUrl } from '../_lib/upload-links.js';
+import { missingForCase } from '../_lib/requirements.js';
 import { CHANNELS, PAST_STATUSES, validatePast, savePast, importCsv, csvTemplate, dataSubjectCount } from '../_lib/past-records.js';
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
-import { adminLoginCodeEmail, caseStatusEmail } from '../_lib/email-templates.js';
+import { adminLoginCodeEmail, caseStatusEmail, missingInfoEmail } from '../_lib/email-templates.js';
 
 const SECURITY_HEADERS = {
   'Cache-Control': 'no-store',
@@ -322,7 +323,8 @@ export async function onRequest(context) {
       ]);
       await audit(env, request, actor, 'case.viewed', 'case', c.id, { reference: c.reference });
       const uploadLink = isOpen(c.status) && !c.purged_at ? await uploadUrl(env, c.id, url.origin) : null;
-      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash, uploadLink }));
+      const missing = isOpen(c.status) && !c.purged_at ? missingForCase(c, docs.results || []) : null;
+      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing }));
     }
     if (method !== 'POST') return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
     const form = await request.formData();
@@ -370,6 +372,37 @@ export async function onRequest(context) {
         console.error('admin: status email failed:', err && err.message);
         return back('status_email_failed');
       }
+    }
+
+    if (parts[2] === 'request-missing') {
+      if (!c.email || c.anonymised_at || !isOpen(c.status)) return back('unchanged');
+      const docs = (await env.DB.prepare('SELECT file_name FROM documents WHERE case_id = ?1 AND deleted_at IS NULL').bind(c.id).all()).results || [];
+      const m = missingForCase(c, docs);
+      if (!m.details.length && !m.documents.length) return back('unchanged');
+      const note = String(form.get('note') || '').trim().slice(0, 1000);
+      try {
+        await sendBrevoEmail(env, {
+          to: { email: c.email, name: c.full_name },
+          subject: `What we still need for ${c.reference}`,
+          html: missingInfoEmail({ fullName: c.full_name, reference: c.reference, details: m.details, documents: m.documents, note, uploadLink: await uploadUrl(env, c.id, url.origin) }),
+          replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' }
+        });
+      } catch (err) {
+        console.error('admin: missing-info email failed:', err && err.message);
+        return back('missing_failed');
+      }
+      const wait = form.get('wait') === '1' && c.kind === 'application' && c.status !== 'awaiting_documents';
+      const stmts = [
+        env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'info_requested', ?2, ?3, ?4)")
+          .bind(c.id, `Asked for ${m.details.length} detail${m.details.length === 1 ? '' : 's'} and ${m.documents.length} document${m.documents.length === 1 ? '' : 's'}${note ? `. Message: ${note}` : ''}`, actor, now),
+        auditStmt(env, request, actor, 'case.info_requested', 'case', c.id, { reference: c.reference, details: m.details.length, documents: m.documents.length }, now)
+      ];
+      if (wait) {
+        stmts.push(env.DB.prepare("UPDATE cases SET status = 'awaiting_documents', updated_at = ?2, status_changed_at = ?2 WHERE id = ?1").bind(c.id, now));
+        stmts.push(env.DB.prepare("INSERT INTO case_events (case_id, event, from_status, to_status, note, actor, created_at) VALUES (?1, 'status_changed', ?2, 'awaiting_documents', 'Waiting for the missing items', ?3, ?4)").bind(c.id, c.status, actor, now));
+      }
+      await env.DB.batch(stmts);
+      return back('missing_sent');
     }
 
     if (parts[2] === 'note') {

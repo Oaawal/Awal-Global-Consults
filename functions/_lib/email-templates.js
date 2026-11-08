@@ -200,6 +200,23 @@ export function adminNoticeEmail({ heading, reference, services = [], lines = []
   return shell(inner, { preheader: `${heading} (${reference})` });
 }
 
+// ── Request for missing information/documents ───────────────────
+export function missingInfoEmail({ fullName, reference, details = [], documents = [], uploadLink = null, note = '' }) {
+  const list = (title, items) => items.length ? `<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:16px;">${escapeHtml(title)}</div>
+    <ul style="font-size:13.5px;line-height:1.7;color:${TEXT};padding-left:18px;margin:6px 0 0;">${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul>` : '';
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">A few things we still need</h2>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(fullName || 'valued client')},</p>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">To continue with your request <strong>${escapeHtml(reference)}</strong>, we need the following from you.</p>
+    ${note ? `<div style="margin:14px 0;padding:12px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13.5px;line-height:1.7;color:${TEXT};white-space:pre-line;">${escapeHtml(note)}</div>` : ''}
+    ${list('Details to send', details)}
+    ${list('Documents to upload', documents)}
+    ${details.length ? `<p style="font-size:13.5px;line-height:1.7;color:${TEXT};margin:16px 0 0;">Please reply to this email with the details above.</p>` : ''}
+    ${documents.length && uploadLink ? `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request.</div></div>` : ''}
+    <p style="font-size:12.5px;line-height:1.6;color:${MUTED};margin:18px 0 0;">Questions? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>, quoting your reference.</p>`;
+  return shell(inner, { preheader: `We need a few more things for ${reference}` });
+}
+
 // ── Case status update email to the client ──────────────────────
 export function caseStatusEmail({ fullName, reference, statusLabel, statusMessage, note, askForReview = false, uploadLink = null }) {
   const inner = `
