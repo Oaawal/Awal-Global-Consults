@@ -180,7 +180,7 @@ export function casesPage({ admin, badges, rows, view, q, counts }) {
 
 // ── Case detail ─────────────────────────────────────────────────
 function eventIcon(event) {
-  return { created: 'inbox', status_changed: 'arrow', client_notified: 'mail', reminder_sent: 'bell', note: 'doc', follow_up: 'clock', legal_hold: 'lock', erased: 'trash', email_bounced: 'mail' }[event] || 'activity';
+  return { created: 'inbox', status_changed: 'arrow', client_notified: 'mail', reminder_sent: 'bell', note: 'doc', follow_up: 'clock', legal_hold: 'lock', erased: 'trash', email_bounced: 'mail', documents_added: 'doc' }[event] || 'activity';
 }
 
 function eventLabel(e, kind) {
@@ -194,6 +194,7 @@ function eventLabel(e, kind) {
     case 'legal_hold': return 'Legal hold changed';
     case 'erased': return 'Personal data erased';
     case 'email_bounced': return 'Email to the client bounced';
+    case 'documents_added': return 'Client uploaded documents';
     default: return e.event;
   }
 }
@@ -205,7 +206,7 @@ const CASE_TABS = [
   { key: 'records', label: 'Records' }
 ];
 
-export function casePage({ admin, badges, c, tab, docs, events, flash }) {
+export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLink = null }) {
   const wa = whatsappLink(c.phone);
   const purged = !!c.purged_at;
   const tabs = CASE_TABS.map(t => `<a class="${t.key === tab ? 'on' : ''}" href="/admin/case/${esc(c.id)}${t.key === 'summary' ? '' : `?tab=${t.key}`}">${esc(t.label)}${t.key === 'documents' && docs.length ? ` (${docs.length})` : ''}</a>`).join('');
@@ -229,10 +230,10 @@ export function casePage({ admin, badges, c, tab, docs, events, flash }) {
     </div>`;
 
   let body = '';
-  if (tab === 'documents') body = caseDocuments(c, docs);
+  if (tab === 'documents') body = caseDocuments(c, docs, uploadLink);
   else if (tab === 'activity') body = caseActivity(c, events);
   else if (tab === 'records') body = caseRecords(c);
-  else body = caseSummary(c);
+  else body = caseSummary(c, uploadLink);
 
   return shell({ title: c.reference, active: 'cases', admin, badges, body: `
     <a class="crumb" href="/admin/cases">${icon('back', 16)}Cases</a>
@@ -243,7 +244,7 @@ export function casePage({ admin, badges, c, tab, docs, events, flash }) {
     ${body}` });
 }
 
-function caseSummary(c) {
+function caseSummary(c, uploadLink = null) {
   let fields = {};
   try { fields = JSON.parse(c.form_data || '{}'); } catch (e) { /* show nothing */ }
   const SHOWN_ELSEWHERE = /^(full name|name|email|email address|phone|phone number|phone \/ whatsapp number|declaration accurate|declaration consent)$/i;
@@ -310,12 +311,20 @@ function caseSummary(c) {
       </dl>
     </div></div>`;
 
-  return `<div class="grid grid-3"><div>${progress}${details}</div><div>${followUp}</div></div>`;
+  return `<div class="grid grid-3"><div>${progress}${details}</div><div>${followUp}${uploadCard(uploadLink)}</div></div>`;
 }
 
-function caseDocuments(c, docs) {
+function uploadCard(uploadLink) {
+  if (!uploadLink) return '';
+  return `<div class="card"><div class="card-head"><h2>Client upload link</h2></div><div class="card-body">
+      <p class="small muted" style="margin-top:0">Send this private link when you need more documents. Files go straight to this case and you are notified. It stops working when the case closes.</p>
+      <input readonly value="${esc(uploadLink)}" style="width:100%;font-size:12px" aria-label="Upload link">
+    </div></div>`;
+}
+
+function caseDocuments(c, docs, uploadLink = null) {
   if (c.purged_at) return `<div class="card"><div class="card-body">${emptyState('trash', 'Documents erased', `Removed on ${fmtDay(c.purged_at)}.`)}</div></div>`;
-  if (!docs.length) return `<div class="card"><div class="card-body">${emptyState('doc', 'No documents uploaded', 'Documents sent on WhatsApp are not stored here.')}</div></div>`;
+  if (!docs.length) return `<div class="card"><div class="card-body">${emptyState('doc', 'No documents yet', 'The client can add them with their private upload link (Summary tab).')}</div></div>`;
   return `<div class="card"><div class="card-body">${docs.map(d => {
     const isImg = /\.(jpe?g|png)$/i.test(d.file_name);
     return `<div class="doc"><span class="doc-ic ${isImg ? 'img' : ''}">${icon('doc', 20)}</span>
@@ -626,7 +635,7 @@ const ACTION_LABELS = {
   'case.note_added': 'Note added', 'case.follow_up_set': 'Follow-up updated', 'case.reminder_sent': 'Automatic reminder sent',
   'case.tracked': 'Client checked status online', 'case.legal_hold': 'Legal hold changed', 'case.erased': 'Case erased',
   'document.viewed': 'Document opened', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
-  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'email.bounced': 'Email bounced', 'case.imported': 'Past client added', 'bounces.enabled': 'Turned on bounce alerts', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
+  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'email.bounced': 'Email bounced', 'case.imported': 'Past client added', 'document.uploaded': 'Client uploaded documents', 'bounces.enabled': 'Turned on bounce alerts', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
   'client.viewed': 'Client opened', 'client.updated': 'Client details corrected', 'client.exported': 'Client data exported', 'client.erased': 'Client erased',
   'client.request_logged': 'Data request recorded', 'client.request_done': 'Data request completed', 'backup.downloaded': 'Backup downloaded'
 };

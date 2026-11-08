@@ -9,7 +9,7 @@
 export const APPLICATION_STATUSES = [
   { key: 'new', label: 'New', notify: false, client: 'We have received your application and will review it shortly.' },
   { key: 'quote_sent', label: 'Quote sent', notify: true, client: 'We have sent you a quote for your request. Please review it and let us know if you have any questions.' },
-  { key: 'awaiting_documents', label: 'Awaiting documents', notify: true, client: 'We need some more documents or information from you before we can continue. Please send them on WhatsApp or reply to this email.' },
+  { key: 'awaiting_documents', label: 'Awaiting documents', notify: true, client: 'We need some more documents or information from you before we can continue. Please upload documents with your private link below, or reply to this email with any information.' },
   { key: 'paid', label: 'Payment received', notify: true, client: 'We have received your payment, thank you. We are now preparing your filing.' },
   { key: 'filed', label: 'Filed with agency', notify: true, client: 'Your application has been filed with the relevant agency. We will update you as soon as we hear back.' },
   { key: 'approved', label: 'Approved', notify: true, client: 'Good news: your application has been approved. We are preparing your documents for delivery.' },

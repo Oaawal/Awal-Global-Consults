@@ -75,9 +75,9 @@ function serviceListHtml(services) {
 }
 
 // ── Application: client confirmation email ──────────────────────
-export function kycClientEmail({ fullName, services, attachedCount = 0, skippedFiles = [], reference = null }) {
+export function kycClientEmail({ fullName, services, attachedCount = 0, skippedFiles = [], reference = null, uploadLink = null }) {
   const docLine = skippedFiles.length > 0
-    ? `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:10px 14px;margin:14px 0;">${attachedCount > 0 ? `We received ${attachedCount} document${attachedCount === 1 ? '' : 's'}, but ` : 'We could not receive '}the following ${skippedFiles.length === 1 ? 'file was' : 'files were'} not received (unsupported file type or too large): <strong>${escapeHtml(skippedFiles.join(', '))}</strong>. Please resend ${skippedFiles.length === 1 ? 'it' : 'them'} directly on <a href="${WHATSAPP_LINK}" style="color:#a05a00;font-weight:600;">WhatsApp</a>.</div>`
+    ? `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:10px 14px;margin:14px 0;">${attachedCount > 0 ? `We received ${attachedCount} document${attachedCount === 1 ? '' : 's'}, but ` : 'We could not receive '}the following ${skippedFiles.length === 1 ? 'file was' : 'files were'} not received (unsupported file type or too large): <strong>${escapeHtml(skippedFiles.join(', '))}</strong>. Please upload ${skippedFiles.length === 1 ? 'it' : 'them'} again as PDF, JPG or PNG (under 7MB) using the button below.</div>`
     : (attachedCount > 0
       ? `<div style="font-size:13px;color:${TEXT};margin:14px 0;">✓ We received <strong>${attachedCount} document${attachedCount === 1 ? '' : 's'}</strong> along with your request.</div>`
       : '');
@@ -93,9 +93,10 @@ export function kycClientEmail({ fullName, services, attachedCount = 0, skippedF
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:20px;">Services Requested</div>
     ${serviceListHtml(services)}
     ${docLine}
+    ${uploadLink ? `<p style="font-size:13.5px;line-height:1.7;color:${TEXT};margin:14px 0 0;">Need to send more documents later? Use your private upload link:</p>` + `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request. For your security we do not accept documents on WhatsApp.</div></div>` : ''}
     <div style="margin:16px 0;padding:14px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13px;color:${NAVY};">Once you're happy with your quote, we'll share our bank transfer details and begin processing right away.</div>
     <div style="margin-top:22px;padding-top:18px;border-top:1px solid ${BORDER};font-size:13px;color:${TEXT};">
-      Have documents to send, or a question in the meantime? Chat with us directly on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>.
+      Questions in the meantime? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>.
     </div>`;
   return shell(inner, { preheader: 'We\'ve received your request: here\'s what happens next.' });
 }
@@ -200,7 +201,7 @@ export function adminNoticeEmail({ heading, reference, services = [], lines = []
 }
 
 // ── Case status update email to the client ──────────────────────
-export function caseStatusEmail({ fullName, reference, statusLabel, statusMessage, note, askForReview = false }) {
+export function caseStatusEmail({ fullName, reference, statusLabel, statusMessage, note, askForReview = false, uploadLink = null }) {
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Update on your request</h2>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(fullName || 'valued client')},</p>
@@ -210,6 +211,7 @@ export function caseStatusEmail({ fullName, reference, statusLabel, statusMessag
     </div>
     ${statusMessage ? `<p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${escapeHtml(statusMessage)}</p>` : ''}
     ${note ? `<div style="margin:14px 0;padding:12px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13.5px;line-height:1.7;color:${TEXT};white-space:pre-line;">${escapeHtml(note)}</div>` : ''}
+    ${uploadLink ? `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request. For your security we do not accept documents on WhatsApp.</div></div>` : ''}
     ${trackLinkHtml(reference)}
     ${askForReview ? `<div style="margin:18px 0;padding:14px 16px;background:${BG};border:1px solid ${BORDER};border-radius:8px;font-size:13.5px;line-height:1.7;color:${TEXT};">
       Happy with our service? A short Google review helps other business owners find us.<br>
@@ -227,13 +229,13 @@ function trackLinkHtml(reference) {
 }
 
 // ── Automatic reminder to a client we are waiting on ────────────
-export function caseReminderEmail({ fullName, reference, status, reminderNumber }) {
+export function caseReminderEmail({ fullName, reference, status, reminderNumber, uploadLink = null }) {
   const waitingForDocs = status === 'awaiting_documents';
   const lead = waitingForDocs
     ? 'We are still waiting for some documents or information from you before we can continue with your request.'
     : 'We sent you a quote for your request and wanted to check whether you have any questions about it.';
   const ask = waitingForDocs
-    ? 'Please send them on WhatsApp or reply to this email, and we will pick things up straight away.'
+    ? 'Please upload them with your private link below, and we will pick things up straight away.'
     : 'When you are ready to go ahead, just reply to this email or message us on WhatsApp.';
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">${reminderNumber > 1 ? 'A quick follow-up' : 'Just checking in'}</h2>
@@ -243,7 +245,7 @@ export function caseReminderEmail({ fullName, reference, status, reminderNumber 
       Reference: <strong style="color:${NAVY};">${escapeHtml(reference)}</strong>
     </div>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${ask}</p>
-    <div style="margin-top:20px;"><a href="${WHATSAPP_LINK}?text=${encodeURIComponent(`Hello, about my request ${reference}`)}" style="display:inline-block;background:#25d366;color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Message us on WhatsApp</a></div>
+    ${waitingForDocs && uploadLink ? `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request. For your security we do not accept documents on WhatsApp.</div></div>` : `<div style="margin-top:20px;"><a href="${WHATSAPP_LINK}?text=${encodeURIComponent(`Hello, about my request ${reference}`)}" style="display:inline-block;background:#25d366;color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Message us on WhatsApp</a></div>`}
     <p style="font-size:12px;line-height:1.6;color:${MUTED};margin:18px 0 0;">If you have already replied or decided not to proceed, please ignore this message, or let us know and we will stop the reminders.</p>`;
   return shell(inner, { preheader: waitingForDocs ? `We need a few more things for ${reference}` : `Any questions about your quote for ${reference}?` });
 }

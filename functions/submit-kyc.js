@@ -1,3 +1,4 @@
+import { uploadUrl } from './_lib/upload-links.js';
 import { checkEmail } from './_lib/email-check.js';
 import { verifyTurnstile, reportBlockedSubmission } from './_lib/turnstile.js';
 import { sendBrevoEmail, bytesToBase64 } from './_lib/brevo.js';
@@ -206,6 +207,7 @@ export async function onRequestPost(context) {
     // the submission still goes through by email and the admin email says so.
     let reference = null;
     let caseUrl = null;
+    let uploadLink = null;
     let recordStatus = 'off';
     if (recordsEnabled(env)) {
       try {
@@ -222,6 +224,7 @@ export async function onRequestPost(context) {
           files: storedFiles
         }));
         caseUrl = `${new URL(request.url).origin}/admin/case/${caseId}`;
+        uploadLink = await uploadUrl(env, caseId, new URL(request.url).origin);
         recordStatus = 'saved';
       } catch (err) {
         console.error('submit-kyc: saving record failed:', err && err.message);
@@ -233,7 +236,7 @@ export async function onRequestPost(context) {
     // carries a link only. If the records could not be saved, attach them so nothing is lost.
     const linkOnly = recordStatus === 'saved';
     const notes = [];
-    if (skippedFiles.length > 0) notes.push(`These documents were NOT received (unsupported file type or too large). Ask the client to resend them on WhatsApp: ${skippedFiles.join(', ')}`);
+    if (skippedFiles.length > 0) notes.push(`These documents were NOT received (unsupported file type or too large). They can upload them again with their private upload link: ${skippedFiles.join(', ')}`);
     if (attachments.length === 0) notes.push('No documents were attached to this submission.');
     else if (linkOnly) notes.push(`${attachments.length} document${attachments.length === 1 ? '' : 's'} saved securely. Open the case in the dashboard to view ${attachments.length === 1 ? 'it' : 'them'}.`);
     const attachmentsNote = notes.join(' ');
@@ -267,14 +270,15 @@ export async function onRequestPost(context) {
     await sendBrevoEmail(env, {
       to: { email, name: fullName },
       subject: `We've Received Your Request: ${subjectServices}${reference ? ` (Ref ${reference})` : ''}`,
-      html: kycClientEmail({ fullName, services, attachedCount: attachments.length, skippedFiles, reference })
+      html: kycClientEmail({ fullName, services, attachedCount: attachments.length, skippedFiles, reference, uploadLink })
     });
 
     return jsonResponse({
       ok: true,
       attachedCount: attachments.length,
       skippedFiles,
-      reference
+      reference,
+      uploadLink
     });
   } catch (err) {
     // Log the real reason server-side only; never expose internals to visitors.

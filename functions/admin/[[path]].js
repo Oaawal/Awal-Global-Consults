@@ -24,10 +24,11 @@ import {
   loginPage, overviewPage, casesPage, casePage, clientsPage, clientPage, recordsPage, activityPage,
   notFoundPage, simplePage, flashFor, CASE_VIEWS, ACTIVITY_FILTERS, importPage
 } from '../_lib/admin-views.js';
-import { statusesFor, statusInfo, retentionFor, documentContentType, autoFollowUp } from '../_lib/cases.js';
+import { statusesFor, statusInfo, retentionFor, documentContentType, autoFollowUp, isOpen } from '../_lib/cases.js';
 import { MANIFEST, SERVICE_WORKER, APP_SCRIPT } from '../_lib/admin-app.js';
 import { vapidKeys, notifyAdmins } from '../_lib/webpush.js';
 import { bounceSettings, ensureBounceWebhook } from '../_lib/bounces.js';
+import { uploadUrl } from '../_lib/upload-links.js';
 import { CHANNELS, PAST_STATUSES, validatePast, savePast, importCsv, csvTemplate, dataSubjectCount } from '../_lib/past-records.js';
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
@@ -320,7 +321,8 @@ export async function onRequest(context) {
         env.DB.prepare('SELECT event, from_status, to_status, note, actor, created_at FROM case_events WHERE case_id = ?1 ORDER BY id DESC').bind(c.id)
       ]);
       await audit(env, request, actor, 'case.viewed', 'case', c.id, { reference: c.reference });
-      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash }));
+      const uploadLink = isOpen(c.status) && !c.purged_at ? await uploadUrl(env, c.id, url.origin) : null;
+      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash, uploadLink }));
     }
     if (method !== 'POST') return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
     const form = await request.formData();
@@ -358,7 +360,7 @@ export async function onRequest(context) {
         await sendBrevoEmail(env, {
           to: { email: c.email, name: c.full_name },
           subject: `Update on your request ${c.reference}: ${info.label}`,
-          html: caseStatusEmail({ fullName: c.full_name, reference: c.reference, statusLabel: info.label, statusMessage: info.client, note: message, askForReview: status === 'delivered' }),
+          html: caseStatusEmail({ fullName: c.full_name, reference: c.reference, statusLabel: info.label, statusMessage: info.client, note: message, askForReview: status === 'delivered', uploadLink: status === 'awaiting_documents' ? await uploadUrl(env, c.id, url.origin) : null }),
           replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' }
         });
         await env.DB.prepare("INSERT INTO case_events (case_id, event, to_status, note, actor, created_at) VALUES (?1, 'client_notified', ?2, ?3, ?4, ?5)")

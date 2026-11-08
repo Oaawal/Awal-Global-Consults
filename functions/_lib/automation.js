@@ -1,3 +1,4 @@
+import { uploadUrl } from './upload-links.js';
 /**
  * The daily job (triggered at 8am Lagos time via /cron/daily):
  *   1. Sends clients a polite reminder when we have waited on them for
@@ -144,7 +145,7 @@ export async function runDailyJob(env, request, { now = new Date() } = {}) {
         subject: c.status === 'awaiting_documents'
           ? `Reminder: we need a few more things for ${c.reference}`
           : `Following up on your quote: ${c.reference}`,
-        html: caseReminderEmail({ fullName: c.full_name, reference: c.reference, status: c.status, reminderNumber }),
+        html: caseReminderEmail({ fullName: c.full_name, reference: c.reference, status: c.status, reminderNumber, uploadLink: c.status === 'awaiting_documents' ? await uploadUrl(env, c.id) : null }),
         replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' }
       });
     } catch (err) {
