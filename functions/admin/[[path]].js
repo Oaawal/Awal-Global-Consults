@@ -30,11 +30,12 @@ import { vapidKeys, notifyAdmins } from '../_lib/webpush.js';
 import { bounceSettings, ensureBounceWebhook } from '../_lib/bounces.js';
 import { uploadUrl } from '../_lib/upload-links.js';
 import { missingForCase } from '../_lib/requirements.js';
+import { START_PRICES, PAYMENT_METHODS, KIND_LABEL, billingSettings, saveBillingSettings, nextNumber, totals, renderDoc, docUrl, money, addDays } from '../_lib/billing.js';
 import { CHANNELS, PAST_STATUSES, validatePast, savePast, importCsv, csvTemplate, dataSubjectCount } from '../_lib/past-records.js';
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
-import { adminLoginCodeEmail, caseStatusEmail, missingInfoEmail } from '../_lib/email-templates.js';
+import { adminLoginCodeEmail, caseStatusEmail, missingInfoEmail, billingEmail } from '../_lib/email-templates.js';
 
 const SECURITY_HEADERS = {
   'Cache-Control': 'no-store',
@@ -102,6 +103,60 @@ async function navBadges(env) {
             (SELECT COUNT(*) FROM cases c WHERE ${REVIEW_SQL}) + (SELECT COUNT(*) FROM data_requests WHERE completed_at IS NULL) AS records`
   ).bind(new Date().toISOString()).first();
   return { cases: row?.cases || 0, records: row?.records || 0 };
+}
+
+// ── Billing helpers ─────────────────────────────────────────────
+function billPrefill(c, docs, fromId) {
+  let f = {}; try { f = JSON.parse(c.form_data || '{}') || {}; } catch (e) {}
+  const from = fromId ? docs.find(d => d.id === fromId) : null;
+  if (from) {
+    return { kind: 'invoice', related: from.kind === 'quote' ? from.id : '', client: JSON.parse(from.client_json), category: from.category,
+      items: JSON.parse(from.items_json), notes: '' };
+  }
+  const services = String(c.services || '').split(',').map(x => x.trim()).filter(Boolean);
+  return {
+    kind: 'quote', related: '',
+    client: { name: f['Business Name'] || c.full_name, address: f['Address'] || f['Passport Address'] || f['Person 1 Residential Address'] || '', tin: '', email: c.email, phone: c.phone },
+    category: services.join(', '),
+    items: services.map(svc => ({ description: svc, qty: 1, unit: START_PRICES[svc] || '' })),
+    notes: ''
+  };
+}
+
+async function sendBillingDoc(env, request, origin, actor, c, doc, extraLinks = []) {
+  const viewUrl = await docUrl(env, doc.id, origin);
+  const dateLine = doc.kind === 'invoice' ? `Due ${new Date(doc.due_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`
+    : doc.kind === 'quote' ? `Valid until ${new Date(doc.valid_until).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`
+    : doc.kind === 'receipt' ? 'Paid, thank you' : '';
+  const cl = JSON.parse(doc.client_json);
+  await sendBrevoEmail(env, {
+    to: { email: c.email, name: c.full_name },
+    subject: `Your ${KIND_LABEL[doc.kind].toLowerCase()} ${doc.number} from Awal Global Consults`,
+    html: billingEmail({ kind: doc.kind, number: doc.number, clientName: cl.name, total: doc.kind === 'receipt' ? doc.amount_paid : doc.total, dateLine, viewUrl, money, extraLinks }),
+    replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' }
+  });
+  const now = new Date().toISOString();
+  await env.DB.batch([
+    env.DB.prepare("UPDATE billing_docs SET sent_at = ?2, status = CASE WHEN status = 'issued' THEN 'sent' ELSE status END WHERE id = ?1").bind(doc.id, now),
+    env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'note', ?2, ?3, ?4)").bind(c.id, `Emailed ${KIND_LABEL[doc.kind].toLowerCase()} ${doc.number} to ${c.email}`, actor, now),
+    auditStmt(env, request, actor, 'billing.sent', 'billing', doc.id, { number: doc.number }, now)
+  ]);
+}
+
+async function createBillingDoc(env, request, actor, c, d) {
+  const id = crypto.randomUUID();
+  const now = d.issuedAt || new Date().toISOString();
+  const number = await nextNumber(env, d.kind, now);
+  await env.DB.batch([
+    env.DB.prepare(`INSERT INTO billing_docs (id, case_id, kind, number, status, issued_at, due_at, valid_until, related_id, category, client_json, items_json,
+        vat_rate, subtotal, vat_amount, total, amount_paid, payment_method, payment_ref, paid_at, notes, created_by, created_at)
+      VALUES (?1, ?2, ?3, ?4, 'issued', ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22)`)
+      .bind(id, c.id, d.kind, number, now, d.dueAt || null, d.validUntil || null, d.related || null, d.category || null, JSON.stringify(d.client), JSON.stringify(d.items),
+        d.vatRate || 0, d.subtotal || 0, d.vat || 0, d.total || 0, d.amountPaid ?? null, d.method || null, d.ref || null, d.paidAt || null, d.notes || null, actor, new Date().toISOString()),
+    env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'note', ?2, ?3, ?4)").bind(c.id, `${KIND_LABEL[d.kind]} ${number} issued${d.total ? ` for ${money(d.total)}` : ''}`, actor, new Date().toISOString()),
+    auditStmt(env, request, actor, 'billing.issued', 'billing', id, { number, kind: d.kind, total: d.total || 0 }, new Date().toISOString())
+  ]);
+  return { id, number };
 }
 
 export async function onRequest(context) {
@@ -202,6 +257,88 @@ export async function onRequest(context) {
     else if (!/\.csv$/i.test(file.name || '')) error = 'Save the spreadsheet as CSV first (File, Download, CSV in Google Sheets; Save As, CSV in Excel).';
     else result = await importCsv(env, request, actor, await file.text(), form.get('kind') === 'enquiry' ? 'enquiry' : 'application');
     return html(importPage({ admin, badges: await navBadges(env), flash: null, error, result, channels: CHANNELS, statuses: PAST_STATUSES }), error ? 400 : 200);
+  }
+
+  // ── Billing documents ──────────────────────────────────────
+  if (route === '/billing-settings' && method === 'POST') {
+    const form = await request.formData();
+    await saveBillingSettings(env, { ...(await billingSettings(env)), vatRegistered: form.get('vat') === '1' });
+    await audit(env, request, actor, 'billing.settings', 'admin', admin, { vatRegistered: form.get('vat') === '1' });
+    const back = String(form.get('back') || '/admin/');
+    return redirect(`${back.startsWith('/admin/') ? back : '/admin/'}${back.includes('?') ? '&' : '?'}done=vat_saved`);
+  }
+  if (parts[0] === 'billing' && parts[1]) {
+    const doc = await env.DB.prepare('SELECT * FROM billing_docs WHERE id = ?1').bind(parts[1]).first();
+    if (!doc) return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
+    const c = await loadCase(env, doc.case_id);
+    const backTo = key => redirect(`/admin/case/${doc.case_id}?tab=billing&done=${key}`);
+    const relatedDocs = async () => {
+      const get = id => id ? env.DB.prepare('SELECT * FROM billing_docs WHERE id = ?1').bind(id).first() : null;
+      const rel = await get(doc.related_id);
+      const invoice = doc.kind === 'invoice' ? doc : (rel && rel.kind === 'invoice' ? rel : null);
+      const quote = invoice && invoice.related_id ? await get(invoice.related_id) : (rel && rel.kind === 'quote' ? rel : null);
+      const receipt = doc.kind === 'engagement' && invoice ? await env.DB.prepare("SELECT * FROM billing_docs WHERE related_id = ?1 AND kind = 'receipt' AND status != 'void' ORDER BY created_at DESC LIMIT 1").bind(invoice.id).first() : null;
+      return { invoice, quote, receipt };
+    };
+    if (parts.length === 2 && method === 'GET') {
+      await audit(env, request, actor, 'billing.viewed', 'billing', doc.id, { number: doc.number });
+      return new Response(renderDoc(doc, await relatedDocs()), { headers: { ...SECURITY_HEADERS, 'Content-Type': 'text/html; charset=utf-8',
+        'Content-Security-Policy': "default-src 'none'; img-src data:; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'unsafe-inline'; frame-ancestors 'none'; base-uri 'none'" } });
+    }
+    if (method !== 'POST' || !c) return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
+    const form = await request.formData();
+    if (parts[2] === 'send') {
+      if (!c.email || doc.status === 'void') return backTo('bill_send_failed');
+      try { await sendBillingDoc(env, request, url.origin, actor, c, doc); } catch (err) { console.error('billing send:', err && err.message); return backTo('bill_send_failed'); }
+      return backTo('bill_sent');
+    }
+    if (parts[2] === 'void') {
+      if (doc.status === 'paid') return backTo('unchanged');
+      const now = new Date().toISOString();
+      await env.DB.batch([
+        env.DB.prepare("UPDATE billing_docs SET status = 'void', voided_at = ?2 WHERE id = ?1").bind(doc.id, now),
+        auditStmt(env, request, actor, 'billing.void', 'billing', doc.id, { number: doc.number }, now)
+      ]);
+      return backTo('bill_void');
+    }
+    if (parts[2] === 'payment' && doc.kind === 'invoice' && doc.status !== 'void') {
+      const amount = Math.round(Number(String(form.get('amount') || '0').replace(/[^\d.]/g, '')) || 0);
+      if (amount <= 0) return backTo('unchanged');
+      const dateStr = String(form.get('date') || '');
+      const paidAt = /^\d{4}-\d{2}-\d{2}$/.test(dateStr) ? new Date(`${dateStr}T12:00:00Z`).toISOString() : new Date().toISOString();
+      const paidSoFar = (doc.amount_paid || 0) + amount;
+      const now = new Date().toISOString();
+      const rc = await createBillingDoc(env, request, actor, c, {
+        kind: 'receipt', client: JSON.parse(doc.client_json), items: JSON.parse(doc.items_json), total: doc.total, subtotal: doc.subtotal, vat: doc.vat_amount, vatRate: doc.vat_rate,
+        amountPaid: amount, method: String(form.get('method') || 'Bank transfer').slice(0, 40), ref: String(form.get('ref') || '').trim().slice(0, 80), paidAt,
+        related: doc.id, category: doc.category, issuedAt: now, notes: `balance:${Math.max(0, doc.total - paidSoFar)}`
+      });
+      await env.DB.batch([
+        env.DB.prepare('UPDATE billing_docs SET amount_paid = ?2, paid_at = ?3, status = ?4 WHERE id = ?1').bind(doc.id, paidSoFar, paidAt, paidSoFar >= doc.total ? 'paid' : 'part_paid'),
+        auditStmt(env, request, actor, 'billing.paid', 'billing', doc.id, { number: doc.number, amount, receipt: rc.number }, now)
+      ]);
+      let letter = null;
+      if (form.get('letter') === '1') {
+        letter = await createBillingDoc(env, request, actor, c, { kind: 'engagement', client: JSON.parse(doc.client_json), items: JSON.parse(doc.items_json), total: doc.total,
+          related: doc.id, category: doc.category, notes: String(form.get('scope') || '').trim().slice(0, 600), issuedAt: now });
+      }
+      if (form.get('markpaid') === '1' && c.kind === 'application' && !['paid', 'filed', 'approved', 'delivered', 'closed'].includes(c.status)) {
+        await env.DB.batch([
+          env.DB.prepare("UPDATE cases SET status = 'paid', updated_at = ?2, status_changed_at = ?2 WHERE id = ?1").bind(c.id, now),
+          env.DB.prepare("INSERT INTO case_events (case_id, event, from_status, to_status, note, actor, created_at) VALUES (?1, 'status_changed', ?2, 'paid', ?3, ?4, ?5)").bind(c.id, c.status, `Receipt ${rc.number}`, actor, now)
+        ]);
+      }
+      if (form.get('send') === '1' && c.email) {
+        try {
+          const receiptDoc = await env.DB.prepare('SELECT * FROM billing_docs WHERE id = ?1').bind(rc.id).first();
+          const extra = letter ? [{ label: `Your engagement letter ${letter.number}`, url: await docUrl(env, letter.id, url.origin) }] : [];
+          await sendBillingDoc(env, request, url.origin, actor, c, receiptDoc, extra);
+          if (letter) await env.DB.prepare("UPDATE billing_docs SET sent_at = ?2, status = 'sent' WHERE id = ?1").bind(letter.id, now).run();
+        } catch (err) { console.error('receipt send:', err && err.message); return backTo('bill_send_failed'); }
+      }
+      return backTo('paid_saved');
+    }
+    return backTo('unchanged');
   }
 
   if (route === '/bounce-alerts' && method === 'POST') {
@@ -316,7 +453,7 @@ export async function onRequest(context) {
     const back = (key, tab) => redirect(`/admin/case/${c.id}?${tab ? `tab=${tab}&` : ''}done=${key}`);
 
     if (parts.length === 2 && method === 'GET') {
-      const tab = ['documents', 'activity', 'records'].includes(url.searchParams.get('tab')) ? url.searchParams.get('tab') : 'summary';
+      const tab = ['documents', 'activity', 'records', 'billing'].includes(url.searchParams.get('tab')) ? url.searchParams.get('tab') : 'summary';
       const [docs, events] = await env.DB.batch([
         env.DB.prepare('SELECT id, file_name, size_bytes, uploaded_at FROM documents WHERE case_id = ?1 AND deleted_at IS NULL ORDER BY uploaded_at').bind(c.id),
         env.DB.prepare('SELECT event, from_status, to_status, note, actor, created_at FROM case_events WHERE case_id = ?1 ORDER BY id DESC').bind(c.id)
@@ -324,7 +461,12 @@ export async function onRequest(context) {
       await audit(env, request, actor, 'case.viewed', 'case', c.id, { reference: c.reference });
       const uploadLink = isOpen(c.status) && !c.purged_at ? await uploadUrl(env, c.id, url.origin) : null;
       const missing = isOpen(c.status) && !c.purged_at ? missingForCase(c, docs.results || []) : null;
-      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing }));
+      let billing = null;
+      if (tab === 'billing') {
+        const bdocs = (await env.DB.prepare('SELECT * FROM billing_docs WHERE case_id = ?1 ORDER BY created_at DESC').bind(c.id).all()).results || [];
+        billing = { docs: bdocs, settings: await billingSettings(env), prefill: billPrefill(c, bdocs, url.searchParams.get('from')), kindLabel: KIND_LABEL, startPrices: START_PRICES, paymentMethods: PAYMENT_METHODS, money };
+      }
+      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing }));
     }
     if (method !== 'POST') return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
     const form = await request.formData();
@@ -372,6 +514,36 @@ export async function onRequest(context) {
         console.error('admin: status email failed:', err && err.message);
         return back('status_email_failed');
       }
+    }
+
+    if (parts[2] === 'billing' && parts[3] === 'new') {
+      const kind = form.get('kind') === 'invoice' ? 'invoice' : 'quote';
+      const settings = await billingSettings(env);
+      const raw = Array.from({ length: 20 }, (_, i) => ({ description: form.get(`desc_${i}`), detail: form.get(`detail_${i}`), timeline: form.get(`timeline_${i}`),
+        qty: form.get(`qty_${i}`), unit: form.get(`unit_${i}`), gov: form.get(`gov_${i}`) === '1' }));
+      const t = totals(raw.filter(r => r.description), settings.vatRegistered);
+      if (!t.items.length) return redirect(`/admin/case/${c.id}?tab=billing&done=bill_empty#new`);
+      const now = new Date().toISOString();
+      const client = { name: String(form.get('name') || c.full_name).trim().slice(0, 160), address: String(form.get('address') || '').trim().slice(0, 300),
+        tin: String(form.get('tin') || '').trim().slice(0, 40), phone: c.phone || '', email: c.email || '' };
+      const doc = await createBillingDoc(env, request, actor, c, {
+        kind, client, items: t.items, subtotal: t.subtotal, vat: t.vat, total: t.total, vatRate: t.vatRate,
+        category: String(form.get('category') || '').trim().slice(0, 200), notes: String(form.get('notes') || '').trim().slice(0, 600),
+        related: String(form.get('related') || '') || null,
+        validUntil: kind === 'quote' ? addDays(now, 14) : null, dueAt: kind === 'invoice' ? addDays(now, 7) : null, issuedAt: now
+      });
+      if (kind === 'quote' && c.kind === 'application' && ['new'].includes(c.status)) {
+        await env.DB.batch([
+          env.DB.prepare("UPDATE cases SET status = 'quote_sent', updated_at = ?2, status_changed_at = ?2 WHERE id = ?1").bind(c.id, now),
+          env.DB.prepare("INSERT INTO case_events (case_id, event, from_status, to_status, note, actor, created_at) VALUES (?1, 'status_changed', 'new', 'quote_sent', ?2, ?3, ?4)").bind(c.id, `Quotation ${doc.number}`, actor, now)
+        ]);
+      }
+      if (form.get('send') === '1' && c.email) {
+        try { await sendBillingDoc(env, request, url.origin, actor, c, await env.DB.prepare('SELECT * FROM billing_docs WHERE id = ?1').bind(doc.id).first()); }
+        catch (err) { console.error('billing send:', err && err.message); return redirect(`/admin/case/${c.id}?tab=billing&done=bill_send_failed`); }
+        return redirect(`/admin/case/${c.id}?tab=billing&done=bill_sent`);
+      }
+      return redirect(`/admin/case/${c.id}?tab=billing&done=bill_saved`);
     }
 
     if (parts[2] === 'request-missing') {

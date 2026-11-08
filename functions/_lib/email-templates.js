@@ -217,6 +217,30 @@ export function missingInfoEmail({ fullName, reference, details = [], documents 
   return shell(inner, { preheader: `We need a few more things for ${reference}` });
 }
 
+
+// ── Quotation / invoice / receipt / engagement letter email ─────
+export function billingEmail({ kind, number, clientName, total = 0, dateLine = '', viewUrl, money, extraLinks = [] }) {
+  const what = { quote: 'quotation', invoice: 'invoice', receipt: 'receipt', engagement: 'engagement letter' }[kind] || 'document';
+  const intro = {
+    quote: 'Thank you for your interest. Please find your quotation below. When you are happy to proceed, reply to this email and we will send your invoice.',
+    invoice: 'Please find your invoice below. Work begins as soon as payment is confirmed.',
+    receipt: 'Thank you for your payment. Please find your receipt below.',
+    engagement: 'Please find your engagement letter below, confirming the terms of our work for you.'
+  }[kind] || '';
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Your ${escapeHtml(what)} ${escapeHtml(number)}</h2>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(clientName || 'valued client')},</p>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${escapeHtml(intro)}</p>
+    ${total ? `<div style="background:${BG};border:1px solid ${BORDER};border-radius:8px;padding:14px 16px;margin:16px 0;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};">${escapeHtml(number)}</div>
+      <div style="font-size:20px;font-weight:700;color:${NAVY};margin-top:4px;">${escapeHtml(money(total))}</div>
+      ${dateLine ? `<div style="font-size:13px;color:${MUTED};margin-top:2px;">${escapeHtml(dateLine)}</div>` : ''}</div>` : ''}
+    <p style="margin:18px 0 6px;"><a href="${escapeHtml(viewUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">View and download your ${escapeHtml(what)}</a></p>
+    ${extraLinks.map(l => `<p style="margin:8px 0;"><a href="${escapeHtml(l.url)}" style="color:${NAVY};font-weight:700;">${escapeHtml(l.label)} →</a></p>`).join('')}
+    <p style="font-size:12.5px;line-height:1.6;color:${MUTED};margin:18px 0 0;">Questions? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>, quoting ${escapeHtml(number)}.</p>`;
+  return shell(inner, { preheader: `Your ${what} ${number}` });
+}
+
 // ── Case status update email to the client ──────────────────────
 export function caseStatusEmail({ fullName, reference, statusLabel, statusMessage, note, askForReview = false, uploadLink = null }) {
   const inner = `

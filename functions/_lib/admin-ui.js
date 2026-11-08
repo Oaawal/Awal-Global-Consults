@@ -106,6 +106,11 @@ export function flashHtml(flash) {
 
 // ── Styles ──────────────────────────────────────────────────────
 const STYLE = `
+.table { width: 100%; border-collapse: collapse; }
+.table th { text-align: left; font-size: 12px; color: #5b6b7b; font-weight: 600; padding: 6px 6px; border-bottom: 1px solid #e3e9ef; }
+.table td { padding: 6px; vertical-align: top; border-bottom: 1px solid #eef2f6; }
+.table td input { width: 100%; }
+
 .app-panel { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; background: #EAF2F8; border: 1px solid #c9dcec; border-radius: 14px; padding: 14px 16px; margin: 0 0 18px; }
 .app-panel[hidden] { display: none; }
 .app-panel-text { display: flex; flex-direction: column; gap: 2px; font-size: 14px; color: #0A2C48; }

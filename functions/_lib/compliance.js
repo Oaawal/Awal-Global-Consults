@@ -46,6 +46,8 @@ export async function eraseCase(env, c, { actor, reason, ip }) {
 
   const statements = [
     env.DB.prepare('UPDATE documents SET deleted_at = ?2 WHERE case_id = ?1 AND deleted_at IS NULL').bind(c.id, now),
+    // Billing documents keep their numbers and amounts (accounting record) but lose the client's personal details
+    env.DB.prepare(`UPDATE billing_docs SET client_json = '{"name":"Erased client"}' WHERE case_id = ?1`).bind(c.id),
     // An erased case is also closed (test entries may still be open), and leaves the review list
     env.DB.prepare(`UPDATE cases SET form_data = '{}', source_page = NULL, follow_up_at = NULL, follow_up_note = NULL,
                       status = ?3, closed_at = COALESCE(closed_at, ?2), retain_until = NULL,
@@ -80,10 +82,11 @@ export async function exportClient(env, clientId) {
 
   const out = [];
   for (const c of cases) {
-    const [docs, events, bookings] = await env.DB.batch([
+    const [docs, events, bookings, bills] = await env.DB.batch([
       env.DB.prepare('SELECT file_name, size_bytes, uploaded_at, deleted_at FROM documents WHERE case_id = ?1 ORDER BY uploaded_at').bind(c.id),
       env.DB.prepare('SELECT event, from_status, to_status, note, created_at FROM case_events WHERE case_id = ?1 ORDER BY id').bind(c.id),
-      env.DB.prepare('SELECT type, slot_start, minutes, mode, status, topic, created_at, cancelled_at FROM bookings WHERE case_id = ?1').bind(c.id)
+      env.DB.prepare('SELECT type, slot_start, minutes, mode, status, topic, created_at, cancelled_at FROM bookings WHERE case_id = ?1').bind(c.id),
+      env.DB.prepare('SELECT kind, number, status, issued_at, total, amount_paid, paid_at, client_json, items_json FROM billing_docs WHERE case_id = ?1 ORDER BY created_at').bind(c.id)
     ]);
     let formData = {};
     try { formData = JSON.parse(c.form_data || '{}'); } catch (e) { /* keep empty */ }
@@ -92,7 +95,8 @@ export async function exportClient(env, clientId) {
       submitted: c.created_at, lastUpdated: c.updated_at, closed: c.closed_at, keepUntil: c.retain_until,
       erased: c.purged_at, consent: { informationAccurate: !!c.consent_accuracy, processingConsent: !!c.consent_processing },
       submittedDetails: formData, documents: docs.results || [], history: events.results || [],
-      consultations: bookings.results || []
+      consultations: bookings.results || [],
+      billing: (bills.results || []).map(b => ({ ...b, client_json: undefined, items_json: undefined, billedTo: JSON.parse(b.client_json || '{}'), items: JSON.parse(b.items_json || '[]') }))
     });
   }
   const subscription = client.email
@@ -109,7 +113,7 @@ export async function exportClient(env, clientId) {
 
 /** Nightly backup of the database to private storage; old backups are removed. */
 export async function backupDatabase(env, runDate) {
-  const tables = ['clients', 'cases', 'documents', 'case_events', 'data_requests', 'counters', 'job_runs', 'audit_log', 'subscribers', 'bookings'];
+  const tables = ['clients', 'cases', 'documents', 'case_events', 'data_requests', 'counters', 'job_runs', 'audit_log', 'subscribers', 'bookings', 'billing_docs'];
   const results = await env.DB.batch(tables.map(t => env.DB.prepare(`SELECT * FROM ${t}`)));
   const dump = { createdAt: new Date().toISOString(), database: 'awal-cases', tables: {} };
   tables.forEach((t, i) => { dump.tables[t] = results[i].results || []; });
