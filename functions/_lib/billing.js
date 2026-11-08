@@ -156,7 +156,8 @@ td small { display: block; color: #6b7280; font-size: 8pt; margin-top: 2px; }
 .foot b { color: #0D2340; }
 .void { color: #b42318; border: 2px solid #b42318; display: inline-block; padding: 2px 10px; font-weight: 700; letter-spacing: .1em; margin-left: 10px; }
 .bar { max-width: 210mm; margin: 18px auto 0; display: flex; gap: 10px; justify-content: flex-end; }
-.bar button { background: #0D2340; color: #fff; border: 0; border-radius: 8px; padding: 10px 16px; font: 600 10pt 'DM Sans', Arial; cursor: pointer; }
+.bar button, .bar a { background: #0D2340; color: #fff; border: 0; border-radius: 8px; padding: 10px 16px; font: 600 10pt 'DM Sans', Arial; cursor: pointer; text-decoration: none; }
+.bar button.alt, .bar a + button { background: #fff; color: #0D2340; border: 1px solid #0D2340; }
 @media print { body { background: #fff; } .sheet { box-shadow: none; margin: 0; max-width: none; padding: 0; } .bar { display: none; } }
 @media (max-width: 640px) { .sheet { padding: 18px 14px; margin: 0; } .meta, .parties, .boxes, .sign { grid-template-columns: 1fr; } .sum { width: 100%; } h1 { font-size: 24pt; } .top { flex-direction: column; } .addr { text-align: left; } }
 `;
@@ -173,7 +174,17 @@ function clientBlock(cl, title) {
   return `<div><span>${esc(title)}</span><strong>${esc(cl.name)}</strong><div>${[cl.address, cl.phone, cl.email].filter(Boolean).map(esc).join('<br>')}</div></div>`;
 }
 
-export function renderDoc(doc, { related = null, invoice = null, receipt = null, quote = null } = {}) {
+/** The invoice, quotation and receipt a document refers to (for numbers quoted inside it). */
+export async function relatedDocs(env, doc) {
+  const get = id => id ? env.DB.prepare('SELECT * FROM billing_docs WHERE id = ?1').bind(id).first() : null;
+  const rel = await get(doc.related_id);
+  const invoice = doc.kind === 'invoice' ? doc : (rel && rel.kind === 'invoice' ? rel : null);
+  const quote = invoice && invoice.related_id ? await get(invoice.related_id) : (rel && rel.kind === 'quote' ? rel : null);
+  const receipt = doc.kind === 'engagement' && invoice ? await env.DB.prepare("SELECT * FROM billing_docs WHERE related_id = ?1 AND kind = 'receipt' AND status != 'void' ORDER BY created_at DESC LIMIT 1").bind(invoice.id).first() : null;
+  return { invoice, quote, receipt };
+}
+
+export function renderDoc(doc, { invoice = null, receipt = null, quote = null, pdfUrl = '' } = {}) {
   const cl = JSON.parse(doc.client_json || '{}');
   const items = JSON.parse(doc.items_json || '[]');
   const voided = doc.status === 'void' ? '<span class="void">VOID</span>' : '';
@@ -246,7 +257,7 @@ export function renderDoc(doc, { related = null, invoice = null, receipt = null,
 <title>${esc(KIND_LABEL[doc.kind])} ${esc(doc.number)} · Awal Global Consults</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>${CSS}</style></head><body>
-<div class="bar"><button type="button" onclick="window.print()">Download / Print PDF</button></div>
+<div class="bar">${pdfUrl ? `<a class="pdf" href="${esc(pdfUrl)}">Download PDF</a>` : ''}<button type="button" onclick="window.print()">${pdfUrl ? 'Print' : 'Download / Print PDF'}</button></div>
 <div class="sheet">
   <div class="top"><img src="${LOGO}" alt="Awal Global Consults">${HEAD_ADDR}</div>
   <div class="kicker">${esc(kicker)}</div><h1>${esc(title)}${voided}</h1>${badge ? `<div class="badge">${esc(badge)}</div>` : ''}

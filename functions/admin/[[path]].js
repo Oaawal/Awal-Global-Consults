@@ -30,7 +30,9 @@ import { vapidKeys, notifyAdmins } from '../_lib/webpush.js';
 import { bounceSettings, ensureBounceWebhook } from '../_lib/bounces.js';
 import { uploadUrl } from '../_lib/upload-links.js';
 import { missingForCase } from '../_lib/requirements.js';
-import { START_PRICES, PAYMENT_METHODS, KIND_LABEL, billingSettings, saveBillingSettings, nextNumber, totals, renderDoc, docUrl, money, addDays } from '../_lib/billing.js';
+import { START_PRICES, PAYMENT_METHODS, KIND_LABEL, billingSettings, saveBillingSettings, nextNumber, totals, renderDoc, relatedDocs, docUrl, money, addDays } from '../_lib/billing.js';
+import { renderPdf, pdfFilename } from '../_lib/billing-pdf.js';
+import { bytesToBase64 } from '../_lib/brevo.js';
 import { CHANNELS, PAST_STATUSES, validatePast, savePast, importCsv, csvTemplate, dataSubjectCount } from '../_lib/past-records.js';
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
@@ -123,8 +125,22 @@ function billPrefill(c, docs, fromId) {
   };
 }
 
-async function sendBillingDoc(env, request, origin, actor, c, doc, extraLinks = []) {
+/** PDF copies to attach. A PDF that fails to build is left out: the email still carries the link. */
+async function billingAttachments(env, docs) {
+  const out = [];
+  for (const d of docs) {
+    try { out.push({ name: pdfFilename(d), content: bytesToBase64(await renderPdf(d, await relatedDocs(env, d))) }); }
+    catch (err) { console.error('billing pdf:', d.number, err && err.message); }
+  }
+  return out;
+}
+
+/** extraDocs: further documents sent in the same email (the engagement letter with a receipt): linked and attached. */
+async function sendBillingDoc(env, request, origin, actor, c, doc, extraDocs = []) {
   const viewUrl = await docUrl(env, doc.id, origin);
+  const extraLinks = [];
+  for (const d of extraDocs) extraLinks.push({ label: `Your ${KIND_LABEL[d.kind].toLowerCase()} ${d.number}`, url: await docUrl(env, d.id, origin) });
+  const attachments = await billingAttachments(env, [doc, ...extraDocs]);
   const dateLine = doc.kind === 'invoice' ? `Due ${new Date(doc.due_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`
     : doc.kind === 'quote' ? `Valid until ${new Date(doc.valid_until).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`
     : doc.kind === 'receipt' ? 'Paid, thank you' : '';
@@ -132,8 +148,9 @@ async function sendBillingDoc(env, request, origin, actor, c, doc, extraLinks = 
   await sendBrevoEmail(env, {
     to: { email: c.email, name: c.full_name },
     subject: `Your ${KIND_LABEL[doc.kind].toLowerCase()} ${doc.number} from Awal Global Consults`,
-    html: billingEmail({ kind: doc.kind, number: doc.number, clientName: cl.name, total: doc.kind === 'receipt' ? doc.amount_paid : doc.total, dateLine, viewUrl, money, extraLinks }),
-    replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' }
+    html: billingEmail({ kind: doc.kind, number: doc.number, clientName: cl.name, total: doc.kind === 'receipt' ? doc.amount_paid : doc.total, dateLine, viewUrl, money, extraLinks, attached: attachments.length > 0 }),
+    replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
+    attachments
   });
   const now = new Date().toISOString();
   await env.DB.batch([
@@ -272,17 +289,13 @@ export async function onRequest(context) {
     if (!doc) return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
     const c = await loadCase(env, doc.case_id);
     const backTo = key => redirect(`/admin/case/${doc.case_id}?tab=billing&done=${key}`);
-    const relatedDocs = async () => {
-      const get = id => id ? env.DB.prepare('SELECT * FROM billing_docs WHERE id = ?1').bind(id).first() : null;
-      const rel = await get(doc.related_id);
-      const invoice = doc.kind === 'invoice' ? doc : (rel && rel.kind === 'invoice' ? rel : null);
-      const quote = invoice && invoice.related_id ? await get(invoice.related_id) : (rel && rel.kind === 'quote' ? rel : null);
-      const receipt = doc.kind === 'engagement' && invoice ? await env.DB.prepare("SELECT * FROM billing_docs WHERE related_id = ?1 AND kind = 'receipt' AND status != 'void' ORDER BY created_at DESC LIMIT 1").bind(invoice.id).first() : null;
-      return { invoice, quote, receipt };
-    };
+    if (parts.length === 3 && parts[2] === 'pdf' && method === 'GET') {
+      return new Response(await renderPdf(doc, await relatedDocs(env, doc)), { headers: { ...SECURITY_HEADERS, 'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${pdfFilename(doc)}"`, 'Cache-Control': 'no-store' } });
+    }
     if (parts.length === 2 && method === 'GET') {
       await audit(env, request, actor, 'billing.viewed', 'billing', doc.id, { number: doc.number });
-      return new Response(renderDoc(doc, await relatedDocs()), { headers: { ...SECURITY_HEADERS, 'Content-Type': 'text/html; charset=utf-8',
+      return new Response(renderDoc(doc, { ...(await relatedDocs(env, doc)), pdfUrl: `/admin/billing/${doc.id}/pdf` }), { headers: { ...SECURITY_HEADERS, 'Content-Type': 'text/html; charset=utf-8',
         'Content-Security-Policy': "default-src 'none'; img-src data:; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'unsafe-inline'; frame-ancestors 'none'; base-uri 'none'" } });
     }
     if (method !== 'POST' || !c) return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
@@ -331,8 +344,8 @@ export async function onRequest(context) {
       if (form.get('send') === '1' && c.email) {
         try {
           const receiptDoc = await env.DB.prepare('SELECT * FROM billing_docs WHERE id = ?1').bind(rc.id).first();
-          const extra = letter ? [{ label: `Your engagement letter ${letter.number}`, url: await docUrl(env, letter.id, url.origin) }] : [];
-          await sendBillingDoc(env, request, url.origin, actor, c, receiptDoc, extra);
+          const letterDoc = letter ? await env.DB.prepare('SELECT * FROM billing_docs WHERE id = ?1').bind(letter.id).first() : null;
+          await sendBillingDoc(env, request, url.origin, actor, c, receiptDoc, letterDoc ? [letterDoc] : []);
           if (letter) await env.DB.prepare("UPDATE billing_docs SET sent_at = ?2, status = 'sent' WHERE id = ?1").bind(letter.id, now).run();
         } catch (err) { console.error('receipt send:', err && err.message); return backTo('bill_send_failed'); }
       }

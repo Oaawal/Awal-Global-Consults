@@ -219,7 +219,7 @@ export function missingInfoEmail({ fullName, reference, details = [], documents 
 
 
 // ── Quotation / invoice / receipt / engagement letter email ─────
-export function billingEmail({ kind, number, clientName, total = 0, dateLine = '', viewUrl, money, extraLinks = [] }) {
+export function billingEmail({ kind, number, clientName, total = 0, dateLine = '', viewUrl, money, extraLinks = [], attached = false }) {
   const what = { quote: 'quotation', invoice: 'invoice', receipt: 'receipt', engagement: 'engagement letter' }[kind] || 'document';
   const intro = {
     quote: 'Thank you for your interest. Please find your quotation below. When you are happy to proceed, reply to this email and we will send your invoice.',
@@ -237,6 +237,7 @@ export function billingEmail({ kind, number, clientName, total = 0, dateLine = '
       ${dateLine ? `<div style="font-size:13px;color:${MUTED};margin-top:2px;">${escapeHtml(dateLine)}</div>` : ''}</div>` : ''}
     <p style="margin:18px 0 6px;"><a href="${escapeHtml(viewUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">View and download your ${escapeHtml(what)}</a></p>
     ${extraLinks.map(l => `<p style="margin:8px 0;"><a href="${escapeHtml(l.url)}" style="color:${NAVY};font-weight:700;">${escapeHtml(l.label)} →</a></p>`).join('')}
+    ${attached ? `<p style="font-size:13px;line-height:1.6;color:${MUTED};margin:12px 0 0;">A PDF copy is attached to this email for your records.</p>` : ''}
     <p style="font-size:12.5px;line-height:1.6;color:${MUTED};margin:18px 0 0;">Questions? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>, quoting ${escapeHtml(number)}.</p>`;
   return shell(inner, { preheader: `Your ${what} ${number}` });
 }

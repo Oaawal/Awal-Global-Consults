@@ -701,7 +701,8 @@ const BILL_STATUS = { issued: ['Saved', 'grey'], sent: ['Sent', 'blue'], paid: [
 export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices, paymentMethods, money }) {
   const rows = docs.length ? `<div class="rows">${docs.map(d => {
     const [label, tone] = BILL_STATUS[d.status] || [d.status, 'grey'];
-    const actions = d.status === 'void' ? '' : `
+    const pdf = `<a class="btn ghost sm" href="/admin/billing/${esc(d.id)}/pdf">PDF</a>`;
+    const actions = d.status === 'void' ? pdf : `${pdf}
       <form method="post" action="/admin/billing/${esc(d.id)}/send" style="display:inline"><button class="btn ghost sm" type="submit">${d.sent_at ? 'Resend' : 'Email to client'}</button></form>
       ${d.kind === 'quote' ? `<a class="btn ghost sm" href="/admin/case/${esc(c.id)}?tab=billing&from=${esc(d.id)}#new">Make invoice</a>` : ''}
       ${d.kind !== 'receipt' && d.kind !== 'engagement' && d.status !== 'paid' ? `<form method="post" action="/admin/billing/${esc(d.id)}/void" style="display:inline" data-confirm="Void ${esc(d.number)}? It stays on record, marked VOID."><button class="btn ghost sm danger" type="submit">Void</button></form>` : ''}`;
