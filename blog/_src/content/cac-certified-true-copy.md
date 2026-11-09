@@ -44,7 +44,7 @@ Make sure the CAC record is up to date before you order CTCs. A CTC certifies wh
 ## How to get them
 
 1. **Identify exactly which documents** the requesting organisation needs.
-2. **Request the CTCs from CAC**, online through its post-registration services, and pay the certification fees, which depend on the documents and number of pages.
+2. **Apply on CAC's portal** (icrp.cac.gov.ng) through the **Post-Incorporation** portal, select the documents, and pay the CTC fees online. Every CTC request carries a fee, which depends on the documents requested.
 3. **Receive the certified copies** once CAC processes the request.
 
 ## From abroad?
@@ -62,7 +62,7 @@ You can request CTCs without being in Nigeria. If they're for use abroad, for ex
 </div>
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can I get CTCs for another company?</p>
-<p class="blog-faq-a">CAC records are generally searchable by the public, and copies of filed documents can be requested: useful for due diligence before a deal.</p>
+<p class="blog-faq-a">Yes. You can apply for certified true copies of the filed documents of any registered business name, company or incorporated trustees, which is useful for due diligence before a deal.</p>
 </div>
 </div>
 

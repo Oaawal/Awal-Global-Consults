@@ -32,7 +32,7 @@ Status: [x] published · [d] drafted, awaiting owner review · [ ] to write · [
 ### After registration
 - [x] R8. CAC post-registration services explained (changes, CTCs, status reports, returns)
 - [?] R9. CAC annual returns fees and late-filing penalties 2026 (needs official figures from the owner)
-- [d] R10. How to download your CAC certificate and status report
+- [d] R10. Lost your CAC certificate? How to recover your documents (download again, or CTC via the Post-Incorporation portal)
 
 ### Compliance
 - [?] R11. DNFBPs in Nigeria: the full list of businesses that must register with SCUML (needs the MLPPA 2022 s.30 text)
