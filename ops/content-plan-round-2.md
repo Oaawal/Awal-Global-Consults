@@ -24,7 +24,7 @@ Status: [x] published · [d] drafted, awaiting owner review · [ ] to write · [
 - [x] R1. How to start a company in Nigeria: the complete 2026 roadmap (pillar; links every step)
 - [x] R2. CAC registration online: what the portal involves and what to expect
 - [x] R3. Business name registration in Lagos: cost, documents and timeline (local)
-- [ ] R4. Company registration in Lagos: Ikeja, Lekki, Island and Mainland (local)
+- [d] R4. Company registration in Lagos: Ikeja, Lekki, Island and Mainland (local)
 - [x] R5. Business name vs company name: are they the same thing?
 - [x] R6. Who can be a director of a Nigerian company?
 - [x] R7. Does CAC registration expire? How long a certificate is valid
@@ -32,7 +32,7 @@ Status: [x] published · [d] drafted, awaiting owner review · [ ] to write · [
 ### After registration
 - [x] R8. CAC post-registration services explained (changes, CTCs, status reports, returns)
 - [?] R9. CAC annual returns fees and late-filing penalties 2026 (needs official figures from the owner)
-- [ ] R10. How to download your CAC certificate and status report
+- [d] R10. How to download your CAC certificate and status report
 
 ### Compliance
 - [?] R11. DNFBPs in Nigeria: the full list of businesses that must register with SCUML (needs the MLPPA 2022 s.30 text)
