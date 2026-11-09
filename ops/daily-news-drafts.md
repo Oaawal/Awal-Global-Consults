@@ -1,9 +1,13 @@
-# Weekly news drafts: instructions for the scheduled session
+# Daily news drafts: instructions for the scheduled session
 
-A scheduled Claude session runs this every Monday morning (Lagos time). It
-finds the week's legal, tax and compliance news that matters to Awal Global
+A scheduled Claude session runs this every morning (Lagos time). It looks for
+**real, new** legal, tax and compliance news that matters to Awal Global
 Consults' clients and drafts guides for the owner to approve. **It never
 publishes.** The owner reviews the drafts and says "publish" in a Claude session.
+
+**Only real news.** If nothing new qualifies today, change nothing, commit
+nothing and finish with one line: "No qualifying news today." Never fill a quiet
+day with evergreen guides or items from the content plans.
 
 ## 1. Get the repository
 
@@ -15,9 +19,9 @@ Read before writing:
   prices, timelines, services and figures. Only use prices and timelines from there.
 - Two or three recent guides in `blog/_src/content/` to match the house style.
 
-## 2. Find this week's news (last 7 days)
+## 2. Find today's news (last 48 hours)
 
-Search the web for news and official updates from the past 7 days on:
+Search the web for news and official updates published in the last 48 hours on:
 - CAC: new rules, fees, portal changes, deadlines, strike-off exercises
 - Tax: Nigeria Revenue Service (NRS, formerly FIRS), state IRS, the Nigeria Tax Act
   2025 and Tax Administration Act 2025, VAT, PAYE, WHT, TCC
@@ -32,17 +36,23 @@ Search the web for news and official updates from the past 7 days on:
 Prefer official sources (cac.gov.ng, nrs.gov.ng, ndpc.gov.ng, immigration.gov.ng,
 canada.ca, gov.uk) and reputable law firms (Mondaq, Templars, Aelex, OAL, SPA Ajibade)
 and news outlets (BusinessDay, Nairametrics, Punch, Premium Times). Skip rumours,
-anything you cannot confirm from two sources, and anything older than 14 days.
+anything you cannot confirm from two sources, and anything older than 48 hours
+(up to 72 hours on a Monday, to cover the weekend).
 
-## 3. Choose 1 to 3 stories
+**Don't repeat a story.** The run happens every day, so before drafting check
+`git log --since="7 days ago" --name-only -- blog/_src/content` and the existing
+guides in `blog/_src/content/` (drafts included). If a story is already drafted
+or published, skip it; if it has a genuinely new development, mention that in the
+report rather than drafting a second guide.
 
-Only stories that a client of a CAC registration, compliance, tax and identity
-consultancy would act on.
+## 3. Choose 0 to 2 stories
 
-**If no news story qualifies this week**, don't stop: draft **two guides** from the next
-`[ ]` items in `ops/content-plan-round-2.md` instead (skip items marked `[?]`, which need
-the owner's input), and mark them `[d]` in that file. The owner always gets something to
-review.
+Only real news (a new rule, fee, deadline, portal change, enforcement action,
+court decision or official notice) that a client of a CAC registration,
+compliance, tax and identity consultancy would act on. How-to topics, explainers
+and anything that isn't new are not news: skip them. **Zero is the normal answer
+on a quiet day.**
+
 Don't duplicate an existing guide; if an existing guide is now out of date,
 list it in the report instead (don't edit published guides).
 
@@ -90,11 +100,14 @@ TZ=Africa/Lagos node build-blog.js    # live build: drafts stay hidden
 
 ## 6. Commit and report
 
-Commit only the new draft files (plus the `[d]` marks in `ops/content-plan-round-2.md`, if you used it) to `main` with the message
-`Add weekly news drafts for owner review (not published)` and push.
+Commit only the new draft files to `main` with the message
+`Add news drafts for owner review (not published)` and push. On a day with no
+qualifying news, commit nothing.
 Commit messages must not include any model name.
 
 Finish with a short report for the owner: each draft's title, the news it covers
 with source links, and anything they should confirm (a figure, a date, whether
 they offer a related service). Also list any published guide the news makes
-out of date. The owner publishes by asking Claude to "publish the weekly drafts".
+out of date. The owner publishes by asking Claude to "publish the news drafts".
+On a day with no qualifying news, the whole report is: "No qualifying news today."
+

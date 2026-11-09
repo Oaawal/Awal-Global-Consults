@@ -48,5 +48,5 @@ Status: [x] published · [d] drafted, awaiting owner review · [ ] to write · [
 - [ ] R17. Registering a Nigerian business from the UAE and Gulf states
 - [ ] R18. UK student visa: the new maintenance amounts from 30 November 2026 (check gov.uk first)
 
-Weekly news drafts (ops/weekly-news-drafts.md) take the next [ ] items from this list when a
-week has no qualifying news.
+The daily news drafts (ops/daily-news-drafts.md) don't use this list: they only draft real
+news. Items here are written when the owner asks for them.
