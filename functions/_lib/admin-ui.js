@@ -297,8 +297,33 @@ details.more[open] summary::before{content:'– '}
 .login h1{font:700 24px var(--serif);color:var(--navy);margin:16px 0 6px}
 .code-input{font-size:26px;letter-spacing:10px;text-align:center;font-weight:700}
 
+/* Billing: documents list, payment form, item lines */
+.bill-row{flex-wrap:wrap;align-items:flex-start}
+.bill-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-top:6px}
+.pay-box{flex-basis:100%;margin:10px 0 0;background:var(--bg,#f6f8fb);border:1px solid var(--line-2,#e6ebf1);border-radius:12px;padding:10px 14px}
+.pay-box[open]{padding-bottom:14px}
+.pay-box form label{margin-top:10px}
+.pay-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+.pay-grid input,.pay-grid select{width:100%}
+.bill-items{display:grid;gap:10px;margin:6px 0 14px}
+.bill-item{display:grid;grid-template-columns:22px minmax(0,1fr) 130px 64px 120px 84px;gap:8px;align-items:end;padding:10px;border:1px solid var(--line-2,#e6ebf1);border-radius:12px}
+.bill-n{align-self:center;font-size:12px;font-weight:700;color:var(--muted)}
+.bi-desc input{width:100%}
+.bi-detail{margin-top:4px;font-size:12px}
+.bi-f{display:flex;flex-direction:column;gap:3px;margin:0}
+.bi-f span{font-size:11px;font-weight:600;color:var(--muted)}
+.bi-f input{width:100%}
+.bi-gov{margin:0 0 8px;font-size:13px;white-space:nowrap}
+
 /* Phones */
 @media (max-width:860px){
+  .bill-row .row-side{flex-basis:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-left:0}
+  .bill-actions{margin-top:0}
+  .pay-grid{grid-template-columns:minmax(0,1fr)}
+  .bill-item{grid-template-columns:repeat(3,minmax(0,1fr));align-items:end}
+  .bill-n{grid-column:1/-1;align-self:start}
+  .bi-desc{grid-column:1/-1}
+  .bi-gov{grid-column:1/-1;margin:2px 0 0}
   .side{display:none}
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--navy-900);color:#fff;padding:12px 16px;position:sticky;top:0;z-index:10}
   .topbar .brand{padding:0}

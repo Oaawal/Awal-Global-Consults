@@ -743,32 +743,38 @@ export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices,
       ${d.kind === 'quote' ? `<a class="btn ghost sm" href="/admin/case/${esc(c.id)}?tab=billing&from=${esc(d.id)}#new">Make invoice</a>` : ''}
       ${d.kind !== 'receipt' && d.kind !== 'engagement' && d.status !== 'paid' ? `<form method="post" action="/admin/billing/${esc(d.id)}/void" style="display:inline" data-confirm="Void ${esc(d.number)}? It stays on record, marked VOID."><button class="btn ghost sm danger" type="submit">Void</button></form>` : ''}`;
     const pay = d.kind === 'invoice' && ['issued', 'sent', 'part_paid'].includes(d.status) ? `
-      <details class="more" style="margin-top:8px"><summary>Record payment and issue receipt</summary>
+      <details class="more pay-box"><summary>Record payment and issue receipt</summary>
         <form method="post" action="/admin/billing/${esc(d.id)}/payment">
-          <label>Amount received (₦)</label><input name="amount" inputmode="numeric" required value="${esc(d.total - (d.amount_paid || 0))}">
-          <label>Method</label><select name="method">${paymentMethods.map(m => `<option>${esc(m)}</option>`).join('')}</select>
-          <label>Transaction reference</label><input name="ref" maxlength="80" placeholder="Bank or Paystack reference">
-          <label>Date received</label><input name="date" type="date" value="${new Date().toISOString().slice(0, 10)}">
+          ${d.amount_paid ? `<p class="small muted" style="margin:0 0 4px">Paid so far ${esc(money(d.amount_paid))} of ${esc(money(d.total))}. Balance ${esc(money(d.total - d.amount_paid))}.</p>` : ''}
+          <div class="pay-grid">
+            <div><label>Amount received (₦)</label><input name="amount" inputmode="numeric" required value="${esc(d.total - (d.amount_paid || 0))}"></div>
+            <div><label>Method</label><select name="method">${paymentMethods.map(m => `<option>${esc(m)}</option>`).join('')}</select></div>
+            <div><label>Transaction reference</label><input name="ref" maxlength="80" placeholder="Bank or Paystack reference"></div>
+            <div><label>Date received</label><input name="date" type="date" value="${new Date().toISOString().slice(0, 10)}"></div>
+          </div>
           <label class="check"><input type="checkbox" name="letter" value="1" checked> Also issue the engagement letter</label>
           <label>Scope for the engagement letter</label><textarea name="scope" maxlength="600" placeholder="e.g. CAC business name registration, including name search, filing and certificate">${esc(d.category || '')}</textarea>
           <label class="check"><input type="checkbox" name="markpaid" value="1" checked> Move the case to &ldquo;Payment received&rdquo; (untick for a part payment if you'll wait for the balance before starting)</label>
           <label class="check"><input type="checkbox" name="send" value="1" checked> Email the receipt${'' } to the client</label>
           <div class="btn-row"><button class="btn" type="submit">Save payment</button></div>
         </form></details>` : '';
-    return `<div class="row" style="flex-wrap:wrap"><span class="tl-dot">${icon('doc', 15)}</span>
+    return `<div class="row bill-row"><span class="tl-dot">${icon('doc', 15)}</span>
       <div class="row-main"><div class="row-title"><a href="/admin/billing/${esc(d.id)}" target="_blank" rel="noopener">${esc(kindLabel[d.kind])} ${esc(d.number)}</a></div>
-      <div class="row-sub">${esc(fmtDay(d.issued_at))}${d.total ? ` · ${esc(money(d.total))}` : ''}${d.amount_paid ? ` · paid ${esc(money(d.amount_paid))}` : ''}${d.sent_at ? ` · emailed ${esc(fmtDay(d.sent_at))}` : ''}</div>${pay}</div>
-      <div class="row-side">${pill(label, tone)}<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-top:6px">${actions}</div></div></div>`;
+      <div class="row-sub">${esc(fmtDay(d.issued_at))}${d.total ? ` · ${esc(money(d.total))}` : ''}${d.amount_paid ? ` · paid ${esc(money(d.amount_paid))}` : ''}${d.sent_at ? ` · emailed ${esc(fmtDay(d.sent_at))}` : ''}</div></div>
+      <div class="row-side">${pill(label, tone)}<div class="bill-actions">${actions}</div></div>
+      ${pay}</div>`;
   }).join('')}</div>` : `<div class="card-body">${emptyState('doc', 'No quotations or invoices yet', 'Create a quotation below.')}</div>`;
 
   const p = prefill;
   const itemRows = Array.from({ length: Math.max(6, p.items.length + 2) }, (_, i) => {
     const it = p.items[i] || {};
-    return `<tr><td><input name="desc_${i}" value="${esc(it.description || '')}" placeholder="Service"><input name="detail_${i}" value="${esc(it.detail || '')}" placeholder="What's included (optional)" style="margin-top:4px;font-size:12px"></td>
-      <td><input name="timeline_${i}" value="${esc(it.timeline || '')}" placeholder="e.g. 3–7 days" style="width:110px"></td>
-      <td><input name="qty_${i}" value="${esc(it.qty || 1)}" inputmode="numeric" style="width:54px"></td>
-      <td><input name="unit_${i}" value="${it.unit ? esc(it.unit) : ''}" inputmode="numeric" placeholder="0" style="width:110px"></td>
-      <td style="text-align:center"><input type="checkbox" name="gov_${i}" value="1"${it.gov ? ' checked' : ''} aria-label="Government fee"></td></tr>`;
+    return `<div class="bill-item">
+      <span class="bill-n">${i + 1}</span>
+      <div class="bi-desc"><input name="desc_${i}" value="${esc(it.description || '')}" placeholder="Service" aria-label="Line ${i + 1}: service"><input name="detail_${i}" value="${esc(it.detail || '')}" placeholder="What's included (optional)" class="bi-detail" aria-label="Line ${i + 1}: what's included"></div>
+      <label class="bi-f"><span>Timeline</span><input name="timeline_${i}" value="${esc(it.timeline || '')}" placeholder="e.g. 3–7 days"></label>
+      <label class="bi-f bi-qty"><span>Qty</span><input name="qty_${i}" value="${esc(it.qty || 1)}" inputmode="numeric"></label>
+      <label class="bi-f"><span>Unit price (₦)</span><input name="unit_${i}" value="${it.unit ? esc(it.unit) : ''}" inputmode="numeric" placeholder="0"></label>
+      <label class="check bi-gov"><input type="checkbox" name="gov_${i}" value="1"${it.gov ? ' checked' : ''}> Gov fee</label></div>`;
   }).join('');
   const form = `<div class="card" id="new"><div class="card-head"><h2>${p.kind === 'invoice' ? 'New invoice' : 'New quotation'}</h2></div><div class="card-body">
     <form method="post" action="/admin/case/${esc(c.id)}/billing/new">
@@ -781,7 +787,7 @@ export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices,
         <div><label>Service category</label><input name="category" value="${esc(p.category || '')}"></div>
       </div>
       <label style="margin-top:12px">Items <span class="small muted">(tick &ldquo;Gov&rdquo; for government fees paid on the client&rsquo;s behalf: no VAT on those)</span></label>
-      <div style="overflow-x:auto"><table class="table" style="min-width:640px"><thead><tr><th>Service</th><th>Timeline</th><th>Qty</th><th>Unit price (₦)</th><th>Gov</th></tr></thead><tbody>${itemRows}</tbody></table></div>
+      <div class="bill-items">${itemRows}</div>
       <label>Note on the document (optional)</label><textarea name="notes" maxlength="600">${esc(p.notes || '')}</textarea>
       <p class="small muted">VAT is <strong>${settings.vatRegistered ? 'ON: 7.5% is added to your fee lines' : 'OFF: no VAT is added and invoices are titled “Invoice”'}</strong>. Change it at the bottom of this page.</p>
       <div class="btn-row"><button class="btn ghost" type="submit" name="send" value="0">Save</button><button class="btn" type="submit" name="send" value="1"${c.email ? '' : ' disabled title="No email on file"'}>Save and email to client</button></div>
