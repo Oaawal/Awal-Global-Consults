@@ -14,7 +14,7 @@ DESC = ('Digital setup for Nigerian businesses: a simple business website, your 
 SERVICES = [
     ('Website', 'Business website', 'A simple, fast website that works well on phones and tells customers what you do, where you are and how to reach you.',
      ['Up to 5 pages, mobile-friendly', 'Contact form with spam protection and a WhatsApp button', 'Search-friendly titles, Google Maps and Search Console set up']),
-    ('Email', 'Domain and business email', 'Your own address, such as you@yourbusiness.com.ng, instead of a free Gmail or Yahoo address.',
+    ('Email', 'Domain and business email', 'Your own address ending in @yourbusiness.com.ng, instead of a free Gmail or Yahoo address.',
      ['.com.ng, .ng or .com domain registered in your business name', 'Business email set up on your phone and laptop', 'Email security records (SPF, DKIM, DMARC) so your emails reach the inbox']),
     ('Google', 'Google Business Profile', 'Show up on Google Search and Maps when people look for your service in your area.',
      ['Profile created or claimed, and verified', 'Categories, services, hours and photos', 'Your own review link to share with customers']),

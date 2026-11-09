@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+# Cloudflare's email-protection links: not pages, and a 404 to crawlers
+Disallow: /cdn-cgi/l/
 
 Sitemap: https://awalglobal.com.ng/sitemap.xml
