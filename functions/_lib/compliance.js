@@ -37,7 +37,9 @@ export function eraseBlocker(c, now, early = false) {
 export async function eraseCase(env, c, { actor, reason, ip }) {
   const now = new Date().toISOString();
   const docs = (await env.DB.prepare('SELECT id, storage_key FROM documents WHERE case_id = ?1 AND deleted_at IS NULL').bind(c.id).all()).results || [];
-  for (const d of docs) await env.DOCS.delete(d.storage_key);
+  // Files from older replace/remove actions (marked deleted but kept in storage) go too
+  const kept = (await env.DB.prepare('SELECT storage_key FROM documents WHERE case_id = ?1 AND deleted_at IS NOT NULL').bind(c.id).all()).results || [];
+  for (const d of [...docs, ...kept]) await env.DOCS.delete(d.storage_key);
 
   // The client record is erased too once none of their cases hold data any more
   const others = await env.DB.prepare('SELECT COUNT(*) AS n FROM cases WHERE client_id = ?1 AND id != ?2 AND purged_at IS NULL')
