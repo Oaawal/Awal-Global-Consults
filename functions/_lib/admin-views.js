@@ -33,9 +33,10 @@ const FLASH = {
   unchanged: ['ok', 'Nothing changed.'],
   note: ['ok', 'Note added.'],
   doc_added: ['ok', 'Document added to the case.'],
-  doc_replaced: ['ok', 'Replaced. The old file has been removed and the change is in the activity log.'],
-  doc_removed: ['ok', 'Document removed. The change is in the activity log.'],
+  doc_replaced: ['ok', 'Replaced. The old file is kept in storage for the record, and the change is in the activity log.'],
+  doc_removed: ['ok', 'Removed from the current documents. The file is kept in storage for the record.'],
   doc_bad: ['err', 'Use a PDF, JPG or PNG file under 7MB.'],
+  doc_unreadable: ['err', 'The file did not arrive in one piece, so nothing was changed. Please try again. If you use the installed app on iPhone, close and reopen it first so it picks up the latest version.'],
   followup: ['ok', 'Follow-up saved. It will show in your morning summary when it is due.'],
   followup_cleared: ['ok', 'Follow-up cleared.'],
   followup_invalid: ['err', 'Please choose a valid date for the follow-up.'],
@@ -378,7 +379,7 @@ function caseDocuments(c, docs, uploadLink = null) {
             <input type="file" name="file" accept="${ACCEPT}" required aria-label="Replacement for ${esc(d.file_name)}">
             <button class="btn sm" type="submit">Replace</button>
           </form>
-          <form method="post" action="/admin/doc/${esc(d.id)}/remove" data-confirm="Remove ${esc(d.file_name)}? The file is deleted; the activity log keeps a record that it existed." style="margin-top:6px">
+          <form method="post" action="/admin/doc/${esc(d.id)}/remove" data-confirm="Remove ${esc(d.file_name)} from the current documents? The file is kept in storage for the record." style="margin-top:6px">
             <button class="btn ghost sm danger" type="submit">Remove</button>
           </form>
         </details></div>

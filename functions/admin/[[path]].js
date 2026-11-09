@@ -188,7 +188,18 @@ async function createBillingDoc(env, request, actor, c, d) {
   return { id, number };
 }
 
+/** Any unexpected failure shows a plain error page (and is logged) instead of Cloudflare's error 1101. */
 export async function onRequest(context) {
+  try {
+    return await handle(context);
+  } catch (err) {
+    console.error('admin error:', context.request.method, new URL(context.request.url).pathname, err && err.stack || err);
+    return new Response(simplePage('Something went wrong', 'That action could not be completed and nothing was changed. Please go back and try again. If it keeps happening, tell your developer the time it happened.'), {
+      status: 500, headers: { ...SECURITY_HEADERS, 'Content-Type': 'text/html; charset=utf-8' } });
+  }
+}
+
+async function handle(context) {
   const { request, env, params } = context;
   if (!env.DB || !env.DOCS) return html(simplePage('Not connected', 'The records database is not connected to this site.'), 503);
 
@@ -500,7 +511,8 @@ export async function onRequest(context) {
       return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment }));
     }
     if (method !== 'POST') return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
-    const form = await request.formData();
+    let form;
+    try { form = await request.formData(); } catch (err) { console.error('case post: unreadable form:', err && err.message); return back('doc_unreadable', url.searchParams.get('tab') || 'documents'); }
     const now = new Date().toISOString();
 
     // Erased cases are read-only
@@ -691,7 +703,8 @@ export async function onRequest(context) {
     const stmts = [];
     let note;
     if (parts[2] === 'replace') {
-      const f = (await request.formData()).get('file');
+      let f = null;
+      try { f = (await request.formData()).get('file'); } catch (err) { console.error('doc replace: unreadable upload:', err && err.message); return backDocs('doc_unreadable'); }
       if (!f || typeof f === 'string' || f.size <= 0 || f.size > DOC_MAX) return backDocs('doc_bad');
       const ext = (String(f.name || '').match(DOC_EXT) || [])[0];
       if (!ext) return backDocs('doc_bad');
@@ -699,18 +712,17 @@ export async function onRequest(context) {
       const name = d.file_name.replace(/\.[a-z0-9]+$/i, '') + ext.toLowerCase();
       const doc = await storeCaseDocument(env, d.case_id, name, f);
       stmts.push(doc.stmt);
-      note = `Replaced ${d.file_name}${name !== d.file_name ? ` with ${name}` : ''}`;
+      note = `Replaced ${d.file_name}${name !== d.file_name ? ` with ${name}` : ''}. The old file is kept in storage for the record.`;
       stmts.push(auditStmt(env, request, actor, 'document.replaced', 'document', d.id, { reference: d.reference, file: d.file_name, replacement: doc.id }, now));
     } else {
-      note = `Removed ${d.file_name}`;
+      note = `Removed ${d.file_name} from the current documents. The file is kept in storage for the record.`;
       stmts.push(auditStmt(env, request, actor, 'document.removed', 'document', d.id, { reference: d.reference, file: d.file_name }, now));
     }
     stmts.push(env.DB.prepare('UPDATE documents SET deleted_at = ?2 WHERE id = ?1').bind(d.id, now));
     stmts.push(env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, ?2, ?3, ?4, ?5)").bind(d.case_id, parts[2] === 'replace' ? 'document_replaced' : 'document_removed', note, actor, now));
     stmts.push(env.DB.prepare('UPDATE cases SET updated_at = ?2 WHERE id = ?1').bind(d.case_id, now));
     await env.DB.batch(stmts);
-    // The wrong file is deleted, not just hidden; any backup copy is cleared by the backup job
-    await env.DOCS.delete(d.storage_key);
+    // The old file is not deleted from storage: it is kept for the record
     return backDocs(parts[2] === 'replace' ? 'doc_replaced' : 'doc_removed');
   }
   if (parts[0] === 'doc' && parts[1] && parts.length === 2 && method === 'GET') {

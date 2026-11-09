@@ -39,7 +39,9 @@ self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
 
 // Always go to the network; never store dashboard pages on the device.
 self.addEventListener('fetch', e => {
-  if (e.request.mode !== 'navigate') return;
+  // Only page loads. Form posts go straight to the network: iPhones can drop an attached file
+  // when a service worker passes an upload on.
+  if (e.request.mode !== 'navigate' || e.request.method !== 'GET') return;
   e.respondWith(fetch(e.request).catch(() => new Response(OFFLINE, { headers: { 'Content-Type': 'text/html; charset=utf-8' } })));
 });
 
