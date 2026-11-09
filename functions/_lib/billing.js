@@ -174,6 +174,23 @@ function clientBlock(cl, title) {
   return `<div><span>${esc(title)}</span><strong>${esc(cl.name)}</strong><div>${[cl.address, cl.phone, cl.email].filter(Boolean).map(esc).join('<br>')}</div></div>`;
 }
 
+/** Amount paid and balance as at a receipt (the receipt stores the balance left when it was issued). */
+export function paymentPosition(invoice, receipt) {
+  const total = (invoice && invoice.total) || 0;
+  const m = /^balance:(\d+)$/.exec((receipt && receipt.notes) || '');
+  const balance = m ? Number(m[1]) : Math.max(0, total - ((invoice && invoice.amount_paid) || 0));
+  return { total, paid: Math.max(0, total - balance), balance };
+}
+
+/** The fees sentence of an engagement letter: full payment, or part payment with the balance. */
+export function feesSentence(inv, rc, doc) {
+  const total = inv.total || doc.total;
+  const base = `The total fee for this engagement is ${money(total)} (${nairaWords(total)}), inclusive of applicable government charges${(inv.vat_rate || 0) > 0 ? ' and VAT' : ''}, as invoiced under ${inv.number || ''}`;
+  const pos = paymentPosition(inv, rc);
+  if (pos.balance > 0) return `${base}. Of this, ${money(pos.paid)} has been received (Receipt No. ${rc.number || ''}), leaving a balance of ${money(pos.balance)} (${nairaWords(pos.balance)}), which is payable before the work is completed and documents are released. Any variation to scope requested by the Client after this date may attract additional fees, which will be communicated and agreed on before proceeding.`;
+  return `${base} and confirmed paid under Receipt No. ${rc.number || ''}. Any variation to scope requested by the Client after this date may attract additional fees, which will be communicated and agreed on before proceeding.`;
+}
+
 /** The invoice, quotation and receipt a document refers to (for numbers quoted inside it). */
 export async function relatedDocs(env, doc) {
   const get = id => id ? env.DB.prepare('SELECT * FROM billing_docs WHERE id = ?1').bind(id).first() : null;
@@ -242,7 +259,7 @@ export function renderDoc(doc, { invoice = null, receipt = null, quote = null, p
       <p><strong>RE: CONFIRMATION OF ENGAGEMENT FOR ${esc(service.toUpperCase())}</strong></p>
       <p>Thank you for your payment. We confirm receipt against Invoice No. ${esc(inv.number || '')} and Receipt No. ${esc(rc.number || '')} and are pleased to formally confirm our engagement on the following terms.</p>
       <h3>1. Scope of Engagement</h3><p>Awal Global Consults Limited ("the Firm") shall provide ${esc(doc.notes || service)} on behalf of ${esc(cl.name)} ("the Client")${qt.number ? `, as more particularly described in Quotation No. ${esc(qt.number)}` : ''}.</p>
-      <h3>2. Fees</h3><p>The total fee for this engagement is ${money(inv.total || doc.total)} (${esc(nairaWords(inv.total || doc.total))}), inclusive of applicable government charges${(inv.vat_rate || 0) > 0 ? ' and VAT' : ''}, as invoiced under ${esc(inv.number || '')} and confirmed paid under Receipt No. ${esc(rc.number || '')}. Any variation to scope requested by the Client after this date may attract additional fees, which will be communicated and agreed on before proceeding.</p>
+      <h3>2. Fees</h3><p>${esc(feesSentence(inv, rc, doc))}</p>
       <h3>3. Client Responsibilities</h3><p>The Client agrees to promptly provide accurate information and documentation reasonably required by the Firm to perform the services. Delays in providing such information may affect delivery timelines quoted.</p>
       <h3>4. Timelines</h3><p>Estimated timelines communicated by the Firm are based on standard processing periods at the relevant regulatory bodies (including CAC and NRS) and are indicative only; the Firm does not control, and cannot guarantee, third-party regulatory processing times.</p>
       <h3>5. Confidentiality</h3><p>Each party shall keep confidential all non-public information received from the other in connection with this engagement and shall not disclose it to any third party except as required to perform the services or by law.</p>

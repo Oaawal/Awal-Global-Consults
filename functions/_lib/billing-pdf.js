@@ -8,7 +8,7 @@
  * are JPEG so they embed without decoding. The standard fonts have no naira sign, so ₦ is
  * drawn as an N with two bars.
  */
-import { KIND_LABEL, PAYMENT_DETAILS, money, nairaWords } from './billing.js';
+import { KIND_LABEL, PAYMENT_DETAILS, money, nairaWords, feesSentence } from './billing.js';
 import * as A from './pdf-assets.js';
 
 const NAVY = [13, 35, 64], CREAM = [239, 231, 211], GOLD = [147, 112, 31], GREY = [74, 85, 104], LINE = [226, 232, 240], RED = [185, 28, 28];
@@ -317,7 +317,7 @@ export async function renderPdf(doc, { invoice = null, receipt = null, quote = n
     head('1. Scope of Engagement');
     P([R(`Awal Global Consults Limited ("the Firm") shall provide ${doc.notes || service} on behalf of ${cl.name} ("the Client")${qt.number ? `, as more particularly described in Quotation No. ${qt.number}` : ''}.`)]);
     head('2. Fees');
-    P([R(`The total fee for this engagement is ${money(inv.total || doc.total)} (${nairaWords(inv.total || doc.total)}), inclusive of applicable government charges${(inv.vat_rate || 0) > 0 ? ' and VAT' : ''}, as invoiced under ${inv.number || ''} and confirmed paid under Receipt No. ${rc.number || ''}. Any variation to scope requested by the Client after this date may attract additional fees, which will be communicated and agreed on before proceeding.`)]);
+    P([R(feesSentence(inv, rc, doc))]);
     head('3. Client Responsibilities');
     P([R('The Client agrees to promptly provide accurate information and documentation reasonably required by the Firm to perform the services. Delays in providing such information may affect delivery timelines quoted.')]);
     head('4. Timelines');

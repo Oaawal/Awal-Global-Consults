@@ -32,6 +32,10 @@ const FLASH = {
   status_no_email: ['ok', 'Status updated. The client has no email address, so let them know on WhatsApp.'],
   unchanged: ['ok', 'Nothing changed.'],
   note: ['ok', 'Note added.'],
+  doc_added: ['ok', 'Document added to the case.'],
+  doc_replaced: ['ok', 'Replaced. The old file has been removed and the change is in the activity log.'],
+  doc_removed: ['ok', 'Document removed. The change is in the activity log.'],
+  doc_bad: ['err', 'Use a PDF, JPG or PNG file under 7MB.'],
   followup: ['ok', 'Follow-up saved. It will show in your morning summary when it is due.'],
   followup_cleared: ['ok', 'Follow-up cleared.'],
   followup_invalid: ['err', 'Please choose a valid date for the follow-up.'],
@@ -189,7 +193,7 @@ export function casesPage({ admin, badges, rows, view, q, counts }) {
 
 // ── Case detail ─────────────────────────────────────────────────
 function eventIcon(event) {
-  return { created: 'inbox', status_changed: 'arrow', client_notified: 'mail', reminder_sent: 'bell', note: 'doc', follow_up: 'clock', legal_hold: 'lock', erased: 'trash', email_bounced: 'mail', documents_added: 'doc', info_requested: 'mail' }[event] || 'activity';
+  return { payment: 'check', document_replaced: 'doc', document_removed: 'trash', created: 'inbox', status_changed: 'arrow', client_notified: 'mail', reminder_sent: 'bell', note: 'doc', follow_up: 'clock', legal_hold: 'lock', erased: 'trash', email_bounced: 'mail', documents_added: 'doc', info_requested: 'mail' }[event] || 'activity';
 }
 
 function eventLabel(e, kind) {
@@ -203,8 +207,11 @@ function eventLabel(e, kind) {
     case 'legal_hold': return 'Legal hold changed';
     case 'erased': return 'Personal data erased';
     case 'email_bounced': return 'Email to the client bounced';
-    case 'documents_added': return 'Client uploaded documents';
+    case 'documents_added': return e.actor && e.actor.startsWith('client') ? 'Client uploaded documents' : 'Documents added';
+    case 'document_replaced': return 'Document replaced';
+    case 'document_removed': return 'Document removed';
     case 'info_requested': return 'Missing items requested from the client';
+    case 'payment': return 'Payment recorded';
     default: return e.event;
   }
 }
@@ -217,7 +224,7 @@ const CASE_TABS = [
   { key: 'records', label: 'Records' }
 ];
 
-export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLink = null, missing = null, billing = null }) {
+export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLink = null, missing = null, billing = null, payment = null }) {
   const wa = whatsappLink(c.phone);
   const purged = !!c.purged_at;
   const tabs = CASE_TABS.map(t => `<a class="${t.key === tab ? 'on' : ''}" href="/admin/case/${esc(c.id)}${t.key === 'summary' ? '' : `?tab=${t.key}`}">${esc(t.label)}${t.key === 'documents' && docs.length ? ` (${docs.length})` : ''}</a>`).join('');
@@ -245,7 +252,7 @@ export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLin
   else if (tab === 'documents') body = caseDocuments(c, docs, uploadLink);
   else if (tab === 'activity') body = caseActivity(c, events);
   else if (tab === 'records') body = caseRecords(c);
-  else body = caseSummary(c, uploadLink, missing);
+  else body = caseSummary(c, uploadLink, missing, payment);
 
   return shell({ title: c.reference, active: 'cases', admin, badges, body: `
     <a class="crumb" href="/admin/cases">${icon('back', 16)}Cases</a>
@@ -256,7 +263,7 @@ export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLin
     ${body}` });
 }
 
-function caseSummary(c, uploadLink = null, missing = null) {
+function caseSummary(c, uploadLink = null, missing = null, payment = null) {
   let fields = {};
   try { fields = JSON.parse(c.form_data || '{}'); } catch (e) { /* show nothing */ }
   const SHOWN_ELSEWHERE = /^(full name|name|email|email address|phone|phone number|phone \/ whatsapp number|declaration accurate|declaration consent)$/i;
@@ -282,6 +289,7 @@ function caseSummary(c, uploadLink = null, missing = null) {
         </div>
         ${notifyBox(nextInfo.notify)}
       </form>` : ''}
+      ${paymentNote(c, payment, next)}
       ${waitingNote}
       <details class="more"${next ? '' : ' open'}>
         <summary>Choose another stage or add a message to the client</summary>
@@ -353,14 +361,41 @@ function uploadCard(uploadLink) {
 
 function caseDocuments(c, docs, uploadLink = null) {
   if (c.purged_at) return `<div class="card"><div class="card-body">${emptyState('trash', 'Documents erased', `Removed on ${fmtDay(c.purged_at)}.`)}</div></div>`;
-  if (!docs.length) return `<div class="card"><div class="card-body">${emptyState('doc', 'No documents yet', 'The client can add them with their private upload link (Summary tab).')}</div></div>`;
+  const ACCEPT = '.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png';
+  const addCard = `<div class="card" style="margin-top:16px"><div class="card-head"><h2>Add a document</h2></div><div class="card-body">
+    <form method="post" action="/admin/case/${esc(c.id)}/doc-add" enctype="multipart/form-data">
+      <label class="field"><span>What is it?</span><input name="what" maxlength="80" placeholder="e.g. Signature of Femi Bakare, NIN slip"></label>
+      <label class="field"><span>File (PDF, JPG or PNG, up to 7MB)</span><input type="file" name="file" accept="${ACCEPT}" required></label>
+      <div class="btn-row"><button class="btn ghost" type="submit">Add to case</button></div>
+    </form></div></div>`;
+  if (!docs.length) return `<div class="card"><div class="card-body">${emptyState('doc', 'No documents yet', 'The client can add them with their private upload link (Summary tab), or add one below.')}</div></div>${addCard}`;
   return `<div class="card"><div class="card-body">${docs.map(d => {
     const isImg = /\.(jpe?g|png)$/i.test(d.file_name);
     return `<div class="doc"><span class="doc-ic ${isImg ? 'img' : ''}">${icon('doc', 20)}</span>
-      <div class="row-main"><div class="row-title">${esc(d.file_name)}</div><div class="small muted">${fmtSize(d.size_bytes)} · ${esc(fmtDate(d.uploaded_at))}</div></div>
+      <div class="row-main"><div class="row-title">${esc(d.file_name)}</div><div class="small muted">${fmtSize(d.size_bytes)} · ${esc(fmtDate(d.uploaded_at))}</div>
+        <details class="doc-replace"><summary class="small">Replace or remove</summary>
+          <form method="post" action="/admin/doc/${esc(d.id)}/replace" enctype="multipart/form-data" class="btn-row" style="margin-top:8px;align-items:center">
+            <input type="file" name="file" accept="${ACCEPT}" required aria-label="Replacement for ${esc(d.file_name)}">
+            <button class="btn sm" type="submit">Replace</button>
+          </form>
+          <form method="post" action="/admin/doc/${esc(d.id)}/remove" data-confirm="Remove ${esc(d.file_name)}? The file is deleted; the activity log keeps a record that it existed." style="margin-top:6px">
+            <button class="btn ghost sm danger" type="submit">Remove</button>
+          </form>
+        </details></div>
       <a class="btn ghost sm" href="/admin/doc/${esc(d.id)}" target="_blank" rel="noopener">Open</a></div>`;
   }).join('')}</div></div>
-  <p class="small muted">${icon('lock', 14)} Documents are stored privately. Every time one is opened, it is recorded in the activity log.</p>`;
+  ${addCard}
+  <p class="small muted">${icon('lock', 14)} Documents are stored privately. Opening, adding, replacing and removing are all recorded in the activity log. A replacement keeps the original file name, so a signature stays matched to its person.</p>`;
+}
+
+/** Where the money stands, under the progress steps. Payments are recorded on the Billing tab. */
+function paymentNote(c, p, next) {
+  if (c.purged_at) return '';
+  const billingLink = `<a href="/admin/case/${esc(c.id)}?tab=billing">Billing tab</a>`;
+  if (!p) return next === 'paid' ? `<div class="note" style="margin-top:14px">${icon('doc', 18)}<span>To record a payment (full or part) and issue a receipt, create an invoice on the ${billingLink}.</span></div>` : '';
+  if (p.status === 'part_paid') return `<div class="note" style="margin-top:14px">${icon('clock', 18)}<span><strong>Part paid:</strong> ${esc(p.money(p.paid))} of ${esc(p.money(p.total))} on ${esc(p.number)}. <strong>Balance ${esc(p.money(p.balance))}.</strong> Record the rest on the ${billingLink}.</span></div>`;
+  if (p.status === 'paid') return `<div class="note" style="margin-top:14px">${icon('check', 18)}<span>Paid in full: ${esc(p.money(p.total))} on ${esc(p.number)}.</span></div>`;
+  return `<div class="note" style="margin-top:14px">${icon('doc', 18)}<span>Invoice ${esc(p.number)} for ${esc(p.money(p.total))} is unpaid. Record a full or part payment on the ${billingLink}.</span></div>`;
 }
 
 function caseActivity(c, events) {
@@ -663,7 +698,7 @@ const ACTION_LABELS = {
   'case.created': 'New submission received', 'case.viewed': 'Case opened', 'case.status_changed': 'Status changed',
   'case.note_added': 'Note added', 'case.follow_up_set': 'Follow-up updated', 'case.reminder_sent': 'Automatic reminder sent',
   'case.tracked': 'Client checked status online', 'case.legal_hold': 'Legal hold changed', 'case.erased': 'Case erased',
-  'document.viewed': 'Document opened', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
+  'document.viewed': 'Document opened', 'document.added': 'Document added', 'document.replaced': 'Document replaced', 'document.removed': 'Document removed', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
   'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'email.bounced': 'Email bounced', 'case.imported': 'Past client added', 'document.uploaded': 'Client uploaded documents', 'billing.issued': 'Billing document issued', 'billing.sent': 'Billing document emailed', 'billing.paid': 'Payment recorded', 'billing.void': 'Billing document voided', 'bounces.enabled': 'Turned on bounce alerts', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
   'client.viewed': 'Client opened', 'client.updated': 'Client details corrected', 'client.exported': 'Client data exported', 'client.erased': 'Client erased',
   'client.request_logged': 'Data request recorded', 'client.request_done': 'Data request completed', 'backup.downloaded': 'Backup downloaded'
@@ -715,7 +750,7 @@ export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices,
           <label>Date received</label><input name="date" type="date" value="${new Date().toISOString().slice(0, 10)}">
           <label class="check"><input type="checkbox" name="letter" value="1" checked> Also issue the engagement letter</label>
           <label>Scope for the engagement letter</label><textarea name="scope" maxlength="600" placeholder="e.g. CAC business name registration, including name search, filing and certificate">${esc(d.category || '')}</textarea>
-          <label class="check"><input type="checkbox" name="markpaid" value="1" checked> Move the case to &ldquo;Payment received&rdquo;</label>
+          <label class="check"><input type="checkbox" name="markpaid" value="1" checked> Move the case to &ldquo;Payment received&rdquo; (untick for a part payment if you'll wait for the balance before starting)</label>
           <label class="check"><input type="checkbox" name="send" value="1" checked> Email the receipt${'' } to the client</label>
           <div class="btn-row"><button class="btn" type="submit">Save payment</button></div>
         </form></details>` : '';

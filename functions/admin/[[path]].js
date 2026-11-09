@@ -91,6 +91,18 @@ function auditStmt(env, request, actor, action, entityType, entityId, detail, at
   ).bind(at, actor, action, entityType, entityId, detail ? JSON.stringify(detail) : null, request.headers.get('CF-Connecting-IP'));
 }
 
+const DOC_EXT = /\.(pdf|jpe?g|png)$/i;
+const DOC_MAX = 7 * 1024 * 1024;
+
+/** Save an uploaded file to a case's private storage; returns the row insert to batch. */
+async function storeCaseDocument(env, caseId, name, file) {
+  const id = crypto.randomUUID();
+  const key = `case/${caseId}/${id}`;
+  await env.DOCS.put(key, new Uint8Array(await file.arrayBuffer()), { httpMetadata: { contentType: documentContentType(name) }, customMetadata: { caseId, docId: id, fileName: name } });
+  return { id, stmt: env.DB.prepare('INSERT INTO documents (id, case_id, file_name, content_type, size_bytes, storage_key, uploaded_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)')
+    .bind(id, caseId, name, documentContentType(name), file.size, key, new Date().toISOString()) };
+}
+
 async function loadCase(env, id) {
   return env.DB.prepare(
     `SELECT c.*, cl.full_name, cl.email, cl.phone, cl.anonymised_at
@@ -328,7 +340,9 @@ export async function onRequest(context) {
       });
       await env.DB.batch([
         env.DB.prepare('UPDATE billing_docs SET amount_paid = ?2, paid_at = ?3, status = ?4 WHERE id = ?1').bind(doc.id, paidSoFar, paidAt, paidSoFar >= doc.total ? 'paid' : 'part_paid'),
-        auditStmt(env, request, actor, 'billing.paid', 'billing', doc.id, { number: doc.number, amount, receipt: rc.number }, now)
+        auditStmt(env, request, actor, 'billing.paid', 'billing', doc.id, { number: doc.number, amount, receipt: rc.number }, now),
+        env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'payment', ?2, ?3, ?4)")
+          .bind(c.id, `${money(amount)} received against ${doc.number} (receipt ${rc.number}). ${paidSoFar >= doc.total ? 'Paid in full.' : `Part paid: balance ${money(doc.total - paidSoFar)}.`}`, actor, now)
       ]);
       let letter = null;
       if (form.get('letter') === '1') {
@@ -474,12 +488,16 @@ export async function onRequest(context) {
       await audit(env, request, actor, 'case.viewed', 'case', c.id, { reference: c.reference });
       const uploadLink = isOpen(c.status) && !c.purged_at ? await uploadUrl(env, c.id, url.origin) : null;
       const missing = isOpen(c.status) && !c.purged_at ? missingForCase(c, docs.results || []) : null;
-      let billing = null;
+      let billing = null, payment = null;
+      if (tab === 'summary') {
+        const inv = await env.DB.prepare("SELECT number, total, amount_paid, status FROM billing_docs WHERE case_id = ?1 AND kind = 'invoice' AND status != 'void' ORDER BY created_at DESC LIMIT 1").bind(c.id).first();
+        if (inv) payment = { number: inv.number, total: inv.total, paid: inv.amount_paid || 0, balance: Math.max(0, inv.total - (inv.amount_paid || 0)), status: inv.status, money };
+      }
       if (tab === 'billing') {
         const bdocs = (await env.DB.prepare('SELECT * FROM billing_docs WHERE case_id = ?1 ORDER BY created_at DESC').bind(c.id).all()).results || [];
         billing = { docs: bdocs, settings: await billingSettings(env), prefill: billPrefill(c, bdocs, url.searchParams.get('from')), kindLabel: KIND_LABEL, startPrices: START_PRICES, paymentMethods: PAYMENT_METHODS, money };
       }
-      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing }));
+      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment }));
     }
     if (method !== 'POST') return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
     const form = await request.formData();
@@ -590,6 +608,22 @@ export async function onRequest(context) {
       return back('missing_sent');
     }
 
+    if (parts[2] === 'doc-add') {
+      if (c.purged_at) return back('doc_bad', 'documents');
+      const f = form.get('file');
+      const what = String(form.get('what') || '').trim().slice(0, 80);
+      const prefix = what ? what.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) + '--' : 'added-by-office--';
+      const name = f && typeof f !== 'string' ? prefix + String(f.name || 'file').replace(/[\\/\r\n\0"]/g, '_').slice(0, 100) : '';
+      if (!name || !DOC_EXT.test(name) || f.size <= 0 || f.size > DOC_MAX) return back('doc_bad', 'documents');
+      const doc = await storeCaseDocument(env, c.id, name, f);
+      await env.DB.batch([
+        doc.stmt,
+        env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'documents_added', ?2, ?3, ?4)").bind(c.id, `Added ${name}`, actor, now),
+        env.DB.prepare('UPDATE cases SET updated_at = ?2 WHERE id = ?1').bind(c.id, now),
+        auditStmt(env, request, actor, 'document.added', 'document', doc.id, { reference: c.reference, file: name }, now)
+      ]);
+      return back('doc_added', 'documents');
+    }
     if (parts[2] === 'note') {
       const note = String(form.get('note') || '').trim().slice(0, 2000);
       if (!note) return redirect(`/admin/case/${c.id}?tab=activity`);
@@ -647,6 +681,38 @@ export async function onRequest(context) {
   }
 
   // ── Documents ───────────────────────────────────────────────
+  if (parts[0] === 'doc' && parts[1] && parts.length === 3 && method === 'POST' && ['replace', 'remove'].includes(parts[2])) {
+    const d = await env.DB.prepare(
+      'SELECT d.id, d.case_id, d.file_name, d.storage_key, c.reference FROM documents d JOIN cases c ON c.id = d.case_id WHERE d.id = ?1 AND d.deleted_at IS NULL'
+    ).bind(parts[1]).first();
+    if (!d) return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
+    const backDocs = key => redirect(`/admin/case/${d.case_id}?tab=documents&done=${key}`);
+    const now = new Date().toISOString();
+    const stmts = [];
+    let note;
+    if (parts[2] === 'replace') {
+      const f = (await request.formData()).get('file');
+      if (!f || typeof f === 'string' || f.size <= 0 || f.size > DOC_MAX) return backDocs('doc_bad');
+      const ext = (String(f.name || '').match(DOC_EXT) || [])[0];
+      if (!ext) return backDocs('doc_bad');
+      // Keep the original name (signatures are matched to people by it); only the extension follows the new file
+      const name = d.file_name.replace(/\.[a-z0-9]+$/i, '') + ext.toLowerCase();
+      const doc = await storeCaseDocument(env, d.case_id, name, f);
+      stmts.push(doc.stmt);
+      note = `Replaced ${d.file_name}${name !== d.file_name ? ` with ${name}` : ''}`;
+      stmts.push(auditStmt(env, request, actor, 'document.replaced', 'document', d.id, { reference: d.reference, file: d.file_name, replacement: doc.id }, now));
+    } else {
+      note = `Removed ${d.file_name}`;
+      stmts.push(auditStmt(env, request, actor, 'document.removed', 'document', d.id, { reference: d.reference, file: d.file_name }, now));
+    }
+    stmts.push(env.DB.prepare('UPDATE documents SET deleted_at = ?2 WHERE id = ?1').bind(d.id, now));
+    stmts.push(env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, ?2, ?3, ?4, ?5)").bind(d.case_id, parts[2] === 'replace' ? 'document_replaced' : 'document_removed', note, actor, now));
+    stmts.push(env.DB.prepare('UPDATE cases SET updated_at = ?2 WHERE id = ?1').bind(d.case_id, now));
+    await env.DB.batch(stmts);
+    // The wrong file is deleted, not just hidden; any backup copy is cleared by the backup job
+    await env.DOCS.delete(d.storage_key);
+    return backDocs(parts[2] === 'replace' ? 'doc_replaced' : 'doc_removed');
+  }
   if (parts[0] === 'doc' && parts[1] && parts.length === 2 && method === 'GET') {
     const d = await env.DB.prepare(
       'SELECT d.id, d.file_name, d.storage_key, c.reference FROM documents d JOIN cases c ON c.id = d.case_id WHERE d.id = ?1 AND d.deleted_at IS NULL'
