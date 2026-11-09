@@ -1,18 +1,55 @@
 /**
  * PDF copies of quotations, invoices, receipts and engagement letters, attached to the
- * billing emails. Same content and look as renderDoc() in billing.js (the web view).
+ * billing emails and downloadable from the dashboard and the client's link.
  *
- * Built to stay within Cloudflare's per-request CPU budget (a PDF takes ~5ms): pdf-lib is
- * loaded on first use only, the fonts are the PDF standard ones (Helvetica, close to DM Sans;
- * Times Bold for headings, close to Fraunces) so nothing is parsed or embedded, and images
- * are JPEG so they embed without decoding. The standard fonts have no naira sign, so ₦ is
- * drawn as an N with two bars.
+ * Every page is printed on the firm's real letterhead: the letterhead (AWAL_letterhead.docx,
+ * converted to PDF by ops/billing-pdf/build_assets.py) is the page background, so the header
+ * and footer are exactly as designed, on every page, with the footer's own "Page x of n".
+ * The body is set in the letterhead's own fonts (DM Sans AGC, Fraunces AGC) between the
+ * header rule and the footer rule, within the letterhead's margins.
+ *
+ * Built to stay within Cloudflare's per-request CPU budget: pdf-lib is loaded on first use,
+ * the fonts are embedded from pre-built data (no font parsing at request time), and images
+ * are JPEG. The fonts have no naira sign, so ₦ is drawn as an N with two bars.
  */
 import { KIND_LABEL, PAYMENT_DETAILS, money, nairaWords, feesSentence } from './billing.js';
 import * as A from './pdf-assets.js';
 
 const NAVY = [13, 35, 64], CREAM = [239, 231, 211], GOLD = [147, 112, 31], GREY = [74, 85, 104], LINE = [226, 232, 240], RED = [185, 28, 28];
-const W = 595.28, H = 841.89, M = 48, TOP = 40, BOTTOM = 26, CW = W - 2 * M, FOOT_H = 60;
+const W = 595.28, H = 841.89, M = 45, CW = W - 2 * M;   // letterhead page and margins (900 twips)
+const TOP_Y = H - A.BODY_TOP, MIN_Y = H - A.BODY_BOTTOM;   // body area: under the header rule, over the footer rule
+const FOOT_GREY = [154, 163, 180];
+
+// Windows-1252 (WinAnsi) codes for the characters outside Latin-1's straight mapping
+const CP1252 = { 0x20ac: 0x80, 0x201a: 0x82, 0x0192: 0x83, 0x201e: 0x84, 0x2026: 0x85, 0x2020: 0x86, 0x2021: 0x87, 0x02c6: 0x88, 0x2030: 0x89, 0x0160: 0x8a, 0x2039: 0x8b, 0x0152: 0x8c, 0x017d: 0x8e,
+  0x2018: 0x91, 0x2019: 0x92, 0x201c: 0x93, 0x201d: 0x94, 0x2022: 0x95, 0x2013: 0x96, 0x2014: 0x97, 0x02dc: 0x98, 0x2122: 0x99, 0x0161: 0x9a, 0x203a: 0x9b, 0x0153: 0x9c, 0x017e: 0x9e, 0x0178: 0x9f };
+const winAnsi = cp => cp >= 0x20 && cp <= 0x7e ? cp : cp >= 0xa0 && cp <= 0xff ? cp : CP1252[cp] || 0;
+
+/** The letterhead's own font, embedded from pre-built data (a WinAnsi TrueType font). */
+function letterheadFont(L, pdf, spec) {
+  const embedder = Object.create(L.StandardFontEmbedder.prototype);   // PDFFont only accepts pdf-lib's embedder types
+  const supported = new Set(spec.codes);
+  const code = ch => { const c = winAnsi(ch.codePointAt(0)); return c && supported.has(ch.codePointAt(0)) ? c : 63; };
+  Object.assign(embedder, {
+    fontName: spec.name,
+    encoding: { supportedCodePoints: spec.codes },
+    encodeText: text => L.PDFHexString.of([...text].map(ch => code(ch).toString(16).padStart(2, '0')).join('')),
+    widthOfTextAtSize: (text, size) => [...text].reduce((w, ch) => w + (spec.widths[code(ch) - 32] || 0), 0) * size / 1000,
+    heightOfFontAtSize: (size, { descender = true } = {}) => (spec.ascent - (descender ? spec.descent : 0)) * size / 1000,
+    sizeOfFontAtHeight: height => 1000 * height / (spec.ascent - spec.descent),
+    embedIntoContext: async (context, ref) => {
+      const file = context.register(context.stream(b64(spec.file), { Filter: 'FlateDecode', Length1: spec.length1 }));
+      const descriptor = context.register(context.obj({ Type: 'FontDescriptor', FontName: spec.name, Flags: spec.flags, FontBBox: spec.bbox,
+        ItalicAngle: spec.italicAngle, Ascent: spec.ascent, Descent: spec.descent, CapHeight: spec.capHeight, StemV: spec.stemV, FontFile2: file }));
+      context.assign(ref, context.obj({ Type: 'Font', Subtype: 'TrueType', BaseFont: spec.name, FirstChar: 32, LastChar: 255,
+        Widths: spec.widths, Encoding: 'WinAnsiEncoding', FontDescriptor: descriptor }));
+      return ref;
+    }
+  });
+  const font = L.PDFFont.of(pdf.context.nextRef(), pdf, embedder);
+  pdf.fonts.push(font);
+  return font;
+}
 
 const plain = n => Math.round(Number(n) || 0).toLocaleString('en-NG');
 const dayLong = iso => iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Africa/Lagos' }) : '';
@@ -40,13 +77,8 @@ export async function renderPdf(doc, { invoice = null, receipt = null, quote = n
   pdf.setAuthor('Awal Global Consults Limited');
   pdf.setCreator('awalglobal.com.ng');
   pdf.setProducer('Awal Global Consults');
-  const F = {
-    r: await pdf.embedFont(L.StandardFonts.Helvetica),
-    b: await pdf.embedFont(L.StandardFonts.HelveticaBold),
-    h: await pdf.embedFont(L.StandardFonts.TimesRomanBold)
-  };
+  const F = { r: letterheadFont(L, pdf, A.FONTS.regular), b: letterheadFont(L, pdf, A.FONTS.bold), h: letterheadFont(L, pdf, A.FONTS.serif) };
   const IMG = {
-    logo: await pdf.embedJpg(b64(A.LOGO_JPG)),
     sig: await pdf.embedJpg(b64(A.SIGNATURE_JPG)),
     seal: await pdf.embedJpg(b64(A.SEAL_JPG))
   };
@@ -91,9 +123,9 @@ export async function renderPdf(doc, { invoice = null, receipt = null, quote = n
   let page, y;
   const pages = [];
   const newPage = () => {
-    page = pdf.addPage([W, H]); pages.push(page); y = H - TOP;
+    page = pdf.addPage([W, H]); pages.push(page); y = TOP_Y;
   };
-  const ensure = h => { if (y - h < BOTTOM + FOOT_H) newPage(); };
+  const ensure = h => { if (y - h < MIN_Y) newPage(); };
   newPage();
 
   const text = (t, x, yy, { font = F.r, size = 9.5, color = GREY, align = 'left', spacing = 0 } = {}) => {
@@ -149,21 +181,15 @@ export async function renderPdf(doc, { invoice = null, receipt = null, quote = n
   };
   const block = (runs, size, w) => wrapRuns(Array.isArray(runs) ? runs : [{ t: runs, font: F.r }], size, w);
 
-  // ---- header ----
-  const logoW = 128, logoH = logoW * IMG.logo.height / IMG.logo.width;
-  page.drawImage(IMG.logo, { x: M, y: y - logoH, width: logoW, height: logoH });
-  let ay = y - 9;
-  text('RC-9282103', W - M, ay, { font: F.b, size: 9.5, color: GOLD, align: 'right' }); ay -= 15;
-  for (const l of ['12, Hakeem Balogun Street', 'Central Business District (CBD)', 'Agidingbi, Alausa, Ikeja', 'Lagos, Nigeria.']) { text(l, W - M, ay, { font: F.h, size: 10, color: NAVY, align: 'right' }); ay -= 13.5; }
-  text('awalglobal.com.ng', W - M, ay + 1, { size: 8, color: GOLD, align: 'right' });
-  y = Math.min(y - logoH, ay) - 18;
+  // The header and footer come from the letterhead itself (added at the end, once the page count is known)
+  y -= 8;
 
   // ---- title ----
   const items = JSON.parse(doc.items_json || '[]');
   const cl = JSON.parse(doc.client_json || '{}');
   const KICKER = { quote: 'Official price quotation', invoice: doc.vat_rate > 0 ? 'Tax invoice' : 'Invoice', receipt: 'Official receipt', engagement: 'Confirmation of engagement' };
   const TITLE = { quote: 'Quotation', invoice: kindLabel, receipt: 'Receipt', engagement: 'Engagement Letter' };
-  caps(KICKER[doc.kind], M, y); y -= 27;
+  caps(KICKER[doc.kind], M, y, { size: 7.5, spacing: 0.8 }); y -= 27;
   const tw = text(TITLE[doc.kind], M, y, { font: F.h, size: 26, color: NAVY });
   if (doc.status === 'void') {
     const vx = M + tw + 14;
@@ -212,7 +238,7 @@ export async function renderPdf(doc, { invoice = null, receipt = null, quote = n
         return { main: block([{ t: c.main, font: c.bold ? F.b : F.r }], 9.5, cw), subs: (c.subs || []).filter(Boolean).flatMap(s => block(s, 7.5, cw)) };
       });
       const h = Math.max(...cells.map(c => c.main.length * 13 + c.subs.length * 10.5)) + 11;
-      if (y - h < BOTTOM + FOOT_H) { newPage(); header(); }
+      if (y - h < MIN_Y) { newPage(); header(); }
       cells.forEach((c, i) => {
         let yy = y - 14; const align = cols[i].align === 'right' ? 'right' : 'left'; const bw = cols[i].w * CW - 2 * pad;
         for (const ln of c.main) { drawLine(ln, xs[i] + pad, yy, 9.5, NAVY, align, bw); yy -= 13; }
@@ -335,20 +361,16 @@ export async function renderPdf(doc, { invoice = null, receipt = null, quote = n
     signoff('Client Acceptance — Signature & Date');
   }
 
-  // ---- footer on every page ----
-  const FOOT = [
-    [{ t: 'Awal Global Consults Limited', font: F.b }, { t: ' · RC-9282103 · Registered Office: 12 Hakeem Balogun Street, Agidingbi, Ikeja, Lagos State, Nigeria', font: F.r }],
-    [{ t: '+234 703 833 6596 · info@awalglobal.com.ng · awalglobal.com.ng', font: F.r }],
-    [{ t: 'Directors: A.O. Abdulwaheed · A.B. Jimoh · I.A. Adeleke · Former name(s): None · Nationality of non-Nigerian director(s): N/A, all directors Nigerian', font: F.r }],
-    [{ t: 'TIN: 2622489142694 (unified NRS Tax ID)', font: F.r }],
-    [{ t: 'Disclosed pursuant to Sections 304(1) & (2) and 729(1)(c) of the Companies and Allied Matters Act 2020', font: F.r }]
-  ];
+  // ---- the letterhead on every page ----
+  // The template with the same number of pages carries the footer's own "Page x of n"; past four
+  // pages, the template without a page number is used and the number is added in the same place.
+  const n = pages.length, numbered = n <= 4;
+  const letterhead = await L.PDFDocument.load(b64(A.TEMPLATES[numbered ? n : 0]));
+  const backgrounds = await pdf.embedPages(letterhead.getPages());
   pages.forEach((p, i) => {
     page = p;
-    let fy = BOTTOM + FOOT_H - 14;
-    hline(M, M + CW, fy + 8);
-    for (const runs of FOOT) { for (const ln of wrapRuns(runs, 6.4, CW)) { drawLine(ln, M, fy - 2, 6.4, GREY); fy -= 8.6; } }
-    if (pages.length > 1) text(`${doc.number} · Page ${i + 1} of ${pages.length}`, M + CW, BOTTOM + FOOT_H - 3, { size: 6.4, align: 'right' });
+    p.drawPage(backgrounds[numbered ? i : 0], { x: 0, y: 0, width: W, height: H });
+    if (!numbered) text(`Page ${i + 1} of ${n}`, 539.9, H - 821.4, { size: 5.5, color: FOOT_GREY, align: 'right' });
   });
 
   // Object streams make files ~10% smaller but cost several times the CPU

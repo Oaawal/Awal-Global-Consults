@@ -12,7 +12,8 @@
  * private signed link and saved as PDF from the browser.
  */
 
-import { LOGO, SIGNATURE, SEAL } from './brand-assets.js';
+import { SIGNATURE, SEAL } from './brand-assets.js';
+import { HEADER_PNG, FOOTER_PNG } from './pdf-assets.js';
 
 export const VAT_RATE = 7.5;
 const SITE_URL = 'https://awalglobal.com.ng';
@@ -120,7 +121,10 @@ const CSS = `
 @page { size: A4; margin: 14mm 14mm 16mm; }
 * { box-sizing: border-box; }
 body { margin: 0; background: #e9edf2; font-family: 'DM Sans', Arial, sans-serif; color: #1f2937; font-size: 10.5pt; }
-.sheet { background: #fff; max-width: 210mm; margin: 18px auto; padding: 16mm 15mm 12mm; box-shadow: 0 6px 24px rgba(13,35,64,.12); }
+.sheet { background: #fff; max-width: 210mm; margin: 18px auto; padding: 0 15.9mm; box-shadow: 0 6px 24px rgba(13,35,64,.12); overflow: hidden; }
+.lh { display: block; width: calc(100% + 31.8mm); max-width: none; margin: 0 -15.9mm; }
+.lh-head { margin-bottom: 4mm; }
+.lh-foot { margin-top: 10mm; }
 .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
 .top img { height: 64px; }
 .addr { text-align: right; font-family: 'Fraunces', Georgia, serif; font-weight: 600; color: #0D2340; font-size: 10pt; line-height: 1.35; }
@@ -158,15 +162,10 @@ td small { display: block; color: #6b7280; font-size: 8pt; margin-top: 2px; }
 .bar { max-width: 210mm; margin: 18px auto 0; display: flex; gap: 10px; justify-content: flex-end; }
 .bar button, .bar a { background: #0D2340; color: #fff; border: 0; border-radius: 8px; padding: 10px 16px; font: 600 10pt 'DM Sans', Arial; cursor: pointer; text-decoration: none; }
 .bar button.alt, .bar a + button { background: #fff; color: #0D2340; border: 1px solid #0D2340; }
-@media print { body { background: #fff; } .sheet { box-shadow: none; margin: 0; max-width: none; padding: 0; } .bar { display: none; } }
-@media (max-width: 640px) { .sheet { padding: 18px 14px; margin: 0; } .meta, .parties, .boxes, .sign { grid-template-columns: 1fr; } .sum { width: 100%; } h1 { font-size: 24pt; } .top { flex-direction: column; } .addr { text-align: left; } }
+@media print { body { background: #fff; } .sheet { box-shadow: none; margin: 0; max-width: none; padding: 0 15.9mm; } .bar { display: none; } }
+@media (max-width: 640px) { .sheet { padding: 0 14px 0; margin: 0; } .lh { width: calc(100% + 28px); margin-left: -14px; margin-right: -14px; } .meta, .parties, .boxes, .sign { grid-template-columns: 1fr; } .sum { width: 100%; } h1 { font-size: 24pt; } .top { flex-direction: column; } .addr { text-align: left; } }
 `;
 
-const HEAD_ADDR = `<div class="addr"><div class="rc">RC-9282103</div>12, Hakeem Balogun Street<br>Central Business District (CBD)<br>Agidingbi, Alausa, Ikeja<br>Lagos, Nigeria.<div class="web">awalglobal.com.ng</div></div>`;
-const FOOTER = `<div class="foot"><b>Awal Global Consults Limited</b> · RC-9282103 · Registered Office: 12 Hakeem Balogun Street, Agidingbi, Ikeja, Lagos State, Nigeria<br>
-+234 703 833 6596 · info@awalglobal.com.ng · awalglobal.com.ng<br>
-Directors: A.O. Abdulwaheed · A.B. Jimoh · I.A. Adeleke · Former name(s): None · Nationality of non-Nigerian director(s): N/A, all directors Nigerian<br>
-TIN: 2622489142694 (unified NRS Tax ID)<br>Disclosed pursuant to Sections 304(1) &amp; (2) and 729(1)(c) of the Companies and Allied Matters Act 2020</div>`;
 const SIGNOFF = (clientLabel) => `<div class="sign"><div class="who"><img class="sig" src="${SIGNATURE}" alt=""><img class="seal" src="${SEAL}" alt=""><strong>A.O. Abdulwaheed</strong><small>For: Awal Global Consults Limited — Director</small></div>
   <div class="client">${esc(clientLabel)}</div></div>`;
 
@@ -276,10 +275,10 @@ export function renderDoc(doc, { invoice = null, receipt = null, quote = null, p
 <style>${CSS}</style></head><body>
 <div class="bar">${pdfUrl ? `<a class="pdf" href="${esc(pdfUrl)}">Download PDF</a>` : ''}<button type="button" onclick="window.print()">${pdfUrl ? 'Print' : 'Download / Print PDF'}</button></div>
 <div class="sheet">
-  <div class="top"><img src="${LOGO}" alt="Awal Global Consults">${HEAD_ADDR}</div>
+  <img class="lh lh-head" src="${HEADER_PNG}" alt="Awal Global Consults. RC-9282103. 12, Hakeem Balogun Street, Central Business District (CBD), Agidingbi, Alausa, Ikeja, Lagos, Nigeria. awalglobal.com.ng">
   <div class="kicker">${esc(kicker)}</div><h1>${esc(title)}${voided}</h1>${badge ? `<div class="badge">${esc(badge)}</div>` : ''}
   ${body}
-  ${FOOTER}
+  <img class="lh lh-foot" src="${FOOTER_PNG}" alt="Awal Global Consults Limited, RC-9282103. Registered Office: 12 Hakeem Balogun Street, Agidingbi, Ikeja, Lagos State, Nigeria. Directors: A.O. Abdulwaheed, A.B. Jimoh, I.A. Adeleke. TIN / VAT Reg. No.: 2622489142694.">
 </div></body></html>`;
 }
 
