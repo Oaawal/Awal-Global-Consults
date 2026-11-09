@@ -59,7 +59,10 @@ CREATE TABLE IF NOT EXISTS documents (
   size_bytes   INTEGER NOT NULL,
   storage_key  TEXT NOT NULL,
   uploaded_at  TEXT NOT NULL,
-  deleted_at   TEXT
+  deleted_at   TEXT,
+  archived_at  TEXT,      -- replaced or removed in the dashboard: kept for the record, not current
+  archive_reason TEXT,    -- replaced | removed
+  replaced_by  TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_documents_case ON documents(case_id);
 

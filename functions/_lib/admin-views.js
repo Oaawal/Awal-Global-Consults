@@ -33,9 +33,10 @@ const FLASH = {
   unchanged: ['ok', 'Nothing changed.'],
   note: ['ok', 'Note added.'],
   doc_added: ['ok', 'Document added to the case.'],
-  doc_replaced: ['ok', 'Replaced. The old file has been removed and the change is in the activity log.'],
-  doc_removed: ['ok', 'Document removed. The change is in the activity log.'],
+  doc_replaced: ['ok', 'Replaced. The old file is kept for the record under "Earlier and removed files".'],
+  doc_removed: ['ok', 'Removed from the current documents. The file is kept for the record under "Earlier and removed files".'],
   doc_bad: ['err', 'Use a PDF, JPG or PNG file under 7MB.'],
+  doc_unreadable: ['err', 'The file did not arrive in one piece, so nothing was changed. Please try again. If you use the installed app on iPhone, open the dashboard in Safari once to update it.'],
   followup: ['ok', 'Follow-up saved. It will show in your morning summary when it is due.'],
   followup_cleared: ['ok', 'Follow-up cleared.'],
   followup_invalid: ['err', 'Please choose a valid date for the follow-up.'],
@@ -224,7 +225,7 @@ const CASE_TABS = [
   { key: 'records', label: 'Records' }
 ];
 
-export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLink = null, missing = null, billing = null, payment = null }) {
+export function casePage({ admin, badges, c, tab, docs, archivedDocs = [], events, flash, uploadLink = null, missing = null, billing = null, payment = null }) {
   const wa = whatsappLink(c.phone);
   const purged = !!c.purged_at;
   const tabs = CASE_TABS.map(t => `<a class="${t.key === tab ? 'on' : ''}" href="/admin/case/${esc(c.id)}${t.key === 'summary' ? '' : `?tab=${t.key}`}">${esc(t.label)}${t.key === 'documents' && docs.length ? ` (${docs.length})` : ''}</a>`).join('');
@@ -249,7 +250,7 @@ export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLin
 
   let body = '';
   if (tab === 'billing' && billing) body = billingTab({ c, ...billing });
-  else if (tab === 'documents') body = caseDocuments(c, docs, uploadLink);
+  else if (tab === 'documents') body = caseDocuments(c, docs, uploadLink, archivedDocs);
   else if (tab === 'activity') body = caseActivity(c, events);
   else if (tab === 'records') body = caseRecords(c);
   else body = caseSummary(c, uploadLink, missing, payment);
@@ -359,7 +360,7 @@ function uploadCard(uploadLink) {
     </div></div>`;
 }
 
-function caseDocuments(c, docs, uploadLink = null) {
+function caseDocuments(c, docs, uploadLink = null, archived = []) {
   if (c.purged_at) return `<div class="card"><div class="card-body">${emptyState('trash', 'Documents erased', `Removed on ${fmtDay(c.purged_at)}.`)}</div></div>`;
   const ACCEPT = '.pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png';
   const addCard = `<div class="card" style="margin-top:16px"><div class="card-head"><h2>Add a document</h2></div><div class="card-body">
@@ -368,7 +369,13 @@ function caseDocuments(c, docs, uploadLink = null) {
       <label class="field"><span>File (PDF, JPG or PNG, up to 7MB)</span><input type="file" name="file" accept="${ACCEPT}" required></label>
       <div class="btn-row"><button class="btn ghost" type="submit">Add to case</button></div>
     </form></div></div>`;
-  if (!docs.length) return `<div class="card"><div class="card-body">${emptyState('doc', 'No documents yet', 'The client can add them with their private upload link (Summary tab), or add one below.')}</div></div>${addCard}`;
+  const archiveCard = archived.length ? `<div class="card" style="margin-top:16px"><div class="card-head"><h2>Earlier and removed files</h2></div><div class="card-body">
+    <p class="small muted" style="margin-top:0">Kept for the record. They don't count as the case's current documents.</p>
+    ${archived.map(d => `<div class="doc"><span class="doc-ic">${icon('doc', 20)}</span>
+      <div class="row-main"><div class="row-title">${esc(d.file_name)}</div><div class="small muted">${d.archive_reason === 'replaced' ? 'Replaced' : 'Removed'} ${esc(fmtDate(d.archived_at))} · uploaded ${esc(fmtDate(d.uploaded_at))}</div></div>
+      <a class="btn ghost sm" href="/admin/doc/${esc(d.id)}" target="_blank" rel="noopener">Open</a></div>`).join('')}
+  </div></div>` : '';
+  if (!docs.length) return `<div class="card"><div class="card-body">${emptyState('doc', 'No documents yet', 'The client can add them with their private upload link (Summary tab), or add one below.')}</div></div>${addCard}${archiveCard}`;
   return `<div class="card"><div class="card-body">${docs.map(d => {
     const isImg = /\.(jpe?g|png)$/i.test(d.file_name);
     return `<div class="doc"><span class="doc-ic ${isImg ? 'img' : ''}">${icon('doc', 20)}</span>
@@ -378,14 +385,15 @@ function caseDocuments(c, docs, uploadLink = null) {
             <input type="file" name="file" accept="${ACCEPT}" required aria-label="Replacement for ${esc(d.file_name)}">
             <button class="btn sm" type="submit">Replace</button>
           </form>
-          <form method="post" action="/admin/doc/${esc(d.id)}/remove" data-confirm="Remove ${esc(d.file_name)}? The file is deleted; the activity log keeps a record that it existed." style="margin-top:6px">
+          <form method="post" action="/admin/doc/${esc(d.id)}/remove" data-confirm="Remove ${esc(d.file_name)} from the current documents? It will be kept for the record under Earlier and removed files." style="margin-top:6px">
             <button class="btn ghost sm danger" type="submit">Remove</button>
           </form>
         </details></div>
       <a class="btn ghost sm" href="/admin/doc/${esc(d.id)}" target="_blank" rel="noopener">Open</a></div>`;
   }).join('')}</div></div>
   ${addCard}
-  <p class="small muted">${icon('lock', 14)} Documents are stored privately. Opening, adding, replacing and removing are all recorded in the activity log. A replacement keeps the original file name, so a signature stays matched to its person.</p>`;
+  ${archiveCard}
+  <p class="small muted">${icon('lock', 14)} Documents are stored privately. Opening, adding, replacing and removing are all recorded in the activity log. A replacement keeps the original file name, so a signature stays matched to its person. Replaced and removed files are never deleted here: they are kept until the case's records are erased at the end of its retention period.</p>`;
 }
 
 /** Where the money stands, under the progress steps. Payments are recorded on the Billing tab. */

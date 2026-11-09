@@ -188,7 +188,18 @@ async function createBillingDoc(env, request, actor, c, d) {
   return { id, number };
 }
 
+/** Any unexpected failure shows a plain error page (and is logged) instead of Cloudflare's error 1101. */
 export async function onRequest(context) {
+  try {
+    return await handle(context);
+  } catch (err) {
+    console.error('admin error:', context.request.method, new URL(context.request.url).pathname, err && err.stack || err);
+    return new Response(simplePage('Something went wrong', 'That action could not be completed and nothing was changed. Please go back and try again. If it keeps happening, tell your developer the time it happened.'), {
+      status: 500, headers: { ...SECURITY_HEADERS, 'Content-Type': 'text/html; charset=utf-8' } });
+  }
+}
+
+async function handle(context) {
   const { request, env, params } = context;
   if (!env.DB || !env.DOCS) return html(simplePage('Not connected', 'The records database is not connected to this site.'), 503);
 
@@ -462,7 +473,7 @@ export async function onRequest(context) {
     const [list, counts] = await env.DB.batch([
       env.DB.prepare(
         `SELECT c.id, c.reference, c.kind, c.services, c.status, c.created_at, c.follow_up_at, cl.full_name,
-                (SELECT COUNT(*) FROM documents d WHERE d.case_id = c.id AND d.deleted_at IS NULL) AS docs
+                (SELECT COUNT(*) FROM documents d WHERE d.case_id = c.id AND d.deleted_at IS NULL AND d.archived_at IS NULL) AS docs
          FROM cases c JOIN clients cl ON cl.id = c.client_id
          WHERE ${CASE_VIEW_SQL[view]}${searchSql}
          ORDER BY ${view === 'followups' ? 'c.follow_up_at ASC' : 'c.created_at DESC'} LIMIT 300`).bind(...args),
@@ -482,12 +493,14 @@ export async function onRequest(context) {
     if (parts.length === 2 && method === 'GET') {
       const tab = ['documents', 'activity', 'records', 'billing'].includes(url.searchParams.get('tab')) ? url.searchParams.get('tab') : 'summary';
       const [docs, events] = await env.DB.batch([
-        env.DB.prepare('SELECT id, file_name, size_bytes, uploaded_at FROM documents WHERE case_id = ?1 AND deleted_at IS NULL ORDER BY uploaded_at').bind(c.id),
+        env.DB.prepare('SELECT id, file_name, size_bytes, uploaded_at, archived_at, archive_reason FROM documents WHERE case_id = ?1 AND deleted_at IS NULL ORDER BY uploaded_at').bind(c.id),
         env.DB.prepare('SELECT event, from_status, to_status, note, actor, created_at FROM case_events WHERE case_id = ?1 ORDER BY id DESC').bind(c.id)
       ]);
       await audit(env, request, actor, 'case.viewed', 'case', c.id, { reference: c.reference });
+      const allDocs = docs.results || [];
+      const currentDocs = allDocs.filter(d => !d.archived_at), archivedDocs = allDocs.filter(d => d.archived_at);
       const uploadLink = isOpen(c.status) && !c.purged_at ? await uploadUrl(env, c.id, url.origin) : null;
-      const missing = isOpen(c.status) && !c.purged_at ? missingForCase(c, docs.results || []) : null;
+      const missing = isOpen(c.status) && !c.purged_at ? missingForCase(c, currentDocs) : null;
       let billing = null, payment = null;
       if (tab === 'summary') {
         const inv = await env.DB.prepare("SELECT number, total, amount_paid, status FROM billing_docs WHERE case_id = ?1 AND kind = 'invoice' AND status != 'void' ORDER BY created_at DESC LIMIT 1").bind(c.id).first();
@@ -497,10 +510,11 @@ export async function onRequest(context) {
         const bdocs = (await env.DB.prepare('SELECT * FROM billing_docs WHERE case_id = ?1 ORDER BY created_at DESC').bind(c.id).all()).results || [];
         billing = { docs: bdocs, settings: await billingSettings(env), prefill: billPrefill(c, bdocs, url.searchParams.get('from')), kindLabel: KIND_LABEL, startPrices: START_PRICES, paymentMethods: PAYMENT_METHODS, money };
       }
-      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment }));
+      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: currentDocs, archivedDocs, events: events.results || [], flash, uploadLink, missing, billing, payment }));
     }
     if (method !== 'POST') return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
-    const form = await request.formData();
+    let form;
+    try { form = await request.formData(); } catch (err) { console.error('case post: unreadable form:', err && err.message); return back('doc_unreadable', url.searchParams.get('tab') || 'documents'); }
     const now = new Date().toISOString();
 
     // Erased cases are read-only
@@ -579,7 +593,7 @@ export async function onRequest(context) {
 
     if (parts[2] === 'request-missing') {
       if (!c.email || c.anonymised_at || !isOpen(c.status)) return back('unchanged');
-      const docs = (await env.DB.prepare('SELECT file_name FROM documents WHERE case_id = ?1 AND deleted_at IS NULL').bind(c.id).all()).results || [];
+      const docs = (await env.DB.prepare('SELECT file_name FROM documents WHERE case_id = ?1 AND deleted_at IS NULL AND archived_at IS NULL').bind(c.id).all()).results || [];
       const m = missingForCase(c, docs);
       if (!m.details.length && !m.documents.length) return back('unchanged');
       const note = String(form.get('note') || '').trim().slice(0, 1000);
@@ -683,7 +697,7 @@ export async function onRequest(context) {
   // ── Documents ───────────────────────────────────────────────
   if (parts[0] === 'doc' && parts[1] && parts.length === 3 && method === 'POST' && ['replace', 'remove'].includes(parts[2])) {
     const d = await env.DB.prepare(
-      'SELECT d.id, d.case_id, d.file_name, d.storage_key, c.reference FROM documents d JOIN cases c ON c.id = d.case_id WHERE d.id = ?1 AND d.deleted_at IS NULL'
+      'SELECT d.id, d.case_id, d.file_name, d.storage_key, c.reference FROM documents d JOIN cases c ON c.id = d.case_id WHERE d.id = ?1 AND d.deleted_at IS NULL AND d.archived_at IS NULL'
     ).bind(parts[1]).first();
     if (!d) return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
     const backDocs = key => redirect(`/admin/case/${d.case_id}?tab=documents&done=${key}`);
@@ -691,7 +705,8 @@ export async function onRequest(context) {
     const stmts = [];
     let note;
     if (parts[2] === 'replace') {
-      const f = (await request.formData()).get('file');
+      let f = null;
+      try { f = (await request.formData()).get('file'); } catch (err) { console.error('doc replace: unreadable upload:', err && err.message); return backDocs('doc_unreadable'); }
       if (!f || typeof f === 'string' || f.size <= 0 || f.size > DOC_MAX) return backDocs('doc_bad');
       const ext = (String(f.name || '').match(DOC_EXT) || [])[0];
       if (!ext) return backDocs('doc_bad');
@@ -699,18 +714,18 @@ export async function onRequest(context) {
       const name = d.file_name.replace(/\.[a-z0-9]+$/i, '') + ext.toLowerCase();
       const doc = await storeCaseDocument(env, d.case_id, name, f);
       stmts.push(doc.stmt);
-      note = `Replaced ${d.file_name}${name !== d.file_name ? ` with ${name}` : ''}`;
+      stmts.push(env.DB.prepare("UPDATE documents SET archived_at = ?2, archive_reason = 'replaced', replaced_by = ?3 WHERE id = ?1").bind(d.id, now, doc.id));
+      note = `Replaced ${d.file_name}${name !== d.file_name ? ` with ${name}` : ''}. The old file is kept for the record.`;
       stmts.push(auditStmt(env, request, actor, 'document.replaced', 'document', d.id, { reference: d.reference, file: d.file_name, replacement: doc.id }, now));
     } else {
-      note = `Removed ${d.file_name}`;
+      stmts.push(env.DB.prepare("UPDATE documents SET archived_at = ?2, archive_reason = 'removed' WHERE id = ?1").bind(d.id, now));
+      note = `Removed ${d.file_name} from the current documents. The file is kept for the record.`;
       stmts.push(auditStmt(env, request, actor, 'document.removed', 'document', d.id, { reference: d.reference, file: d.file_name }, now));
     }
-    stmts.push(env.DB.prepare('UPDATE documents SET deleted_at = ?2 WHERE id = ?1').bind(d.id, now));
     stmts.push(env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, ?2, ?3, ?4, ?5)").bind(d.case_id, parts[2] === 'replace' ? 'document_replaced' : 'document_removed', note, actor, now));
     stmts.push(env.DB.prepare('UPDATE cases SET updated_at = ?2 WHERE id = ?1').bind(d.case_id, now));
     await env.DB.batch(stmts);
-    // The wrong file is deleted, not just hidden; any backup copy is cleared by the backup job
-    await env.DOCS.delete(d.storage_key);
+    // Nothing is deleted: the old file stays in storage (and in backups) until the case itself is erased
     return backDocs(parts[2] === 'replace' ? 'doc_replaced' : 'doc_removed');
   }
   if (parts[0] === 'doc' && parts[1] && parts.length === 2 && method === 'GET') {

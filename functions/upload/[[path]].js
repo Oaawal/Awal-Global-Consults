@@ -26,7 +26,7 @@ async function loadCase(env, params) {
   const [caseId, sig] = [].concat(params.path || []);
   if (!caseId || !(await verifyUploadLink(env, caseId, sig))) return null;
   return env.DB.prepare(`SELECT c.id, c.reference, c.services, c.status, ${OPEN} AS open,
-    (SELECT COUNT(*) FROM documents d WHERE d.case_id = c.id AND d.deleted_at IS NULL) AS docs
+    (SELECT COUNT(*) FROM documents d WHERE d.case_id = c.id AND d.deleted_at IS NULL AND d.archived_at IS NULL) AS docs
     FROM cases c WHERE c.id = ?1`).bind(caseId).first();
 }
 
