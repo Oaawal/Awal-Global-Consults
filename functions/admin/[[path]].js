@@ -21,7 +21,7 @@
  */
 import { createLoginCode, verifyLoginCode, createSession, currentAdmin, endSession, isAdminEmail } from '../_lib/admin-auth.js';
 import {
-  loginPage, overviewPage, casesPage, casePage, clientsPage, clientPage, recordsPage, activityPage,
+  loginPage, overviewPage, funnelPage, casesPage, casePage, clientsPage, clientPage, recordsPage, activityPage,
   notFoundPage, simplePage, flashFor, CASE_VIEWS, ACTIVITY_FILTERS, importPage
 } from '../_lib/admin-views.js';
 import { statusesFor, statusInfo, retentionFor, documentContentType, autoFollowUp, isOpen } from '../_lib/cases.js';
@@ -30,6 +30,7 @@ import { vapidKeys, notifyAdmins } from '../_lib/webpush.js';
 import { bounceSettings, ensureBounceWebhook } from '../_lib/bounces.js';
 import { uploadUrl, detailsUrl } from '../_lib/upload-links.js';
 import { awaitingDetails } from '../_lib/records.js';
+import { funnelStats, PERIODS } from '../_lib/funnel.js';
 import { missingForCase } from '../_lib/requirements.js';
 import { START_PRICES, PAYMENT_METHODS, KIND_LABEL, billingSettings, saveBillingSettings, nextNumber, totals, renderDoc, relatedDocs, docUrl, money, addDays } from '../_lib/billing.js';
 import { renderPdf, pdfFilename } from '../_lib/billing-pdf.js';
@@ -461,10 +462,17 @@ async function handle(context) {
     if (reviewN) alerts.push({ href: '/admin/records', tone: 'warn', icon: 'clock', text: `${reviewN} record${reviewN === 1 ? ' has' : 's have'} passed the retention period: review for erasure.` });
     if (requestN) alerts.push({ href: '/admin/records', tone: 'warn', icon: 'inbox', text: `${requestN} client data request${requestN === 1 ? ' is' : 's are'} open.` });
     return html(overviewPage({
+      funnel: await funnelStats(env, 30), money,
       admin, badges: { cases: s.newCount || 0, records: reviewN + requestN },
       stats: { newCount: s.newCount || 0, waiting: s.waiting || 0, inProgress: s.inProgress || 0, followUpsDue: s.followUpsDue || 0 },
       needsReply: needs.results || [], followUps: follow.results || [], waiting: waiting.results || [], recent: recent.results || [], alerts
     }));
+  }
+
+  // ── Funnel: requests → quoted → invoiced → paid ─────────────
+  if (route === '/funnel' && method === 'GET') {
+    const period = PERIODS[url.searchParams.get('period')] ? url.searchParams.get('period') : '30';
+    return html(funnelPage({ admin, badges: await navBadges(env), period, periods: PERIODS, f: await funnelStats(env, period), money }));
   }
 
   // ── Case list ───────────────────────────────────────────────

@@ -297,6 +297,13 @@ details.more[open] summary::before{content:'– '}
 .login h1{font:700 24px var(--serif);color:var(--navy);margin:16px 0 6px}
 .code-input{font-size:26px;letter-spacing:10px;text-align:center;font-weight:700}
 
+/* Funnel */
+.funnel{display:grid;gap:12px}
+.funnel-label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}
+.funnel-track{background:var(--line-2);border-radius:999px;height:12px;overflow:hidden}
+.funnel-bar{height:100%;border-radius:999px;background:#0F3A5F}
+.funnel-bar.tone-1{background:#2f6ea5}.funnel-bar.tone-2{background:#b8892b}.funnel-bar.tone-3{background:#1f9d55}
+
 /* Billing: documents list, payment form, item lines */
 .bill-row{flex-wrap:wrap;align-items:flex-start}
 .bill-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-top:6px}

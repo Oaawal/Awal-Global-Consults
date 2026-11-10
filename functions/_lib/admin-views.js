@@ -110,7 +110,7 @@ export function loginPage({ step = 'email', email = '', next = '/admin/', error 
 }
 
 // ── Overview ────────────────────────────────────────────────────
-export function overviewPage({ admin, badges, stats, needsReply, followUps, waiting, recent, alerts }) {
+export function overviewPage({ admin, badges, stats, needsReply, followUps, waiting, recent, alerts, funnel = null, money = null }) {
   const hour = Number(new Date().toLocaleString('en-GB', { timeZone: 'Africa/Lagos', hour: '2-digit', hour12: false }));
   const greeting = hour < 12 ? 'Good morning' : (hour < 17 ? 'Good afternoon' : 'Good evening');
   const today = new Date().toLocaleDateString('en-GB', { timeZone: 'Africa/Lagos', weekday: 'long', day: 'numeric', month: 'long' });
@@ -151,7 +151,47 @@ export function overviewPage({ admin, badges, stats, needsReply, followUps, wait
           ${list(waiting, 'Not waiting on anyone', r => `Since ${ago(r.status_changed_at)}`)}</div>
       </div>
       <div>
+        ${funnel ? `<div class="card"><div class="card-head"><h2>Last 30 days</h2><a href="/admin/funnel">Full funnel</a></div><div class="card-body">
+          ${funnelBars(funnel)}
+          <p class="small muted" style="margin:10px 0 0">${funnel.requests ? `${funnel.conversion}% of requests became paying clients. ` : ''}Received in this period: <strong>${esc(money(funnel.received))}</strong>.</p></div></div>` : ''}
         <div class="card"><div class="card-head"><h2>Recent activity</h2><a href="/admin/activity">All</a></div>${recentHtml}</div>
+      </div>
+    </div>` });
+}
+
+// ── Funnel ──────────────────────────────────────────────────────
+function funnelBars(f) {
+  const steps = [['Requests received', f.requests], ['Quoted', f.quoted], ['Invoiced', f.invoiced], ['Paying clients', f.paying]];
+  const max = Math.max(1, f.requests);
+  return `<div class="funnel">${steps.map(([label, n], i) => `<div class="funnel-step"><div class="funnel-label"><span>${esc(label)}</span><strong>${n}</strong></div>
+    <div class="funnel-track"><div class="funnel-bar tone-${i}" style="width:${Math.max(n ? 4 : 0, Math.round(n * 100 / max))}%"></div></div>
+    ${i && steps[i - 1][1] ? `<div class="small muted">${Math.round(n * 100 / steps[i - 1][1])}% of ${esc(steps[i - 1][0].toLowerCase())}</div>` : ''}</div>`).join('')}</div>`;
+}
+
+export function funnelPage({ admin, badges, period, periods, f, money }) {
+  const tabs = Object.entries(periods).map(([k, label]) => `<a class="${k === String(period) ? 'on' : ''}" href="/admin/funnel?period=${esc(k)}">${esc(label)}</a>`).join('');
+  const table = (title, rows, showRevenue, hint) => `<div class="card"><div class="card-head"><h2>${esc(title)}</h2></div><div class="card-body">
+    ${rows.length ? `<div style="overflow-x:auto"><table class="table"><thead><tr><th>${showRevenue ? 'Source' : 'Service'}</th><th style="text-align:right">Requests</th><th style="text-align:right">Paying</th>${showRevenue ? '<th style="text-align:right">Paid so far</th>' : ''}</tr></thead><tbody>
+      ${rows.map(r => `<tr><td>${esc(r.name)}</td><td style="text-align:right">${r.requests}</td><td style="text-align:right">${r.paying}</td>${showRevenue ? `<td style="text-align:right">${esc(money(r.revenue))}</td>` : ''}</tr>`).join('')}</tbody></table></div>` : emptyState('activity', 'Nothing in this period yet')}
+    <p class="small muted" style="margin:10px 0 0">${hint}</p></div></div>`;
+  return shell({ title: 'Funnel', active: 'overview', admin, badges, body: `
+    ${pageHead('Client funnel', 'From first request to payment', '', { href: '/admin/', label: 'Overview' })}
+    <div class="tabs">${tabs}</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-top"><span>Requests received</span></div><div class="stat-num">${f.requests}</div><div class="stat-note">${f.applications} application${f.applications === 1 ? '' : 's'}, ${f.enquiries} enquir${f.enquiries === 1 ? 'y' : 'ies'}</div></div>
+      <div class="stat"><div class="stat-top"><span>Paying clients</span></div><div class="stat-num">${f.paying}</div><div class="stat-note">${f.conversion}% of requests</div></div>
+      <div class="stat"><div class="stat-top"><span>Paid by these clients</span></div><div class="stat-num" style="font-size:22px">${esc(money(f.revenue))}</div><div class="stat-note">On invoices for requests in this period</div></div>
+      <div class="stat"><div class="stat-top"><span>Money received</span></div><div class="stat-num" style="font-size:22px">${esc(money(f.received))}</div><div class="stat-note">${f.receipts} receipt${f.receipts === 1 ? '' : 's'} dated in this period</div></div>
+    </div>
+    <div class="grid grid-3">
+      <div>
+        <div class="card"><div class="card-head"><h2>Where requests drop off</h2></div><div class="card-body">${funnelBars(f)}
+          <p class="small muted" style="margin:12px 0 0">Counts requests received in this period and how far each has got. A case counts as quoted, invoiced or paying from its billing documents, or from its status if you handled that step outside the Billing tab. Money is counted only from payments recorded on the Billing tab.</p></div></div>
+        ${table('Where clients came from', f.sources, true, 'From the client\u2019s answer to \u201cHow did you hear about us?\u201d, or the link they arrived by if they accepted analytics cookies.')}
+      </div>
+      <div>
+        ${table('Most requested services', f.services, false, 'A request for several services is counted under each one.')}
+        <div class="card"><div class="card-body"><p class="small" style="margin:0">${icon('activity', 16)} Visitor numbers and page views are in Google Analytics. This page starts at the first request, where the dashboard\u2019s own records begin.</p></div></div>
       </div>
     </div>` });
 }
