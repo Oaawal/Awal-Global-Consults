@@ -116,7 +116,10 @@ export async function recentSignIns(env, sinceIso, limit = 10) {
 /** Copy client documents to the backup bucket and remove copies of erased documents. */
 export async function backupDocuments(env) {
   if (!env.DOCS_BACKUP) return { enabled: false };
-  const docs = (await env.DB.prepare('SELECT storage_key, size_bytes, deleted_at FROM documents').all()).results || [];
+  // A replaced or removed file is kept (and stays backed up) until its case is erased, so a
+  // document only counts as gone once the case's records have been purged.
+  const docs = (await env.DB.prepare(
+    'SELECT d.storage_key, d.size_bytes, CASE WHEN c.purged_at IS NOT NULL THEN d.deleted_at END AS deleted_at FROM documents d JOIN cases c ON c.id = d.case_id').all()).results || [];
   const cutoff = new Date(Date.now() - BACKUP_KEEP_DAYS * 86400000).toISOString();
   const byKey = new Map(docs.map(d => [d.storage_key, d]));
 

@@ -524,7 +524,15 @@ async function handle(context) {
         const bdocs = (await env.DB.prepare('SELECT * FROM billing_docs WHERE case_id = ?1 ORDER BY created_at DESC').bind(c.id).all()).results || [];
         billing = { docs: bdocs, settings: await billingSettings(env), prefill: billPrefill(c, bdocs, url.searchParams.get('from')), kindLabel: KIND_LABEL, startPrices: START_PRICES, paymentMethods: PAYMENT_METHODS, money };
       }
-      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment, detailsLink }));
+      // Replaced or removed files are kept (marked deleted_at, file still in storage) until the case
+      // itself is erased. Whether each was replaced or removed comes from the audit log.
+      const archivedDocs = tab === 'documents' && !c.purged_at
+        ? (await env.DB.prepare(
+            `SELECT d.id, d.file_name, d.size_bytes, d.uploaded_at, d.deleted_at AS archived_at,
+                    EXISTS(SELECT 1 FROM audit_log a WHERE a.action = 'document.replaced' AND a.entity_id = d.id) AS replaced
+               FROM documents d WHERE d.case_id = ?1 AND d.deleted_at IS NOT NULL ORDER BY d.deleted_at DESC`).bind(c.id).all()).results || []
+        : [];
+      return html(casePage({ admin, badges: await navBadges(env), c, tab, archivedDocs, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment, detailsLink }));
     }
     if (method !== 'POST') return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
     let form;
@@ -745,10 +753,10 @@ async function handle(context) {
       const name = d.file_name.replace(/\.[a-z0-9]+$/i, '') + ext.toLowerCase();
       const doc = await storeCaseDocument(env, d.case_id, name, f);
       stmts.push(doc.stmt);
-      note = `Replaced ${d.file_name}${name !== d.file_name ? ` with ${name}` : ''}. The old file is kept in storage for the record.`;
+      note = `Replaced ${d.file_name}${name !== d.file_name ? ` with ${name}` : ''}. The old file is kept under Earlier and removed files.`;
       stmts.push(auditStmt(env, request, actor, 'document.replaced', 'document', d.id, { reference: d.reference, file: d.file_name, replacement: doc.id }, now));
     } else {
-      note = `Removed ${d.file_name} from the current documents. The file is kept in storage for the record.`;
+      note = `Removed ${d.file_name} from the current documents. The file is kept under Earlier and removed files.`;
       stmts.push(auditStmt(env, request, actor, 'document.removed', 'document', d.id, { reference: d.reference, file: d.file_name }, now));
     }
     stmts.push(env.DB.prepare('UPDATE documents SET deleted_at = ?2 WHERE id = ?1').bind(d.id, now));
@@ -760,7 +768,7 @@ async function handle(context) {
   }
   if (parts[0] === 'doc' && parts[1] && parts.length === 2 && method === 'GET') {
     const d = await env.DB.prepare(
-      'SELECT d.id, d.file_name, d.storage_key, c.reference FROM documents d JOIN cases c ON c.id = d.case_id WHERE d.id = ?1 AND d.deleted_at IS NULL'
+      'SELECT d.id, d.file_name, d.storage_key, c.reference FROM documents d JOIN cases c ON c.id = d.case_id WHERE d.id = ?1 AND (d.deleted_at IS NULL OR c.purged_at IS NULL)'
     ).bind(parts[1]).first();
     const obj = d ? await env.DOCS.get(d.storage_key) : null;
     if (!obj) return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
