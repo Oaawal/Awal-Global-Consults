@@ -66,6 +66,10 @@ The right structure is the one that matches what your business actually does and
 
 Registering a business name doesn't lock you out of incorporating a company down the line, plenty of businesses do exactly that as they grow. But it's a separate registration with its own filing and cost, not an automatic upgrade, and there's a gap in your business's formal history while the conversion happens. If you can already see the company stage coming within the next year or so, there's a real argument for registering there directly rather than paying to move twice.
 
+::: callout
+Still not sure? Our free [cost calculator](/cac-cost-calculator?type=unsure) asks three questions, suggests a structure and shows what it costs.
+:::
+
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can two people co-own a business name?</p>

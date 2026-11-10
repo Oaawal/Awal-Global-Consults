@@ -33,6 +33,10 @@ These are **government fees only**, not our package prices. Our packages (busine
 | Registration (submission) | **₦10,000 for every ₦1 million** of share capital + Remita charge |
 | Stamp duty on share capital | **0.75%** of share capital (₦7,500 for every ₦1 million) + Remita charge |
 
+::: callout
+Want the numbers for your own case? Use our free [CAC registration cost calculator](/cac-cost-calculator): pick your structure and share capital and it shows the official charges and our package price.
+:::
+
 ## Worked examples for companies
 
 | Share capital | Name reservation | Registration | Stamp duty | Total government fees (before Remita charges) |

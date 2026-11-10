@@ -61,6 +61,10 @@ What a properly scoped service fee should cover:
 - The actual filing and follow-through until your certificate is issued
 - A clear breakdown of what's a government fee versus what's the service charge, so you're never guessing which part went where
 
+::: callout
+Want the numbers for your own case? Use our free [CAC registration cost calculator](/cac-cost-calculator): pick your structure and share capital and it shows the official charges and our package price.
+:::
+
 ## Getting a number you can actually trust
 
 For the official government fees themselves: name reservation, registration per ₦1 million of share capital and stamp duty. See [CAC fees 2026: the official fee table](/blog/cac-fees-2026-fee-table/).
