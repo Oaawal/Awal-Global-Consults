@@ -32,6 +32,8 @@ const FLASH = {
   status_no_email: ['ok', 'Status updated. The client has no email address, so let them know on WhatsApp.'],
   unchanged: ['ok', 'Nothing changed.'],
   note: ['ok', 'Note added.'],
+  details_sent: ['ok', 'Emailed. The client can now complete the full application with their private link.'],
+  details_failed: ['err', 'The details form could not be emailed. Copy the link and send it on WhatsApp instead.'],
   doc_added: ['ok', 'Document added to the case.'],
   doc_replaced: ['ok', 'Replaced. The old file is kept in storage for the record, and the change is in the activity log.'],
   doc_removed: ['ok', 'Removed from the current documents. The file is kept in storage for the record.'],
@@ -194,7 +196,7 @@ export function casesPage({ admin, badges, rows, view, q, counts }) {
 
 // ── Case detail ─────────────────────────────────────────────────
 function eventIcon(event) {
-  return { payment: 'check', document_replaced: 'doc', document_removed: 'trash', created: 'inbox', status_changed: 'arrow', client_notified: 'mail', reminder_sent: 'bell', note: 'doc', follow_up: 'clock', legal_hold: 'lock', erased: 'trash', email_bounced: 'mail', documents_added: 'doc', info_requested: 'mail' }[event] || 'activity';
+  return { details_requested: 'mail', details_completed: 'check', payment: 'check', document_replaced: 'doc', document_removed: 'trash', created: 'inbox', status_changed: 'arrow', client_notified: 'mail', reminder_sent: 'bell', note: 'doc', follow_up: 'clock', legal_hold: 'lock', erased: 'trash', email_bounced: 'mail', documents_added: 'doc', info_requested: 'mail' }[event] || 'activity';
 }
 
 function eventLabel(e, kind) {
@@ -213,6 +215,8 @@ function eventLabel(e, kind) {
     case 'document_removed': return 'Document removed';
     case 'info_requested': return 'Missing items requested from the client';
     case 'payment': return 'Payment recorded';
+    case 'details_requested': return 'Full application form sent to the client';
+    case 'details_completed': return 'Client completed the full application';
     default: return e.event;
   }
 }
@@ -225,7 +229,7 @@ const CASE_TABS = [
   { key: 'records', label: 'Records' }
 ];
 
-export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLink = null, missing = null, billing = null, payment = null }) {
+export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLink = null, missing = null, billing = null, payment = null, detailsLink = null }) {
   const wa = whatsappLink(c.phone);
   const purged = !!c.purged_at;
   const tabs = CASE_TABS.map(t => `<a class="${t.key === tab ? 'on' : ''}" href="/admin/case/${esc(c.id)}${t.key === 'summary' ? '' : `?tab=${t.key}`}">${esc(t.label)}${t.key === 'documents' && docs.length ? ` (${docs.length})` : ''}</a>`).join('');
@@ -253,7 +257,7 @@ export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLin
   else if (tab === 'documents') body = caseDocuments(c, docs, uploadLink);
   else if (tab === 'activity') body = caseActivity(c, events);
   else if (tab === 'records') body = caseRecords(c);
-  else body = caseSummary(c, uploadLink, missing, payment);
+  else body = caseSummary(c, uploadLink, missing, payment, detailsLink);
 
   return shell({ title: c.reference, active: 'cases', admin, badges, body: `
     <a class="crumb" href="/admin/cases">${icon('back', 16)}Cases</a>
@@ -264,7 +268,7 @@ export function casePage({ admin, badges, c, tab, docs, events, flash, uploadLin
     ${body}` });
 }
 
-function caseSummary(c, uploadLink = null, missing = null, payment = null) {
+function caseSummary(c, uploadLink = null, missing = null, payment = null, detailsLink = null) {
   let fields = {};
   try { fields = JSON.parse(c.form_data || '{}'); } catch (e) { /* show nothing */ }
   const SHOWN_ELSEWHERE = /^(full name|name|email|email address|phone|phone number|phone \/ whatsapp number|declaration accurate|declaration consent)$/i;
@@ -332,7 +336,7 @@ function caseSummary(c, uploadLink = null, missing = null, payment = null) {
       </dl>
     </div></div>`;
 
-  return `<div class="grid grid-3"><div>${progress}${details}</div><div>${missingCard(c, missing)}${followUp}${uploadCard(uploadLink)}</div></div>`;
+  return `<div class="grid grid-3"><div>${progress}${details}</div><div>${detailsCard(c, detailsLink)}${missingCard(c, missing)}${followUp}${uploadCard(uploadLink)}</div></div>`;
 }
 
 function missingCard(c, m) {
@@ -350,6 +354,21 @@ function missingCard(c, m) {
         : (total ? '<p class="small muted" style="margin-top:10px">No email on file: ask the client on WhatsApp and send them the upload link below.</p>' : '')}`
     : `<p class="small muted" style="margin:0">${icon('check', 16)} Nothing missing for the services requested.</p>`;
   return `<div class="card" id="missing"><div class="card-head"><h2>Still needed${total ? ` (${total})` : ''}</h2></div><div class="card-body">${body}</div></div>`;
+}
+
+/** A quick quote request: only contact details so far. Send the private full-application link when they are ready. */
+function detailsCard(c, link) {
+  if (!link) return '';
+  return `<div class="card" id="details-form"><div class="card-head"><h2>Full details not collected yet</h2></div><div class="card-body">
+      <p class="small" style="margin-top:0">This came in as a <strong>quotation request</strong>: contact details only. Send the quotation from the Billing tab first. When the client is ready to proceed, send them this private link to complete the full application (owners, IDs, signatures, documents). What they submit is added to this case.</p>
+      <input readonly value="${esc(link)}" style="width:100%;font-size:12px" aria-label="Full application link">
+      ${c.email ? `<form method="post" action="/admin/case/${esc(c.id)}/details-link" style="margin-top:10px">
+        <label for="df-note">Message to the client (optional)</label>
+        <textarea id="df-note" name="note" maxlength="1000" placeholder="e.g. Thank you for your payment. Please complete this so we can begin."></textarea>
+        <div class="btn-row"><button class="btn" type="submit">Email the form to the client</button></div></form>`
+        : '<p class="small muted" style="margin-top:10px">No email on file: copy the link and send it on WhatsApp.</p>'}
+      <p class="small muted" style="margin-bottom:0">It is also included automatically in the receipt email when you record a payment.</p>
+    </div></div>`;
 }
 
 function uploadCard(uploadLink) {
@@ -699,7 +718,7 @@ const ACTION_LABELS = {
   'case.created': 'New submission received', 'case.viewed': 'Case opened', 'case.status_changed': 'Status changed',
   'case.note_added': 'Note added', 'case.follow_up_set': 'Follow-up updated', 'case.reminder_sent': 'Automatic reminder sent',
   'case.tracked': 'Client checked status online', 'case.legal_hold': 'Legal hold changed', 'case.erased': 'Case erased',
-  'document.viewed': 'Document opened', 'document.added': 'Document added', 'document.replaced': 'Document replaced', 'document.removed': 'Document removed', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
+  'document.viewed': 'Document opened', 'document.added': 'Document added', 'case.details_requested': 'Full application form sent', 'case.details_completed': 'Client completed the full application', 'case.details_opened': 'Client opened the application form link', 'document.replaced': 'Document replaced', 'document.removed': 'Document removed', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
   'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'email.bounced': 'Email bounced', 'case.imported': 'Past client added', 'document.uploaded': 'Client uploaded documents', 'billing.issued': 'Billing document issued', 'billing.sent': 'Billing document emailed', 'billing.paid': 'Payment recorded', 'billing.void': 'Billing document voided', 'bounces.enabled': 'Turned on bounce alerts', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
   'client.viewed': 'Client opened', 'client.updated': 'Client details corrected', 'client.exported': 'Client data exported', 'client.erased': 'Client erased',
   'client.request_logged': 'Data request recorded', 'client.request_done': 'Data request completed', 'backup.downloaded': 'Backup downloaded'

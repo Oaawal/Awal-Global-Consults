@@ -1,9 +1,10 @@
-import { uploadUrl } from './_lib/upload-links.js';
+import { uploadUrl, verifyDetailsLink } from './_lib/upload-links.js';
 import { checkEmail } from './_lib/email-check.js';
 import { verifyTurnstile, reportBlockedSubmission } from './_lib/turnstile.js';
 import { contentMatchesName } from './_lib/file-check.js';
 import { sendBrevoEmail, bytesToBase64 } from './_lib/brevo.js';
-import { recordsEnabled, recordSubmission } from './_lib/records.js';
+import { recordsEnabled, recordSubmission, completeSubmission, INTAKE_QUICK } from './_lib/records.js';
+import { isOpen } from './_lib/cases.js';
 import { documentContentType } from './_lib/cases.js';
 import { kycAdminEmail, kycClientEmail, blockedSubmissionEmail, adminNoticeEmail } from './_lib/email-templates.js';
 import { notifyAdmins } from './_lib/webpush.js';
@@ -15,7 +16,7 @@ const MULTI_FILE_FIELDS = ['Signatures', 'LGA_Certificate', 'Documents'];
 
 const HIDDEN_FIELDS = new Set([
   'svc', 'Services_Requested', 'Subject', 'People_Count'
-]);
+, 'Intake', 'Case_Id', 'Case_Key']);
 
 // Registrations need every person's details and signature; SCUML needs every person's NIN.
 const REG_SERVICES = ['Business Name Registration', 'Limited Company Registration', 'Incorporated Trustees / NGO'];
@@ -144,6 +145,19 @@ export async function onRequestPost(context) {
       return jsonResponse({ error: 'The security check did not complete. Please refresh the page and submit again, or message us on WhatsApp: +234 703 833 6596.' }, 400);
     }
 
+    // Two-stage intake. "quick" = a quote request with contact details only (no people, IDs or
+    // documents yet). Case_Id + Case_Key = the client is completing the full form for that request.
+    const quick = formData.get('Intake') === 'quick';
+    const resumeId = String(formData.get('Case_Id') || '');
+    let resumeCase = null;
+    if (resumeId && !quick) {
+      const valid = recordsEnabled(env) && await verifyDetailsLink(env, resumeId, String(formData.get('Case_Key') || ''));
+      resumeCase = valid ? await env.DB.prepare("SELECT * FROM cases WHERE id = ?1 AND kind = 'application' AND purged_at IS NULL").bind(resumeId).first() : null;
+      if (!resumeCase || !isOpen(resumeCase.status)) {
+        return jsonResponse({ error: 'This application link is no longer valid. Please message us on WhatsApp: +234 703 833 6596.' }, 400);
+      }
+    }
+
     // Group text fields (handles repeated keys like multi-checked checkboxes)
     const grouped = {};
     for (const [key, value] of formData.entries()) {
@@ -158,6 +172,7 @@ export async function onRequestPost(context) {
       const joined = values.filter(Boolean).join(', ').slice(0, MAX_FIELD_LENGTH);
       if (joined) fields[humanize(key)] = joined;
     }
+    if (quick) fields.Intake = INTAKE_QUICK;
 
     const servicesRaw = String(formData.get('Services_Requested') || '');
     const services = servicesRaw.split(',').map(s => s.trim()).filter(Boolean);
@@ -175,7 +190,7 @@ export async function onRequestPost(context) {
     const attachments = [];
     const storedFiles = [];
     const skippedFiles = [];
-    for (const fieldName of MULTI_FILE_FIELDS) {
+    for (const fieldName of quick ? [] : MULTI_FILE_FIELDS) {
       const files = formData.getAll(fieldName)
         .filter(f => typeof f !== 'string' && f.size > 0)
         .slice(0, MAX_FILES);
@@ -199,9 +214,9 @@ export async function onRequestPost(context) {
 
     const signatureNames = formData.getAll('Signatures').filter(f => typeof f !== 'string' && f.size > 0)
       .map(f => safeFileName(f.name, 'signature')).filter(name => !skippedFiles.includes(name));
-    const peopleError = await peopleProblem(formData, services, signatureNames);
+    const peopleError = quick ? null : await peopleProblem(formData, services, signatureNames);
     if (peopleError) return jsonResponse({ error: peopleError, field: 'people' }, 400);
-    const passportError = await passportProblem(formData, services, storedFiles.some(f => f.name.startsWith('lga-certificate-')));
+    const passportError = quick ? null : await passportProblem(formData, services, storedFiles.some(f => f.name.startsWith('lga-certificate-')));
     if (passportError) return jsonResponse({ error: passportError, field: 'passport' }, 400);
 
     const subjectServices = services.slice(0, 3).join(', ') || 'New Submission';
@@ -215,7 +230,7 @@ export async function onRequestPost(context) {
     if (recordsEnabled(env)) {
       try {
         let caseId;
-        ({ reference, caseId } = await recordSubmission(env, request, {
+        ({ reference, caseId } = await (resumeCase ? completeSubmission.bind(null, env, request, resumeCase) : recordSubmission.bind(null, env, request))({
           kind: 'application',
           fullName,
           email,
@@ -248,10 +263,11 @@ export async function onRequestPost(context) {
     if (linkOnly) {
       await sendBrevoEmail(env, {
         to: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
-        subject: `[${reference}] New application: ${subjectServices}`,
+        subject: `[${reference}] ${resumeCase ? 'Details completed' : quick ? 'New quote request' : 'New application'}: ${subjectServices}`,
         html: adminNoticeEmail({
-          heading: 'New application', reference, services, caseUrl,
-          lines: [`${attachments.length} document${attachments.length === 1 ? '' : 's'} received${skippedFiles.length ? `; ${skippedFiles.length} could not be received` : ''}.`]
+          heading: resumeCase ? 'Application details completed' : quick ? 'New quote request' : 'New application', reference, services, caseUrl,
+          lines: [quick ? 'Contact details only. Send a quotation; the full details form follows when they are ready to proceed.'
+            : `${resumeCase ? 'The client completed the full application form. ' : ''}${attachments.length} document${attachments.length === 1 ? '' : 's'} received${skippedFiles.length ? `; ${skippedFiles.length} could not be received` : ''}.`]
         })
       });
     } else {
@@ -264,7 +280,7 @@ export async function onRequestPost(context) {
       });
     }
     await notifyAdmins(env, {
-      title: `New application${reference ? ` ${reference}` : ''}`,
+      title: `${resumeCase ? 'Details completed' : quick ? 'New quote request' : 'New application'}${reference ? ` ${reference}` : ''}`,
       body: subjectServices,
       url: caseUrl ? new URL(caseUrl).pathname : '/admin/cases',
       tag: reference || undefined
@@ -273,7 +289,7 @@ export async function onRequestPost(context) {
     await sendBrevoEmail(env, {
       to: { email, name: fullName },
       subject: `We've Received Your Request: ${subjectServices}${reference ? ` (Ref ${reference})` : ''}`,
-      html: kycClientEmail({ fullName, services, attachedCount: attachments.length, skippedFiles, reference, uploadLink })
+      html: kycClientEmail({ fullName, services, attachedCount: attachments.length, skippedFiles, reference, uploadLink: quick ? null : uploadLink, stage: resumeCase ? 'completed' : quick ? 'quick' : 'full' })
     });
 
     return jsonResponse({
@@ -281,7 +297,8 @@ export async function onRequestPost(context) {
       attachedCount: attachments.length,
       skippedFiles,
       reference,
-      uploadLink
+      uploadLink: quick ? null : uploadLink,
+      quick
     });
   } catch (err) {
     // Log the real reason server-side only; never expose internals to visitors.

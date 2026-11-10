@@ -28,7 +28,8 @@ import { statusesFor, statusInfo, retentionFor, documentContentType, autoFollowU
 import { MANIFEST, SERVICE_WORKER, APP_SCRIPT } from '../_lib/admin-app.js';
 import { vapidKeys, notifyAdmins } from '../_lib/webpush.js';
 import { bounceSettings, ensureBounceWebhook } from '../_lib/bounces.js';
-import { uploadUrl } from '../_lib/upload-links.js';
+import { uploadUrl, detailsUrl } from '../_lib/upload-links.js';
+import { awaitingDetails } from '../_lib/records.js';
 import { missingForCase } from '../_lib/requirements.js';
 import { START_PRICES, PAYMENT_METHODS, KIND_LABEL, billingSettings, saveBillingSettings, nextNumber, totals, renderDoc, relatedDocs, docUrl, money, addDays } from '../_lib/billing.js';
 import { renderPdf, pdfFilename } from '../_lib/billing-pdf.js';
@@ -38,7 +39,7 @@ import { CHANNELS, PAST_STATUSES, validatePast, savePast, importCsv, csvTemplate
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
-import { adminLoginCodeEmail, caseStatusEmail, missingInfoEmail, billingEmail } from '../_lib/email-templates.js';
+import { adminLoginCodeEmail, caseStatusEmail, missingInfoEmail, billingEmail, detailsFormEmail } from '../_lib/email-templates.js';
 
 const SECURITY_HEADERS = {
   'Cache-Control': 'no-store',
@@ -153,6 +154,9 @@ async function sendBillingDoc(env, request, origin, actor, c, doc, extraDocs = [
   const viewUrl = await docUrl(env, doc.id, origin);
   const extraLinks = [];
   for (const d of extraDocs) extraLinks.push({ label: `Your ${KIND_LABEL[d.kind].toLowerCase()} ${d.number}`, url: await docUrl(env, d.id, origin) });
+  if (doc.kind === 'receipt' && c.kind === 'application' && awaitingDetails(c) && isOpen(c.status)) {
+    extraLinks.push({ label: 'Next step: complete your application details', url: await detailsUrl(env, c.id, origin) });
+  }
   const attachments = await billingAttachments(env, [doc, ...extraDocs]);
   const dateLine = doc.kind === 'invoice' ? `Due ${new Date(doc.due_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`
     : doc.kind === 'quote' ? `Valid until ${new Date(doc.valid_until).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`
@@ -499,7 +503,10 @@ async function handle(context) {
       ]);
       await audit(env, request, actor, 'case.viewed', 'case', c.id, { reference: c.reference });
       const uploadLink = isOpen(c.status) && !c.purged_at ? await uploadUrl(env, c.id, url.origin) : null;
-      const missing = isOpen(c.status) && !c.purged_at ? missingForCase(c, docs.results || []) : null;
+      // A quick quote request has no details yet: offer the full details form instead of a long "missing" list
+      const pendingDetails = c.kind === 'application' && isOpen(c.status) && !c.purged_at && awaitingDetails(c);
+      const detailsLink = pendingDetails ? await detailsUrl(env, c.id, url.origin) : null;
+      const missing = isOpen(c.status) && !c.purged_at && !pendingDetails ? missingForCase(c, docs.results || []) : null;
       let billing = null, payment = null;
       if (tab === 'summary') {
         const inv = await env.DB.prepare("SELECT number, total, amount_paid, status FROM billing_docs WHERE case_id = ?1 AND kind = 'invoice' AND status != 'void' ORDER BY created_at DESC LIMIT 1").bind(c.id).first();
@@ -509,7 +516,7 @@ async function handle(context) {
         const bdocs = (await env.DB.prepare('SELECT * FROM billing_docs WHERE case_id = ?1 ORDER BY created_at DESC').bind(c.id).all()).results || [];
         billing = { docs: bdocs, settings: await billingSettings(env), prefill: billPrefill(c, bdocs, url.searchParams.get('from')), kindLabel: KIND_LABEL, startPrices: START_PRICES, paymentMethods: PAYMENT_METHODS, money };
       }
-      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment }));
+      return html(casePage({ admin, badges: await navBadges(env), c, tab, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment, detailsLink }));
     }
     if (method !== 'POST') return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
     let form;
@@ -621,6 +628,23 @@ async function handle(context) {
       return back('missing_sent');
     }
 
+    if (parts[2] === 'details-link') {
+      if (!c.email || c.kind !== 'application' || !isOpen(c.status) || c.purged_at) return back('details_failed');
+      try {
+        await sendBrevoEmail(env, {
+          to: { email: c.email, name: c.full_name },
+          subject: `Complete your application ${c.reference}`,
+          html: detailsFormEmail({ fullName: c.full_name, reference: c.reference, services: c.services, link: await detailsUrl(env, c.id, url.origin), note: String(form.get('note') || '').trim().slice(0, 1000) }),
+          replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' }
+        });
+      } catch (err) { console.error('admin: details-form email failed:', err && err.message); return back('details_failed'); }
+      await env.DB.batch([
+        env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'details_requested', ?2, ?3, ?4)").bind(c.id, `Emailed the full application form link to ${c.email}`, actor, now),
+        env.DB.prepare('UPDATE cases SET updated_at = ?2 WHERE id = ?1').bind(c.id, now),
+        auditStmt(env, request, actor, 'case.details_requested', 'case', c.id, { reference: c.reference }, now)
+      ]);
+      return back('details_sent');
+    }
     if (parts[2] === 'doc-add') {
       if (c.purged_at) return back('doc_bad', 'documents');
       const f = form.get('file');

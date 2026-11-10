@@ -20,6 +20,25 @@
   }
   window.agcTrack = track;
 
+  // Where this visit came from (shown on the case in the dashboard, so paying clients can be
+  // traced to a channel). Kept for this browser session only, and only with analytics consent.
+  function noteSource() {
+    try {
+      if (localStorage.getItem(CONSENT_KEY) !== 'granted' || sessionStorage.getItem('agc_src')) return;
+      const q = new URLSearchParams(location.search);
+      let ref = '';
+      try { const h = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, '') : ''; if (h && h !== location.hostname.replace(/^www\./, '')) ref = h; } catch (e) {}
+      const parts = [];
+      if (q.get('utm_source')) parts.push('campaign: ' + [q.get('utm_source'), q.get('utm_medium'), q.get('utm_campaign')].filter(Boolean).join(' / '));
+      if (q.get('gclid')) parts.push('Google Ads');
+      if (q.get('fbclid')) parts.push('Facebook/Instagram link');
+      if (ref) parts.push('from ' + ref);
+      parts.push('landed on ' + location.pathname);
+      sessionStorage.setItem('agc_src', parts.join('; ').slice(0, 200));
+    } catch (e) { /* storage unavailable */ }
+  }
+  noteSource();
+
   // ── 1. Cookie consent ────────────────────────────────────────────
   function readConsent() {
     try { return localStorage.getItem(CONSENT_KEY); } catch (e) { return null; }
@@ -65,7 +84,7 @@
       '</div>';
     document.body.appendChild(box);
 
-    box.querySelector('.agc-accept').addEventListener('click', function () { saveConsent('granted'); box.remove(); });
+    box.querySelector('.agc-accept').addEventListener('click', function () { saveConsent('granted'); box.remove(); noteSource(); });
     box.querySelector('.agc-decline').addEventListener('click', function () { saveConsent('denied'); box.remove(); });
   }
 

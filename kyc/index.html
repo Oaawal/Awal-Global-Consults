@@ -83,6 +83,15 @@
 
     .stage { display: none; animation: fadeUp 0.35s ease; }
     .stage.active { display: block; }
+    body:not(.quick) .quick-only { display: none !important; }
+    body.quick .full-only { display: none !important; }
+    body.resume .new-only { display: none !important; }
+    .path-choice { display: grid; gap: 10px; padding: 16px 22px 20px; border-top: 1px solid var(--border); }
+    .path-choice .btn { width: 100%; justify-content: center; text-align: center; }
+    .path-choice .btn-alt { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
+    .path-choice small { display: block; font-weight: 400; font-size: 11.5px; opacity: .85; margin-top: 2px; }
+    #resume-banner { display: none; background: #eef6ee; border: 1px solid #b9d8b9; color: #1d4d1d; border-radius: 10px; padding: 12px 16px; margin: 0 auto 14px; font-size: 13.5px; line-height: 1.6; }
+    #resume-banner.bad { background: #fdf0f0; border-color: #e8c0c0; color: var(--error); }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
     /* ─── Stage card ─── */
@@ -279,7 +288,8 @@
 
 <main>
 
-<div class="est-time">⏱ A simple request takes about <strong>2 minutes</strong>; registrations take longer, as we need each owner's details. You can attach documents now or upload them later with the private link we email you.</div>
+<div id="resume-banner" role="status"></div>
+<div class="est-time">⏱ Getting a quotation takes about <strong>1 minute</strong>: just your contact details. The full application takes longer, as registrations need each owner's details. You can attach documents now or upload them later with the private link we email you.</div>
 
 <!-- MAIN FORM -->
 <div id="form-wrapper">
@@ -370,9 +380,9 @@
 
       <div id="svc-error" style="display:none;font-size:11.5px;color:var(--error);margin-top:8px;">Please select at least one service to continue.</div>
     </div>
-    <div class="nav-bar">
-      <span class="step-counter"></span>
-      <button type="button" class="btn btn-next" onclick="goNext('services')">Continue →</button>
+    <div class="path-choice">
+      <button type="button" class="btn btn-next new-only" id="quick-start" onclick="startPath(true)">Get a quotation first →<small>About 1 minute. Contact details only: no documents or ID yet.</small></button>
+      <button type="button" class="btn btn-next btn-alt" id="full-start" onclick="startPath(false)">Start the full application →<small class="new-only">For when you are ready to proceed and have your details to hand.</small></button>
     </div>
   </div>
 </div>
@@ -390,15 +400,32 @@
         <div class="field" id="fw-email"><label>Email Address <span class="req">*</span></label><input type="email" name="Email" id="email" placeholder="your@email.com" autocomplete="email"/><span class="err-msg">Enter a valid email</span><span class="email-note" id="email-note"></span></div>
         <div class="field"><label>Business / Organisation Name <span class="opt">(if applicable)</span></label><input type="text" name="Business_Name" placeholder="Registered or proposed name"/></div>
       </div>
-      <div class="field-row">
+      <div class="field-row full-only">
         <div class="field"><label>Existing RC / BN / TIN Number <span class="opt">(if already registered)</span></label><input type="text" name="Existing_Registration_Number" placeholder="e.g. RC 1234567"/><span class="field-hint">Leave blank if this is a brand-new registration.</span></div>
         <div class="field"><label>State <span class="opt">(where you're based)</span></label><input type="text" name="State" placeholder="e.g. Lagos"/></div>
       </div>
       <div class="field-row one">
         <div class="field"><label>What's this about? <span class="opt">(one or two lines)</span></label><textarea name="Business_Description" placeholder="Briefly describe your business, or what you need help with"></textarea></div>
       </div>
+      <div class="field-row one new-only">
+        <div class="field"><label>How did you hear about us? <span class="opt">(optional)</span></label>
+          <select name="Heard_About_Us"><option value="">Select…</option><option>Google search</option><option>Instagram</option><option>LinkedIn</option><option>Facebook</option><option>X (Twitter)</option><option>WhatsApp</option><option>Referred by someone</option><option>Existing client</option><option>Other</option></select></div>
+      </div>
+      <input type="hidden" name="Found_Us_Via" id="h-source" value="">
+      <div class="quick-only">
+        <div class="summary-card" style="margin-top:6px;">
+          <div class="summary-title">Estimated Cost</div>
+          <div id="quick-estimate-lines"></div>
+          <div class="field-hint" style="margin-top:10px;color:rgba(255,255,255,.78);">Starting prices. Your exact amount comes in an itemized quotation within 1 working day, before you pay anything.</div>
+        </div>
+        <div class="chk-field" id="fw-qconsent" style="margin-top:14px;">
+          <input type="checkbox" id="q-consent"/>
+          <label for="q-consent">I confirm these details are correct and consent to Awal Global Consults Limited using them to prepare my quotation and contact me about it.</label>
+        </div>
+        <div id="quick-error" style="display:none;background:#fdf0f0;border:1px solid #e8c0c0;border-radius:6px;padding:11px 14px;margin-top:12px;font-size:12.5px;color:var(--error);"></div>
+      </div>
     </div>
-    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter"></span><button type="button" class="btn btn-next" onclick="goNext('details')">Continue →</button></div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter"></span><button type="button" class="btn btn-next full-only" onclick="goNext('details')">Continue →</button><button type="button" class="btn btn-submit quick-only" id="quick-btn" onclick="submitKYC(true)">Send my request ✓</button></div>
   </div>
 </div>
 
@@ -808,8 +835,60 @@ function needsSignatures() { return selectedServices.some(s => REG_SERVICES.incl
 function needsPassport() { return selectedServices.includes('International Passport (E-passport)'); }
 // A passport-only application needs no separate "Your Details" step: the passport form has everything
 function skipDetails() { return needsPassport() && selectedServices.length === 1; }
+let quickMode = false;
+let RESUME = null; // set when the client opened their private "complete your application" link
+
+// Links from the site can pre-select a service: /kyc/?s=business-name
+const SERVICE_SHORTCUTS = {
+  'business-name': 'Business Name Registration', 'company': 'Limited Company Registration', 'ngo': 'Incorporated Trustees / NGO',
+  'trademark': 'Intellectual Property Registration', 'tax': 'Tax Clearance & VAT Filing', 'tin': 'TIN Registration & Validation', 'scuml': 'SCUML Registration',
+  'licence': 'Business Permits & Regulatory Licensing', 'expatriate': 'Expatriate Quota / CERPAC', 'data-protection': 'NDPC Registration (Data Controller / Processor)',
+  'legal-documents': 'Legal Documentation', 'passport': 'International Passport (E-passport)', 'nin': 'NIN Registration & Correction', 'export-import': 'Export / Import Licensing',
+  'cybersecurity': 'Cybersecurity Support', 'grc': 'GRC Review', 'fintech': 'Fintech & Startup Compliance', 'digital': 'Digital & Business Setup', 'advisory': 'Business Advisory', 'annual-returns': 'Post-Incorporation Changes & Compliance'
+};
+function tickServices(names) {
+  document.querySelectorAll('input[name="svc"]').forEach(cb => { if (names.includes(cb.value)) cb.checked = true; });
+  onSvcChange();
+}
+async function initFromLink() {
+  const q = new URLSearchParams(location.search);
+  const picked = (q.get('s') || '').split(',').map(k => SERVICE_SHORTCUTS[k.trim()]).filter(Boolean);
+  if (picked.length) tickServices(picked);
+  const c = q.get('c'), k = q.get('k');
+  if (!c || !k) return;
+  const banner = document.getElementById('resume-banner');
+  try {
+    const res = await fetch('/kyc-resume?c=' + encodeURIComponent(c) + '&k=' + encodeURIComponent(k));
+    if (!res.ok) throw new Error('invalid');
+    RESUME = await res.json();
+  } catch (e) {
+    banner.className = 'bad'; banner.style.display = 'block';
+    banner.textContent = 'This application link is no longer valid. You can still send a new request below, or message us on WhatsApp: +234 703 833 6596.';
+    return;
+  }
+  document.body.classList.add('resume');
+  const form = document.getElementById('kyc-form');
+  for (const [name, value] of [['Case_Id', c], ['Case_Key', k]]) { const h = document.createElement('input'); h.type = 'hidden'; h.name = name; h.value = value; form.appendChild(h); }
+  document.getElementById('fullname').value = RESUME.fullName || '';
+  document.getElementById('phone').value = RESUME.phone || '';
+  document.getElementById('email').value = RESUME.email || '';
+  if (RESUME.businessName) form.elements['Business_Name'].value = RESUME.businessName;
+  if (RESUME.note) form.elements['Business_Description'].value = RESUME.note;
+  tickServices(RESUME.services || []);
+  banner.style.display = 'block';
+  banner.innerHTML = 'Completing your application <strong>' + escapeHtml(RESUME.reference) + '</strong>. Your contact details and services are filled in from your quotation request: check them, then add the rest.';
+  document.querySelector('.est-time').style.display = 'none';
+}
+document.addEventListener('DOMContentLoaded', initFromLink);
+// Two ways in: a quick quotation request (contact details only), or the full application
+function startPath(quick) {
+  quickMode = !!quick;
+  document.body.classList.toggle('quick', quickMode);
+  goNext('services');
+}
 function computeStages() {
-  ALL_STAGES = ['services'].concat(skipDetails() ? [] : ['details'], needsPeople() ? ['people'] : [], needsPassport() ? ['passport'] : [], ['docs','review']);
+  ALL_STAGES = quickMode ? ['services', 'details']
+    : ['services'].concat(skipDetails() ? [] : ['details'], needsPeople() ? ['people'] : [], needsPassport() ? ['passport'] : [], ['docs','review']);
   const btn = document.querySelector('#stage-passport .copy-me');
   if (btn) btn.style.display = skipDetails() ? 'none' : '';
 }
@@ -859,6 +938,7 @@ function showStage(stageId) {
   if (stageId === 'people') setupPeopleStage();
   if (stageId === 'docs') { renderChecklist('checklist-box', 'checklist-content'); renderReqUploads(); }
   if (stageId === 'review') buildSummary();
+  if (stageId === 'details' && quickMode) buildEstimate('quick-estimate-lines');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -889,7 +969,7 @@ function buildSummary() {
   buildEstimate();
 }
 
-function buildEstimate() {
+function buildEstimate(target) {
   let total = 0, quoted = 0;
   const rows = selectedServices.map(svc => {
     const price = START_PRICES[svc];
@@ -899,7 +979,7 @@ function buildEstimate() {
   const totalLine = total
     ? `<div class="summary-line" style="display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--border);margin-top:8px;padding-top:8px;"><span><strong>Estimated total</strong>${quoted ? ` <span style="color:rgba(255,255,255,.75);font-weight:400;">(plus ${quoted} service${quoted === 1 ? '' : 's'} quoted separately)</span>` : ''}</span><strong style="white-space:nowrap;">From ${naira(total)}</strong></div>`
     : '<div class="summary-line" style="color:rgba(255,255,255,.85);">We will send you a quotation for these services within 1 working day.</div>';
-  document.getElementById('estimate-lines').innerHTML = rows.join('') + totalLine;
+  document.getElementById(target || 'estimate-lines').innerHTML = rows.join('') + totalLine;
   document.getElementById('h-estimate').value = total ? `From ${naira(total)}${quoted ? ` + ${quoted} quoted separately` : ''}` : 'Quote after review';
 }
 
@@ -1391,18 +1471,28 @@ function showToast(msg) {
 
 // ═══ SUBMIT ═══
 function escapeHtml(t){return String(t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
-async function submitKYC() {
-  if (!document.getElementById('dec1').checked || !document.getElementById('dec2').checked) {
+async function submitKYC(quick) {
+  quick = quick === true;
+  if (quick) {
+    // Quotation request: contact details and consent only
+    const qErr = document.getElementById('quick-error');
+    qErr.style.display = 'none';
+    if (!validateStage('details')) return;
+    if (!document.getElementById('q-consent').checked) { qErr.textContent = 'Please tick the box to confirm and consent before sending.'; qErr.style.display = 'block'; return; }
+    document.getElementById('dec1').checked = true; document.getElementById('dec2').checked = true;
+  } else if (!document.getElementById('dec1').checked || !document.getElementById('dec2').checked) {
     document.getElementById('decl-error').style.display = 'block';
     return;
   }
   document.getElementById('decl-error').style.display = 'none';
-  syncDetailsFromPassport();
+  if (!quick) syncDetailsFromPassport();
+  try { document.getElementById('h-source').value = sessionStorage.getItem('agc_src') || ''; } catch (e) { /* no stored source */ }
   const name = document.getElementById('fullname').value;
   document.getElementById('h-subject').value = `Client Intake | ${name} | ${selectedServices.slice(0,2).join(', ')}`;
 
-  const btn = document.getElementById('submit-btn');
-  const submitErr = document.getElementById('submit-error');
+  const btn = document.getElementById(quick ? 'quick-btn' : 'submit-btn');
+  const submitErr = document.getElementById(quick ? 'quick-error' : 'submit-error');
+  const btnLabel = btn.textContent;
   btn.disabled = true; btn.textContent = 'Submitting…';
   submitErr.style.display = 'none';
 
@@ -1418,11 +1508,15 @@ async function submitKYC() {
       btn.textContent = 'Submitting…';
     }
     const fd = new FormData(form);
-    if (needsPeople()) {
+    if (quick) {
+      fd.set('Intake', 'quick');
+      // Nothing beyond contact details leaves the device on a quotation request
+      for (const key of Array.from(fd.keys())) if (/^(Person_|Passport_|Signatures$|Documents$|LGA_Certificate$)/.test(key)) fd.delete(key);
+    } else if (needsPeople()) {
       fd.append('People_Count', document.getElementById('people-count').value);
       for (const f of await signatureFiles()) fd.append('Signatures', f, f.name);
     }
-    for (const f of requirementFiles()) fd.append('Documents', f, f.name);
+    if (!quick) for (const f of requirementFiles()) fd.append('Documents', f, f.name);
     const res = await fetch('/submit-kyc', { method: 'POST', body: fd });
     if (!res.ok) {
       const errBody = await res.json().catch(() => ({}));
@@ -1448,8 +1542,14 @@ async function submitKYC() {
       docsStatus.innerHTML = '';
     }
 
+    if (quick) {
+      document.querySelector('#success-screen h2').textContent = 'Quotation Request Received';
+      docsStatus.innerHTML = '<p>No documents or ID are needed yet. When you are happy with your quotation and ready to proceed, we will email you a private link to complete your application.</p>';
+    } else if (RESUME) {
+      document.querySelector('#success-screen h2').textContent = 'Application Details Received';
+    }
     if (typeof window.gtag === 'function') {
-      window.gtag('event', 'generate_lead', { form_name: 'application', service: selectedServices.slice(0, 3).join(', '), documents: attachedCount });
+      window.gtag('event', 'generate_lead', { form_name: quick ? 'quote_request' : RESUME ? 'application_completed' : 'application', service: selectedServices.slice(0, 3).join(', '), documents: attachedCount });
     }
 
     if (result.uploadLink) {
@@ -1461,10 +1561,10 @@ async function submitKYC() {
   } catch (err) {
     // A Turnstile token works once; get a fresh one for the retry
     if (window.turnstile) { try { window.turnstile.reset(); } catch (e) { /* widget not ready */ } }
-    btn.disabled = false; btn.textContent = 'Submit Request ✓';
+    btn.disabled = false; btn.textContent = btnLabel;
     submitErr.textContent = (err && err.userMessage) || 'We could not submit your request. Please check your connection and try again, or send your details directly on WhatsApp: +234 703 833 6596.';
     submitErr.style.display = 'block';
-    window.scrollTo({top:document.getElementById('stage-review').offsetTop - 20, behavior:'smooth'});
+    if (!quick) window.scrollTo({top:document.getElementById('stage-review').offsetTop - 20, behavior:'smooth'});
   }
 }
 

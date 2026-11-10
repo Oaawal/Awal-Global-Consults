@@ -75,7 +75,7 @@ function serviceListHtml(services) {
 }
 
 // ── Application: client confirmation email ──────────────────────
-export function kycClientEmail({ fullName, services, attachedCount = 0, skippedFiles = [], reference = null, uploadLink = null }) {
+export function kycClientEmail({ fullName, services, attachedCount = 0, skippedFiles = [], reference = null, uploadLink = null, stage = 'full' }) {
   const docLine = skippedFiles.length > 0
     ? `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:10px 14px;margin:14px 0;">${attachedCount > 0 ? `We received ${attachedCount} document${attachedCount === 1 ? '' : 's'}, but ` : 'We could not receive '}the following ${skippedFiles.length === 1 ? 'file was' : 'files were'} not received (unsupported file type or too large): <strong>${escapeHtml(skippedFiles.join(', '))}</strong>. Please upload ${skippedFiles.length === 1 ? 'it' : 'them'} again as PDF, JPG or PNG (under 7MB) using the button below.</div>`
     : (attachedCount > 0
@@ -84,9 +84,11 @@ export function kycClientEmail({ fullName, services, attachedCount = 0, skippedF
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Thank you, ${escapeHtml(fullName || 'valued client')}</h2>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">
-      We've received your application. Our team will review your request and get back to you within
-      <strong>1 working day</strong> with a clear, itemized quote and confirmation of any documents still needed.
-      No payment is needed until then.
+      ${stage === 'completed'
+        ? 'Thank you: we have received your full application details. We will review them and let you know if anything else is needed.'
+        : stage === 'quick'
+        ? 'We\'ve received your request. We will send you a <strong>clear, itemized quotation within 1 working day</strong>. No payment or documents are needed until you decide to proceed; we will then send you a private link to complete your application.'
+        : 'We\'ve received your application. Our team will review your request and get back to you within <strong>1 working day</strong> with a clear, itemized quote and confirmation of any documents still needed. No payment is needed until then.'}
     </p>
     ${referenceHtml(reference)}
     ${trackLinkHtml(reference)}
@@ -94,7 +96,7 @@ export function kycClientEmail({ fullName, services, attachedCount = 0, skippedF
     ${serviceListHtml(services)}
     ${docLine}
     ${uploadLink ? `<p style="font-size:13.5px;line-height:1.7;color:${TEXT};margin:14px 0 0;">Need to send more documents later? Use your private upload link:</p>` + `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request.</div></div>` : ''}
-    <div style="margin:16px 0;padding:14px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13px;color:${NAVY};">Once you're happy with your quote, we'll share our bank transfer details and begin processing right away.</div>
+    ${stage === 'completed' ? '' : `<div style="margin:16px 0;padding:14px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13px;color:${NAVY};">Once you're happy with your quote, we'll share our bank transfer details and begin processing right away.</div>`}
     <div style="margin-top:22px;padding-top:18px;border-top:1px solid ${BORDER};font-size:13px;color:${TEXT};">
       Questions in the meantime? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>.
     </div>`;
@@ -240,6 +242,19 @@ export function billingEmail({ kind, number, clientName, total = 0, dateLine = '
     ${attached ? `<p style="font-size:13px;line-height:1.6;color:${MUTED};margin:12px 0 0;">A PDF copy is attached to this email for your records.</p>` : ''}
     <p style="font-size:12.5px;line-height:1.6;color:${MUTED};margin:18px 0 0;">Questions? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>, quoting ${escapeHtml(number)}.</p>`;
   return shell(inner, { preheader: `Your ${what} ${number}` });
+}
+
+// ── "Complete your application" email: private link to the full form ──
+export function detailsFormEmail({ fullName, reference, services = '', link, note = '' }) {
+  const inner = `
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Complete your application</h2>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(fullName || 'valued client')},</p>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">To begin work on <strong>${escapeHtml(reference)}</strong>${services ? ` (${escapeHtml(services)})` : ''}, we now need your full application details. Your contact details are already filled in.</p>
+    ${note ? `<div style="margin:14px 0;padding:12px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13.5px;line-height:1.6;color:${TEXT};">${escapeHtml(note)}</div>` : ''}
+    <p style="margin:18px 0 6px;"><a href="${escapeHtml(link)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Complete my application</a></p>
+    <p style="font-size:12.5px;line-height:1.6;color:${MUTED};margin:14px 0 0;">This link is private to you: please do not forward it. Have your ID and, for registrations, each owner's details to hand. You can attach documents in the form or add them later.</p>
+    <p style="font-size:12.5px;line-height:1.6;color:${MUTED};margin:14px 0 0;">Questions? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>, quoting ${escapeHtml(reference)}.</p>`;
+  return shell(inner, { preheader: `Complete your application ${reference}` });
 }
 
 // ── Case status update email to the client ──────────────────────

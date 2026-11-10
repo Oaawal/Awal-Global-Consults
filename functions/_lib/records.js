@@ -118,3 +118,47 @@ export async function recordSubmission(env, request, s) {
 
   return { reference, caseId };
 }
+
+/** A quick quote request: only contact details and the service were collected; the rest follows. */
+export const INTAKE_QUICK = 'Quote request: full details to follow';
+export const INTAKE_COMPLETED = 'Full details completed';
+export const awaitingDetails = c => { try { return (JSON.parse(c.form_data || '{}') || {}).Intake === INTAKE_QUICK; } catch (e) { return false; } };
+
+/**
+ * The client completed the full application form for a case that started as a quick
+ * quote request. Adds the details and documents to that case; never creates a new one.
+ * @returns {Promise<{reference:string, caseId:string}>}
+ */
+export async function completeSubmission(env, request, c, s) {
+  const now = new Date().toISOString();
+  const ip = request.headers.get('CF-Connecting-IP');
+  let old = {};
+  try { old = JSON.parse(c.form_data || '{}') || {}; } catch (e) { /* start again */ }
+  const fields = { ...old, ...(s.fields || {}), Intake: INTAKE_COMPLETED };
+  const storedKeys = [];
+  const statements = [
+    env.DB.prepare('UPDATE cases SET services = ?2, form_data = ?3, consent_accuracy = ?4, consent_processing = ?5, updated_at = ?6 WHERE id = ?1')
+      .bind(c.id, (s.services || []).join(', ') || c.services, JSON.stringify(fields), s.consentAccuracy ? 1 : 0, s.consentProcessing ? 1 : 0, now),
+    env.DB.prepare('UPDATE clients SET full_name = ?2, phone = COALESCE(?3, phone), updated_at = ?4 WHERE id = ?1')
+      .bind(c.client_id, s.fullName, s.phone ? String(s.phone).trim() : null, now)
+  ];
+  try {
+    for (const file of s.files || []) {
+      const docId = crypto.randomUUID();
+      const key = `case/${c.id}/${docId}`;
+      await env.DOCS.put(key, file.bytes, { httpMetadata: { contentType: file.type || 'application/octet-stream' }, customMetadata: { caseId: c.id, docId, fileName: file.name } });
+      storedKeys.push(key);
+      statements.push(env.DB.prepare('INSERT INTO documents (id, case_id, file_name, content_type, size_bytes, storage_key, uploaded_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)')
+        .bind(docId, c.id, file.name, file.type || null, file.bytes.byteLength, key, now));
+    }
+    statements.push(env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'details_completed', ?2, 'client:details-link', ?3)")
+      .bind(c.id, `Client completed the full application form${storedKeys.length ? ` and attached ${storedKeys.length} document${storedKeys.length === 1 ? '' : 's'}` : ''}.`, now));
+    statements.push(env.DB.prepare("INSERT INTO audit_log (at, actor, action, entity_type, entity_id, detail, ip) VALUES (?1, 'client:details-link', 'case.details_completed', 'case', ?2, ?3, ?4)")
+      .bind(now, c.id, JSON.stringify({ reference: c.reference, documents: storedKeys.length }), ip));
+    await env.DB.batch(statements);
+  } catch (err) {
+    await Promise.all(storedKeys.map(k => env.DOCS.delete(k).catch(() => {})));
+    throw err;
+  }
+  return { reference: c.reference, caseId: c.id };
+}
