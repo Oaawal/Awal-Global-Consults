@@ -1,13 +1,19 @@
 /**
  * Cloudflare Turnstile (bot check) verification for form submissions.
  *
- * Off by default: if the Cloudflare Pages environment variable
- * TURNSTILE_SECRET_KEY is not set, every submission passes. To switch it on,
- * set TURNSTILE_SECRET_KEY in Cloudflare Pages AND fill in TURNSTILE_SITE_KEY
- * in assets/js/site.js — always both together.
+ * Needs the Cloudflare Pages environment variable TURNSTILE_SECRET_KEY (with
+ * TURNSTILE_SITE_KEY in assets/js/site.js). On the live site a missing key
+ * fails closed: submissions are refused (and the admins alerted) rather than
+ * let through unchecked. Only local and preview copies run without the check.
  */
+const LIVE_HOSTS = new Set(['awalglobal.com.ng', 'www.awalglobal.com.ng']);
+
 export async function verifyTurnstile(env, formData, request) {
-  if (!env.TURNSTILE_SECRET_KEY) return true;
+  if (!env.TURNSTILE_SECRET_KEY) {
+    const live = LIVE_HOSTS.has(new URL(request.url).hostname);
+    if (live) console.error('TURNSTILE_SECRET_KEY is missing on the live site: submissions are being refused');
+    return !live;
+  }
 
   const token = String(formData.get('cf-turnstile-response') || '');
   if (!token) return false;

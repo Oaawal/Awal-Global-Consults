@@ -4,6 +4,7 @@
  * case, and alerts the admins (short email and phone notification).
  */
 import { verifyUploadLink } from '../_lib/upload-links.js';
+import { fileMatchesName } from '../_lib/file-check.js';
 import { publicPage } from '../_lib/public-page.js';
 import { documentContentType } from '../_lib/cases.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
@@ -71,7 +72,7 @@ export async function onRequestPost({ request, env, params }) {
   const stmts = [];
   for (const f of files) {
     const name = prefix + String(f.name || 'file').replace(/[\\/\r\n\0]/g, '_').slice(0, 100);
-    if (!/\.(pdf|jpe?g|png)$/i.test(name) || f.size > MAX_FILE || total + f.size > MAX_TOTAL) { skipped.push(f.name); continue; }
+    if (!/\.(pdf|jpe?g|png)$/i.test(name) || f.size > MAX_FILE || total + f.size > MAX_TOTAL || !(await fileMatchesName(name, f))) { skipped.push(f.name); continue; }
     total += f.size;
     const docId = crypto.randomUUID();
     const key = `case/${c.id}/${docId}`;

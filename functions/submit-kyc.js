@@ -1,6 +1,7 @@
 import { uploadUrl } from './_lib/upload-links.js';
 import { checkEmail } from './_lib/email-check.js';
 import { verifyTurnstile, reportBlockedSubmission } from './_lib/turnstile.js';
+import { contentMatchesName } from './_lib/file-check.js';
 import { sendBrevoEmail, bytesToBase64 } from './_lib/brevo.js';
 import { recordsEnabled, recordSubmission } from './_lib/records.js';
 import { documentContentType } from './_lib/cases.js';
@@ -186,6 +187,8 @@ export async function onRequestPost(context) {
           continue;
         }
         const bytes = new Uint8Array(await file.arrayBuffer());
+        // The contents must match the extension: a renamed file is not accepted
+        if (!contentMatchesName(name, bytes)) { skippedFiles.push(name); continue; }
         runningBytes += file.size;
         attachments.push({ name, content: bytesToBase64(bytes) });
         // Content type comes from the (already checked) extension, never from the browser

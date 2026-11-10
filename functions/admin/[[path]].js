@@ -33,6 +33,7 @@ import { missingForCase } from '../_lib/requirements.js';
 import { START_PRICES, PAYMENT_METHODS, KIND_LABEL, billingSettings, saveBillingSettings, nextNumber, totals, renderDoc, relatedDocs, docUrl, money, addDays } from '../_lib/billing.js';
 import { renderPdf, pdfFilename } from '../_lib/billing-pdf.js';
 import { bytesToBase64 } from '../_lib/brevo.js';
+import { fileMatchesName } from '../_lib/file-check.js';
 import { CHANNELS, PAST_STATUSES, validatePast, savePast, importCsv, csvTemplate, dataSubjectCount } from '../_lib/past-records.js';
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
@@ -626,7 +627,7 @@ async function handle(context) {
       const what = String(form.get('what') || '').trim().slice(0, 80);
       const prefix = what ? what.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) + '--' : 'added-by-office--';
       const name = f && typeof f !== 'string' ? prefix + String(f.name || 'file').replace(/[\\/\r\n\0"]/g, '_').slice(0, 100) : '';
-      if (!name || !DOC_EXT.test(name) || f.size <= 0 || f.size > DOC_MAX) return back('doc_bad', 'documents');
+      if (!name || !DOC_EXT.test(name) || f.size <= 0 || f.size > DOC_MAX || !(await fileMatchesName(name, f))) return back('doc_bad', 'documents');
       const doc = await storeCaseDocument(env, c.id, name, f);
       await env.DB.batch([
         doc.stmt,
@@ -707,7 +708,7 @@ async function handle(context) {
       try { f = (await request.formData()).get('file'); } catch (err) { console.error('doc replace: unreadable upload:', err && err.message); return backDocs('doc_unreadable'); }
       if (!f || typeof f === 'string' || f.size <= 0 || f.size > DOC_MAX) return backDocs('doc_bad');
       const ext = (String(f.name || '').match(DOC_EXT) || [])[0];
-      if (!ext) return backDocs('doc_bad');
+      if (!ext || !(await fileMatchesName(String(f.name), f))) return backDocs('doc_bad');
       // Keep the original name (signatures are matched to people by it); only the extension follows the new file
       const name = d.file_name.replace(/\.[a-z0-9]+$/i, '') + ext.toLowerCase();
       const doc = await storeCaseDocument(env, d.case_id, name, f);

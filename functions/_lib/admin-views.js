@@ -35,7 +35,7 @@ const FLASH = {
   doc_added: ['ok', 'Document added to the case.'],
   doc_replaced: ['ok', 'Replaced. The old file is kept in storage for the record, and the change is in the activity log.'],
   doc_removed: ['ok', 'Removed from the current documents. The file is kept in storage for the record.'],
-  doc_bad: ['err', 'Use a PDF, JPG or PNG file under 7MB.'],
+  doc_bad: ['err', 'Use a genuine PDF, JPG or PNG file under 7MB (a renamed file of another type is not accepted).'],
   doc_unreadable: ['err', 'The file did not arrive in one piece, so nothing was changed. Please try again. If you use the installed app on iPhone, close and reopen it first so it picks up the latest version.'],
   followup: ['ok', 'Follow-up saved. It will show in your morning summary when it is due.'],
   followup_cleared: ['ok', 'Follow-up cleared.'],
