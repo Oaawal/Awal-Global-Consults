@@ -81,11 +81,18 @@ function likePattern(q) {
   return `%${q.replace(/[%_\\]/g, m => '\\' + m)}%`;
 }
 
+// Requests whose log writes can finish after the page is sent (set per request in onRequest)
+const BACKGROUND = new WeakMap();
+
+/** Write to the audit log. The page doesn't wait for it: the write completes in the background. */
 async function audit(env, request, actor, action, entityType, entityId, detail) {
-  await env.DB.prepare(
+  const write = env.DB.prepare(
     'INSERT INTO audit_log (at, actor, action, entity_type, entity_id, detail, ip) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)'
   ).bind(new Date().toISOString(), actor, action, entityType, entityId, detail ? JSON.stringify(detail) : null,
     request.headers.get('CF-Connecting-IP')).run();
+  const later = BACKGROUND.get(request);
+  if (later) later(write.catch(err => console.error('audit write failed:', action, err && err.message)));
+  else await write;
 }
 
 function auditStmt(env, request, actor, action, entityType, entityId, detail, at) {
@@ -196,6 +203,7 @@ async function createBillingDoc(env, request, actor, c, d) {
 
 /** Any unexpected failure shows a plain error page (and is logged) instead of Cloudflare's error 1101. */
 export async function onRequest(context) {
+  if (typeof context.waitUntil === 'function') BACKGROUND.set(context.request, p => context.waitUntil(p));
   try {
     return await handle(context);
   } catch (err) {
@@ -446,6 +454,7 @@ async function handle(context) {
     const now = new Date().toISOString();
     const weekAhead = new Date(Date.now() + 7 * 86400000).toISOString();
     const base = 'SELECT c.id, c.reference, c.kind, c.services, c.status, c.created_at, c.status_changed_at, c.follow_up_at, c.follow_up_note, cl.full_name FROM cases c JOIN clients cl ON cl.id = c.client_id';
+    const funnelP = funnelStats(env, 30); // its own trip, alongside the batch below
     const [needs, follow, waiting, recent, counts, review, requests] = await env.DB.batch([
       env.DB.prepare(`${base} WHERE c.status = 'new' ORDER BY c.created_at LIMIT 6`),
       env.DB.prepare(`${base} WHERE c.follow_up_at IS NOT NULL AND c.follow_up_at <= ?1 ORDER BY c.follow_up_at LIMIT 6`).bind(weekAhead),
@@ -462,7 +471,7 @@ async function handle(context) {
     if (reviewN) alerts.push({ href: '/admin/records', tone: 'warn', icon: 'clock', text: `${reviewN} record${reviewN === 1 ? ' has' : 's have'} passed the retention period: review for erasure.` });
     if (requestN) alerts.push({ href: '/admin/records', tone: 'warn', icon: 'inbox', text: `${requestN} client data request${requestN === 1 ? ' is' : 's are'} open.` });
     return html(overviewPage({
-      funnel: await funnelStats(env, 30), money,
+      funnel: await funnelP, money,
       admin, badges: { cases: s.newCount || 0, records: reviewN + requestN },
       stats: { newCount: s.newCount || 0, waiting: s.waiting || 0, inProgress: s.inProgress || 0, followUpsDue: s.followUpsDue || 0 },
       needsReply: needs.results || [], followUps: follow.results || [], waiting: waiting.results || [], recent: recent.results || [], alerts
@@ -505,34 +514,34 @@ async function handle(context) {
 
     if (parts.length === 2 && method === 'GET') {
       const tab = ['documents', 'activity', 'records', 'billing'].includes(url.searchParams.get('tab')) ? url.searchParams.get('tab') : 'summary';
-      const [docs, events] = await env.DB.batch([
-        env.DB.prepare('SELECT id, file_name, size_bytes, uploaded_at FROM documents WHERE case_id = ?1 AND deleted_at IS NULL ORDER BY uploaded_at').bind(c.id),
-        env.DB.prepare('SELECT event, from_status, to_status, note, actor, created_at FROM case_events WHERE case_id = ?1 ORDER BY id DESC').bind(c.id)
+      // Everything below is independent: fetch it side by side (each database trip can be far away)
+      audit(env, request, actor, 'case.viewed', 'case', c.id, { reference: c.reference });
+      const open = isOpen(c.status) && !c.purged_at;
+      const pendingDetails = c.kind === 'application' && open && awaitingDetails(c);
+      const [[docs, events], uploadLink, detailsLink, badges, inv, bdocs, settings, archived] = await Promise.all([
+        env.DB.batch([
+          env.DB.prepare('SELECT id, file_name, size_bytes, uploaded_at FROM documents WHERE case_id = ?1 AND deleted_at IS NULL ORDER BY uploaded_at').bind(c.id),
+          env.DB.prepare('SELECT event, from_status, to_status, note, actor, created_at FROM case_events WHERE case_id = ?1 ORDER BY id DESC').bind(c.id)
+        ]),
+        open ? uploadUrl(env, c.id, url.origin) : null,
+        // A quick quote request has no details yet: offer the full details form instead of a long "missing" list
+        pendingDetails ? detailsUrl(env, c.id, url.origin) : null,
+        navBadges(env),
+        tab === 'summary' ? env.DB.prepare("SELECT number, total, amount_paid, status FROM billing_docs WHERE case_id = ?1 AND kind = 'invoice' AND status != 'void' ORDER BY created_at DESC LIMIT 1").bind(c.id).first() : null,
+        tab === 'billing' ? env.DB.prepare('SELECT * FROM billing_docs WHERE case_id = ?1 ORDER BY created_at DESC').bind(c.id).all() : null,
+        tab === 'billing' ? billingSettings(env) : null,
+        // Replaced or removed files are kept (marked deleted_at, file still in storage) until the case
+        // itself is erased. Whether each was replaced or removed comes from the audit log.
+        tab === 'documents' && !c.purged_at ? env.DB.prepare(
+          `SELECT d.id, d.file_name, d.size_bytes, d.uploaded_at, d.deleted_at AS archived_at,
+                  EXISTS(SELECT 1 FROM audit_log a WHERE a.action = 'document.replaced' AND a.entity_id = d.id) AS replaced
+             FROM documents d WHERE d.case_id = ?1 AND d.deleted_at IS NOT NULL ORDER BY d.deleted_at DESC`).bind(c.id).all() : null
       ]);
-      await audit(env, request, actor, 'case.viewed', 'case', c.id, { reference: c.reference });
-      const uploadLink = isOpen(c.status) && !c.purged_at ? await uploadUrl(env, c.id, url.origin) : null;
-      // A quick quote request has no details yet: offer the full details form instead of a long "missing" list
-      const pendingDetails = c.kind === 'application' && isOpen(c.status) && !c.purged_at && awaitingDetails(c);
-      const detailsLink = pendingDetails ? await detailsUrl(env, c.id, url.origin) : null;
-      const missing = isOpen(c.status) && !c.purged_at && !pendingDetails ? missingForCase(c, docs.results || []) : null;
-      let billing = null, payment = null;
-      if (tab === 'summary') {
-        const inv = await env.DB.prepare("SELECT number, total, amount_paid, status FROM billing_docs WHERE case_id = ?1 AND kind = 'invoice' AND status != 'void' ORDER BY created_at DESC LIMIT 1").bind(c.id).first();
-        if (inv) payment = { number: inv.number, total: inv.total, paid: inv.amount_paid || 0, balance: Math.max(0, inv.total - (inv.amount_paid || 0)), status: inv.status, money };
-      }
-      if (tab === 'billing') {
-        const bdocs = (await env.DB.prepare('SELECT * FROM billing_docs WHERE case_id = ?1 ORDER BY created_at DESC').bind(c.id).all()).results || [];
-        billing = { docs: bdocs, settings: await billingSettings(env), prefill: billPrefill(c, bdocs, url.searchParams.get('from')), kindLabel: KIND_LABEL, startPrices: START_PRICES, paymentMethods: PAYMENT_METHODS, money };
-      }
-      // Replaced or removed files are kept (marked deleted_at, file still in storage) until the case
-      // itself is erased. Whether each was replaced or removed comes from the audit log.
-      const archivedDocs = tab === 'documents' && !c.purged_at
-        ? (await env.DB.prepare(
-            `SELECT d.id, d.file_name, d.size_bytes, d.uploaded_at, d.deleted_at AS archived_at,
-                    EXISTS(SELECT 1 FROM audit_log a WHERE a.action = 'document.replaced' AND a.entity_id = d.id) AS replaced
-               FROM documents d WHERE d.case_id = ?1 AND d.deleted_at IS NOT NULL ORDER BY d.deleted_at DESC`).bind(c.id).all()).results || []
-        : [];
-      return html(casePage({ admin, badges: await navBadges(env), c, tab, archivedDocs, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment, detailsLink }));
+      const missing = open && !pendingDetails ? missingForCase(c, docs.results || []) : null;
+      const payment = inv ? { number: inv.number, total: inv.total, paid: inv.amount_paid || 0, balance: Math.max(0, inv.total - (inv.amount_paid || 0)), status: inv.status, money } : null;
+      const billing = bdocs ? { docs: bdocs.results || [], settings, prefill: billPrefill(c, bdocs.results || [], url.searchParams.get('from')), kindLabel: KIND_LABEL, startPrices: START_PRICES, paymentMethods: PAYMENT_METHODS, money } : null;
+      const archivedDocs = archived ? archived.results || [] : [];
+      return html(casePage({ admin, badges, c, tab, archivedDocs, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment, detailsLink }));
     }
     if (method !== 'POST') return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
     let form;

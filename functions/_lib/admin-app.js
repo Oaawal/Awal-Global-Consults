@@ -30,20 +30,12 @@ export const MANIFEST = JSON.stringify({
 });
 
 export const SERVICE_WORKER = `
-const OFFLINE = '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><title>Offline</title>'
-  + '<body style="margin:0;font-family:system-ui,sans-serif;background:#0A2C48;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:24px">'
-  + '<div><h1 style="font-size:20px">You are offline</h1><p style="opacity:.8">Connect to the internet, then pull down or reopen the app.</p></div>';
-
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
 
-// Always go to the network; never store dashboard pages on the device.
-self.addEventListener('fetch', e => {
-  // Only page loads. Form posts go straight to the network: iPhones can drop an attached file
-  // when a service worker passes an upload on.
-  if (e.request.mode !== 'navigate' || e.request.method !== 'GET') return;
-  e.respondWith(fetch(e.request).catch(() => new Response(OFFLINE, { headers: { 'Content-Type': 'text/html; charset=utf-8' } })));
-});
+// No fetch handler on purpose: pages and form posts go straight to the network (nothing is stored
+// on the device), and the browser doesn't have to wake this worker before every page load, which
+// made the installed app slow to open. The worker is only for notifications.
 
 self.addEventListener('push', e => {
   let d = {};

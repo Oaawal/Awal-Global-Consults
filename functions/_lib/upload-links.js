@@ -13,12 +13,18 @@ function b64url(bytes) {
   return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
+let cachedSecret = null; // the secret never changes once created: read it once per worker
 async function secret(env) {
-  const row = await env.DB.prepare("SELECT value FROM app_settings WHERE key = 'upload_secret'").first();
-  if (row) return row.value;
+  if (cachedSecret) return cachedSecret;
+  const row = await secretRow(env);
+  if (row) return (cachedSecret = row);
   const value = b64url(crypto.getRandomValues(new Uint8Array(32)));
   await env.DB.prepare("INSERT INTO app_settings (key, value, updated_at) VALUES ('upload_secret', ?1, ?2) ON CONFLICT(key) DO NOTHING").bind(value, new Date().toISOString()).run();
-  return (await env.DB.prepare("SELECT value FROM app_settings WHERE key = 'upload_secret'").first()).value;
+  return (cachedSecret = await secretRow(env));
+}
+async function secretRow(env) {
+  const r = await env.DB.prepare("SELECT value FROM app_settings WHERE key = 'upload_secret'").first();
+  return r ? r.value : null;
 }
 
 async function sign(env, caseId, purpose = 'upload') {

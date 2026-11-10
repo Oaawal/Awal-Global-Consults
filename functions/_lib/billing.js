@@ -95,7 +95,12 @@ export function nairaWords(amount) {
 
 // ── Private links for clients ────────────────────────────────────
 const enc = new TextEncoder();
+let cachedLinkSecret = null; // never changes once created: read it once per worker
 async function linkSecret(env) {
+  if (cachedLinkSecret) return cachedLinkSecret;
+  return (cachedLinkSecret = await linkSecretFromDb(env));
+}
+async function linkSecretFromDb(env) {
   const row = await env.DB.prepare("SELECT value FROM app_settings WHERE key = 'upload_secret'").first();
   if (row) return row.value;
   const v = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))).replace(/[+/=]/g, '');
