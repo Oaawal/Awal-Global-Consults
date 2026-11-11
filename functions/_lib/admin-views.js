@@ -37,6 +37,7 @@ const FLASH = {
   doc_added: ['ok', 'Document added to the case.'],
   doc_replaced: ['ok', 'Replaced. The old file is kept below under "Earlier and removed files".'],
   doc_removed: ['ok', 'Removed from the current documents. The file is kept below under "Earlier and removed files".'],
+  import_docs_partial: ['err', 'Client added, but some files were not accepted: use genuine PDF, JPG or PNG files under 7MB. Add them again below.'],
   doc_bad: ['err', 'Use a genuine PDF, JPG or PNG file under 7MB (a renamed file of another type is not accepted).'],
   doc_unreadable: ['err', 'The file did not arrive in one piece, so nothing was changed. Please try again. If you use the installed app on iPhone, close and reopen it first so it picks up the latest version.'],
   followup: ['ok', 'Follow-up saved. It will show in your morning summary when it is due.'],
@@ -709,7 +710,7 @@ export function importPage({ admin, badges, flash, error = null, result = null, 
     ${res}
     <div class="grid grid-2">
       <div class="card"><div class="card-head"><h2>Add one client</h2></div><div class="card-body">
-        <form method="post" action="/admin/import/one">
+        <form method="post" action="/admin/import/one" enctype="multipart/form-data">
           <label for="i-kind">Type</label>
           <select id="i-kind" name="kind"><option value="application"${form.kind === 'enquiry' ? '' : ' selected'}>Paid job (application)</option><option value="enquiry"${form.kind === 'enquiry' ? ' selected' : ''}>Enquiry only (did not become a job)</option></select>
           <label for="i-name">Full name</label>
@@ -730,6 +731,9 @@ export function importPage({ admin, badges, flash, error = null, result = null, 
           <textarea id="i-people" name="people" maxlength="2000" placeholder="Ngozi Okafor&#10;Emeka Okafor">${esc(form.people || '')}</textarea>
           <label for="i-notes">Notes (optional)</label>
           <textarea id="i-notes" name="notes" maxlength="2000">${esc(form.notes || '')}</textarea>
+          <label for="i-files">Documents <span class="small muted">(optional: PDF, JPG or PNG, up to 7MB each, 10 files)</span></label>
+          <input id="i-files" name="files" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
+          <p class="small muted" style="margin:4px 0 0">CAC certificate, ID, signatures and so on. You can add more later from the case's Documents tab.</p>
           <div class="btn-row"><button class="btn" type="submit">Add client</button></div>
         </form>
       </div></div>

@@ -296,11 +296,33 @@ async function handle(context) {
     return new Response(csvTemplate(), { headers: { ...SECURITY_HEADERS, 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="awal-past-clients-template.csv"' } });
   }
   if (route === '/import/one' && method === 'POST') {
-    const f = Object.fromEntries((await request.formData()).entries());
+    const fd = await request.formData();
+    const f = {};
+    for (const [k, v] of fd.entries()) if (typeof v === 'string') f[k] = v;
     const v = validatePast(f);
     if (v.error) return html(importPage({ admin, badges: await navBadges(env), flash: null, error: v.error, form: f, channels: CHANNELS, statuses: PAST_STATUSES }), 400);
     const r = await savePast(env, request, actor, v.record);
-    return redirect(r.duplicate ? '/admin/import?done=import_dup' : `/admin/case/${r.caseId}?done=imported`);
+    if (r.duplicate) return redirect('/admin/import?done=import_dup');
+    // Documents chosen on the form go onto the new case (same checks as every other upload)
+    const files = fd.getAll('files').filter(x => typeof x !== 'string' && x.size > 0).slice(0, 10);
+    let added = 0, refused = 0;
+    if (files.length) {
+      const now = new Date().toISOString(), stmts = [];
+      for (const file of files) {
+        const name = 'added-by-office--' + String(file.name || 'file').replace(/[\\/\r\n\0"]/g, '_').slice(0, 100);
+        if (!DOC_EXT.test(name) || file.size > DOC_MAX || !(await fileMatchesName(name, file))) { refused++; continue; }
+        const doc = await storeCaseDocument(env, r.caseId, name, file);
+        stmts.push(doc.stmt, auditStmt(env, request, actor, 'document.added', 'document', doc.id, { file: name }, now));
+        added++;
+      }
+      if (added) {
+        stmts.push(env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'documents_added', ?2, ?3, ?4)")
+          .bind(r.caseId, `Added ${added} document${added === 1 ? '' : 's'} with the past-client record`, actor, now));
+        await env.DB.batch(stmts);
+      }
+    }
+    if (refused) return redirect(`/admin/case/${r.caseId}?tab=documents&done=import_docs_partial`);
+    return redirect(`/admin/case/${r.caseId}${added ? '?tab=documents&' : '?'}done=imported`);
   }
   if (route === '/import/csv' && method === 'POST') {
     const form = await request.formData();
