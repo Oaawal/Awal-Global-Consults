@@ -64,6 +64,10 @@ Banks increasingly ask DNFBPs for their **SCUML certificate** before opening or 
 | A company buys jewellery through a representative | Identify the company and its owners, and check the representative's authority |
 | A customer refuses to give ID | Don't proceed with the transaction |
 
+::: callout
+Not sure your business is covered? Our free [SCUML checker](/scuml-checker) tells you.
+:::
+
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">I'm a small agent. Does this really apply to me?</p>

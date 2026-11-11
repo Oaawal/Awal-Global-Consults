@@ -62,6 +62,10 @@ Broadly, SCUML registration follows a similar shape to other regulatory registra
 
 Getting the certificate isn't the finish line. Once registered, a DNFBP is expected to run genuine customer due diligence on its own clients: identity verification, source-of-funds questions for higher-value transactions, and screening for Politically Exposed Persons, not as occasional extras but as a routine part of how the business operates. This is exactly the layer covered in our [KYC documentation checklist](/blog/kyc-documentation-checklist-nigeria/), and for a DNFBP, that standard is the baseline, not the upgrade.
 
+::: callout
+Check your business in seconds with our free [SCUML checker](/scuml-checker).
+:::
+
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Does SCUML registration replace my CAC registration?</p>

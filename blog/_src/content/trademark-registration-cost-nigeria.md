@@ -64,6 +64,10 @@ Before comparing numbers, a trademark quote worth trusting should separate:
 
 If a quote arrives as one flat number with no breakdown of these five things, that's worth asking about before you pay, not after.
 
+::: callout
+Each class is a separate application, so the number of classes drives the cost. Our free [trademark class finder](/trademark-class-finder) shows which ones you need.
+:::
+
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Is it cheaper to register in one class now and add more later?</p>

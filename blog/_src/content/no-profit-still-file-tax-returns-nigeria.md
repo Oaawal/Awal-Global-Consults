@@ -60,6 +60,10 @@ A business name isn't taxed separately: the **owner** pays personal income tax o
 
 Don't wait for a demand notice. Get your accounts prepared, file the outstanding returns, and ask about penalties: it's almost always cheaper to regularise early than to deal with assessments and penalties later.
 
+::: callout
+Missed a return already? Our free [late filing penalty calculator](/tax-penalty-calculator) shows what it costs now and what each extra month adds.
+:::
+
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">What if the company hasn't started trading yet?</p>

@@ -54,6 +54,10 @@ Some goods and services are **exempt** from VAT or **zero-rated**. Under the 202
 
 Large companies and government bodies may deduct VAT at source from what they pay you, and they often ask for your TIN and evidence of tax compliance, sometimes a tax clearance certificate. See [tax clearance certificates](/blog/tax-clearance-certificate-nigeria/).
 
+::: callout
+Check your turnover against the threshold with our free [VAT registration checker](/vat-registration-checker).
+:::
+
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can I register for VAT voluntarily below the threshold?</p>

@@ -115,6 +115,10 @@ The Tax Appeal Tribunal, established under the Joint Revenue Board Act, is now t
 
 ## Frequently asked questions
 
+::: callout
+Not sure whether your company qualifies for 0% company income tax? Try our free [small company tax checker](/small-company-tax-checker).
+:::
+
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Do I need a new TIN if I already had one before January 2026?</p>

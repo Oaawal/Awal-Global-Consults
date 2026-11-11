@@ -122,6 +122,7 @@ main = f'''  <section class="hero service-hero">
         <tbody>{tiers}</tbody>
       </table></div>
       <p class="table-note">Source: NDPC Guidance Notice on Registration of Data Controllers and Data Processors of Major Importance (NDPC/HQ/GN/VOL.03/B/24, 19 December 2024). Ultra-High and Extra-High Level organisations also file an annual compliance audit return by 31 March under the GAID 2025.</p>
+      <p class="table-note"><strong>Not sure which applies to you?</strong> Use our free <a href="/ndpc-registration-checker">NDPC registration checker</a>: it shows whether you must register, your likely category and the fee.</p>
     </div>
   </section>
 

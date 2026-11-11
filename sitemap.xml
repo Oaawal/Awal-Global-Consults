@@ -42,6 +42,41 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://awalglobal.com.ng/tools</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/small-company-tax-checker</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/tax-penalty-calculator</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/vat-registration-checker</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/ndpc-registration-checker</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/scuml-checker</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/trademark-class-finder</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://awalglobal.com.ng/trademark-ip</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>

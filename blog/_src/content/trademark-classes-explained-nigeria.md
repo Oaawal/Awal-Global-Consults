@@ -69,6 +69,10 @@ Keep one distinction in mind: a CAC business name or company registration does *
 
 ## Frequently asked questions
 
+::: callout
+Pick what your brand sells or does in our free [trademark class finder](/trademark-class-finder) to see the classes to consider.
+:::
+
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Can I trademark just my business name, or do I need a logo too?</p>

@@ -56,6 +56,10 @@ Once turnover exceeds ₦100 million, or fixed assets reach ₦250 million, the 
 
 A business name isn't a company, so this exemption doesn't apply. The owner pays personal income tax on the business's profits to their state tax authority. See [the Nigeria Tax Act 2025 compliance guide](/blog/nigeria-tax-act-2025-compliance-guide/).
 
+::: callout
+Check your own company in a minute with our free [small company tax checker](/small-company-tax-checker): enter your turnover and fixed assets and see whether the 0% rate applies.
+:::
+
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">Do I need to apply for the exemption?</p>

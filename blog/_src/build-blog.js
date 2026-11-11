@@ -593,6 +593,20 @@ const SERVICE_GUIDES = {
   'fintech-compliance.html': ['baas-licensing-warranty-nigerian-fintech', 'licences-new-business-nigeria', 'change-business-name-address-partners-cac', 'foreigner-own-nigerian-company', 'ndpa-compliance-nigerian-business', 'data-breach-response-nigeria-ndpa'],
   'cybersecurity-support.html': ['small-business-cybersecurity-checklist-nigeria', 'secure-business-email-social-media-accounts', 'business-email-compromise-payment-fraud-nigeria', 'whatsapp-business-account-security-nigeria', 'staff-cybersecurity-training-small-business', 'security-policies-small-business-nigeria', 'data-breach-response-nigeria-ndpa', 'cybersecurity-levy-nigeria-businesses', 'ndpa-compliance-nigerian-business']
 };
+// Free tools shown under the guides on each service page (pages built by ops/tools/build.py)
+const TOOL_NAMES = {
+  'cac-cost-calculator': 'CAC registration cost calculator', 'small-company-tax-checker': 'Small company tax checker',
+  'tax-penalty-calculator': 'Late tax filing penalty calculator', 'vat-registration-checker': 'VAT registration checker',
+  'ndpc-registration-checker': 'NDPC registration checker', 'scuml-checker': 'Do I need SCUML?', 'trademark-class-finder': 'Trademark class finder'
+};
+const SERVICE_TOOLS = {
+  'cac-registration.html': ['cac-cost-calculator'], 'trademark-ip.html': ['trademark-class-finder'],
+  'corporate-regulatory.html': ['small-company-tax-checker', 'tax-penalty-calculator', 'vat-registration-checker', 'scuml-checker'],
+  'business-advisory.html': ['cac-cost-calculator', 'small-company-tax-checker', 'vat-registration-checker'],
+  'grc.html': ['ndpc-registration-checker', 'scuml-checker'], 'fintech-compliance.html': ['ndpc-registration-checker'],
+  'cybersecurity-support.html': ['ndpc-registration-checker'], 'legal-documentation.html': ['trademark-class-finder'],
+  'export-import-licensing.html': ['vat-registration-checker']
+};
 const bySlug = Object.fromEntries(posts.map(p => [p.slug, p]));
 for (const [file, slugs] of Object.entries(SERVICE_GUIDES)) {
   const pagePath = path.join(ROOT_DIR, file);
@@ -614,7 +628,8 @@ for (const [file, slugs] of Object.entries(SERVICE_GUIDES)) {
       <div class="guide-link-grid">
 ${cards}
       </div>
-      <p class="guide-link-all"><a href="/blog/">Browse all Awal Guides &rarr;</a></p>
+      ${(SERVICE_TOOLS[file] || []).length ? `<p class="guide-tools"><strong>Free tools:</strong> ${SERVICE_TOOLS[file].map(t => `<a href="/${t}">${esc(TOOL_NAMES[t])}</a>`).join(' · ')}</p>
+      ` : ''}<p class="guide-link-all"><a href="/blog/">Browse all Awal Guides &rarr;</a></p>
     </div>
   </section>
   `;

@@ -51,6 +51,10 @@ A template from another business, or another country, usually describes things y
 4. Decide how long you really need each type of data.
 5. Make sure your policy says all of that, in plain language.
 
+::: callout
+Wondering whether you also have to register with the NDPC? Use our free [NDPC registration checker](/ndpc-registration-checker).
+:::
+
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">I only sell on WhatsApp and Instagram. Do I need one?</p>

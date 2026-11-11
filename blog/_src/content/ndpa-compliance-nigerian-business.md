@@ -77,6 +77,10 @@ Below the registration threshold, the NDPA doesn't ask less of you in principle.
 - **Not tracking the six-month rolling count at all.** Crossing 200 data subjects isn't a one-time event to notice and forget; it's a rolling window, so a business that dips below and back above it can still be in scope.
 - **Treating "data protection" as a website problem.** Data collected via WhatsApp, email, in-person forms, or a physical register counts exactly the same as data collected through a web form. The NDPA doesn't care about the channel.
 
+::: callout
+Do you have to register with the NDPC? Our free [NDPC registration checker](/ndpc-registration-checker) tells you, with your likely category and fee.
+:::
+
 <div class="blog-faq">
 <div class="blog-faq-item">
 <p class="blog-faq-q">How do I know how many data subjects my business has processed in the last six months?</p>
