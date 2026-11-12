@@ -147,6 +147,14 @@ export function missingForCase(c, docs) {
   if (!c.email) out.details.push('Client email address');
   if (!c.phone) out.details.push('Client phone number');
 
+  // Registrations: proposed names, what the business does, and where
+  if (services.some(s => REG_SERVICES.includes(s))) {
+    if (!f['Proposed Name 1'] || !f['Proposed Name 2']) out.details.push('Two proposed names, in order of preference');
+    if (!f['Business Category'] || !f['Specific Nature Of Business']) out.details.push('Nature of business: CAC category and specific nature of business');
+    if (services.includes('Incorporated Trustees / NGO') && !f['Aims And Objectives']) out.details.push('Aims and objectives of the organisation');
+    if (!f['Business Address']) out.details.push('Business address in Nigeria');
+  }
+
   // People on registrations and SCUML
   if (services.some(s => NIN_SERVICES.includes(s))) {
     const count = Object.keys(f).filter(k => /^Person \d+ Full Name$/.test(k)).length;

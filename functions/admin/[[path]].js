@@ -140,7 +140,7 @@ function billPrefill(c, docs, fromId) {
   const services = String(c.services || '').split(',').map(x => x.trim()).filter(Boolean);
   return {
     kind: 'quote', related: '',
-    client: { name: f['Business Name'] || c.full_name, address: f['Address'] || f['Passport Address'] || f['Person 1 Residential Address'] || '', tin: '', email: c.email, phone: c.phone },
+    client: { name: f['Business Name'] || f['Proposed Name 1'] || c.full_name, address: f['Business Address'] || f['Address'] || f['Passport Address'] || f['Person 1 Residential Address'] || '', tin: '', email: c.email, phone: c.phone },
     category: services.join(', '),
     items: services.map(svc => ({ description: svc, qty: 1, unit: START_PRICES[svc] || '' })),
     notes: ''

@@ -23,6 +23,18 @@ const REG_SERVICES = ['Business Name Registration', 'Limited Company Registratio
 const NIN_SERVICES = [...REG_SERVICES, 'SCUML Registration'];
 const MAX_PEOPLE = 10;
 
+/** Registrations: proposed names, what the business does, and its address. Returns an error message or null. */
+function businessProblem(formData, services) {
+  if (!services.some(s => REG_SERVICES.includes(s))) return null;
+  const v = k => String(formData.get(k) || '').trim();
+  if (!v('Proposed_Name_1')) return 'Please give your first-choice name for the registration.';
+  if (!v('Proposed_Name_2') || v('Proposed_Name_2').toLowerCase() === v('Proposed_Name_1').toLowerCase()) return 'Please give a different second-choice name, in case the first is not available.';
+  if (!v('Business_Category') || !v('Specific_Nature_Of_Business')) return 'Please choose the nature of business category and describe the specific nature of business.';
+  if (services.includes('Incorporated Trustees / NGO') && v('Aims_And_Objectives').length < 10) return 'Please describe the aims and objectives of the organisation.';
+  if (v('Business_Address').length < 8) return 'Please enter the business address in Nigeria.';
+  return null;
+}
+
 /** Check the people section. Returns an error message for the visitor, or null. */
 async function peopleProblem(formData, services, signatureNames) {
   if (!services.some(s => NIN_SERVICES.includes(s))) return null;
@@ -214,6 +226,8 @@ export async function onRequestPost(context) {
 
     const signatureNames = formData.getAll('Signatures').filter(f => typeof f !== 'string' && f.size > 0)
       .map(f => safeFileName(f.name, 'signature')).filter(name => !skippedFiles.includes(name));
+    const businessError = quick ? null : businessProblem(formData, services);
+    if (businessError) return jsonResponse({ error: businessError, field: 'business' }, 400);
     const peopleError = quick ? null : await peopleProblem(formData, services, signatureNames);
     if (peopleError) return jsonResponse({ error: peopleError, field: 'people' }, 400);
     const passportError = quick ? null : await passportProblem(formData, services, storedFiles.some(f => f.name.startsWith('lga-certificate-')));

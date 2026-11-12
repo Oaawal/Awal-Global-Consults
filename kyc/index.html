@@ -83,6 +83,11 @@
 
     .stage { display: none; animation: fadeUp 0.35s ease; }
     .stage.active { display: block; }
+    .biz-block { margin-top: 18px; }
+    #stage-business select, #stage-business input, #stage-business textarea { width: 100%; max-width: 100%; min-width: 0; }
+    #stage-business .field { min-width: 0; }
+    #nature-hint { display: block; line-height: 1.45; margin: -4px 0 6px; }
+    .biz-block .sec-label { margin-bottom: 8px; }
     body:not(.quick) .quick-only { display: none !important; }
     body.quick .full-only { display: none !important; }
     body.resume .new-only { display: none !important; }
@@ -426,6 +431,50 @@
       </div>
     </div>
     <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter"></span><button type="button" class="btn btn-next full-only" onclick="goNext('details')">Continue →</button><button type="button" class="btn btn-submit quick-only" id="quick-btn" onclick="submitKYC(true)">Send my request ✓</button></div>
+  </div>
+</div>
+
+<!-- ═══ STAGE 2a — BUSINESS DETAILS (registrations only) ═══ -->
+<div class="stage" id="stage-business">
+  <div class="stage-card">
+    <div class="stage-head"><div class="stage-num">3</div><div><div class="stage-title">Business Details</div><div class="stage-sub">The names you want and what the business will do</div></div></div>
+    <div class="stage-body">
+      <div class="notice blue" id="biz-intro">CAC approves one of your proposed names if it is available, so give at least two in order of preference.</div>
+      <div class="field-row">
+        <div class="field" id="fw-name1"><label>Proposed name (first choice) <span class="req">*</span></label><input type="text" name="Proposed_Name_1" id="name1" maxlength="120"/><span class="err-msg">Enter your first-choice name</span></div>
+        <div class="field" id="fw-name2"><label>Proposed name (second choice) <span class="req">*</span></label><input type="text" name="Proposed_Name_2" id="name2" maxlength="120"/><span class="err-msg">Enter a different second-choice name</span></div>
+      </div>
+      <div class="field-row one">
+        <div class="field"><label>Proposed name (third choice) <span class="opt">(optional)</span></label><input type="text" name="Proposed_Name_3" id="name3" maxlength="120"/><span class="field-hint" id="name-hint"></span></div>
+      </div>
+
+      <div class="sec-label" style="margin-top:18px;">Nature of business</div>
+      <div class="field-row">
+        <div class="field" id="fw-biz-category"><label>Nature of business category <span class="req">*</span></label><select name="Business_Category" id="biz-category"><option value="">Select one</option><option>Accommodation and Food Service Activities</option><option>Activities of Extraterritorial Organisations and Bodies</option><option>Activities of Households as Employers; Undifferentiated Goods- and Services-Producing Activities of Households for Own Use</option><option>Administrative and Support Service Activities</option><option>Agriculture, Forestry and Fishing</option><option>Arts, Entertainment and Recreation</option><option>Community Based Association</option><option>Construction</option><option>Cultural Based Association</option><option>Digital Services - Agricultural Services</option><option>Digital Services - Commerce &amp; Retail Services</option><option>Digital Services - Communication Services</option><option>Digital Services - Computing &amp; Infrastructure Services</option><option>Digital Services - Construction &amp; Engineering Services</option><option>Digital Services - Content &amp; Entertainment Services</option><option>Digital Services - Digital Public Infrastructure Services</option><option>Digital Services - Education &amp; Knowledge Services</option><option>Digital Services - Environmental &amp; Utility Services</option><option>Digital Services - Financial Services</option><option>Digital Services - Healthcare Services</option><option>Digital Services - Human Resources &amp; Employment Services</option><option>Digital Services - Manufacturing &amp; Industrial Services</option><option>Digital Services - Professional Services</option><option>Digital Services - Smart Consumer Devices</option><option>Digital Services - Transport &amp; Logistics Services</option><option>Education</option><option>Faith Based Association</option><option>Financial and Insurance Activities</option><option>Foundation Based Association</option><option>Human Health and Social Work Activities</option><option>Information and Communication</option><option>Manufacturing</option><option>Mining and Quarrying</option><option>Other Service Activities</option><option>Others</option><option>Power</option><option>Professional, Scientific and Technical Activities</option><option>Public Administration and Defence; Compulsory Social Security</option><option>Real Estate Activities</option><option>Repairs of Motor Vehicles and Motorcycles</option><option>Social Clubs Based Association</option><option>Sporting Based Association</option><option>Transportation</option><option>Water Supply, Sewerage, Waste Management and Remediation Activities</option><option>Wholesale and Retail Trade; Repair of Motor Vehicles and Motorcycles</option></select><span class="err-msg">Choose one category</span></div>
+        <div class="field" id="fw-biz-nature"><label>Specific nature of business <span class="req">*</span></label><input type="text" name="Specific_Nature_Of_Business" id="biz-nature" maxlength="160" placeholder="e.g. Sale of women's clothing and accessories"/><span class="err-msg">Describe the main activity</span></div>
+      </div>
+      <span class="field-hint" id="nature-hint">The categories are the ones CAC uses. Choose the closest one.</span>
+
+      <div class="biz-block" data-for="ltd">
+        <div class="field-row one">
+          <div class="field" id="fw-company-type"><label>Type of company <span class="req">*</span></label><select name="Company_Type" id="company-type"><option>Private Company Limited by Shares</option><option>Private Unlimited Company</option><option>Public Company Limited by Shares</option><option>Public Unlimited Company</option><option>Company Limited by Guarantee</option></select><span class="field-hint">Most businesses are a private company limited by shares. A company limited by guarantee (usually for non-profits) needs CAC&rsquo;s consent for its name first, so it takes longer.</span></div>
+        </div>
+        <div class="field-row one">
+          <div class="field"><label>Other objects of the company <span class="opt">(optional, one per line)</span></label><textarea name="Other_Objects" id="ltd-objects" maxlength="1500" placeholder="e.g.&#10;Warehousing and storage&#10;Import and export of general goods&#10;Vehicle leasing"></textarea><span class="field-hint">Everything else the company may do now or soon. We draft the objects clause of your memorandum and articles from this and the main activity above.</span></div>
+        </div>
+      </div>
+
+      <div class="biz-block" data-for="ngo">
+        <div class="field-row one">
+          <div class="field" id="fw-ngo-aims"><label>Aims and objectives of the organisation <span class="req">*</span></label><textarea name="Aims_And_Objectives" id="ngo-aims" maxlength="1500" placeholder="e.g.&#10;To provide free education support to children in rural communities&#10;To run skills training for young people"></textarea><span class="err-msg">Describe what the organisation will do</span><span class="field-hint">One per line. Incorporated trustees must be non-profit: the aims cannot include sharing profit with members.</span></div>
+        </div>
+      </div>
+
+      <div class="field-row one">
+        <div class="field" id="fw-biz-address"><label>Business address in Nigeria <span class="req">*</span></label><input type="text" name="Business_Address" id="biz-address" maxlength="300" placeholder="Number, street, area, city, state"/><span class="err-msg">Enter the business address</span><span class="field-hint">Where the business will operate from. No address in Nigeria yet? Write &ldquo;Need help with an address&rdquo; and we will advise.</span></div>
+      </div>
+    </div>
+    <div class="nav-bar"><button type="button" class="btn btn-back" onclick="goBack()">← Back</button><span class="step-counter"></span><button type="button" class="btn btn-next" onclick="goNext('business')">Continue →</button></div>
   </div>
 </div>
 
@@ -826,7 +875,7 @@ function onSvcChange() {
 // ═══ FLOW ═══
 const REG_SERVICES = ['Business Name Registration', 'Limited Company Registration', 'Incorporated Trustees / NGO'];
 const NIN_SERVICES = REG_SERVICES.concat(['SCUML Registration']);
-const STAGE_LABELS = {services:'Services',details:'Your Details',people:'People',passport:'Passport',docs:'Documents',review:'Review'};
+const STAGE_LABELS = {services:'Services',details:'Your Details',business:'Business',people:'People',passport:'Passport',docs:'Documents',review:'Review'};
 let ALL_STAGES = ['services','details','docs','review'];
 let currentIdx = 0;
 
@@ -888,7 +937,7 @@ function startPath(quick) {
 }
 function computeStages() {
   ALL_STAGES = quickMode ? ['services', 'details']
-    : ['services'].concat(skipDetails() ? [] : ['details'], needsPeople() ? ['people'] : [], needsPassport() ? ['passport'] : [], ['docs','review']);
+    : ['services'].concat(skipDetails() ? [] : ['details'], needsSignatures() ? ['business'] : [], needsPeople() ? ['people'] : [], needsPassport() ? ['passport'] : [], ['docs','review']);
   const btn = document.querySelector('#stage-passport .copy-me');
   if (btn) btn.style.display = skipDetails() ? 'none' : '';
 }
@@ -931,11 +980,12 @@ function updateProgress() {
 }
 
 function showStage(stageId) {
-  ['services','details','people','passport','docs','review'].forEach(s => document.getElementById('stage-' + s).classList.remove('active'));
+  ['services','details','business','people','passport','docs','review'].forEach(s => document.getElementById('stage-' + s).classList.remove('active'));
   document.getElementById('stage-' + stageId).classList.add('active');
   currentIdx = ALL_STAGES.indexOf(stageId);
   updateProgress();
   if (stageId === 'people') setupPeopleStage();
+  if (stageId === 'business') setupBusinessStage();
   if (stageId === 'docs') { renderChecklist('checklist-box', 'checklist-content'); renderReqUploads(); }
   if (stageId === 'review') buildSummary();
   if (stageId === 'details' && quickMode) buildEstimate('quick-estimate-lines');
@@ -959,6 +1009,10 @@ function renderChecklist(boxId, contentId) {
 function buildSummary() {
   const lines = document.getElementById('summary-lines');
   let html = selectedServices.map(s => `<div class="summary-line"><strong>✓</strong> ${escapeHtml(s)}</div>`).join('');
+  if (needsSignatures()) {
+    const nm = [1, 2, 3].map(i => (document.getElementById('name' + i).value || '').trim()).filter(Boolean);
+    html += `<div class="summary-title" style="margin-top:14px;">Proposed names</div>` + nm.map((n, i) => `<div class="summary-line"><strong>${i + 1}.</strong> ${escapeHtml(n)}</div>`).join('');
+  }
   if (needsPeople()) {
     const people = collectPeople();
     html += `<div class="summary-title" style="margin-top:14px;">${escapeHtml(peopleConfig().title)}</div>` +
@@ -1217,6 +1271,54 @@ function markErr(i, key, bad) {
   return !bad;
 }
 
+// ═══ BUSINESS DETAILS (registrations) ═══
+function bizKinds() {
+  return { bn: selectedServices.includes('Business Name Registration'), ltd: selectedServices.includes('Limited Company Registration'), ngo: selectedServices.includes('Incorporated Trustees / NGO') };
+}
+// Clear a field's error mark as soon as it is filled in
+document.addEventListener('input', e => {
+  const f = e.target.closest && e.target.closest('#stage-business .field');
+  if (f && e.target.value.trim()) { f.classList.remove('has-err'); e.target.classList.remove('err'); }
+});
+document.addEventListener('change', e => {
+  const f = e.target.closest && e.target.closest('#stage-business .field');
+  if (f && e.target.value) { f.classList.remove('has-err'); e.target.classList.remove('err'); }
+});
+function setupBusinessStage() {
+  const k = bizKinds();
+  document.querySelectorAll('#stage-business .biz-block').forEach(b => { b.style.display = k[b.dataset.for] ? '' : 'none'; });
+  document.getElementById('nature-hint').textContent = k.bn
+    ? 'A business name is registered for one category and one main activity. If you want to do several unrelated things, a limited company may suit you better. The categories are the ones CAC uses.'
+    : 'The categories are the ones CAC uses. Choose the one closest to your main activity.';
+  ['name1', 'name2', 'name3'].forEach(id => { document.getElementById(id).placeholder = k.ltd ? 'e.g. Mekus & Sons Ltd' : k.ngo ? 'e.g. Hope for Tomorrow Foundation' : 'e.g. Mekus Fashion House'; });
+  document.getElementById('name-hint').textContent = k.ltd
+    ? 'Company names end in “Ltd” or “Limited” (“Plc” for a public company, “Ltd/Gte” for a guarantee company); we add it if you leave it out. Words like “Federal”, “National” or “Bank” need CAC’s consent first.'
+    : k.ngo ? 'For example “Hope for Tomorrow Foundation”. CAC registers it as “The Incorporated Trustees of …”.'
+    : 'Avoid “Limited” or “Ltd” (that is for companies) and words like “Federal” or “National”.';
+}
+function validateBusiness() {
+  const k = bizKinds();
+  let ok = reqField('name1');
+  const n1 = document.getElementById('name1').value.trim().toLowerCase(), n2el = document.getElementById('name2');
+  const n2ok = !!n2el.value.trim() && n2el.value.trim().toLowerCase() !== n1;
+  n2el.classList.toggle('err', !n2ok); document.getElementById('fw-name2').classList.toggle('has-err', !n2ok);
+  ok = n2ok && ok;
+  ok = reqField('biz-category') && ok;
+  ok = reqField('biz-nature') && ok;
+  if (k.ltd) {
+    // CAC: a company name must end in Ltd or Limited (Ltd/Gte for guarantee companies)
+    const type = document.getElementById('company-type').value;
+    ['name1', 'name2', 'name3'].forEach(id => {
+      const el = document.getElementById(id), v = el.value.trim();
+      if (v && !/(\bltd\.?|\blimited|\bltd\/gte|\bunlimited|\bplc)$/i.test(v)) el.value = v + (type.includes('Guarantee') ? ' Ltd/Gte' : type.includes('Unlimited') ? ' Unlimited' : type.startsWith('Public') ? ' Plc' : ' Ltd');
+    });
+  }
+  if (k.ngo) ok = reqField('ngo-aims') && ok;
+  ok = reqField('biz-address') && ok;
+  if (!ok) { const first = document.querySelector('#stage-business .has-err'); if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+  return ok;
+}
+
 function validatePeople() {
   const cfg = peopleConfig();
   const people = collectPeople();
@@ -1405,6 +1507,7 @@ function validateStage(stageId) {
     return nameOk && phoneOk && emailOk;
   }
   if (stageId === 'people') return validatePeople();
+  if (stageId === 'business') return validateBusiness();
   if (stageId === 'passport') { const ok = validatePassport(); if (ok) syncDetailsFromPassport(); return ok; }
   return true;
 }
