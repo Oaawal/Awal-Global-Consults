@@ -31,6 +31,8 @@ import { bounceSettings, ensureBounceWebhook } from '../_lib/bounces.js';
 import { uploadUrl, detailsUrl } from '../_lib/upload-links.js';
 import { awaitingDetails } from '../_lib/records.js';
 import { funnelStats, PERIODS } from '../_lib/funnel.js';
+import { serviceProgress, stepInfo, isStep } from '../_lib/service-progress.js';
+import { BUSINESS_FIELDS } from '../_lib/cac.js';
 import { missingForCase } from '../_lib/requirements.js';
 import { START_PRICES, PAYMENT_METHODS, KIND_LABEL, billingSettings, saveBillingSettings, nextNumber, totals, renderDoc, relatedDocs, docUrl, money, addDays, lineItems, discountOf, discountLabelOf } from '../_lib/billing.js';
 import { renderPdf, pdfFilename } from '../_lib/billing-pdf.js';
@@ -573,6 +575,50 @@ async function handle(context) {
     // Erased cases are read-only
     if (c.purged_at) return back('unchanged');
 
+    if (parts[2] === 'details-edit') {
+      if (c.purged_at) return back('unchanged');
+      let fields = {};
+      try { fields = JSON.parse(c.form_data || '{}') || {}; } catch (e) { /* start afresh */ }
+      const changed = [];
+      for (const f of BUSINESS_FIELDS) {
+        const v = String(form.get(`f_${f.key.replace(/\s+/g, '_')}`) || '').trim().slice(0, f.type === 'textarea' ? 1500 : 300);
+        if (v && v !== fields[f.key]) { fields[f.key] = v; changed.push(f.label.replace(/ \(.*\)$/, '')); }
+      }
+      if (!changed.length) return back('unchanged');
+      await env.DB.batch([
+        env.DB.prepare('UPDATE cases SET form_data = ?2, updated_at = ?3 WHERE id = ?1').bind(c.id, JSON.stringify(fields), now),
+        env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'details_edited', ?2, ?3, ?4)").bind(c.id, `Entered by the office: ${changed.join(', ')}`, actor, now),
+        auditStmt(env, request, actor, 'case.details_edited', 'case', c.id, { reference: c.reference, fields: changed }, now)
+      ]);
+      return back('details_saved');
+    }
+    if (parts[2] === 'service') {
+      const service = String(form.get('service') || '');
+      const step = String(form.get('step') || '');
+      const note = String(form.get('note') || '').trim().slice(0, 300);
+      const services = String(c.services || '').split(',').map(x => x.trim());
+      if (!services.includes(service) || !isStep(step) || c.purged_at) return back('unchanged');
+      const events = (await env.DB.prepare("SELECT event, from_status, to_status, note, created_at FROM case_events WHERE case_id = ?1 AND event = 'service_progress'").bind(c.id).all()).results || [];
+      const before = serviceProgress(c.services, events).find(r => r.service === service);
+      const info = stepInfo(service, step);
+      await env.DB.batch([
+        env.DB.prepare("INSERT INTO case_events (case_id, event, from_status, to_status, note, actor, created_at) VALUES (?1, 'service_progress', ?2, ?3, ?4, ?5, ?6)").bind(c.id, service, step, note || null, actor, now),
+        env.DB.prepare('UPDATE cases SET updated_at = ?2 WHERE id = ?1').bind(c.id, now),
+        auditStmt(env, request, actor, 'case.service_progress', 'case', c.id, { reference: c.reference, service, step }, now)
+      ]);
+      const early = before && before.waitingFor.length && ['submitted', 'approved', 'delivered'].includes(step);
+      if (form.get('notify') !== '1' || !info.client) return back(early ? 'service_early' : 'service_saved');
+      if (!c.email || c.anonymised_at) return back('service_no_email');
+      try {
+        await sendBrevoEmail(env, {
+          to: { email: c.email, name: c.full_name },
+          subject: `Update on ${c.reference}: ${service}`,
+          html: caseStatusEmail({ fullName: c.full_name, reference: c.reference, statusLabel: `${service}: ${info.label}`, statusMessage: info.client, note, askForReview: false }),
+          replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' }
+        });
+      } catch (err) { console.error('admin: service email failed:', err && err.message); return back('service_send_failed'); }
+      return back('service_sent');
+    }
     if (parts[2] === 'status') {
       const status = String(form.get('status') || '');
       const message = String(form.get('message') || '').trim().slice(0, 2000);

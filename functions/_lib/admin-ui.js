@@ -297,6 +297,15 @@ details.more[open] summary::before{content:'– '}
 .login h1{font:700 24px var(--serif);color:var(--navy);margin:16px 0 6px}
 .code-input{font-size:26px;letter-spacing:10px;text-align:center;font-weight:700}
 
+/* Services on a case */
+.svc-row{padding:12px 0;border-top:1px solid var(--line-2)}
+.svc-row:first-of-type{border-top:0}
+.svc-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.svc-wait{margin-top:6px;color:#8a5a00;background:#fdf3e1;border-radius:8px;padding:6px 10px;display:inline-block}
+.svc-edit{margin-top:6px}
+.svc-edit summary{cursor:pointer;color:var(--blue,#2563eb);font-weight:600}
+.svc-edit form{margin-top:8px}
+
 /* Funnel */
 .funnel{display:grid;gap:12px}
 .funnel-label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}

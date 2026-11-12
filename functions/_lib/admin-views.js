@@ -4,6 +4,8 @@
  */
 import { statusesFor, statusInfo, isOpen, whatsappLink, nextStatus, progressPath } from './cases.js';
 import { EARLY_ERASE_REASONS, eraseBlocker } from './compliance.js';
+import { serviceProgress, STEPS, stepInfo } from './service-progress.js';
+import { CAC_CATEGORIES, COMPANY_TYPES, BUSINESS_FIELDS } from './cac.js';
 import {
   esc, fmtDate, fmtDay, ago, fmtSize, icon, statusPill, pill, avatar, emptyState, flashHtml,
   shell, htmlDocument, pageHead
@@ -27,6 +29,12 @@ const FLASH = {
   bounces: ['ok', 'Bounce alerts are on. You will be alerted when an email to a client cannot be delivered.'],
   bounces_failed: ['err', 'Bounce alerts could not be turned on: Brevo did not accept the request. Try again later.'],
   status: ['ok', 'Status updated.'],
+  service_saved: ['ok', 'Service updated.'],
+  details_saved: ['ok', 'Business details saved. The change is in the activity log.'],
+  service_sent: ['ok', 'Service updated and the client emailed.'],
+  service_no_email: ['ok', 'Service updated. The client has no email address, so let them know on WhatsApp.'],
+  service_send_failed: ['err', 'Service updated, but the email could not be sent. Let the client know on WhatsApp.'],
+  service_early: ['ok', 'Service updated. Note: it was marked as moving before the services it depends on were finished.'],
   status_emailed: ['ok', 'Status updated and the client was emailed.'],
   status_email_failed: ['err', 'Status updated, but the email to the client could not be sent.'],
   status_no_email: ['ok', 'Status updated. The client has no email address, so let them know on WhatsApp.'],
@@ -237,7 +245,7 @@ export function casesPage({ admin, badges, rows, view, q, counts }) {
 
 // ── Case detail ─────────────────────────────────────────────────
 function eventIcon(event) {
-  return { details_requested: 'mail', details_completed: 'check', payment: 'check', document_replaced: 'doc', document_removed: 'trash', created: 'inbox', status_changed: 'arrow', client_notified: 'mail', reminder_sent: 'bell', note: 'doc', follow_up: 'clock', legal_hold: 'lock', erased: 'trash', email_bounced: 'mail', documents_added: 'doc', info_requested: 'mail' }[event] || 'activity';
+  return { details_edited: 'doc', service_progress: 'arrow', details_requested: 'mail', details_completed: 'check', payment: 'check', document_replaced: 'doc', document_removed: 'trash', created: 'inbox', status_changed: 'arrow', client_notified: 'mail', reminder_sent: 'bell', note: 'doc', follow_up: 'clock', legal_hold: 'lock', erased: 'trash', email_bounced: 'mail', documents_added: 'doc', info_requested: 'mail' }[event] || 'activity';
 }
 
 function eventLabel(e, kind) {
@@ -256,6 +264,8 @@ function eventLabel(e, kind) {
     case 'document_removed': return 'Document removed';
     case 'info_requested': return 'Missing items requested from the client';
     case 'payment': return 'Payment recorded';
+    case 'details_edited': return 'Business details entered by the office';
+    case 'service_progress': return `${e.from_status}: ${stepInfo(e.from_status, e.to_status).label}`;
     case 'details_requested': return 'Full application form sent to the client';
     case 'details_completed': return 'Client completed the full application';
     default: return e.event;
@@ -298,7 +308,7 @@ export function casePage({ admin, badges, c, tab, docs, archivedDocs = [], event
   else if (tab === 'documents') body = caseDocuments(c, docs, uploadLink, archivedDocs);
   else if (tab === 'activity') body = caseActivity(c, events);
   else if (tab === 'records') body = caseRecords(c);
-  else body = caseSummary(c, uploadLink, missing, payment, detailsLink);
+  else body = caseSummary(c, uploadLink, missing, payment, detailsLink, events);
 
   return shell({ title: c.reference, active: 'cases', admin, badges, body: `
     <a class="crumb" href="/admin/cases">${icon('back', 16)}Cases</a>
@@ -309,7 +319,7 @@ export function casePage({ admin, badges, c, tab, docs, archivedDocs = [], event
     ${body}` });
 }
 
-function caseSummary(c, uploadLink = null, missing = null, payment = null, detailsLink = null) {
+function caseSummary(c, uploadLink = null, missing = null, payment = null, detailsLink = null, events = []) {
   let fields = {};
   try { fields = JSON.parse(c.form_data || '{}'); } catch (e) { /* show nothing */ }
   const SHOWN_ELSEWHERE = /^(full name|name|email|email address|phone|phone number|phone \/ whatsapp number|declaration accurate|declaration consent)$/i;
@@ -377,7 +387,7 @@ function caseSummary(c, uploadLink = null, missing = null, payment = null, detai
       </dl>
     </div></div>`;
 
-  return `<div class="grid grid-3"><div>${progress}${details}</div><div>${detailsCard(c, detailsLink)}${missingCard(c, missing)}${followUp}${uploadCard(uploadLink)}</div></div>`;
+  return `<div class="grid grid-3"><div>${progress}${servicesCard(c, events)}${details}</div><div>${detailsCard(c, detailsLink)}${missingCard(c, missing)}${businessEditCard(c, fields)}${followUp}${uploadCard(uploadLink)}</div></div>`;
 }
 
 function missingCard(c, m) {
@@ -394,7 +404,9 @@ function missingCard(c, m) {
           <div class="btn-row"><button class="btn" type="submit">Email the client this list</button></div></form>`
         : (total ? '<p class="small muted" style="margin-top:10px">No email on file: ask the client on WhatsApp and send them the upload link below.</p>' : '')}`
     : `<p class="small muted" style="margin:0">${icon('check', 16)} Nothing missing for the services requested.</p>`;
-  return `<div class="card" id="missing"><div class="card-head"><h2>Still needed${total ? ` (${total})` : ''}</h2></div><div class="card-body">${body}</div></div>`;
+  const fillLink = m.details.some(d => /proposed names|Nature of business|Business address|share capital|Aims and objectives/i.test(d))
+    ? `<p class="small" style="margin:0 0 10px"><a href="#biz-details">Got these by WhatsApp or phone? Type them in below &rarr;</a></p>` : '';
+  return `<div class="card" id="missing"><div class="card-head"><h2>Still needed${total ? ` (${total})` : ''}</h2></div><div class="card-body">${fillLink}${body}</div></div>`;
 }
 
 /** A quick quote request: only contact details so far. Send the private full-application link when they are ready. */
@@ -410,6 +422,55 @@ function detailsCard(c, link) {
         : '<p class="small muted" style="margin-top:10px">No email on file: copy the link and send it on WhatsApp.</p>'}
       <p class="small muted" style="margin-bottom:0">It is also included automatically in the receipt email when you record a payment.</p>
     </div></div>`;
+}
+
+/** Each service on the case, in the order it has to be done, with its own step and agency. */
+function servicesCard(c, events) {
+  if (c.purged_at || c.kind !== 'application') return '';
+  const rows = serviceProgress(c.services, events);
+  if (!rows.length) return '';
+  const tone = { not_started: 'grey', waiting_client: 'amber', preparing: 'blue', submitted: 'violet', query: 'red', approved: 'green', delivered: 'green', not_needed: 'grey' };
+  const allDone = rows.every(r => r.done);
+  return `<div class="card" id="services-progress"><div class="card-head"><h2>Services</h2></div><div class="card-body">
+    <p class="small muted" style="margin-top:0">Track each service separately, in the order the work has to happen.${rows.length > 1 ? ' Services that depend on another show what they are waiting for.' : ''}</p>
+    ${rows.map(r => `<div class="svc-row">
+      <div class="svc-head"><div><strong>${esc(r.service)}</strong><div class="small muted">${esc(r.agency.replace(/^the /, ''))}${r.at ? ` · updated ${esc(fmtDay(r.at))}` : ''}</div></div>${pill(r.label, tone[r.step] || 'grey')}</div>
+      ${r.note ? `<div class="small" style="margin-top:4px">${esc(r.note)}</div>` : ''}
+      ${r.waitingFor.length && !r.done ? `<div class="small svc-wait">Waiting for: ${esc(r.waitingFor.join(', '))}</div>` : ''}
+      ${isOpen(c.status) ? `<details class="svc-edit"><summary class="small">Update</summary>
+        <form method="post" action="/admin/case/${esc(c.id)}/service">
+          <input type="hidden" name="service" value="${esc(r.service)}">
+          <label>Step</label><select name="step">${STEPS.map(s => { const i = stepInfo(r.service, s.key); return `<option value="${s.key}"${s.key === r.step ? ' selected' : ''}>${esc(i.label)}</option>`; }).join('')}</select>
+          <label>Note <span class="small muted">(optional: agency reference, query details, RC/TIN number)</span></label><input name="note" maxlength="300">
+          ${c.email ? `<label class="check"><input type="checkbox" name="notify" value="1"> Email the client about this step</label>` : ''}
+          <div class="btn-row"><button class="btn sm" type="submit">Save</button></div>
+        </form></details>` : ''}
+    </div>`).join('')}
+    ${allDone && !['approved', 'delivered', 'closed', 'cancelled'].includes(c.status) ? `<div class="note" style="margin-top:12px">${icon('check', 18)}<span>Every service is approved or done. You can move the case to &ldquo;Approved&rdquo; or &ldquo;Delivered&rdquo; above.</span></div>` : ''}
+  </div></div>`;
+}
+
+/** Registrations: type in names, nature of business and address received by WhatsApp, email or phone. */
+function businessEditCard(c, fields) {
+  const services = String(c.services || '').split(',').map(s => s.trim());
+  const reg = ['Business Name Registration', 'Limited Company Registration', 'Incorporated Trustees / NGO'];
+  if (c.purged_at || c.kind !== 'application' || !services.some(s => reg.includes(s))) return '';
+  const missingSome = BUSINESS_FIELDS.some(f => (!f.only || services.includes(f.only)) && !/Name 3|Other Objects/.test(f.key) && !fields[f.key]);
+  const input = f => {
+    const v = fields[f.key] || '', name = `f_${f.key.replace(/\s+/g, '_')}`;
+    if (f.type === 'category') return `<select name="${name}"><option value="">Select one</option>${CAC_CATEGORIES.map(o => `<option${o === v ? ' selected' : ''}>${esc(o)}</option>`).join('')}</select>`;
+    if (f.type === 'companyType') return `<select name="${name}">${COMPANY_TYPES.map(o => `<option${o === (v || COMPANY_TYPES[0]) ? ' selected' : ''}>${esc(o)}</option>`).join('')}</select>`;
+    if (f.type === 'textarea') return `<textarea name="${name}" maxlength="1500">${esc(v)}</textarea>`;
+    return `<input name="${name}" maxlength="${f.key === 'Business Address' ? 300 : 160}" value="${esc(v)}">`;
+  };
+  return `<div class="card" id="biz-details"><div class="card-head"><h2>Business details</h2></div><div class="card-body">
+    <details class="more"${missingSome ? ' open' : ''}><summary>${missingSome ? 'Fill in details received by WhatsApp, phone or email' : 'Edit business details'}</summary>
+      <form method="post" action="/admin/case/${esc(c.id)}/details-edit" style="margin-top:10px">
+        ${BUSINESS_FIELDS.filter(f => !f.only || services.includes(f.only)).map(f => `<label>${esc(f.label)}</label>${input(f)}`).join('')}
+        <p class="small muted">Leave a box empty to keep what is there. Use the client&rsquo;s exact wording for names.</p>
+        <div class="btn-row"><button class="btn" type="submit">Save details</button></div>
+      </form></details>
+  </div></div>`;
 }
 
 function uploadCard(uploadLink) {
@@ -769,7 +830,7 @@ const ACTION_LABELS = {
   'case.created': 'New submission received', 'case.viewed': 'Case opened', 'case.status_changed': 'Status changed',
   'case.note_added': 'Note added', 'case.follow_up_set': 'Follow-up updated', 'case.reminder_sent': 'Automatic reminder sent',
   'case.tracked': 'Client checked status online', 'case.legal_hold': 'Legal hold changed', 'case.erased': 'Case erased',
-  'document.viewed': 'Document opened', 'document.added': 'Document added', 'case.details_requested': 'Full application form sent', 'case.details_completed': 'Client completed the full application', 'case.details_opened': 'Client opened the application form link', 'document.replaced': 'Document replaced', 'document.removed': 'Document removed', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
+  'document.viewed': 'Document opened', 'document.added': 'Document added', 'case.service_progress': 'Service step updated', 'case.details_edited': 'Business details entered', 'case.details_requested': 'Full application form sent', 'case.details_completed': 'Client completed the full application', 'case.details_opened': 'Client opened the application form link', 'document.replaced': 'Document replaced', 'document.removed': 'Document removed', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
   'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'email.bounced': 'Email bounced', 'case.imported': 'Past client added', 'document.uploaded': 'Client uploaded documents', 'billing.issued': 'Billing document issued', 'billing.sent': 'Billing document emailed', 'billing.paid': 'Payment recorded', 'billing.void': 'Billing document voided', 'bounces.enabled': 'Turned on bounce alerts', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
   'client.viewed': 'Client opened', 'client.updated': 'Client details corrected', 'client.exported': 'Client data exported', 'client.erased': 'Client erased',
   'client.request_logged': 'Data request recorded', 'client.request_done': 'Data request completed', 'backup.downloaded': 'Backup downloaded'
