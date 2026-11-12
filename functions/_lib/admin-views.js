@@ -805,6 +805,22 @@ export function simplePage(title, text) {
 // ── Billing tab: quotations, invoices, receipts, engagement letters ──
 const BILL_STATUS = { issued: ['Saved', 'grey'], sent: ['Sent', 'blue'], paid: ['Paid', 'green'], part_paid: ['Part paid', 'amber'], void: ['Void', 'red'] };
 export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices, paymentMethods, money }) {
+  const byId = new Map(docs.map(d => [d.id, d]));
+  // What each line means at a glance: a receipt is money received, an invoice shows what's paid and owed
+  const billSummary = d => {
+    if (d.kind === 'receipt') {
+      const inv = byId.get(d.related_id);
+      return `<strong>Received ${esc(money(d.amount_paid || 0))}</strong>${inv ? ` against ${esc(inv.number)}` : ''}`;
+    }
+    if (d.kind === 'invoice') {
+      const receipts = docs.filter(r => r.kind === 'receipt' && r.related_id === d.id && r.status !== 'void');
+      const paid = d.amount_paid || 0;
+      return `${esc(money(d.total))}${paid ? ` · paid ${esc(money(paid))}${paid < d.total ? ` · <strong>balance ${esc(money(d.total - paid))}</strong>` : ''}` : ''}` +
+        (receipts.length ? ` · receipt${receipts.length > 1 ? 's' : ''} ${receipts.map(r => esc(r.number)).join(', ')}` : '');
+    }
+    if (d.kind === 'engagement') { const inv = byId.get(d.related_id); return `Engagement letter${inv ? ` for ${esc(inv.number)}` : ''}`; }
+    return d.total ? esc(money(d.total)) : '';
+  };
   const rows = docs.length ? `<div class="rows">${docs.map(d => {
     const [label, tone] = BILL_STATUS[d.status] || [d.status, 'grey'];
     const pdf = `<a class="btn ghost sm" href="/admin/billing/${esc(d.id)}/pdf">PDF</a>`;
@@ -830,7 +846,7 @@ export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices,
         </form></details>` : '';
     return `<div class="row bill-row"><span class="tl-dot">${icon('doc', 15)}</span>
       <div class="row-main"><div class="row-title"><a href="/admin/billing/${esc(d.id)}" target="_blank" rel="noopener">${esc(kindLabel[d.kind])} ${esc(d.number)}</a></div>
-      <div class="row-sub">${esc(fmtDay(d.issued_at))}${d.total ? ` · ${esc(money(d.total))}` : ''}${d.amount_paid ? ` · paid ${esc(money(d.amount_paid))}` : ''}${d.sent_at ? ` · emailed ${esc(fmtDay(d.sent_at))}` : ''}</div></div>
+      <div class="row-sub">${esc(fmtDay(d.issued_at))} · ${billSummary(d)}${d.sent_at ? ` · emailed ${esc(fmtDay(d.sent_at))}` : ''}</div></div>
       <div class="row-side">${pill(label, tone)}<div class="bill-actions">${actions}</div></div>
       ${pay}</div>`;
   }).join('')}</div>` : `<div class="card-body">${emptyState('doc', 'No quotations or invoices yet', 'Create a quotation below.')}</div>`;
