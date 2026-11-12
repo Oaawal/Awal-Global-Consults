@@ -836,8 +836,11 @@ export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices,
   }).join('')}</div>` : `<div class="card-body">${emptyState('doc', 'No quotations or invoices yet', 'Create a quotation below.')}</div>`;
 
   const p = prefill;
-  const itemRows = Array.from({ length: Math.max(6, p.items.length + 2) }, (_, i) => {
-    const it = p.items[i] || {};
+  const pDiscount = (p.items || []).filter(i => i.discount).reduce((t, i) => t + Math.abs(Number(i.amount) || 0), 0);
+  const pDiscountLabel = ((p.items || []).find(i => i.discount) || {}).description || '';
+  const pItems = (p.items || []).filter(i => !i.discount);
+  const itemRows = Array.from({ length: Math.max(6, pItems.length + 2) }, (_, i) => {
+    const it = pItems[i] || {};
     return `<div class="bill-item">
       <span class="bill-n">${i + 1}</span>
       <div class="bi-desc"><input name="desc_${i}" value="${esc(it.description || '')}" placeholder="Service" aria-label="Line ${i + 1}: service"><input name="detail_${i}" value="${esc(it.detail || '')}" placeholder="What's included (optional)" class="bi-detail" aria-label="Line ${i + 1}: what's included"></div>
@@ -847,7 +850,7 @@ export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices,
       <label class="check bi-gov"><input type="checkbox" name="gov_${i}" value="1"${it.gov ? ' checked' : ''}> Gov fee</label></div>`;
   }).join('');
   const form = `<div class="card" id="new"><div class="card-head"><h2>${p.kind === 'invoice' ? 'New invoice' : 'New quotation'}</h2></div><div class="card-body">
-    <form method="post" action="/admin/case/${esc(c.id)}/billing/new">
+    <form method="post" action="/admin/case/${esc(c.id)}/billing/new" class="bill-form" data-vat="${settings.vatRegistered ? 7.5 : 0}">
       <input type="hidden" name="related" value="${esc(p.related || '')}">
       <label>Document</label><select name="kind"><option value="quote"${p.kind === 'quote' ? ' selected' : ''}>Quotation (valid 14 days)</option><option value="invoice"${p.kind === 'invoice' ? ' selected' : ''}>Invoice (due in 7 days)</option></select>
       <div class="grid grid-2" style="gap:12px">
@@ -858,6 +861,15 @@ export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices,
       </div>
       <label style="margin-top:12px">Items <span class="small muted">(tick &ldquo;Gov&rdquo; for government fees paid on the client&rsquo;s behalf: no VAT on those)</span></label>
       <div class="bill-items">${itemRows}</div>
+      <details class="more disc-box"${pDiscount ? ' open' : ''}><summary>Add a discount (optional)</summary>
+        <p class="small muted" style="margin:6px 0 0">Comes off your professional fees only. Government fees stay in full${settings.vatRegistered ? ', and VAT is worked out after the discount' : ''}. Fill in one of the two.</p>
+        <div class="pay-grid">
+          <div><label>Discount (₦ or %)</label><input name="discount" inputmode="decimal" placeholder="e.g. 10000 or 10%" value="${pDiscount ? esc(pDiscount) : ''}"></div>
+          <div><label>Or: total the client should pay (₦)</label><input name="discount_total" inputmode="numeric" placeholder="e.g. 500000"></div>
+        </div>
+        <label>Discount wording on the document</label><input name="discount_label" maxlength="80" placeholder="Discount" value="${esc(pDiscountLabel)}">
+        <div class="disc-preview small" aria-live="polite"></div>
+      </details>
       <label>Note on the document (optional)</label><textarea name="notes" maxlength="600">${esc(p.notes || '')}</textarea>
       <p class="small muted">VAT is <strong>${settings.vatRegistered ? 'ON: 7.5% is added to your fee lines' : 'OFF: no VAT is added and invoices are titled “Invoice”'}</strong>. Change it at the bottom of this page.</p>
       <div class="btn-row"><button class="btn ghost" type="submit" name="send" value="0">Save</button><button class="btn" type="submit" name="send" value="1"${c.email ? '' : ' disabled title="No email on file"'}>Save and email to client</button></div>

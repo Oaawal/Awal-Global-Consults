@@ -66,6 +66,42 @@ self.addEventListener('notificationclick', e => {
 export const APP_SCRIPT = `
 (function () {
   document.querySelectorAll('form[data-confirm]').forEach(f => f.addEventListener('submit', e => { if (!confirm(f.dataset.confirm)) e.preventDefault(); }));
+
+  // Quotation / invoice form: live totals with the discount (same rules as the server)
+  document.querySelectorAll('form.bill-form').forEach(form => {
+    const out = form.querySelector('.disc-preview');
+    if (!out) return;
+    const rate = Number(form.dataset.vat || 0) / 100;
+    const num = v => Math.round(Number(String(v || '').replace(/[^0-9.]/g, '')) || 0);
+    const naira = n => '₦' + Math.round(n).toLocaleString('en-NG');
+    const update = () => {
+      let fees = 0, gov = 0;
+      for (let i = 0; i < 20; i++) {
+        const d = form.elements['desc_' + i]; if (!d || !d.value.trim()) continue;
+        const amt = Math.max(1, num(form.elements['qty_' + i].value)) * num(form.elements['unit_' + i].value);
+        if (form.elements['gov_' + i] && form.elements['gov_' + i].checked) gov += amt; else fees += amt;
+      }
+      const vatOf = d => Math.round((fees - d) * rate);
+      const target = num(form.elements.discount_total.value), raw = form.elements.discount.value;
+      let disc = 0;
+      if (form.elements.discount_total.value.trim() && target > 0) {
+        disc = Math.round(fees - (target - gov) / (1 + rate));
+        for (let k = 0; k < 3; k++) disc += (fees + gov - disc + vatOf(disc)) - target;
+      } else if (/%/.test(raw)) disc = Math.round(fees * Math.min(100, num(raw)) / 100);
+      else disc = num(raw);
+      const capped = disc > fees;
+      disc = Math.max(0, Math.min(fees, disc));
+      const total = fees + gov - disc + vatOf(disc);
+      out.innerHTML = 'Your fees ' + naira(fees) + ' · Government fees ' + naira(gov) +
+        (disc ? ' · Discount −' + naira(disc) + (fees ? ' (' + (Math.round(disc * 1000 / fees) / 10) + '% of your fees)' : '') : '') +
+        (rate ? ' · VAT ' + naira(vatOf(disc)) : '') + '<br><strong>Client pays ' + naira(total) + '</strong>' +
+        (capped ? '<br><span style="color:#b42318">The discount can’t be more than your fees: government fees are always charged in full.</span>' : '');
+    };
+    form.addEventListener('input', update);
+    form.addEventListener('change', update);
+    update();
+  });
+
   if (!('serviceWorker' in navigator)) return;
   const reg = navigator.serviceWorker.register('/admin/sw.js', { scope: '/admin/' });
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;

@@ -56,17 +56,49 @@ export async function nextNumber(env, kind, iso = new Date().toISOString()) {
 
 // ── Totals ───────────────────────────────────────────────────────
 /** items: [{ description, detail, qty, unit, gov }] — gov = government fee (no VAT). */
-export function totals(items, vatOn) {
-  const clean = items.map(i => ({
+/** Document lines without the discount line (the discount is stored as a line with discount: true). */
+export const lineItems = items => (items || []).filter(i => !i.discount);
+/** The discount given on a document, in naira (0 if none). */
+export const discountOf = items => (items || []).filter(i => i.discount).reduce((t, i) => t + Math.abs(Number(i.amount) || 0), 0);
+export const discountLabelOf = items => ((items || []).find(i => i.discount) || {}).description || 'Discount';
+
+/**
+ * Lines, subtotal, discount, VAT and total. A discount comes off our professional fees only,
+ * never off government fees, and VAT (when on) is charged on the fees after the discount.
+ * adj.discount: an amount in naira, or a percentage such as "10%".
+ * adj.target: the total the client should pay; the discount is worked out from it.
+ */
+export function totals(items, vatOn, adj = {}) {
+  const clean = lineItems(items).map(i => ({
     description: String(i.description || '').trim().slice(0, 200), detail: String(i.detail || '').trim().slice(0, 300),
     qty: Math.max(1, Math.min(999, parseInt(i.qty, 10) || 1)), unit: Math.max(0, Math.round(Number(String(i.unit || '0').replace(/[^\d.]/g, '')) || 0)),
     gov: !!i.gov, timeline: String(i.timeline || '').trim().slice(0, 60)
   })).filter(i => i.description);
   clean.forEach(i => { i.amount = i.qty * i.unit; });
   const subtotal = clean.reduce((t, i) => t + i.amount, 0);
-  const vatable = clean.filter(i => !i.gov).reduce((t, i) => t + i.amount, 0);
-  const vat = vatOn ? Math.round(vatable * VAT_RATE / 100) : 0;
-  return { items: clean, subtotal, vat, total: subtotal + vat, vatRate: vatOn ? VAT_RATE : 0 };
+  const fees = clean.filter(i => !i.gov).reduce((t, i) => t + i.amount, 0);
+  const gov = subtotal - fees;
+  const rate = vatOn ? VAT_RATE / 100 : 0;
+  const vatOf = d => Math.round((fees - d) * rate);
+  const parse = v => Math.round(Number(String(v == null ? '' : v).replace(/[^\d.]/g, '')) || 0);
+  let discount = 0;
+  const target = parse(adj.target);
+  if (String(adj.target || '').trim() && target > 0) {
+    // Find the discount that makes the total exactly the amount asked for (VAT rounding included)
+    discount = Math.round(fees - (target - gov) / (1 + rate));
+    for (let k = 0; k < 3; k++) discount += (subtotal - discount + vatOf(discount)) - target;
+  } else if (/%/.test(String(adj.discount || ''))) {
+    discount = Math.round(fees * Math.min(100, parse(adj.discount)) / 100);
+  } else {
+    discount = parse(adj.discount);
+  }
+  discount = Math.max(0, Math.min(fees, discount));
+  const vat = vatOf(discount);
+  if (discount > 0) {
+    const label = String(adj.label || '').trim().slice(0, 80) || 'Discount';
+    clean.push({ description: label, detail: '', qty: 1, unit: -discount, amount: -discount, gov: false, timeline: '', discount: true });
+  }
+  return { items: clean, subtotal, discount, vat, total: subtotal - discount + vat, vatRate: vatOn ? VAT_RATE : 0 };
 }
 
 // ── Amount in words (Nigerian style: "Eighty-Six Thousand Naira Only") ──
@@ -169,6 +201,7 @@ td small { display: block; color: #6b7280; font-size: 8pt; margin-top: 2px; }
 .bar button.alt, .bar a + button { background: #fff; color: #0D2340; border: 1px solid #0D2340; }
 @media print { body { background: #fff; } .sheet { box-shadow: none; margin: 0; max-width: none; padding: 0 15.9mm; } .bar { display: none; } }
 @media (max-width: 640px) { .sheet { padding: 0 14px 0; margin: 0; } .lh { width: calc(100% + 28px); margin-left: -14px; margin-right: -14px; } .meta, .parties, .boxes, .sign { grid-template-columns: 1fr; } .sum { width: 100%; } h1 { font-size: 24pt; } .top { flex-direction: column; } .addr { text-align: left; } }
+.sum .disc td { color: #93701F; }
 `;
 
 const SIGNOFF = (clientLabel) => `<div class="sign"><div class="who"><img class="sig" src="${SIGNATURE}" alt=""><img class="seal" src="${SEAL}" alt=""><strong>A.O. Abdulwaheed</strong><small>For: Awal Global Consults Limited — Director</small></div>
@@ -207,7 +240,7 @@ export async function relatedDocs(env, doc) {
 
 export function renderDoc(doc, { invoice = null, receipt = null, quote = null, pdfUrl = '' } = {}) {
   const cl = JSON.parse(doc.client_json || '{}');
-  const items = JSON.parse(doc.items_json || '[]');
+  const items = lineItems(JSON.parse(doc.items_json || '[]'));
   const voided = doc.status === 'void' ? '<span class="void">VOID</span>' : '';
   let title = KIND_LABEL[doc.kind], kicker = '', badge = '', body = '';
 
@@ -288,7 +321,9 @@ export function renderDoc(doc, { invoice = null, receipt = null, quote = null, p
 }
 
 function sumTable(doc, totalLabel) {
+  const all = JSON.parse(doc.items_json || '[]'), d = discountOf(all);
   return `<table class="sum"><tbody><tr><td>Subtotal</td><td class="num">${money(doc.subtotal)}</td></tr>
+    ${d ? `<tr class="disc"><td>${esc(discountLabelOf(all))}</td><td class="num">−${money(d)}</td></tr>` : ''}
     ${doc.vat_rate > 0 ? `<tr><td>VAT (${doc.vat_rate}% on our fees)</td><td class="num">${money(doc.vat_amount)}</td></tr>` : ''}
     <tr class="total"><td>${esc(totalLabel)}</td><td class="num">${money(doc.total)}</td></tr></tbody></table>`;
 }

@@ -32,7 +32,7 @@ import { uploadUrl, detailsUrl } from '../_lib/upload-links.js';
 import { awaitingDetails } from '../_lib/records.js';
 import { funnelStats, PERIODS } from '../_lib/funnel.js';
 import { missingForCase } from '../_lib/requirements.js';
-import { START_PRICES, PAYMENT_METHODS, KIND_LABEL, billingSettings, saveBillingSettings, nextNumber, totals, renderDoc, relatedDocs, docUrl, money, addDays } from '../_lib/billing.js';
+import { START_PRICES, PAYMENT_METHODS, KIND_LABEL, billingSettings, saveBillingSettings, nextNumber, totals, renderDoc, relatedDocs, docUrl, money, addDays, lineItems, discountOf, discountLabelOf } from '../_lib/billing.js';
 import { renderPdf, pdfFilename } from '../_lib/billing-pdf.js';
 import { bytesToBase64 } from '../_lib/brevo.js';
 import { fileMatchesName } from '../_lib/file-check.js';
@@ -135,7 +135,7 @@ function billPrefill(c, docs, fromId) {
   const from = fromId ? docs.find(d => d.id === fromId) : null;
   if (from) {
     return { kind: 'invoice', related: from.kind === 'quote' ? from.id : '', client: JSON.parse(from.client_json), category: from.category,
-      items: JSON.parse(from.items_json), notes: '' };
+      items: JSON.parse(from.items_json), notes: '' }; // a discount line is shown in the discount box, not as an item
   }
   const services = String(c.services || '').split(',').map(x => x.trim()).filter(Boolean);
   return {
@@ -619,7 +619,8 @@ async function handle(context) {
       const settings = await billingSettings(env);
       const raw = Array.from({ length: 20 }, (_, i) => ({ description: form.get(`desc_${i}`), detail: form.get(`detail_${i}`), timeline: form.get(`timeline_${i}`),
         qty: form.get(`qty_${i}`), unit: form.get(`unit_${i}`), gov: form.get(`gov_${i}`) === '1' }));
-      const t = totals(raw.filter(r => r.description), settings.vatRegistered);
+      const t = totals(raw.filter(r => r.description), settings.vatRegistered, {
+        discount: form.get('discount'), target: form.get('discount_total'), label: form.get('discount_label') });
       if (!t.items.length) return redirect(`/admin/case/${c.id}?tab=billing&done=bill_empty#new`);
       const now = new Date().toISOString();
       const client = { name: String(form.get('name') || c.full_name).trim().slice(0, 160), address: String(form.get('address') || '').trim().slice(0, 300),

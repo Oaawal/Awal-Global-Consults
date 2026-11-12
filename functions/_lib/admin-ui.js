@@ -312,6 +312,9 @@ details.more[open] summary::before{content:'– '}
 .pay-box form label{margin-top:10px}
 .pay-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
 .pay-grid input,.pay-grid select{width:100%}
+.disc-box{margin:4px 0 14px;background:var(--bg,#f6f8fb);border:1px solid var(--line-2,#e6ebf1);border-radius:12px;padding:10px 14px}
+.disc-preview{margin-top:10px;line-height:1.7}
+.disc-preview strong{color:var(--navy)}
 .bill-items{display:grid;gap:10px;margin:6px 0 14px}
 .bill-item{display:grid;grid-template-columns:22px minmax(0,1fr) 130px 64px 120px 84px;gap:8px;align-items:end;padding:10px;border:1px solid var(--line-2,#e6ebf1);border-radius:12px}
 .bill-n{align-self:center;font-size:12px;font-weight:700;color:var(--muted)}

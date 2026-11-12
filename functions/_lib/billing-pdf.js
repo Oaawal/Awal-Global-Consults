@@ -12,7 +12,7 @@
  * the fonts are embedded from pre-built data (no font parsing at request time), and images
  * are JPEG. The fonts have no naira sign, so ₦ is drawn as an N with two bars.
  */
-import { KIND_LABEL, PAYMENT_DETAILS, money, nairaWords, feesSentence } from './billing.js';
+import { KIND_LABEL, PAYMENT_DETAILS, money, nairaWords, feesSentence, lineItems, discountOf, discountLabelOf } from './billing.js';
 import * as A from './pdf-assets.js';
 
 const NAVY = [13, 35, 64], CREAM = [239, 231, 211], GOLD = [147, 112, 31], GREY = [74, 85, 104], LINE = [226, 232, 240], RED = [185, 28, 28];
@@ -185,7 +185,8 @@ export async function renderPdf(doc, { invoice = null, receipt = null, quote = n
   y -= 8;
 
   // ---- title ----
-  const items = JSON.parse(doc.items_json || '[]');
+  const allItems = JSON.parse(doc.items_json || '[]');
+  const items = lineItems(allItems);
   const cl = JSON.parse(doc.client_json || '{}');
   const KICKER = { quote: 'Official price quotation', invoice: doc.vat_rate > 0 ? 'Tax invoice' : 'Invoice', receipt: 'Official receipt', engagement: 'Confirmation of engagement' };
   const TITLE = { quote: 'Quotation', invoice: kindLabel, receipt: 'Receipt', engagement: 'Engagement Letter' };
@@ -251,6 +252,8 @@ export async function renderPdf(doc, { invoice = null, receipt = null, quote = n
   };
   const sums = totalLabel => {
     const rows = [['Subtotal', money(doc.subtotal)]];
+    const disc = discountOf(allItems);
+    if (disc) rows.push([discountLabelOf(allItems), '–' + money(disc)]); // en dash: the PDF font has no minus sign
     if (doc.vat_rate > 0) rows.push([`VAT (${doc.vat_rate}% on our fees)`, money(doc.vat_amount)]);
     ensure(rows.length * 24 + 34);
     const x0 = M + CW - 230, x1 = M + CW;
