@@ -433,7 +433,7 @@ export function htmlDocument(title, body) {
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Awal Admin">
 <link rel="manifest" href="/admin/manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="192x192" href="/assets/images/app/icon-192.png">
+<link rel="icon" type="image/png" href="/assets/images/favicon-gold.png">
 <link rel="apple-touch-icon" href="/assets/images/app/apple-touch-icon.png">
 <title>${esc(title)} · Awal Case Manager</title>
 <style>${STYLE}</style>

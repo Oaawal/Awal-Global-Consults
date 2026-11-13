@@ -30,8 +30,17 @@ function layout(body) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Track Your Application | Awal Global Consults</title>
+<meta property="og:site_name" content="Awal Global Consults">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Track Your Application | Awal Global Consults">
+<meta property="og:description" content="Governance, risk and compliance. CAC registration, trademarks, tax and data protection in Nigeria.">
+<meta property="og:image" content="https://awalglobal.com.ng/assets/images/og-awal.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://awalglobal.com.ng/assets/images/og-awal.jpg">
 <meta name="description" content="Check the progress of your application with Awal Global Consults using your reference number.">
-<link rel="icon" type="image/png" href="/assets/images/favicon.png">
+<link rel="icon" type="image/png" href="/assets/images/favicon-gold.png">
 <style>
 :root{--navy:#0F3A5F;--navy-dark:#0A2C48;--blue:#1B4F78;--cta:#D4A72C;--bg:#F6F1E7;--line:#E2D9C6;--text:#222;--muted:#555}
 *{box-sizing:border-box}

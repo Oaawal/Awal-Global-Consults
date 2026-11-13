@@ -218,4 +218,27 @@
       document.head.appendChild(s);
     }
   }
+
+  // Blog share buttons: the phone's own share sheet where available, plus copy link
+  document.querySelectorAll('[data-share-native]').forEach(function (btn) {
+    if (!navigator.share) return;
+    btn.hidden = false;
+    btn.addEventListener('click', function () {
+      navigator.share({ title: btn.getAttribute('data-title') || document.title, url: btn.getAttribute('data-url') || location.href })
+        .then(function () { track('share', { method: 'native', content_type: 'article' }); })
+        .catch(function () {});
+    });
+  });
+  document.querySelectorAll('[data-copy-link]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var url = btn.getAttribute('data-copy-link') || location.href;
+      var label = btn.querySelector('span') || btn;
+      var done = function () { label.textContent = 'Link copied'; setTimeout(function () { label.textContent = 'Copy link'; }, 2200); track('share', { method: 'copy_link', content_type: 'article' }); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function () { window.prompt('Copy this link:', url); });
+      else window.prompt('Copy this link:', url);
+    });
+  });
+  document.querySelectorAll('.share-box a.share-btn').forEach(function (a) {
+    a.addEventListener('click', function () { track('share', { method: (a.getAttribute('aria-label') || '').replace('Share on ', ''), content_type: 'article' }); });
+  });
 })();

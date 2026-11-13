@@ -603,3 +603,15 @@ body:has(.guide-hero) { background: #fff; }
 .lead-magnet .subscribe-msg.ok, .lead-magnet .subscribe-msg.ok a { color: #9be7b5; }
 .lead-magnet .subscribe-msg.err { color: #ffb4a8; }
 @media (max-width: 560px) { .lead-magnet .subscribe-row { flex-direction: column; } }
+
+/* Share after reading */
+.share-box { margin: 34px 0 6px; padding: 22px 24px; border-radius: var(--radius, 14px); background: #fff; border: 1px solid var(--line); }
+.share-title { margin: 0 0 14px; font-family: var(--display); font-weight: 600; font-size: 1.12rem; color: var(--navy-900); }
+.share-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.share-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--navy-900); font: 600 0.9rem var(--body); cursor: pointer; text-decoration: none; transition: border-color .18s ease, transform .18s ease, background .18s ease; }
+.share-btn svg { width: 18px; height: 18px; flex: none; }
+.share-btn:hover, .share-btn:focus-visible { border-color: var(--navy-800); transform: translateY(-1px); background: #fff; }
+.share-btn.share-native { background: var(--cta); border-color: var(--cta); color: var(--navy-950); }
+.share-btn.share-native:hover { background: var(--cta-hover); }
+.share-btn.share-wa svg { color: #1FAF55; }
+@media (max-width: 520px) { .share-box { padding: 18px 16px; } .share-btn { flex: 1 1 calc(50% - 5px); justify-content: center; } }

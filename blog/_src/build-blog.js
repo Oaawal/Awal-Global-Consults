@@ -266,7 +266,7 @@ ${post.toc.map(t => `          <li><a href="#${t.id}">${t.text}</a></li>`).join(
         lastReviewed: new Date((post.reviewed || post.updated || post.date) + 'T00:00:00').toISOString()
       } : {})
     },
-    image: `${SITE_URL}/assets/images/og-image.jpg`
+    image: `${SITE_URL}/assets/images/og-awal.jpg`
   }, null, 2);
 
   const breadcrumbSchema = JSON.stringify({
@@ -330,7 +330,10 @@ ${related.map(p => card(p, '../')).join('\n')}
     CTA_TEXT: post.cta_text || 'Talk to us about your specific situation.',
     RELATED_SERVICE_HREF: post.category.relatedService.href,
     RELATED_SERVICE_LABEL: post.category.relatedService.label,
-    WHATSAPP_TOPIC: encodeURIComponent(post.whatsapp_topic || post.category.label)
+    WHATSAPP_TOPIC: encodeURIComponent(post.whatsapp_topic || post.category.label),
+    SHARE_URL: encodeURIComponent(canonical),
+    SHARE_TITLE: encodeURIComponent(post.title),
+    SHARE_WHATSAPP: encodeURIComponent(`${post.title}\n${canonical}`)
   });
 
   const outDir = path.join(BLOG_DIR, post.slug);

@@ -309,6 +309,15 @@ export function renderDoc(doc, { invoice = null, receipt = null, quote = null, p
 
   return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
 <title>${esc(KIND_LABEL[doc.kind])} ${esc(doc.number)} · Awal Global Consults</title>
+<meta property="og:site_name" content="Awal Global Consults">
+<meta property="og:type" content="website">
+<meta property="og:title" content="${esc(KIND_LABEL[doc.kind])} from Awal Global Consults">
+<meta property="og:description" content="View and download your document from Awal Global Consults.">
+<meta property="og:image" content="https://awalglobal.com.ng/assets/images/og-awal.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://awalglobal.com.ng/assets/images/og-awal.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>${CSS}</style></head><body>
 <div class="bar">${pdfUrl ? `<a class="pdf" href="${esc(pdfUrl)}">Download PDF</a>` : ''}<button type="button" onclick="window.print()">${pdfUrl ? 'Print' : 'Download / Print PDF'}</button></div>
