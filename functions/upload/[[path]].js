@@ -40,9 +40,9 @@ function form(c, message = '') {
       <p>${c.docs ? `We already have <strong>${c.docs}</strong> document${c.docs === 1 ? '' : 's'} for this request. ` : ''}Add any documents we asked for: IDs, certificates, photographs or signatures. PDF, JPG or PNG, up to 7MB each.</p>
       <form method="post" enctype="multipart/form-data" style="margin-top:18px;">
         <label style="display:block;font-weight:600;margin-bottom:6px;" for="what">What are you sending? <span style="font-weight:400;color:#666;">(e.g. NIN slip, LGA certificate)</span></label>
-        <input id="what" name="what" maxlength="200" style="width:100%;padding:12px;border:1.5px solid #d5dde6;border-radius:10px;margin-bottom:14px;font:inherit;">
+        <input id="what" name="what" maxlength="200" style="width:100%;padding:12px;border:1.5px solid #E2D9C6;border-radius:10px;margin-bottom:14px;font:inherit;">
         <input type="file" name="files" multiple required accept=".pdf,.jpg,.jpeg,.png" style="display:block;margin-bottom:16px;">
-        <button type="submit" style="background:#0F3A5F;color:#fff;border:0;border-radius:10px;padding:12px 20px;font-weight:700;font:inherit;cursor:pointer;">Upload</button>
+        <button type="submit" style="background:#D4A72C;color:#0A2C48;border:0;border-radius:10px;padding:12px 20px;font-weight:700;font:inherit;cursor:pointer;">Upload</button>
       </form>
       <p style="font-size:13px;color:#666;margin-top:18px;">This link is private to your request.</p>`
   };

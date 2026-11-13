@@ -157,7 +157,7 @@ export async function verifyDocLink(env, id, s) {
 const CSS = `
 @page { size: A4; margin: 14mm 14mm 16mm; }
 * { box-sizing: border-box; }
-body { margin: 0; background: #e9edf2; font-family: 'DM Sans', Arial, sans-serif; color: #1f2937; font-size: 10.5pt; }
+body { margin: 0; background: #EFE8DA; font-family: 'DM Sans', Arial, sans-serif; color: #1f2937; font-size: 10.5pt; }
 .sheet { background: #fff; max-width: 210mm; margin: 18px auto; padding: 0 15.9mm; box-shadow: 0 6px 24px rgba(13,35,64,.12); overflow: hidden; }
 .lh { display: block; width: calc(100% + 31.8mm); max-width: none; margin: 0 -15.9mm; }
 .lh-head { margin-bottom: 4mm; }

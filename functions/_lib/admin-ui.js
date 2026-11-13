@@ -121,7 +121,7 @@ const STYLE = `
   --navy:#0F3A5F;--navy-900:#0A2C48;--navy-800:#0d3556;--blue:#1B4F78;--blue-50:#F1EADA;--cta:#D4A72C;--ivory:#E9DCBF;
   --bg:#F6F1E7;--card:#fff;--line:#E6DECD;--line-2:#EFE9DC;--text:#1C2733;--muted:#677585;
   --green:#1F7A4D;--green-50:#E6F4EC;--amber:#9A5B00;--amber-50:#FFF3DC;--red:#B3261E;--red-50:#FDECEA;
-  --violet:#5B3FB3;--violet-50:#EFEAFB;--grey-50:#EEF1F4;
+  --violet:#5B3FB3;--violet-50:#EFEAFB;--grey-50:#F1ECE2;
   --radius:14px;--shadow:0 1px 2px rgba(15,58,95,.05),0 4px 16px rgba(15,58,95,.05);
   --serif:Georgia,"Times New Roman",serif;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;

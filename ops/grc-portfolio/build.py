@@ -21,34 +21,34 @@ CSS = """
 body { font-family: 'DM Sans', Arial, sans-serif; color: #222; font-size: 10.2pt; line-height: 1.5; margin: 0; }
 h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; color: #0A2C48; line-height: 1.2; }
 h1 { font-size: 26pt; margin: 0 0 6mm; }
-h2 { font-size: 15pt; margin: 9mm 0 3mm; padding-bottom: 1.5mm; border-bottom: 1.5px solid #B7D9FA; break-after: avoid; }
+h2 { font-size: 15pt; margin: 9mm 0 3mm; padding-bottom: 1.5mm; border-bottom: 1.5px solid #E2D3AE; break-after: avoid; }
 h3 { font-size: 11.5pt; margin: 5mm 0 2mm; break-after: avoid; }
 p { margin: 0 0 2.6mm; }
 ul, ol { margin: 0 0 3mm; padding-left: 5.5mm; }
 li { margin-bottom: 1mm; }
 table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 8.6pt; }
 th { background: #0F3A5F; color: #fff; text-align: left; padding: 1.8mm 2mm; font-weight: 600; }
-td { border-bottom: 1px solid #dbe6f0; padding: 1.6mm 2mm; vertical-align: top; }
+td { border-bottom: 1px solid #E6DECD; padding: 1.6mm 2mm; vertical-align: top; }
 tr { break-inside: avoid; }
-tbody tr:nth-child(even) td { background: #F4F8FC; }
+tbody tr:nth-child(even) td { background: #FAF6EE; }
 .cover { height: 250mm; display: flex; flex-direction: column; justify-content: space-between; break-after: page; }
 .cover-top { border-top: 6px solid #0F3A5F; padding-top: 8mm; }
 .brand { display: flex; align-items: center; gap: 4mm; font-weight: 700; color: #0F3A5F; font-size: 11pt; }
 .brand img { width: 16mm; }
-.kicker { text-transform: uppercase; letter-spacing: .12em; font-size: 8.5pt; color: #1B6CA8; font-weight: 700; margin: 28mm 0 3mm; }
+.kicker { text-transform: uppercase; letter-spacing: .12em; font-size: 8.5pt; color: #1B4F78; font-weight: 700; margin: 28mm 0 3mm; }
 .sub { font-size: 12.5pt; color: #444; max-width: 150mm; }
 .meta { width: auto; font-size: 9pt; margin-top: 10mm; }
 .meta td { border: 0; padding: 1mm 6mm 1mm 0; background: none !important; }
 .meta td:first-child { color: #666; }
 .notice { border: 1.5px solid #C9A646; background: #FBF6E6; border-radius: 3mm; padding: 4mm 5mm; font-size: 9pt; }
 .notice strong { color: #93701F; }
-.callout { background: #EAF2F8; border-left: 4px solid #1B6CA8; padding: 3mm 4mm; margin: 3mm 0 4mm; break-inside: avoid; }
+.callout { background: #F3ECDD; border-left: 4px solid #1B4F78; padding: 3mm 4mm; margin: 3mm 0 4mm; break-inside: avoid; }
 .kpis { display: flex; gap: 3mm; margin: 3mm 0 5mm; }
-.kpi { flex: 1; border: 1px solid #dbe6f0; border-radius: 2.5mm; padding: 3mm; }
+.kpi { flex: 1; border: 1px solid #E6DECD; border-radius: 2.5mm; padding: 3mm; }
 .kpi b { display: block; font-family: 'Fraunces', Georgia, serif; font-size: 18pt; color: #0F3A5F; }
 .kpi span { font-size: 8pt; color: #555; }
-.bar { height: 3.2mm; background: #e6eef5; border-radius: 2mm; position: relative; overflow: hidden; }
-.bar i { position: absolute; left: 0; top: 0; bottom: 0; background: #1B6CA8; border-radius: 2mm; }
+.bar { height: 3.2mm; background: #EFE8DA; border-radius: 2mm; position: relative; overflow: hidden; }
+.bar i { position: absolute; left: 0; top: 0; bottom: 0; background: #1B4F78; border-radius: 2mm; }
 .bar s { position: absolute; top: -1mm; bottom: -1mm; width: 2px; background: #C9A646; }
 .pill { display: inline-block; padding: .3mm 2mm; border-radius: 5mm; font-size: 7.6pt; font-weight: 700; white-space: nowrap; }
 .Low { background: #DDF2E3; color: #1E6B3A; } .Medium { background: #FFF1C9; color: #7A5B00; }
@@ -61,7 +61,7 @@ tbody tr:nth-child(even) td { background: #F4F8FC; }
 .cols { display: flex; gap: 6mm; break-inside: avoid; } .cols > div { flex: 1; }
 .small { font-size: 8.4pt; color: #555; }
 .sig td { height: 12mm; }
-.check td:first-child { width: 7mm; font-size: 12pt; color: #1B6CA8; }
+.check td:first-child { width: 7mm; font-size: 12pt; color: #1B4F78; }
 .page-break { break-before: page; }
 """
 
@@ -337,10 +337,10 @@ from openpyxl.formatting.rule import CellIsRule, FormulaRule
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.utils import get_column_letter
 
-NAVY, PALE = '0F3A5F', 'EAF2F8'
+NAVY, PALE = '0F3A5F', 'F3ECDD'
 FILL = {'Low': 'DDF2E3', 'Medium': 'FFF1C9', 'High': 'FFD9B8', 'Critical': 'F8C9C9'}
 hdr_font, hdr_fill = Font(bold=True, color='FFFFFF'), PatternFill('solid', fgColor=NAVY)
-thin = Border(bottom=Side(style='thin', color='DBE6F0'))
+thin = Border(bottom=Side(style='thin', color='E6DECD'))
 wrap = Alignment(wrap_text=True, vertical='top')
 
 def header(ws, row, cols, widths=None):

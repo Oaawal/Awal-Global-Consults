@@ -64,7 +64,7 @@
       'background:#0A2C48;color:#F6F1E7;border-radius:14px;padding:16px 18px;box-shadow:0 20px 50px rgba(10,44,72,.35);' +
       'font:14px/1.5 "DM Sans",Arial,sans-serif;}' +
       '#agc-consent p{margin:0 0 12px;}' +
-      '#agc-consent a{color:#B7D9FA;text-decoration:underline;}' +
+      '#agc-consent a{color:#E9DCBF;text-decoration:underline;}' +
       '#agc-consent .agc-consent-actions{display:flex;gap:10px;flex-wrap:wrap;}' +
       '#agc-consent button{flex:1 1 120px;min-height:44px;border-radius:10px;font:600 14px "DM Sans",Arial,sans-serif;cursor:pointer;}' +
       '#agc-consent .agc-accept{background:#D4A72C;color:#0A2C48;border:0;}' +

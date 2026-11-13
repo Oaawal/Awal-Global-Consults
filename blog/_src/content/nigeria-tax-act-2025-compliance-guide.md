@@ -19,7 +19,7 @@ This guide covers what actually changed, which taxes apply to your specific type
 
 President Bola Ahmed Tinubu signed four connected bills into law on 26 June 2025, collectively known as the Tax Reform Acts. They took effect on 1 January 2026.
 
-![The four 2025 tax reform Acts and what each one governs](/assets/images/blog/tax-reform-four-acts.svg)
+![The four 2025 tax reform Acts and what each one governs](/assets/images/blog/tax-reform-four-acts.svg?v=2)
 caption: Four separate Acts, each doing a different job in the same reform.
 
 - **The Nigeria Tax Act (NTA)** repeals and consolidates the Companies Income Tax Act, Personal Income Tax Act, Petroleum Profits Tax Act, VAT Act, Capital Gains Tax Act, and Stamp Duties Act into one unified law. It sets the actual rates, exemptions, and reliefs.
@@ -70,7 +70,7 @@ VAT stays at **7.5%**, despite earlier proposals to raise it. What has changed i
 
 ## Filing deadlines you actually need to track
 
-![Recurring monthly tax filing deadlines under the new tax administration rules](/assets/images/blog/tax-filing-deadlines.svg)
+![Recurring monthly tax filing deadlines under the new tax administration rules](/assets/images/blog/tax-filing-deadlines.svg?v=2)
 caption: The recurring monthly cycle every registered business needs to plan around.
 
 - **PAYE**: remit by the 10th of the following month.

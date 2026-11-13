@@ -105,7 +105,7 @@ main = f'''  <section class="hero service-hero">
         <div class="content-card"><h3>You do not need to register if</h3><ul>{li(NOT_REQUIRED)}</ul>
           <p class="table-note">Not registering does not take you outside the NDPA: you still need a lawful basis, a privacy notice and proper security for any personal data you hold.</p></div>
       </div>
-      <div class="content-card" style="margin-top:22px;border-left:4px solid #C9A646;"><p style="margin:0;"><strong>The NDPC registration period has closed.</strong> Organisations registering now pay a 50% late penalty on top of the registration fee, and every day without registration adds to your regulatory risk. Register now rather than wait for the next cycle.</p></div>
+      <div class="content-card" style="margin-top:22px;border-left:4px solid #1B4F78;"><p style="margin:0;"><strong>The NDPC registration period has closed.</strong> Organisations registering now pay a 50% late penalty on top of the registration fee, and every day without registration adds to your regulatory risk. Register now rather than wait for the next cycle.</p></div>
       <div class="content-card" style="margin-top:22px;"><p style="margin:0;"><strong>Newly incorporated company?</strong> The NDPC waives late registration penalties for companies incorporated no more than six months before they apply. The waiver is requested by letter with the Certificate of Incorporation; we prepare and send it with your registration.</p></div>
     </div>
   </section>
@@ -251,7 +251,7 @@ meta = f'''<title>{e(TITLE)}</title>
 {schema}
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261113">
+  <link rel="stylesheet" href="style.css?v=20261113b">
 
   <meta property="og:title" content="{e(TITLE)}">
   <meta property="og:description" content="{e(DESC)}">
