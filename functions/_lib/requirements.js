@@ -141,7 +141,10 @@ export function missingForCase(c, docs) {
   try { f = JSON.parse(c.form_data || '{}') || {}; } catch (e) {}
   const services = String(c.services || '').split(',').map(s => s.trim()).filter(Boolean);
   const names = docs.map(d => d.file_name.toLowerCase());
-  const has = slug => names.some(n => n.startsWith(slug + '--'));
+  // An ID or passport photo uploaded under one service's box counts for the others too
+  const SAME = [/^valid-id|^nin-slip-or-valid-id/, /^passport-photograph/, /^cac-certificate/];
+  const has = slug => names.some(n => n.startsWith(slug + '--'))
+    || SAME.some(re => re.test(slug) && names.some(n => n.includes('--') && re.test(n)));
   const out = { details: [], documents: [], actions: [], unlabelled: names.filter(n => !n.includes('--') && !n.startsWith('signature-') && !n.startsWith('lga-certificate-')).length };
 
   if (!c.email) out.details.push('Client email address');

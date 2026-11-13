@@ -259,7 +259,7 @@ export function detailsFormEmail({ fullName, reference, services = '', link, not
 }
 
 // ── Case status update email to the client ──────────────────────
-export function caseStatusEmail({ fullName, reference, statusLabel, statusMessage, note, askForReview = false, uploadLink = null }) {
+export function caseStatusEmail({ fullName, reference, statusLabel, statusMessage, note, askForReview = false, uploadLink = null, documents = [] }) {
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Update on your request</h2>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(fullName || 'valued client')},</p>
@@ -269,6 +269,10 @@ export function caseStatusEmail({ fullName, reference, statusLabel, statusMessag
     </div>
     ${statusMessage ? `<p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${escapeHtml(statusMessage)}</p>` : ''}
     ${note ? `<div style="margin:14px 0;padding:12px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13.5px;line-height:1.7;color:${TEXT};white-space:pre-line;">${escapeHtml(note)}</div>` : ''}
+    ${documents.length ? `<div style="margin:16px 0;padding:14px 16px;background:${BG};border:1px solid ${BORDER};border-radius:8px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-bottom:8px;">Your documents</div>
+      ${documents.map(d => `<div style="margin:6px 0;"><a href="${escapeHtml(d.url)}" style="display:inline-block;background:${CTA};color:${NAVY};text-decoration:none;font-weight:700;padding:9px 16px;border-radius:8px;font-size:13.5px;">Download ${escapeHtml(d.name)}</a></div>`).join('')}
+      <div style="font-size:12px;color:${MUTED};margin-top:8px;">These links are private to you. You can also download them any time from awalglobal.com.ng/track.</div></div>` : ''}
     ${uploadLink ? `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${CTA};color:${NAVY};text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request.</div></div>` : ''}
     ${trackLinkHtml(reference)}
     ${askForReview ? `<div style="margin:18px 0;padding:14px 16px;background:${BG};border:1px solid ${BORDER};border-radius:8px;font-size:13.5px;line-height:1.7;color:${TEXT};">
@@ -320,7 +324,7 @@ function summarySection(title, rows, empty) {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">${body}</table>`;
 }
 
-export function dailySummaryEmail({ dateLabel, security = null, counts, newCases, waiting, inProgress, followUps, remindersSent, retentionDue, dashboardUrl, consultations = [], digest = null }) {
+export function dailySummaryEmail({ dateLabel, security = null, counts, newCases, waiting, inProgress, followUps, remindersSent, retentionDue, dashboardUrl, consultations = [], digest = null, atAgency = [] }) {
   const inner = `
     <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 4px;">Good morning</h2>
     <div style="font-size:13px;color:${MUTED};">${escapeHtml(dateLabel)} · in the last 24 hours: <strong>${counts.applications}</strong> new application${counts.applications === 1 ? '' : 's'}, <strong>${counts.enquiries}</strong> enquir${counts.enquiries === 1 ? 'y' : 'ies'}</div>
@@ -329,6 +333,7 @@ export function dailySummaryEmail({ dateLabel, security = null, counts, newCases
     ${summarySection('Follow-ups due', followUps)}
     ${summarySection('Waiting on the client', waiting)}
     ${summarySection('In progress', inProgress)}
+    ${summarySection('Chase the agency: waiting longer than usual', atAgency)}
     ${summarySection('Reminders sent to clients this morning', remindersSent)}
     ${digest ? `<div style="font-size:12.5px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:6px;padding:10px 14px;margin-top:20px;">Weekly guides email sent to <strong>${digest.sent}</strong> subscriber${digest.sent === 1 ? '' : 's'}${digest.remaining ? ` (${digest.remaining} more tomorrow)` : ''}.</div>` : ''}
     ${security && (security.signIns || security.failed) ? `<div style="font-size:12.5px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:6px;padding:10px 14px;margin-top:20px;">Dashboard sign-ins in the last 24 hours: <strong>${security.signIns}</strong>${security.failed ? ` · <strong style="color:#8a1212;">${security.failed} wrong code${security.failed === 1 ? '' : 's'}</strong>` : ''}.</div>` : ''}

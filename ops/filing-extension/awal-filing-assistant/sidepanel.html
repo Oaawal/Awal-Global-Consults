@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Awal Filing Assistant</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header class="top">
+    <img src="icons/icon-32.png" width="22" height="22" alt="">
+    <div><strong>Awal Filing Assistant</strong><span id="who" class="muted"></span></div>
+  </header>
+
+  <section id="setup" hidden>
+    <h2>Connect this browser</h2>
+    <p class="muted">On the dashboard, open <b>Clients → Filing assistant</b>, make a connection key for this browser and paste it here.</p>
+    <label for="key">Connection key</label>
+    <input id="key" autocomplete="off" spellcheck="false" placeholder="agcx_…">
+    <details class="adv"><summary>Advanced</summary>
+      <label for="base">Website</label><input id="base" value="https://awalglobal.com.ng">
+    </details>
+    <button id="connect" class="gold">Connect</button>
+    <p id="setup-msg" class="msg" role="status"></p>
+  </section>
+
+  <section id="main" hidden>
+    <div id="picker">
+      <label for="q">Find a case</label>
+      <input id="q" type="search" placeholder="Reference, name or proposed business name">
+      <div id="results" class="results"></div>
+    </div>
+
+    <div id="case" hidden>
+      <div class="case-head">
+        <div><div id="c-ref" class="ref"></div><div id="c-name" class="name"></div><div id="c-svc" class="muted small"></div></div>
+        <button id="change" class="ghost sm">Change</button>
+      </div>
+      <div id="missing" class="warn" hidden></div>
+
+      <div class="toolbar">
+        <button id="fill-business" class="gold">Fill business details on this page</button>
+        <div class="row">
+          <select id="person" aria-label="Person"></select>
+          <button id="fill-person" class="gold">Fill person</button>
+        </div>
+        <button id="clear" class="ghost sm">Remove gold outlines</button>
+      </div>
+      <p id="status" class="msg" role="status"></p>
+      <p class="tip">Or click into a box on the page, then click a value below to put it there. The assistant remembers that box for next time.</p>
+
+      <div id="sections"></div>
+
+      <h3>Documents</h3>
+      <div class="row small"><label for="limit">Shrink photos to</label>
+        <select id="limit"><option value="204800">200 KB</option><option value="512000">500 KB</option><option value="1048576" selected>1 MB</option><option value="2097152">2 MB</option><option value="0">No limit</option></select></div>
+      <div id="docs"></div>
+      <div id="boxes" class="boxes" hidden></div>
+    </div>
+    <footer>
+      <p class="muted small">It never presses Submit or pays. Check every page before you submit.</p>
+      <button id="disconnect" class="link small">Disconnect this browser</button>
+    </footer>
+  </section>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

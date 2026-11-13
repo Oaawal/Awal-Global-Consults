@@ -69,9 +69,11 @@ export const isStep = key => STEPS.some(s => s.key === key);
  */
 export function serviceProgress(servicesText, events) {
   const services = String(servicesText || '').split(',').map(s => s.trim()).filter(Boolean);
-  const latest = new Map();
-  for (const e of [...(events || [])].filter(e => e.event === 'service_progress').sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)))) {
-    latest.set(e.from_status, e);
+  const latest = new Map(), refs = new Map();
+  const ordered_ = [...(events || [])].sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)));
+  for (const e of ordered_) {
+    if (e.event === 'service_progress') latest.set(e.from_status, e);
+    if (e.event === 'service_ref') refs.set(e.from_status, e.to_status);
   }
   // Order: anything a service needs comes before it (stable otherwise)
   const ordered = [], seen = new Set();
@@ -80,7 +82,7 @@ export function serviceProgress(servicesText, events) {
   const rows = ordered.map(service => {
     const ev = latest.get(service);
     const step = stepInfo(service, ev ? ev.to_status : 'not_started');
-    return { service, agency: agencyOf(service), step: step.key, label: step.label, note: ev ? ev.note : '', at: ev ? ev.created_at : null };
+    return { service, agency: agencyOf(service), step: step.key, label: step.label, note: ev ? ev.note : '', at: ev ? ev.created_at : null, reference: refs.get(service) || '' };
   });
   const byName = new Map(rows.map(r => [r.service, r]));
   for (const r of rows) {
@@ -88,4 +90,18 @@ export function serviceProgress(servicesText, events) {
     r.done = DONE.has(r.step);
   }
   return rows;
+}
+
+/**
+ * How long an application can sit with each agency before it is worth chasing (days).
+ * Used by the morning summary to list services "submitted" or "queried" for longer than this.
+ */
+const CHASE_AFTER = { CAC: 5, NRS: 7, SCUML: 10, 'the NDPC': 14, 'the Trademarks Registry': 30 };
+export const chaseAfterDays = agency => CHASE_AFTER[agency] || 14;
+
+/** Services waiting on an agency for longer than usual: [{ service, agency, label, days, reference }] */
+export function overdueAtAgency(rows, now = new Date()) {
+  return rows.filter(r => ['submitted', 'query'].includes(r.step) && r.at)
+    .map(r => ({ ...r, days: Math.floor((now - new Date(r.at)) / 86400000) }))
+    .filter(r => r.days >= chaseAfterDays(r.agency));
 }

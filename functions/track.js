@@ -6,6 +6,7 @@
  */
 import { statusInfo, statusesFor } from './_lib/cases.js';
 import { serviceProgress } from './_lib/service-progress.js';
+import { deliveredUrl } from './_lib/upload-links.js';
 import { esc } from './_lib/admin-views.js';
 
 const MAX_FAILED_PER_HOUR = 10;
@@ -58,7 +59,7 @@ button,.btn{display:inline-block;font:inherit;font-weight:700;padding:11px 18px;
 .btn.wa{background:#25d366}
 .err{background:#fdf0f0;color:#c0392b;border-radius:10px;padding:10px 14px;margin-bottom:12px}
 .ref{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--blue)}
-.svc-title{font-size:15px;color:var(--navy);margin:18px 0 8px}.svc{list-style:none;padding:0;margin:0 0 14px}.svc li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid #e5e7eb;font-size:14px}.svc li span{color:#667085;text-align:right}.svc li.now span{color:var(--navy);font-weight:600}.svc li.done span{color:#15803d;font-weight:600}
+.svc-title{font-size:15px;color:var(--navy);margin:18px 0 8px}.svc{list-style:none;padding:0;margin:0 0 14px}.svc li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid #e5e7eb;font-size:14px}.svc li span{color:#667085;text-align:right}.svc li.now span{color:var(--navy);font-weight:600}.svc li.done span{color:#15803d;font-weight:600}.svc-ref{display:block;font-weight:400;font-size:12px;color:#667085;margin-top:2px}.svc a{color:var(--navy);font-weight:700}
 .status{font-size:22px;font-weight:700;color:var(--navy);margin:2px 0 6px}
 .steps{list-style:none;margin:16px 0 0;padding:0}
 .steps li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;color:var(--muted)}
@@ -95,7 +96,7 @@ function formHtml({ reference = '', email = '', error = '' } = {}) {
   <p class="meta">Can't find your reference? <a href="https://wa.me/2347038336596?text=${encodeURIComponent('Hello, I want to check the status of my application')}">Ask us on WhatsApp</a>.</p>`;
 }
 
-function resultHtml(c, events = []) {
+function resultHtml(c, events = [], delivered = []) {
   const info = statusInfo(c.kind, c.status);
   // Main path of stages up to delivery; side stages only appear while they are current
   const path = statusesFor(c.kind).filter(s =>
@@ -114,6 +115,7 @@ function resultHtml(c, events = []) {
     <p class="meta">${esc(c.services || '')}<br>Submitted ${fmtDay(c.created_at)} · last update ${fmtDay(c.status_changed_at || c.created_at)}</p>
     <ul class="steps">${steps}</ul>
     ${servicesHtml(c, events)}
+    ${delivered.length ? `<h2 class="svc-title">Your documents</h2><ul class="svc">${delivered.map(d => `<li><strong>${esc(d.name)}</strong><span><a href="${esc(d.url)}">Download</a></span></li>`).join('')}</ul>` : ''}
     <a class="btn wa" href="https://wa.me/2347038336596?text=${encodeURIComponent(`Hello, about my application ${c.reference}`)}">Ask about this on WhatsApp</a>
   </div>
   <p class="meta"><a href="/track">Check another reference</a></p>`;
@@ -125,7 +127,7 @@ function servicesHtml(c, events) {
   const rows = serviceProgress(c.services, events).filter(r => r.step !== 'not_needed');
   if (rows.length < 1) return '';
   return `<h2 class="svc-title">Your services</h2><ul class="svc">${rows.map(r => `<li class="${r.done ? 'done' : r.step === 'not_started' ? '' : 'now'}">
-      <strong>${esc(r.service)}</strong><span>${esc(r.step === 'not_started' && r.waitingFor.length ? `Starts after ${r.waitingFor.join(' and ')}` : r.label)}</span></li>`).join('')}</ul>`;
+      <strong>${esc(r.service)}${r.reference ? `<small class="svc-ref">Reference ${esc(r.reference)}</small>` : ''}</strong><span>${esc(r.step === 'not_started' && r.waitingFor.length ? `Starts after ${r.waitingFor.join(' and ')}` : r.label)}</span></li>`).join('')}</ul>`;
 }
 
 export async function onRequestGet() {
@@ -163,6 +165,10 @@ export async function onRequestPost(context) {
 
   await env.DB.prepare("INSERT INTO audit_log (at, actor, action, entity_type, entity_id, detail, ip) VALUES (?1, 'client', 'case.tracked', 'case', ?2, ?3, ?4)")
     .bind(now, c.id, JSON.stringify({ reference: c.reference }), ip).run();
-  const events = (await env.DB.prepare("SELECT event, from_status, to_status, created_at FROM case_events WHERE case_id = ?1 AND event = 'service_progress'").bind(c.id).all()).results || [];
-  return new Response(layout(resultHtml(c, events)), { headers: HEADERS });
+  const [evRes, docRes] = await env.DB.batch([
+    env.DB.prepare("SELECT event, from_status, to_status, created_at FROM case_events WHERE case_id = ?1 AND event IN ('service_progress', 'service_ref')").bind(c.id),
+    env.DB.prepare("SELECT id, file_name FROM documents WHERE case_id = ?1 AND deleted_at IS NULL AND file_name LIKE 'delivered-%' ORDER BY uploaded_at").bind(c.id)
+  ]);
+  const delivered = await Promise.all((docRes.results || []).map(async d => ({ name: d.file_name.replace(/^delivered-[a-z0-9-]*--/, ''), url: await deliveredUrl(env, d.id, new URL(request.url).origin) })));
+  return new Response(layout(resultHtml(c, evRes.results || [], delivered)), { headers: HEADERS });
 }

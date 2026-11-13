@@ -206,3 +206,109 @@ export const APP_SCRIPT = `
   render();
 })();
 `;
+
+// Filing pack tab: copy buttons, "Copy all", and one zip of the documents renamed for the portal
+// (photos over the size limit are shrunk here in the browser, so the server does no image work).
+// Written without template literals so it can sit inside String.raw.
+export const FILING_SCRIPT = String.raw`
+(function () {
+  function flash(btn, text) { var old = btn.innerHTML; btn.textContent = text; setTimeout(function () { btn.innerHTML = old; }, 1400); }
+  function copyText(text, btn) {
+    var done = function () { flash(btn, 'Copied'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function () { fallback(); });
+    else fallback();
+    function fallback() { var t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); done(); } catch (e) {} t.remove(); }
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-copy]');
+    if (b) { copyText(b.getAttribute('data-copy'), b); return; }
+    var all = e.target.closest('[data-copy-all]');
+    if (all) {
+      var box = document.getElementById(all.getAttribute('data-copy-all'));
+      if (!box) return;
+      var lines = Array.prototype.map.call(box.querySelectorAll('.fp-row'), function (r) {
+        var l = r.querySelector('.fp-label').firstChild.textContent.trim();
+        return l + ': ' + r.querySelector('[data-copy]').getAttribute('data-copy');
+      });
+      copyText(lines.join('\n'), all);
+    }
+  });
+
+  var zipBtn = document.getElementById('fp-zip');
+  if (!zipBtn) return;
+  var status = document.getElementById('fp-zip-status');
+  var limitSel = document.getElementById('fp-limit');
+  try { var saved = localStorage.getItem('agc_fp_limit'); if (saved) limitSel.value = saved; } catch (e) {}
+  limitSel.addEventListener('change', function () { try { localStorage.setItem('agc_fp_limit', limitSel.value); } catch (e) {} });
+
+  var CRC = (function () { var t = new Uint32Array(256); for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  function crc32(u8) { var c = 0xFFFFFFFF; for (var i = 0; i < u8.length; i++) c = CRC[(c ^ u8[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  // Stored (uncompressed) zip: documents are already compressed formats
+  function makeZip(files) {
+    var enc = new TextEncoder(), parts = [], central = [], offset = 0;
+    var d = new Date(), dosTime = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1), dosDate = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    files.forEach(function (f) {
+      var name = enc.encode(f.name), crc = crc32(f.data), size = f.data.length;
+      var h = new DataView(new ArrayBuffer(30));
+      h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true);
+      h.setUint16(10, dosTime, true); h.setUint16(12, dosDate, true); h.setUint32(14, crc, true); h.setUint32(18, size, true); h.setUint32(22, size, true);
+      h.setUint16(26, name.length, true); h.setUint16(28, 0, true);
+      parts.push(new Uint8Array(h.buffer), name, f.data);
+      var cd = new DataView(new ArrayBuffer(46));
+      cd.setUint32(0, 0x02014b50, true); cd.setUint16(4, 20, true); cd.setUint16(6, 20, true); cd.setUint16(8, 0x0800, true); cd.setUint16(10, 0, true);
+      cd.setUint16(12, dosTime, true); cd.setUint16(14, dosDate, true); cd.setUint32(16, crc, true); cd.setUint32(20, size, true); cd.setUint32(24, size, true);
+      cd.setUint16(28, name.length, true); cd.setUint32(42, offset, true);
+      central.push(new Uint8Array(cd.buffer), name);
+      offset += 30 + name.length + size;
+    });
+    var cdSize = central.reduce(function (t, p) { return t + p.length; }, 0);
+    var end = new DataView(new ArrayBuffer(22));
+    end.setUint32(0, 0x06054b50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true);
+    end.setUint32(12, cdSize, true); end.setUint32(16, offset, true);
+    return new Blob(parts.concat(central, [new Uint8Array(end.buffer)]), { type: 'application/zip' });
+  }
+  // Shrink a photo to under the limit: lower JPEG quality, then smaller dimensions
+  async function shrink(blob, limit) {
+    var bmp = await createImageBitmap(blob);
+    var w = bmp.width, h = bmp.height, scale = Math.min(1, 2000 / Math.max(w, h));
+    for (var round = 0; round < 8; round++) {
+      var cv = document.createElement('canvas'); cv.width = Math.round(w * scale); cv.height = Math.round(h * scale);
+      var ctx = cv.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cv.width, cv.height); ctx.drawImage(bmp, 0, 0, cv.width, cv.height);
+      for (var q = 0.9; q >= 0.5; q -= 0.1) {
+        var out = await new Promise(function (res) { cv.toBlob(res, 'image/jpeg', q); });
+        if (out && out.size <= limit) return out;
+      }
+      scale *= 0.8;
+    }
+    return null;
+  }
+  zipBtn.addEventListener('click', async function () {
+    var items = Array.prototype.slice.call(document.querySelectorAll('.fp-doc'));
+    var limit = Number(limitSel.value) || 0, files = [], notes = [];
+    zipBtn.disabled = true;
+    try {
+      for (var i = 0; i < items.length; i++) {
+        var el = items[i], name = el.getAttribute('data-doc-name');
+        status.textContent = 'Preparing ' + (i + 1) + ' of ' + items.length + '…';
+        var r = await fetch('/admin/doc/' + el.getAttribute('data-doc-id'), { credentials: 'same-origin' });
+        if (!r.ok) { notes.push(name + ' could not be fetched'); continue; }
+        var blob = await r.blob();
+        if (limit && blob.size > limit) {
+          if (/\.(jpg|jpeg|png)$/i.test(name)) {
+            var small = await shrink(blob, limit).catch(function () { return null; });
+            if (small) { blob = small; name = name.replace(/\.(png|jpeg)$/i, '.jpg'); }
+            else notes.push(name + ' is still over the limit');
+          } else notes.push(name + ' is over the limit (PDF not changed)');
+        }
+        files.push({ name: name, data: new Uint8Array(await blob.arrayBuffer()) });
+      }
+      var zip = makeZip(files);
+      var a = document.createElement('a'); a.href = URL.createObjectURL(zip); a.download = zipBtn.getAttribute('data-zip-name');
+      document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+      status.textContent = 'Downloaded ' + files.length + ' file' + (files.length === 1 ? '' : 's') + '.' + (notes.length ? ' Check: ' + notes.join('; ') + '.' : '');
+    } catch (e) {
+      status.textContent = 'The zip could not be made: ' + (e && e.message || e) + '. Download the files one by one instead.';
+    } finally { zipBtn.disabled = false; }
+  });
+})();
+`;

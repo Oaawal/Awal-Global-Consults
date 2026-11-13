@@ -18,6 +18,7 @@ import { caseReminderEmail, dailySummaryEmail, bookingReminderEmail, digestEmail
 import { sendBrevoBatch } from './brevo.js';
 import { CONSULT_TYPES, MODES, fmtLagos, feeText } from './booking.js';
 import { statusInfo, SITE_URL } from './cases.js';
+import { serviceProgress, overdueAtAgency } from './service-progress.js';
 import { backupDatabase } from './compliance.js';
 import { backupDocuments, verifyBackups, recentSignIns } from './security.js';
 import { securityAlertEmail } from './email-templates.js';
@@ -247,14 +248,32 @@ export async function runDailyJob(env, request, { now = new Date() } = {}) {
   const counts = { applications: (countRes.results || [])[0]?.applications || 0, enquiries: (countRes.results || [])[0]?.enquiries || 0 };
   const retentionDue = (retentionRes.results || [])[0]?.n || 0;
 
+  // Services sitting with an agency (submitted or queried) longer than usual: time to chase
+  const atAgency = [];
+  try {
+    const evRows = (await env.DB.prepare(
+      `SELECT c.id, c.reference, c.services, cl.full_name, e.event, e.from_status, e.to_status, e.note, e.created_at
+       FROM case_events e JOIN cases c ON c.id = e.case_id JOIN clients cl ON cl.id = c.client_id
+       WHERE e.event IN ('service_progress', 'service_ref') AND c.purged_at IS NULL
+         AND c.status NOT IN ('closed', 'cancelled', 'converted', 'delivered')`).all()).results || [];
+    const byCase = new Map();
+    for (const r of evRows) { if (!byCase.has(r.id)) byCase.set(r.id, { c: r, events: [] }); byCase.get(r.id).events.push(r); }
+    for (const { c, events } of byCase.values()) {
+      for (const r of overdueAtAgency(serviceProgress(c.services, events), now)) {
+        atAgency.push({ reference: c.reference, name: c.full_name, url: caseUrl(c.id),
+          detail: `${r.service}: ${r.label} ${r.days} days ago${r.reference ? ` · ref ${r.reference}` : ''}` });
+      }
+    }
+  } catch (err) { console.error('daily job: agency check failed:', err && err.message); }
+
   const signIns24 = await recentSignIns(env, dayAgo, 50);
   const security = { signIns: signIns24.filter(r => r.ok).length, failed: signIns24.filter(r => !r.ok).length };
-  const hasNews = security.failed || consultations.length || digest || newCases.length || followUps.length || waiting.length || inProgress.length || remindersSent.length || retentionDue
+  const hasNews = atAgency.length || security.failed || consultations.length || digest || newCases.length || followUps.length || waiting.length || inProgress.length || remindersSent.length || retentionDue
     || counts.applications || counts.enquiries;
   let summarySent = false;
   if (hasNews) {
     const dateLabel = new Date(now).toLocaleDateString('en-GB', { timeZone: 'Africa/Lagos', weekday: 'long', day: 'numeric', month: 'long' });
-    const html = dailySummaryEmail({ dateLabel, security, counts, newCases, waiting, inProgress, followUps, remindersSent, retentionDue, consultations, digest, dashboardUrl: `${SITE_URL}/admin/` });
+    const html = dailySummaryEmail({ dateLabel, security, counts, newCases, waiting, inProgress, followUps, remindersSent, retentionDue, consultations, digest, atAgency, dashboardUrl: `${SITE_URL}/admin/` });
     for (const email of adminEmails(env)) {
       try {
         await sendBrevoEmail(env, {

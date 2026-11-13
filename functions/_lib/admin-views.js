@@ -34,6 +34,8 @@ const FLASH = {
   service_sent: ['ok', 'Service updated and the client emailed.'],
   service_no_email: ['ok', 'Service updated. The client has no email address, so let them know on WhatsApp.'],
   service_send_failed: ['err', 'Service updated, but the email could not be sent. Let the client know on WhatsApp.'],
+  ext_revoked: ['ok', 'Disconnected. That browser can no longer read case details.'],
+  service_file_bad: ['err', 'Nothing was saved: a file was not a real PDF, JPG or PNG, or was over 7MB.'],
   service_early: ['ok', 'Service updated. Note: it was marked as moving before the services it depends on were finished.'],
   status_emailed: ['ok', 'Status updated and the client was emailed.'],
   status_email_failed: ['err', 'Status updated, but the email to the client could not be sent.'],
@@ -275,12 +277,13 @@ function eventLabel(e, kind) {
 const CASE_TABS = [
   { key: 'summary', label: 'Summary' },
   { key: 'documents', label: 'Documents' },
+  { key: 'filing', label: 'Filing pack' },
   { key: 'billing', label: 'Billing' },
   { key: 'activity', label: 'Activity' },
   { key: 'records', label: 'Records' }
 ];
 
-export function casePage({ admin, badges, c, tab, docs, archivedDocs = [], events, flash, uploadLink = null, missing = null, billing = null, payment = null, detailsLink = null }) {
+export function casePage({ admin, badges, c, tab, docs, archivedDocs = [], events, flash, uploadLink = null, missing = null, billing = null, payment = null, detailsLink = null, pack = null }) {
   const wa = whatsappLink(c.phone);
   const purged = !!c.purged_at;
   const tabs = CASE_TABS.map(t => `<a class="${t.key === tab ? 'on' : ''}" href="/admin/case/${esc(c.id)}${t.key === 'summary' ? '' : `?tab=${t.key}`}">${esc(t.label)}${t.key === 'documents' && docs.length ? ` (${docs.length})` : ''}</a>`).join('');
@@ -306,6 +309,7 @@ export function casePage({ admin, badges, c, tab, docs, archivedDocs = [], event
   let body = '';
   if (tab === 'billing' && billing) body = billingTab({ c, ...billing });
   else if (tab === 'documents') body = caseDocuments(c, docs, uploadLink, archivedDocs);
+  else if (tab === 'filing') body = filingTab(c, pack);
   else if (tab === 'activity') body = caseActivity(c, events);
   else if (tab === 'records') body = caseRecords(c);
   else body = caseSummary(c, uploadLink, missing, payment, detailsLink, events);
@@ -435,13 +439,16 @@ function servicesCard(c, events) {
     <p class="small muted" style="margin-top:0">Track each service separately, in the order the work has to happen.${rows.length > 1 ? ' Services that depend on another show what they are waiting for.' : ''}</p>
     ${rows.map(r => `<div class="svc-row">
       <div class="svc-head"><div><strong>${esc(r.service)}</strong><div class="small muted">${esc(r.agency.replace(/^the /, ''))}${r.at ? ` · updated ${esc(fmtDay(r.at))}` : ''}</div></div>${pill(r.label, tone[r.step] || 'grey')}</div>
+      ${r.reference ? `<div class="small" style="margin-top:4px">Agency reference: <strong>${esc(r.reference)}</strong></div>` : ''}
       ${r.note ? `<div class="small" style="margin-top:4px">${esc(r.note)}</div>` : ''}
       ${r.waitingFor.length && !r.done ? `<div class="small svc-wait">Waiting for: ${esc(r.waitingFor.join(', '))}</div>` : ''}
       ${isOpen(c.status) ? `<details class="svc-edit"><summary class="small">Update</summary>
-        <form method="post" action="/admin/case/${esc(c.id)}/service">
+        <form method="post" action="/admin/case/${esc(c.id)}/service" enctype="multipart/form-data">
           <input type="hidden" name="service" value="${esc(r.service)}">
           <label>Step</label><select name="step">${STEPS.map(s => { const i = stepInfo(r.service, s.key); return `<option value="${s.key}"${s.key === r.step ? ' selected' : ''}>${esc(i.label)}</option>`; }).join('')}</select>
-          <label>Note <span class="small muted">(optional: agency reference, query details, RC/TIN number)</span></label><input name="note" maxlength="300">
+          <label>Agency reference <span class="small muted">(e.g. CAC application number, RC/BN, TIN, SCUML number)</span></label><input name="ref" maxlength="80" value="${esc(r.reference)}">
+          <label>Note <span class="small muted">(optional: query details, what was said)</span></label><input name="note" maxlength="300">
+          <label>Give the client their documents <span class="small muted">(certificate, status report, TIN slip: PDF, JPG or PNG)</span></label><input type="file" name="files" multiple accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
           ${c.email ? `<label class="check"><input type="checkbox" name="notify" value="1"> Email the client about this step</label>` : ''}
           <div class="btn-row"><button class="btn sm" type="submit">Save</button></div>
         </form></details>` : ''}
@@ -610,7 +617,7 @@ export function clientsPage({ admin, badges, rows, q }) {
       <div class="row-side"><span class="small muted">${r.cases} case${r.cases === 1 ? '' : 's'}</span><span class="small muted">${esc(ago(r.last_activity))}</span></div></a>`).join('')}</div>`
     : `<div class="card-body">${emptyState('clients', q ? 'No clients match your search' : 'No clients yet')}</div>`;
   return shell({ title: 'Clients', active: 'clients', admin, badges, body: `
-    ${pageHead('Clients', 'Everyone who has applied or enquired, matched by email address', '<a class="btn sm" href="/admin/import">Add past clients</a>')}
+    ${pageHead('Clients', 'Everyone who has applied or enquired, matched by email address', '<a class="btn ghost sm" href="/admin/extension">Filing assistant</a> <a class="btn sm" href="/admin/import">Add past clients</a>')}
     <form class="toolbar" method="get" action="/admin/clients">
       <div class="search">${icon('search', 18)}<input name="q" type="search" placeholder="Search name, email or phone" value="${esc(q)}"></div>
       <button class="btn ghost" type="submit">Search</button>
@@ -959,4 +966,96 @@ export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices,
       <div class="btn-row"><button class="btn ghost sm" type="submit">Save VAT setting</button></div></form></div></div>`;
 
   return `<div class="card"><div class="card-head"><h2>Quotations, invoices and receipts</h2></div>${rows}</div>${form}${vat}`;
+}
+
+
+/**
+ * Filing pack: every value the agency portal will ask for, in filing order, each with a
+ * copy button; documents renamed for the portal and downloadable as one zip (photos shrunk
+ * to the size limit in the browser); and what is still missing.
+ */
+function filingTab(c, pack) {
+  if (c.purged_at) return `<div class="card"><div class="card-body">${emptyState('trash', 'Erased', 'This case has no details left to file.')}</div></div>`;
+  if (!pack) return '';
+  const row = (f, prefix = '') => `<div class="fp-row">
+      <div class="fp-label">${esc(f.label)}${f.hint ? `<span class="fp-hint">${esc(f.hint)}</span>` : ''}</div>
+      <div class="fp-value">${esc(f.value).replace(/\n/g, '<br>')}</div>
+      <button type="button" class="btn ghost sm fp-copy" data-copy="${esc(f.value)}" aria-label="Copy ${esc(prefix + f.label)}">${icon('doc', 15)}Copy</button>
+    </div>`;
+  const m = pack.missing || { details: [], documents: [], actions: [] };
+  const gaps = [...m.details, ...m.documents];
+  const checklist = `<div class="card"><div class="card-head"><h2>${gaps.length ? `Before you file: ${gaps.length} item${gaps.length === 1 ? '' : 's'} missing` : 'Ready to file'}</h2></div><div class="card-body">
+      ${gaps.length ? `<ul class="small" style="margin:0;padding-left:18px;line-height:1.7">${gaps.map(g => `<li>${esc(g)}</li>`).join('')}</ul>
+        <p class="small muted" style="margin:10px 0 0">Ask for these from the <a href="/admin/case/${esc(c.id)}#missing">Summary tab</a>, or type details given by WhatsApp into the business details form there.</p>`
+        : `<p class="small" style="margin:0">${icon('check', 16)} Every detail and document the services need is on file.</p>`}
+      ${m.actions.length ? `<p class="small" style="margin:10px 0 0"><strong>For you to do:</strong> ${esc(m.actions.join('; '))}</p>` : ''}
+    </div></div>`;
+  const services = `<div class="card"><div class="card-head"><h2>Filing for</h2></div><div class="card-body">
+      <div class="fp-services">${pack.services.map(s => `<span class="pill blue">${esc(s.service)} &middot; ${esc(s.agency)}</span>`).join('')}</div>
+      <p class="small muted" style="margin:12px 0 0">Copy each value into the portal, or open the portal in Chrome and use the <a href="/admin/extension">Awal Filing Assistant</a> extension to fill the boxes and attach the documents for you. You still check everything and press Submit yourself.</p>
+    </div></div>`;
+  const sections = pack.sections.map(sec => `<div class="card"><div class="card-head"><h2>${esc(sec.title)}</h2>
+      <button type="button" class="btn ghost sm" data-copy-all="fp-${esc(sec.id)}">Copy all</button></div>
+      <div class="card-body fp-list" id="fp-${esc(sec.id)}">${sec.fields.map(f => row(f)).join('')}</div></div>`).join('');
+  const people = pack.people.map(p => `<div class="card"><div class="card-head"><h2>Person ${p.index}: ${esc(p.name)}${p.role ? ` <span class="muted small">(${esc(p.role)})</span>` : ''}</h2>
+      <button type="button" class="btn ghost sm" data-copy-all="fp-person-${p.index}">Copy all</button></div>
+      <div class="card-body fp-list" id="fp-person-${p.index}">${p.fields.map(f => row(f, `person ${p.index} `)).join('')}</div></div>`).join('');
+  const docs = pack.documents;
+  const docsCard = `<div class="card"><div class="card-head"><h2>Documents (${docs.length})</h2></div><div class="card-body">
+      ${docs.length ? `<p class="small muted" style="margin-top:0">Renamed for the portal. The zip shrinks photos (JPG and PNG) that are over the size limit; PDFs are left as they are and flagged if too big.</p>
+      <div class="fp-zip">
+        <label for="fp-limit" class="small">Size limit per file</label>
+        <select id="fp-limit"><option value="204800">200 KB</option><option value="512000">500 KB</option><option value="1048576" selected>1 MB</option><option value="2097152">2 MB</option><option value="0">No limit</option></select>
+        <button type="button" class="btn" id="fp-zip" data-zip-name="${esc(c.reference)}-filing-documents.zip">${icon('download', 18)}Download all as zip</button>
+        <span class="small muted" id="fp-zip-status" role="status"></span>
+      </div>
+      <div class="fp-docs">${docs.map(d => `<div class="doc fp-doc" data-doc-id="${esc(d.id)}" data-doc-name="${esc(d.portal_name)}" data-doc-size="${d.size_bytes}">
+          <span class="doc-ic ${/^(jpg|png)$/.test(d.ext) ? 'img' : ''}">${icon('doc', 20)}</span>
+          <div class="row-main"><div class="row-title">${esc(d.portal_name)}</div>
+            <div class="small muted">${esc(d.what)} · ${fmtSize(d.size_bytes)} · uploaded as ${esc(d.file_name)}</div></div>
+          <a class="btn ghost sm" href="/admin/doc/${esc(d.id)}?download=${encodeURIComponent(d.portal_name)}">Download</a></div>`).join('')}</div>`
+      : emptyState('doc', 'No documents yet', 'Ask the client to upload them with their private link (Summary tab).')}
+    </div></div>`;
+  return `<div class="fp">${services}${checklist}${sections}${people}${docsCard}</div><script src="/admin/filing.js" defer></script>`;
+}
+
+
+/** Connect the Awal Filing Assistant browser extension: install steps and connection keys. */
+export function extensionPage({ admin, badges, flash, keys = [], newKey = null }) {
+  const keyCard = newKey ? `<div class="card" style="border:2px solid var(--cta)"><div class="card-head"><h2>Connection key for ${esc(newKey.label)}</h2></div><div class="card-body">
+      <p class="small" style="margin-top:0"><strong>Copy it now.</strong> It is shown only once. Paste it into the extension's side panel on that browser.</p>
+      <div class="btn-row" style="align-items:center"><input readonly value="${esc(newKey.key)}" style="flex:1;min-width:0;font-family:ui-monospace,monospace;font-size:13px" aria-label="Connection key">
+        <button type="button" class="btn sm" data-copy="${esc(newKey.key)}">Copy</button></div>
+      <p class="small muted" style="margin:10px 0 0">Anyone with this key can read case details and documents (not change them) until you disconnect it below. Keep it to your own computer.</p>
+    </div></div><script src="/admin/filing.js" defer></script>` : '';
+  const list = keys.length ? keys.map(k => `<div class="doc"><span class="doc-ic">${icon('lock', 20)}</span>
+      <div class="row-main"><div class="row-title">${esc(k.label)}</div><div class="small muted">Made by ${esc(k.by)} ${esc(fmtDate(k.created_at))} · ${k.last_used ? `last used ${esc(ago(k.last_used))}` : 'not used yet'}</div></div>
+      <form method="post" action="/admin/extension/revoke" data-confirm="Disconnect ${esc(k.label)}? The extension there stops working until it gets a new key."><input type="hidden" name="id" value="${esc(k.id)}"><button class="btn ghost sm danger" type="submit">Disconnect</button></form></div>`).join('')
+    : `<p class="small muted" style="margin:0">No browsers connected yet.</p>`;
+  return shell({ title: 'Filing assistant', active: 'records', admin, badges, body: `
+    ${pageHead('Filing assistant', 'Fill agency portals from a case with the browser extension. You still check and submit.', '')}
+    ${flashHtml(flash)}
+    ${keyCard}
+    <div class="card"><div class="card-head"><h2>What it does</h2></div><div class="card-body small" style="line-height:1.7">
+      <p style="margin-top:0">A Chrome (or Edge) extension that sits beside an agency portal (CAC, SCUML, NRS, NDPC) and fills it from a case's filing pack.</p>
+      <ul style="padding-left:18px;margin:0">
+        <li><strong>Fill this page</strong> fills every box it recognises and outlines each one it filled in gold. Boxes it is unsure of are left for you.</li>
+        <li>Click into any box on the portal, then click a value in the panel to put it there. It remembers that box for next time on the same portal.</li>
+        <li><strong>Attach</strong> puts a case document straight into an upload box (photos are shrunk to the size limit you choose).</li>
+        <li>It never presses Submit or pays. You check the page and submit yourself.</li>
+      </ul></div></div>
+    <div class="card"><div class="card-head"><h2>Install (once per computer)</h2></div><div class="card-body small" style="line-height:1.7">
+      <ol style="padding-left:18px;margin:0">
+        <li><a href="/downloads/tools/awal-filing-assistant.zip">Download the extension</a> and unzip it into a folder you will keep (for example Documents).</li>
+        <li>In Chrome open <strong>chrome://extensions</strong> (Edge: edge://extensions) and turn on <strong>Developer mode</strong> (top right).</li>
+        <li>Click <strong>Load unpacked</strong> and choose the unzipped <em>awal-filing-assistant</em> folder.</li>
+        <li>Pin it (puzzle icon, then the pin), click the gold <strong>AG</strong> icon to open the side panel, and paste a connection key from below.</li>
+      </ol>
+      <p class="muted" style="margin:10px 0 0">When the extension is updated, download it again, replace the folder's contents and click the reload arrow on chrome://extensions.</p></div></div>
+    <div class="card"><div class="card-head"><h2>Connected browsers</h2></div><div class="card-body">
+      ${list}
+      <form method="post" action="/admin/extension/key" class="btn-row" style="margin-top:14px;align-items:flex-end">
+        <label style="flex:1;min-width:180px;margin:0">Name this browser<input name="label" maxlength="60" placeholder="e.g. Office laptop Chrome" required></label>
+        <button class="btn" type="submit">Make a connection key</button>
+      </form></div></div>` });
 }

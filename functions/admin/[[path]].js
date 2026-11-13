@@ -22,13 +22,15 @@
 import { createLoginCode, verifyLoginCode, createSession, currentAdmin, endSession, isAdminEmail } from '../_lib/admin-auth.js';
 import {
   loginPage, overviewPage, funnelPage, casesPage, casePage, clientsPage, clientPage, recordsPage, activityPage,
-  notFoundPage, simplePage, flashFor, CASE_VIEWS, ACTIVITY_FILTERS, importPage
+  notFoundPage, simplePage, flashFor, CASE_VIEWS, ACTIVITY_FILTERS, importPage, extensionPage
 } from '../_lib/admin-views.js';
 import { statusesFor, statusInfo, retentionFor, documentContentType, autoFollowUp, isOpen } from '../_lib/cases.js';
-import { MANIFEST, SERVICE_WORKER, APP_SCRIPT } from '../_lib/admin-app.js';
+import { MANIFEST, SERVICE_WORKER, APP_SCRIPT, FILING_SCRIPT } from '../_lib/admin-app.js';
+import { filingPack } from '../_lib/filing-pack.js';
+import { handleExtensionApi, listKeys, createKey, revokeKey } from '../_lib/extension-api.js';
 import { vapidKeys, notifyAdmins } from '../_lib/webpush.js';
 import { bounceSettings, ensureBounceWebhook } from '../_lib/bounces.js';
-import { uploadUrl, detailsUrl } from '../_lib/upload-links.js';
+import { uploadUrl, detailsUrl, deliveredUrl } from '../_lib/upload-links.js';
 import { awaitingDetails } from '../_lib/records.js';
 import { funnelStats, PERIODS } from '../_lib/funnel.js';
 import { serviceProgress, stepInfo, isStep } from '../_lib/service-progress.js';
@@ -228,10 +230,15 @@ async function handle(context) {
   if (method === 'GET' && route === '/manifest.webmanifest') {
     return new Response(MANIFEST, { headers: { 'Content-Type': 'application/manifest+json', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff' } });
   }
-  if (method === 'GET' && (route === '/sw.js' || route === '/app.js')) {
-    return new Response(route === '/sw.js' ? SERVICE_WORKER : APP_SCRIPT, {
+  if (method === 'GET' && (route === '/sw.js' || route === '/app.js' || route === '/filing.js')) {
+    return new Response(route === '/sw.js' ? SERVICE_WORKER : route === '/filing.js' ? FILING_SCRIPT : APP_SCRIPT, {
       headers: { 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'no-cache', 'X-Content-Type-Options': 'nosniff', 'Service-Worker-Allowed': '/admin/' }
     });
+  }
+
+  // Filing assistant extension: read-only, signs in with its own connection key (no cookies)
+  if (parts[0] === 'api') {
+    return handleExtensionApi(env, request, parts, (actor, action, type, id, detail) => audit(env, request, actor, action, type, id, detail));
   }
 
   // Form posts must come from this site (blocks cross-site request forgery)
@@ -537,7 +544,7 @@ async function handle(context) {
     const back = (key, tab) => redirect(`/admin/case/${c.id}?${tab ? `tab=${tab}&` : ''}done=${key}`);
 
     if (parts.length === 2 && method === 'GET') {
-      const tab = ['documents', 'activity', 'records', 'billing'].includes(url.searchParams.get('tab')) ? url.searchParams.get('tab') : 'summary';
+      const tab = ['documents', 'filing', 'activity', 'records', 'billing'].includes(url.searchParams.get('tab')) ? url.searchParams.get('tab') : 'summary';
       // Everything below is independent: fetch it side by side (each database trip can be far away)
       audit(env, request, actor, 'case.viewed', 'case', c.id, { reference: c.reference });
       const open = isOpen(c.status) && !c.purged_at;
@@ -565,7 +572,8 @@ async function handle(context) {
       const payment = inv ? { number: inv.number, total: inv.total, paid: inv.amount_paid || 0, balance: Math.max(0, inv.total - (inv.amount_paid || 0)), status: inv.status, money } : null;
       const billing = bdocs ? { docs: bdocs.results || [], settings, prefill: billPrefill(c, bdocs.results || [], url.searchParams.get('from')), kindLabel: KIND_LABEL, startPrices: START_PRICES, paymentMethods: PAYMENT_METHODS, money } : null;
       const archivedDocs = archived ? archived.results || [] : [];
-      return html(casePage({ admin, badges, c, tab, archivedDocs, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment, detailsLink }));
+      const pack = tab === 'filing' && !c.purged_at ? filingPack(c, docs.results || []) : null;
+      return html(casePage({ admin, badges, c, tab, archivedDocs, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment, detailsLink, pack }));
     }
     if (method !== 'POST') return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
     let form;
@@ -596,24 +604,51 @@ async function handle(context) {
       const service = String(form.get('service') || '');
       const step = String(form.get('step') || '');
       const note = String(form.get('note') || '').trim().slice(0, 300);
+      const ref = String(form.get('ref') || '').trim().slice(0, 80);
       const services = String(c.services || '').split(',').map(x => x.trim());
       if (!services.includes(service) || !isStep(step) || c.purged_at) return back('unchanged');
-      const events = (await env.DB.prepare("SELECT event, from_status, to_status, note, created_at FROM case_events WHERE case_id = ?1 AND event = 'service_progress'").bind(c.id).all()).results || [];
+      const events = (await env.DB.prepare("SELECT event, from_status, to_status, note, created_at FROM case_events WHERE case_id = ?1 AND event IN ('service_progress', 'service_ref')").bind(c.id).all()).results || [];
       const before = serviceProgress(c.services, events).find(r => r.service === service);
       const info = stepInfo(service, step);
-      await env.DB.batch([
-        env.DB.prepare("INSERT INTO case_events (case_id, event, from_status, to_status, note, actor, created_at) VALUES (?1, 'service_progress', ?2, ?3, ?4, ?5, ?6)").bind(c.id, service, step, note || null, actor, now),
+      const stepChanged = !before || before.step !== step || !!note;
+      const refChanged = ref !== (before ? before.reference : '');
+
+      // Finished documents for the client (certificate, status report...): kept on the case,
+      // named "delivered-<service>--<file>" so they are told apart from what the client sent us
+      const slug = service.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+      const files = form.getAll('files').filter(f => f && typeof f !== 'string' && f.size > 0);
+      const stored = [];
+      for (const f of files.slice(0, 6)) {
+        const name = `delivered-${slug}--` + String(f.name || 'document').replace(/[\\/\r\n\0"]/g, '_').slice(0, 100);
+        if (!DOC_EXT.test(name) || f.size > DOC_MAX || !(await fileMatchesName(name, f))) return back('service_file_bad');
+        stored.push({ ...(await storeCaseDocument(env, c.id, name, f)), name, label: String(f.name || 'document') });
+      }
+      if (!stepChanged && !refChanged && !stored.length) return back('unchanged');
+
+      const stmts = [];
+      if (stepChanged) stmts.push(env.DB.prepare("INSERT INTO case_events (case_id, event, from_status, to_status, note, actor, created_at) VALUES (?1, 'service_progress', ?2, ?3, ?4, ?5, ?6)").bind(c.id, service, step, note || null, actor, now));
+      if (refChanged) stmts.push(env.DB.prepare("INSERT INTO case_events (case_id, event, from_status, to_status, note, actor, created_at) VALUES (?1, 'service_ref', ?2, ?3, ?4, ?5, ?6)").bind(c.id, service, ref, `${service}: agency reference ${ref || 'cleared'}`, actor, now));
+      for (const d of stored) stmts.push(d.stmt, auditStmt(env, request, actor, 'document.delivered', 'document', d.id, { reference: c.reference, file: d.name, service }, now));
+      if (stored.length) stmts.push(env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'documents_added', ?2, ?3, ?4)").bind(c.id, `${service}: ${stored.map(d => d.label).join(', ')} added for the client`, actor, now));
+      stmts.push(
         env.DB.prepare('UPDATE cases SET updated_at = ?2 WHERE id = ?1').bind(c.id, now),
-        auditStmt(env, request, actor, 'case.service_progress', 'case', c.id, { reference: c.reference, service, step }, now)
-      ]);
-      const early = before && before.waitingFor.length && ['submitted', 'approved', 'delivered'].includes(step);
-      if (form.get('notify') !== '1' || !info.client) return back(early ? 'service_early' : 'service_saved');
+        auditStmt(env, request, actor, 'case.service_progress', 'case', c.id, { reference: c.reference, service, step, ref: refChanged ? ref : undefined, files: stored.length || undefined }, now)
+      );
+      await env.DB.batch(stmts);
+
+      const early = stepChanged && before && before.waitingFor.length && ['submitted', 'approved', 'delivered'].includes(step);
+      if (form.get('notify') !== '1' || (!info.client && !stored.length)) return back(early ? 'service_early' : 'service_saved');
       if (!c.email || c.anonymised_at) return back('service_no_email');
+      const documents = await Promise.all(stored.map(async d => ({ name: d.label, url: await deliveredUrl(env, d.id, url.origin) })));
       try {
         await sendBrevoEmail(env, {
           to: { email: c.email, name: c.full_name },
-          subject: `Update on ${c.reference}: ${service}`,
-          html: caseStatusEmail({ fullName: c.full_name, reference: c.reference, statusLabel: `${service}: ${info.label}`, statusMessage: info.client, note, askForReview: false }),
+          subject: stored.length ? `Your documents are ready: ${service} (${c.reference})` : `Update on ${c.reference}: ${service}`,
+          html: caseStatusEmail({
+            fullName: c.full_name, reference: c.reference, statusLabel: `${service}: ${info.label}`,
+            statusMessage: info.client || 'Your documents for this service are ready to download below.',
+            note: [ref ? `Reference: ${ref}` : '', note].filter(Boolean).join('\n'), askForReview: ['approved', 'delivered'].includes(step), documents
+          }),
           replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' }
         });
       } catch (err) { console.error('admin: service email failed:', err && err.message); return back('service_send_failed'); }
@@ -851,13 +886,17 @@ async function handle(context) {
     const obj = d ? await env.DOCS.get(d.storage_key) : null;
     if (!obj) return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
     await audit(env, request, actor, 'document.viewed', 'document', d.id, { reference: d.reference, file: d.file_name });
-    const safeName = d.file_name.replace(/["\\\r\n]/g, '_');
+    // ?download=<portal name> saves it under the filing pack's name (same file type only)
+    const wanted = String(url.searchParams.get('download') || '').slice(0, 120);
+    const ext = s => (/\.([a-z0-9]+)$/i.exec(s) || [, ''])[1].toLowerCase().replace('jpeg', 'jpg');
+    const asName = wanted && /^[A-Za-z0-9._ -]+$/.test(wanted) && ext(wanted) === ext(d.file_name) ? wanted : d.file_name;
+    const safeName = asName.replace(/["\\\r\n]/g, '_');
     return new Response(obj.body, {
       headers: {
         ...SECURITY_HEADERS,
         // Type comes from the file extension only, so an upload can never run as a web page
         'Content-Type': documentContentType(d.file_name),
-        'Content-Disposition': `inline; filename="${safeName}"; filename*=UTF-8''${encodeURIComponent(d.file_name)}`,
+        'Content-Disposition': `${asName !== d.file_name ? 'attachment' : 'inline'}; filename="${safeName}"; filename*=UTF-8''${encodeURIComponent(asName)}`,
         'Content-Security-Policy': "default-src 'none'; img-src 'self'; style-src 'unsafe-inline'; object-src 'self'; frame-ancestors 'none'"
       }
     });
@@ -975,6 +1014,23 @@ async function handle(context) {
   }
 
   // ── Records ─────────────────────────────────────────────────
+  // ── Filing assistant (browser extension) connection keys ─────
+  if (route === '/extension' && method === 'GET') {
+    return html(extensionPage({ admin, badges: await navBadges(env), flash, keys: await listKeys(env), newKey: null }));
+  }
+  if (route === '/extension/key' && method === 'POST') {
+    const form = await request.formData();
+    const { key, rec } = await createKey(env, admin, String(form.get('label') || '').trim() || 'Browser');
+    await audit(env, request, actor, 'extension.key_created', 'admin', admin, { id: rec.id, label: rec.label });
+    return html(extensionPage({ admin, badges: await navBadges(env), flash: null, keys: await listKeys(env), newKey: { key, label: rec.label } }));
+  }
+  if (route === '/extension/revoke' && method === 'POST') {
+    const form = await request.formData();
+    const id = String(form.get('id') || '');
+    if (await revokeKey(env, id)) await audit(env, request, actor, 'extension.key_revoked', 'admin', admin, { id });
+    return redirect('/admin/extension?done=ext_revoked');
+  }
+
   if (route === '/records' && method === 'GET') {
     const now = new Date().toISOString();
     const [due, holds, requests, stats] = await env.DB.batch([

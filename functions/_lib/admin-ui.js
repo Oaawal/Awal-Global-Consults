@@ -310,6 +310,18 @@ details.more[open] summary::before{content:'– '}
 .funnel{display:grid;gap:12px}
 .funnel-label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}
 .funnel-track{background:var(--line-2);border-radius:999px;height:12px;overflow:hidden}
+.fp{display:grid;gap:16px}
+.fp .card-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.fp-services{display:flex;flex-wrap:wrap;gap:8px}
+.fp-row{display:grid;grid-template-columns:minmax(120px,220px) minmax(0,1fr) auto;gap:6px 14px;align-items:start;padding:10px 0;border-top:1px solid var(--line-2)}
+.fp-row:first-child{border-top:0;padding-top:0}
+.fp-label{font-size:13px;color:var(--muted);font-weight:600}
+.fp-hint{display:block;font-weight:400;font-size:11.5px;color:var(--amber)}
+.fp-value{font-size:14.5px;overflow-wrap:anywhere;min-width:0}
+.fp-copy{min-height:32px;padding:4px 10px}
+.fp-zip{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 14px}
+.fp-zip select{width:auto;min-width:110px}
+@media (max-width:640px){.fp-row{grid-template-columns:minmax(0,1fr) auto}.fp-label{grid-column:1/-1}}
 .funnel-bar{height:100%;border-radius:999px;background:#0F3A5F}
 .funnel-bar.tone-1{background:#2C6390}.funnel-bar.tone-2{background:#b8892b}.funnel-bar.tone-3{background:#1f9d55}
 
