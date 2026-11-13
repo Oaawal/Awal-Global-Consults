@@ -33,7 +33,7 @@ function layout(body) {
 <meta name="description" content="Check the progress of your application with Awal Global Consults using your reference number.">
 <link rel="icon" type="image/png" href="/assets/images/favicon.png">
 <style>
-:root{--navy:#0F3A5F;--navy-dark:#0A2C48;--blue:#2F80ED;--bg:#F4F8FC;--line:#D7E6F2;--text:#222;--muted:#555}
+:root{--navy:#0F3A5F;--navy-dark:#0A2C48;--blue:#1B4F78;--cta:#D4A72C;--bg:#F6F1E7;--line:#E2D9C6;--text:#222;--muted:#555}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 "DM Sans",-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
 header{background:var(--navy-dark);padding:14px 16px}
@@ -45,7 +45,7 @@ h1{font-family:Georgia,"Fraunces",serif;color:var(--navy);font-size:26px;margin:
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px}
 label{display:block;font-weight:600;margin:12px 0 4px}
 input{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px}
-button,.btn{display:inline-block;font:inherit;font-weight:700;padding:11px 18px;border-radius:10px;border:0;background:var(--blue);color:#fff;text-decoration:none;margin-top:16px;cursor:pointer}
+button,.btn{display:inline-block;font:inherit;font-weight:700;padding:11px 18px;border-radius:10px;border:0;background:var(--cta);color:var(--navy-dark);text-decoration:none;margin-top:16px;cursor:pointer}
 .btn.wa{background:#25d366}
 .err{background:#fdf0f0;color:#c0392b;border-radius:10px;padding:10px 14px;margin-bottom:12px}
 .ref{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--blue)}
@@ -57,7 +57,7 @@ button,.btn{display:inline-block;font:inherit;font-weight:700;padding:11px 18px;
 .steps li.done{color:var(--text)}
 .steps li.done .dot{background:var(--blue);border-color:var(--blue)}
 .steps li.now{color:var(--navy);font-weight:700}
-.steps li.now .dot{background:#fff;border-color:var(--blue);box-shadow:0 0 0 3px #cfe3f7}
+.steps li.now .dot{background:#fff;border-color:var(--blue);box-shadow:0 0 0 3px #E9DCBF}
 .meta{color:var(--muted);font-size:13px}
 a{color:var(--navy)}
 </style>

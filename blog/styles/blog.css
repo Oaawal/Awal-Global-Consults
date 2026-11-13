@@ -2,7 +2,7 @@
    Uses the current site design tokens (--navy-900, --gold-500, --paper,
    --ink, --muted, --line, --shadow-*, --radius*, --display/--body) so
    the blog stays in sync automatically if the palette changes again.
-   Note: --gold-500 is the brand's blue accent (#2F80ED), not gold —
+   Note: --gold-500 is a navy accent (see style.css), not gold —
    see the token comment in /style.css for the full 2026 palette. */
 
 /* ---------- Listing page ---------- */
@@ -389,7 +389,7 @@
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: rgba(47,128,237,0.14);
+  background: rgba(233,220,191,0.14);
 }
 .blog-cta-box h3 {
   font-family: var(--display);
@@ -447,7 +447,7 @@ body:has(.guide-hero) { background: #fff; }
   padding: 46px 0 22px;
   background:
     radial-gradient(circle at 1px 1px, rgba(15,58,95,0.07) 1px, transparent 1.4px) 0 0 / 26px 26px,
-    linear-gradient(180deg, #F4F8FC 0%, #fff 100%);
+    linear-gradient(180deg, #F6F1E7 0%, #fff 100%);
 }
 .guide-hero-sm { padding-bottom: 10px; }
 .guide-crumbs {
@@ -587,13 +587,13 @@ body:has(.guide-hero) { background: #fff; }
   .desk-lg .desk-meta::before { display: none; }
 }
 .blog-cta-book { position: relative; margin-top: 18px; font-size: 0.92rem; color: rgba(255,255,255,0.78); }
-.blog-cta-book a { color: var(--gold-300, #E3C77A); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.blog-cta-book a { color: var(--gold-300, #E9DCBF); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 
 /* Free download (lead magnet) box inside a guide */
-.lead-magnet { margin: 30px 0; padding: 24px; border-radius: var(--radius, 14px); background: linear-gradient(135deg, #0A2C48, #0F3A5F); color: #fff; border-bottom: 4px solid #C9A646; }
+.lead-magnet { margin: 30px 0; padding: 24px; border-radius: var(--radius, 14px); background: linear-gradient(135deg, #0A2C48, #0F3A5F); color: #fff; border-bottom: 4px solid #E9DCBF; }
 .lead-magnet h3 { color: #fff; margin: 6px 0 8px; font-size: 1.25rem; }
 .lead-magnet p { color: rgba(255,255,255,0.82); margin: 0 0 14px; }
-.lead-magnet-tag { display: inline-block; background: #C9A646; color: #0A2C48; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; }
+.lead-magnet-tag { display: inline-block; background: #E9DCBF; color: #0A2C48; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; }
 .lead-magnet .subscribe-row { display: flex; gap: 10px; }
 .lead-magnet .subscribe-row input { flex: 1; min-width: 0; font: inherit; padding: 12px 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.25); background: #fff; color: #111; }
 .lead-magnet .subscribe-consent { display: block; padding-left: 24px; text-indent: -24px; margin-top: 10px; font-size: 0.84rem; color: rgba(255,255,255,0.75); }

@@ -1,10 +1,11 @@
 import { WHATSAPP_LINK } from './brevo.js';
 
 const NAVY = '#0F3A5F';
-const GOLD = '#2F80ED';
+const GOLD = '#1B4F78'; // name is historical: navy accent for labels and ticks
+const CTA = '#D4A72C'; // gold from the logo: buttons and the header rule only
 const GOLD_PALE = '#f9f0dc'; // warning-banner background only: intentionally not a brand color
-const BG = '#F4F8FC';
-const BORDER = '#D7E6F2';
+const BG = '#F6F1E7';
+const BORDER = '#E2D9C6';
 const TEXT = '#222222';
 const MUTED = '#555555';
 // Opens the Google Business Profile, where clients can read and write reviews
@@ -30,7 +31,7 @@ function shell(innerHtml, { preheader = '' } = {}) {
     <tr><td align="center">
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:10px;overflow:hidden;border:1px solid ${BORDER};">
         <tr>
-          <td style="background:${NAVY};padding:24px 28px;border-bottom:3px solid ${GOLD};">
+          <td style="background:${NAVY};padding:24px 28px;border-bottom:3px solid ${CTA};">
             <div style="font-family:Georgia,'Fraunces',serif;color:#ffffff;font-size:19px;font-weight:700;">Awal Global Consults</div>
             <div style="color:rgba(255,255,255,0.55);font-size:11px;margin-top:2px;">Legal, Governance, Risk & Compliance</div>
           </td>
@@ -95,7 +96,7 @@ export function kycClientEmail({ fullName, services, attachedCount = 0, skippedF
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:20px;">Services Requested</div>
     ${serviceListHtml(services)}
     ${docLine}
-    ${uploadLink ? `<p style="font-size:13.5px;line-height:1.7;color:${TEXT};margin:14px 0 0;">Need to send more documents later? Use your private upload link:</p>` + `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request.</div></div>` : ''}
+    ${uploadLink ? `<p style="font-size:13.5px;line-height:1.7;color:${TEXT};margin:14px 0 0;">Need to send more documents later? Use your private upload link:</p>` + `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${CTA};color:${NAVY};text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request.</div></div>` : ''}
     ${stage === 'completed' ? '' : `<div style="margin:16px 0;padding:14px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13px;color:${NAVY};">Once you're happy with your quote, we'll share our bank transfer details and begin processing right away.</div>`}
     <div style="margin-top:22px;padding-top:18px;border-top:1px solid ${BORDER};font-size:13px;color:${TEXT};">
       Questions in the meantime? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>.
@@ -117,7 +118,7 @@ export function kycAdminEmail({ fields, services, attachmentsNote, reference = n
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:10px;">Services Requested</div>
     ${serviceListHtml(services)}
     ${attachmentsNote ? `<div style="font-size:12px;color:${documentsSaved ? NAVY : '#a05a00'};background:${documentsSaved ? BG : GOLD_PALE};border:1px solid ${documentsSaved ? BORDER : GOLD_PALE};border-radius:6px;padding:8px 12px;margin-bottom:12px;">${escapeHtml(attachmentsNote)}</div>` : ''}
-    ${documentsSaved && caseUrl ? `<p style="margin:0 0 14px;"><a href="${escapeHtml(caseUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13.5px;">View documents in dashboard</a></p>` : ''}
+    ${documentsSaved && caseUrl ? `<p style="margin:0 0 14px;"><a href="${escapeHtml(caseUrl)}" style="display:inline-block;background:${CTA};color:${NAVY};text-decoration:none;font-weight:700;padding:10px 16px;border-radius:8px;font-size:13.5px;">View documents in dashboard</a></p>` : ''}
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};margin-top:16px;margin-bottom:8px;">Submitted Details</div>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">${rows}</table>`;
   return shell(inner, { preheader: 'New client intake submission received.' });
@@ -173,7 +174,7 @@ export function securityAlertEmail({ title, intro, rows = [], action, buttonUrl,
     <p style="font-size:14px;line-height:1.7;color:${NAVY};margin:0 0 12px;">${escapeHtml(intro)}</p>
     <table style="border-collapse:collapse;margin:0 0 14px;">${table}</table>
     <p style="font-size:13px;line-height:1.7;color:${MUTED};margin:0 0 18px;">${escapeHtml(action)}</p>
-    ${buttonUrl ? `<a href="${escapeHtml(buttonUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">${escapeHtml(buttonLabel || 'Open dashboard')}</a>` : ''}`;
+    ${buttonUrl ? `<a href="${escapeHtml(buttonUrl)}" style="display:inline-block;background:${CTA};color:${NAVY};text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">${escapeHtml(buttonLabel || 'Open dashboard')}</a>` : ''}`;
   return shell(inner, { preheader: title });
 }
 
@@ -197,7 +198,7 @@ export function adminNoticeEmail({ heading, reference, services = [], lines = []
     <div style="font-size:13px;color:${MUTED};margin-bottom:14px;">Reference <strong style="color:${NAVY};">${escapeHtml(reference)}</strong></div>
     ${serviceListHtml(services)}
     ${lines.map(l => `<p style="font-size:13px;color:${TEXT};margin:0 0 8px;">${escapeHtml(l)}</p>`).join('')}
-    <p style="margin:18px 0 10px;"><a href="${escapeHtml(caseUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Open in dashboard</a></p>
+    <p style="margin:18px 0 10px;"><a href="${escapeHtml(caseUrl)}" style="display:inline-block;background:${CTA};color:${NAVY};text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Open in dashboard</a></p>
     <p style="font-size:12px;color:${MUTED};margin:0;">Client details and documents are kept only in the dashboard. Remember to reply within 1 working day.</p>`;
   return shell(inner, { preheader: `${heading} (${reference})` });
 }
@@ -214,7 +215,7 @@ export function missingInfoEmail({ fullName, reference, details = [], documents 
     ${list('Details to send', details)}
     ${list('Documents to upload', documents)}
     ${details.length ? `<p style="font-size:13.5px;line-height:1.7;color:${TEXT};margin:16px 0 0;">Please reply to this email with the details above.</p>` : ''}
-    ${documents.length && uploadLink ? `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request.</div></div>` : ''}
+    ${documents.length && uploadLink ? `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${CTA};color:${NAVY};text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request.</div></div>` : ''}
     <p style="font-size:12.5px;line-height:1.6;color:${MUTED};margin:18px 0 0;">Questions? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>, quoting your reference.</p>`;
   return shell(inner, { preheader: `We need a few more things for ${reference}` });
 }
@@ -237,7 +238,7 @@ export function billingEmail({ kind, number, clientName, total = 0, dateLine = '
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};">${escapeHtml(number)}</div>
       <div style="font-size:20px;font-weight:700;color:${NAVY};margin-top:4px;">${escapeHtml(money(total))}</div>
       ${dateLine ? `<div style="font-size:13px;color:${MUTED};margin-top:2px;">${escapeHtml(dateLine)}</div>` : ''}</div>` : ''}
-    <p style="margin:18px 0 6px;"><a href="${escapeHtml(viewUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">View and download your ${escapeHtml(what)}</a></p>
+    <p style="margin:18px 0 6px;"><a href="${escapeHtml(viewUrl)}" style="display:inline-block;background:${CTA};color:${NAVY};text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">View and download your ${escapeHtml(what)}</a></p>
     ${extraLinks.map(l => `<p style="margin:8px 0;"><a href="${escapeHtml(l.url)}" style="color:${NAVY};font-weight:700;">${escapeHtml(l.label)} →</a></p>`).join('')}
     ${attached ? `<p style="font-size:13px;line-height:1.6;color:${MUTED};margin:12px 0 0;">A PDF copy is attached to this email for your records.</p>` : ''}
     <p style="font-size:12.5px;line-height:1.6;color:${MUTED};margin:18px 0 0;">Questions? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>, quoting ${escapeHtml(number)}.</p>`;
@@ -251,7 +252,7 @@ export function detailsFormEmail({ fullName, reference, services = '', link, not
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(fullName || 'valued client')},</p>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">To begin work on <strong>${escapeHtml(reference)}</strong>${services ? ` (${escapeHtml(services)})` : ''}, we now need your full application details. Your contact details are already filled in.</p>
     ${note ? `<div style="margin:14px 0;padding:12px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13.5px;line-height:1.6;color:${TEXT};">${escapeHtml(note)}</div>` : ''}
-    <p style="margin:18px 0 6px;"><a href="${escapeHtml(link)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Complete my application</a></p>
+    <p style="margin:18px 0 6px;"><a href="${escapeHtml(link)}" style="display:inline-block;background:${CTA};color:${NAVY};text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Complete my application</a></p>
     <p style="font-size:12.5px;line-height:1.6;color:${MUTED};margin:14px 0 0;">This link is private to you: please do not forward it. Have your ID and, for registrations, each owner's details to hand. You can attach documents in the form or add them later.</p>
     <p style="font-size:12.5px;line-height:1.6;color:${MUTED};margin:14px 0 0;">Questions? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>, quoting ${escapeHtml(reference)}.</p>`;
   return shell(inner, { preheader: `Complete your application ${reference}` });
@@ -268,7 +269,7 @@ export function caseStatusEmail({ fullName, reference, statusLabel, statusMessag
     </div>
     ${statusMessage ? `<p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${escapeHtml(statusMessage)}</p>` : ''}
     ${note ? `<div style="margin:14px 0;padding:12px 16px;background:${BG};border-left:3px solid ${NAVY};border-radius:0 8px 8px 0;font-size:13.5px;line-height:1.7;color:${TEXT};white-space:pre-line;">${escapeHtml(note)}</div>` : ''}
-    ${uploadLink ? `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request.</div></div>` : ''}
+    ${uploadLink ? `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${CTA};color:${NAVY};text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request.</div></div>` : ''}
     ${trackLinkHtml(reference)}
     ${askForReview ? `<div style="margin:18px 0;padding:14px 16px;background:${BG};border:1px solid ${BORDER};border-radius:8px;font-size:13.5px;line-height:1.7;color:${TEXT};">
       Happy with our service? A short Google review helps other business owners find us.<br>
@@ -302,7 +303,7 @@ export function caseReminderEmail({ fullName, reference, status, reminderNumber,
       Reference: <strong style="color:${NAVY};">${escapeHtml(reference)}</strong>
     </div>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${ask}</p>
-    ${waitingForDocs && uploadLink ? `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request.</div></div>` : `<div style="margin-top:20px;"><a href="${WHATSAPP_LINK}?text=${encodeURIComponent(`Hello, about my request ${reference}`)}" style="display:inline-block;background:#25d366;color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Message us on WhatsApp</a></div>`}
+    ${waitingForDocs && uploadLink ? `<div style="margin:18px 0;"><a href="${escapeHtml(uploadLink)}" style="display:inline-block;background:${CTA};color:${NAVY};text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Upload documents</a><div style="font-size:12px;color:${MUTED};margin-top:6px;">This link is private to your request.</div></div>` : `<div style="margin-top:20px;"><a href="${WHATSAPP_LINK}?text=${encodeURIComponent(`Hello, about my request ${reference}`)}" style="display:inline-block;background:#25d366;color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Message us on WhatsApp</a></div>`}
     <p style="font-size:12px;line-height:1.6;color:${MUTED};margin:18px 0 0;">If you have already replied or decided not to proceed, please ignore this message, or let us know and we will stop the reminders.</p>`;
   return shell(inner, { preheader: waitingForDocs ? `We need a few more things for ${reference}` : `Any questions about your quote for ${reference}?` });
 }
@@ -332,7 +333,7 @@ export function dailySummaryEmail({ dateLabel, security = null, counts, newCases
     ${digest ? `<div style="font-size:12.5px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:6px;padding:10px 14px;margin-top:20px;">Weekly guides email sent to <strong>${digest.sent}</strong> subscriber${digest.sent === 1 ? '' : 's'}${digest.remaining ? ` (${digest.remaining} more tomorrow)` : ''}.</div>` : ''}
     ${security && (security.signIns || security.failed) ? `<div style="font-size:12.5px;color:${NAVY};background:${BG};border:1px solid ${BORDER};border-radius:6px;padding:10px 14px;margin-top:20px;">Dashboard sign-ins in the last 24 hours: <strong>${security.signIns}</strong>${security.failed ? ` · <strong style="color:#8a1212;">${security.failed} wrong code${security.failed === 1 ? '' : 's'}</strong>` : ''}.</div>` : ''}
     ${retentionDue ? `<div style="font-size:12.5px;color:#a05a00;background:${GOLD_PALE};border-radius:6px;padding:10px 14px;margin-top:20px;"><strong>${retentionDue}</strong> record${retentionDue === 1 ? ' has' : 's have'} passed the retention period and should be reviewed for deletion.</div>` : ''}
-    <div style="margin-top:24px;"><a href="${escapeHtml(dashboardUrl)}" style="display:inline-block;background:${NAVY};color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Open dashboard</a></div>`;
+    <div style="margin-top:24px;"><a href="${escapeHtml(dashboardUrl)}" style="display:inline-block;background:${CTA};color:${NAVY};text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px;font-size:14px;">Open dashboard</a></div>`;
   return shell(inner, { preheader: `${newCases.length} need a reply · ${followUps.length} follow-ups due · ${waiting.length} waiting on clients` });
 }
 

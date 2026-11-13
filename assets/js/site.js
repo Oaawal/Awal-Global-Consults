@@ -61,14 +61,14 @@
     const style = document.createElement('style');
     style.textContent =
       '#agc-consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:10000;max-width:560px;margin:0 auto;' +
-      'background:#0A2C48;color:#F4F8FC;border-radius:14px;padding:16px 18px;box-shadow:0 20px 50px rgba(10,44,72,.35);' +
+      'background:#0A2C48;color:#F6F1E7;border-radius:14px;padding:16px 18px;box-shadow:0 20px 50px rgba(10,44,72,.35);' +
       'font:14px/1.5 "DM Sans",Arial,sans-serif;}' +
       '#agc-consent p{margin:0 0 12px;}' +
       '#agc-consent a{color:#B7D9FA;text-decoration:underline;}' +
       '#agc-consent .agc-consent-actions{display:flex;gap:10px;flex-wrap:wrap;}' +
       '#agc-consent button{flex:1 1 120px;min-height:44px;border-radius:10px;font:600 14px "DM Sans",Arial,sans-serif;cursor:pointer;}' +
-      '#agc-consent .agc-accept{background:#2F80ED;color:#fff;border:0;}' +
-      '#agc-consent .agc-decline{background:transparent;color:#F4F8FC;border:1px solid rgba(255,255,255,.4);}';
+      '#agc-consent .agc-accept{background:#D4A72C;color:#0A2C48;border:0;}' +
+      '#agc-consent .agc-decline{background:transparent;color:#F6F1E7;border:1px solid rgba(255,255,255,.4);}';
     document.head.appendChild(style);
 
     const box = document.createElement('div');

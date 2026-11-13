@@ -24,7 +24,7 @@ export function publicPage({ title, heading, body, actions = [] }, status = 200)
 <title>${esc(title)} | Awal Global Consults</title>
 <link rel="icon" type="image/png" href="/assets/images/favicon.png">
 <style>
-:root{--navy:#0F3A5F;--navy-dark:#0A2C48;--blue:#2F80ED;--gold:#C9A646;--bg:#F4F8FC;--line:#D7E6F2;--text:#222;--muted:#555}
+:root{--navy:#0F3A5F;--navy-dark:#0A2C48;--blue:#1B4F78;--cta:#D4A72C;--gold:#D4A72C;--bg:#F6F1E7;--line:#E2D9C6;--text:#222;--muted:#555}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 "DM Sans",-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
 header{background:var(--navy-dark);padding:14px 16px;border-bottom:3px solid var(--gold)}
@@ -35,7 +35,7 @@ main{max-width:620px;margin:32px auto;padding:0 16px}
 h1{font-family:Georgia,serif;color:var(--navy);font-size:24px;margin:0 0 12px}
 p{margin:0 0 14px}
 .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
-.btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;padding:11px 18px;border-radius:999px}
+.btn{display:inline-block;background:var(--cta);color:var(--navy-dark);text-decoration:none;font-weight:700;padding:11px 18px;border-radius:999px}
 .btn.ghost{background:transparent;color:var(--navy);border:1px solid var(--line)}
 </style>
 </head>
