@@ -3,18 +3,19 @@
 // hubs.js); small details vary per post (seeded from the slug) so covers in
 // the same hub look related but not identical.
 
+// Brand colours: navy and ivory, with the logo gold as a highlight
 const NAVY = '#0F3A5F';
-const BLUE = '#2F80ED';
+const BLUE = '#1B4F78'; // name is historical: a lighter navy
 const GOLD = '#C9A646';
-const LINE = '#9FB9D2';
+const LINE = '#CBBF9F';
 
 const PALETTES = {
-  registration: { bg: '#E9F2FC', soft: '#D3E5F8', accent: BLUE },
-  compliance: { bg: '#E8F3EF', soft: '#CFE6DD', accent: '#2E7D5B' },
+  registration: { bg: '#F6F1E7', soft: '#E6DCC7', accent: BLUE },
+  compliance: { bg: '#F3EEE3', soft: '#E2D8C2', accent: NAVY },
   brand: { bg: '#F7F0DF', soft: '#EEDFBA', accent: GOLD },
-  travel: { bg: '#EAF0F7', soft: '#D5E1EE', accent: NAVY },
-  globe: { bg: '#E6F1F6', soft: '#CBE2EC', accent: '#2A7A9B' },
-  data: { bg: '#EEF0F6', soft: '#DADFEC', accent: '#5B5FC7' }
+  travel: { bg: '#F4EFE6', soft: '#E4DBC9', accent: NAVY },
+  globe: { bg: '#F5F0E6', soft: '#E5DCC8', accent: BLUE },
+  data: { bg: '#F2EDE3', soft: '#E1D8C5', accent: '#2C6390' }
 };
 
 // Small deterministic random generator so a post's cover never changes between builds
