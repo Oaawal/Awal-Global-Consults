@@ -18,7 +18,9 @@
 
 # Stylesheets and scripts: check for a newer copy on every visit (cheap, uses the ETag),
 # so design changes show straight away instead of after the browser's 4-hour cache.
-/*.css
+/style.css
+  Cache-Control: public, max-age=0, must-revalidate
+/blog/styles/*
   Cache-Control: public, max-age=0, must-revalidate
 /assets/js/*
   Cache-Control: public, max-age=0, must-revalidate
