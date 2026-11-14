@@ -32,4 +32,4 @@ Photo: ops/google-products/05-scuml.jpg · Button: **Learn more** → https://aw
 
 Bank asking for a SCUML certificate? NGOs, churches, real estate agents, car dealers, jewellers and other designated businesses must register with SCUML, and banks increasingly hold up accounts without it.
 
-Official SCUML registration is free. If you'd rather not deal with the paperwork, we prepare and handle the whole application for a ₦70,000 professional fee. Read our guide to see if your business is covered.
+Official SCUML registration is free. If you'd rather not deal with the paperwork, we prepare and handle the whole application for a ₦70,000 professional fee, within 7 days. Read our guide to see if your business is covered.

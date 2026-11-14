@@ -271,6 +271,7 @@ TOOLS.append(dict(
         '<ul class="calc-list">' + picked.map(function (p) { return '<li>' + p + '</li>'; }).join('') + '</ul>' +
         '<p class="calc-note">Banks treat the SCUML certificate as standard account-opening documentation for these businesses. Without it, a corporate account can be declined or restricted.</p>' +
         '<h3>Cost</h3>' + row('SCUML’s own registration fee', 'Free') + row('Our professional fee', naira(70000), 'total') +
+        '<h3>Timeline</h3><p class="calc-note">Within 7 days once we have your documents.</p>' +
         '<p class="calc-note">Once registered, you are expected to run customer due diligence on your own clients. See our <a href="/blog/scuml-registration-nigeria/">SCUML guide</a>.</p>' +
         cta('scuml', 'Register my business with SCUML');
     }""",
@@ -278,6 +279,7 @@ TOOLS.append(dict(
         ('What is SCUML?', 'The Special Control Unit against Money Laundering, a unit of the EFCC that registers and monitors designated non-financial businesses and professions (DNFBPs).'),
         ('Which businesses need SCUML registration?', 'Designated categories including estate agents, dealers in jewellery and high-value goods, car dealers, hotels, lawyers, accountants and tax consultants, consultants, trust and company service providers, casinos and estate surveyors. It depends on the category, not the size.'),
         ('How much does SCUML registration cost?', 'SCUML registration itself is free. Our professional fee for handling it is ₦70,000.'),
+        ('How long does SCUML registration take?', 'We complete SCUML registration within 7 days once we have your documents.'),
     ],
     guides=[('scuml-registration-nigeria', 'SCUML registration explained'), ('scuml-real-estate-car-dealers-jewellers-nigeria', 'SCUML for estate agents, car dealers and jewellers'), ('open-corporate-bank-account-nigeria', 'Opening a corporate bank account')],
 ))

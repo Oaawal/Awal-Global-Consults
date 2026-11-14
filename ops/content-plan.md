@@ -163,7 +163,7 @@ official CAC service times or fees — say so wherever they are quoted.
   return is required by law. Failure to file: ₦100,000 first month + ₦50,000 each
   month after. The ₦50,000/₦25,000 figure some sources quote for filing is the old law.
 - **More owner answers (31 Oct 2026):** VAT threshold ₦100m turnover. SCUML registration is
-  officially free; our professional fee is ₦70,000. Trademark estimates: search 1–3 working
+  officially free; our professional fee is ₦70,000. SCUML timeline: within 7 days (14 Nov 2026). Trademark estimates: search 1–3 working
   days; acknowledgement 1–3 days after filing; acceptance typically 2–8 weeks; within 5 working days when we handle it (mark partly approved);
   publication 60 days in the Journal but long wait to be published; final certificate 12–18
   months. Expatriate quota: no share capital figure needed; we handle it digitally. We handle

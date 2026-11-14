@@ -96,7 +96,7 @@ export function serviceProgress(servicesText, events) {
  * How long an application can sit with each agency before it is worth chasing (days).
  * Used by the morning summary to list services "submitted" or "queried" for longer than this.
  */
-const CHASE_AFTER = { CAC: 5, NRS: 7, SCUML: 10, 'the NDPC': 14, 'the Trademarks Registry': 30 };
+const CHASE_AFTER = { CAC: 5, NRS: 7, SCUML: 7, 'the NDPC': 14, 'the Trademarks Registry': 30 };
 export const chaseAfterDays = agency => CHASE_AFTER[agency] || 14;
 
 /** Services waiting on an agency for longer than usual: [{ service, agency, label, days, reference }] */

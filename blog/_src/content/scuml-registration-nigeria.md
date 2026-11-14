@@ -56,7 +56,7 @@ By the time SCUML comes up, it's usually not a paperwork conversation anymore. I
 
 ## What registering actually involves
 
-Broadly, SCUML registration follows a similar shape to other regulatory registrations: confirming your business falls into a designated category, preparing the required corporate documentation (typically your CAC certificate, business description, and ownership details), and submitting through the official SCUML registration channel. Because it's a government process with its own current requirements and processing timeline, it's worth confirming the exact current documentation list at the point of application rather than relying on a checklist from somewhere online that may already be out of date. Official SCUML registration is free; if you'd like us to handle the application, our professional fee is ₦70,000.
+Broadly, SCUML registration follows a similar shape to other regulatory registrations: confirming your business falls into a designated category, preparing the required corporate documentation (typically your CAC certificate, business description, and ownership details), and submitting through the official SCUML registration channel. Because it's a government process with its own current requirements and processing timeline, it's worth confirming the exact current documentation list at the point of application rather than relying on a checklist from somewhere online that may already be out of date. Official SCUML registration is free; if you'd like us to handle the application, our professional fee is ₦70,000 and we complete it within 7 days once we have your documents.
 
 ## SCUML doesn't stand alone: it's tied to ongoing KYC
 
