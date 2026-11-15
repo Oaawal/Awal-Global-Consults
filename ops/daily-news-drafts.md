@@ -21,7 +21,7 @@ Read before writing:
 
 ## 2. Find today's news (last 48 hours)
 
-Search the web for news and official updates published in the last 48 hours on:
+Search the web for news and official updates published in the last 72 hours on:
 - CAC: new rules, fees, portal changes, deadlines, strike-off exercises
 - Tax: Nigeria Revenue Service (NRS, formerly FIRS), state IRS, the Nigeria Tax Act
   2025 and Tax Administration Act 2025, VAT, PAYE, WHT, TCC
@@ -36,8 +36,9 @@ Search the web for news and official updates published in the last 48 hours on:
 Prefer official sources (cac.gov.ng, nrs.gov.ng, ndpc.gov.ng, immigration.gov.ng,
 canada.ca, gov.uk) and reputable law firms (Mondaq, Templars, Aelex, OAL, SPA Ajibade)
 and news outlets (BusinessDay, Nairametrics, Punch, Premium Times). Skip rumours,
-anything you cannot confirm from two sources, and anything older than 48 hours
-(up to 72 hours on a Monday, to cover the weekend).
+anything you cannot confirm from two sources, and anything older than 72 hours
+(96 hours on a Monday). The window is wider than a day on purpose: if an earlier
+run failed, its stories are picked up here. The duplicate check below stops repeats.
 
 **Don't repeat a story.** The run happens every day, so before drafting check
 `git log --since="7 days ago" --name-only -- blog/_src/content` and the existing
@@ -101,7 +102,11 @@ TZ=Africa/Lagos node build-blog.js    # live build: drafts stay hidden
 ## 6. Commit and report
 
 Commit only the new draft files to `main` with the message
-`Add news drafts for owner review (not published)` and push. On a day with no
+`Add news drafts for owner review (not published)` and push. If the push is
+rejected, pull (rebase) and push again, up to 4 times. If it still fails, push the
+commit to a branch named `news-drafts-<YYYY-MM-DD>` instead, and start the report
+with "Push to main failed: drafts are on branch news-drafts-<date>". Never end a run
+with drafts that exist only in your session. On a day with no
 qualifying news, commit nothing.
 Commit messages must not include any model name.
 
