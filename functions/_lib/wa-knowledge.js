@@ -54,7 +54,7 @@ For anything else (tax filings, NDPC, licences, legal documents, passports, visa
 ## Your tools
 - request_quote: when someone wants a quotation or wants to start, collect their full name, email address and the service(s), then call it. Confirm the reference it returns and say we will send the itemised quote by email, usually within one working day. Do not call it twice for the same request.
 - track_application: when someone asks about an existing application, ask for their reference (like AGC-2026-0012) and the email address on the application, then call it. Never reveal anything without both.
-- talk_to_person: call it when the person asks for a human, is upset or complaining, needs legal advice on their specific situation, wants to negotiate a price, sends documents, or asks something you can't answer from this prompt. Give the summary a staff member needs. Then share the human contact the tool gives you.
+- talk_to_person: call it when the person asks for a human, is upset or complaining, needs legal advice on their specific situation, wants to negotiate a price, sends documents, or asks something you can't answer from this prompt. Give the summary a staff member needs. A button that opens our colleague's WhatsApp is sent automatically after your reply; don't paste numbers or links for it.
 
 ## Limits
 - Give general information only, never legal advice on someone's specific situation; offer a consultation or a person instead.
@@ -105,9 +105,10 @@ export const TOOLS = [
       additionalProperties: false,
       properties: {
         summary: { type: 'string', description: 'What the person needs, in one or two sentences, for the staff member' },
+        client_need: { type: 'string', description: 'The same need in the client\'s own words, first person, one sentence (pre-typed into their message to our colleague), e.g. "registering my company with 2 directors before Friday"' },
         urgent: { type: 'boolean', description: 'True for complaints, deadlines within days, or an upset client' }
       },
-      required: ['summary', 'urgent']
+      required: ['summary', 'client_need', 'urgent']
     }
   }
 ];

@@ -83,6 +83,22 @@ const sendList = (env, to, text, button, rows) => graph(env, `${phoneId(env)}/me
   messaging_product: 'whatsapp', recipient_type: 'individual', to, type: 'interactive',
   interactive: { type: 'list', body: { text }, action: { button, sections: [{ title: 'Services', rows: rows.map(([id, title, description]) => ({ id, title, description })) }] } }
 });
+/** A message with one button that opens a link (here: a WhatsApp chat with the agent, message pre-typed). */
+export const sendCta = (env, to, text, label, url) => graph(env, `${phoneId(env)}/messages`, {
+  messaging_product: 'whatsapp', recipient_type: 'individual', to, type: 'interactive',
+  interactive: { type: 'cta_url', body: { text: text.slice(0, 1024) }, action: { name: 'cta_url', parameters: { display_text: label.slice(0, 20), url } } }
+});
+/** Opens a chat with the agent (0703 833 6596) with the client's message already typed; they just press Send. */
+export function agentChatUrl(chat, need) {
+  const lines = ['Hello Awal Global Consults, I was chatting with your WhatsApp assistant and would like to speak with someone.'];
+  if (chat.name) lines.push(`Name: ${chat.name}`);
+  if (chat.case_ref) lines.push(`Reference: ${chat.case_ref}`);
+  if (need) lines.push(`I need help with: ${String(need).slice(0, 400)}`);
+  return `${HUMAN_WHATSAPP_LINK}?text=${encodeURIComponent(lines.join('\n'))}`;
+}
+const sendAgentButton = (env, waId, chat, need) => sendCta(env, waId,
+  `Tap the button to chat with a colleague on ${HUMAN_WHATSAPP}. Your message is already typed for you: just press *Send*. We've also been notified.\n\nOffice hours: Mon to Fri 10am to 4pm, Sat 10am to 1pm (Lagos).`,
+  'Chat with an agent', agentChatUrl(chat, need));
 /** Blue ticks plus "typing..." while the assistant thinks (best effort). */
 const markRead = (env, messageId) => graph(env, `${phoneId(env)}/messages`, {
   messaging_product: 'whatsapp', status: 'read', message_id: messageId, typing_indicator: { type: 'text' }
@@ -194,7 +210,8 @@ async function toolHandoff(env, chat, input) {
         lines: [`${chat.name || 'Client'} · +${chat.wa_id}`, summary, 'The button opens a WhatsApp chat with them from your phone.'] })
     }).catch(err => console.error('wa: handoff email failed:', err && err.message));
   }
-  return { human_contact: HUMAN_WHATSAPP, chat_link: HUMAN_WHATSAPP_LINK, note: 'Tell them a colleague has been notified and will reach out, and that they can also message this number directly. Office hours Mon to Fri 10am to 4pm, Sat 10am to 1pm.' };
+  chat.agent_need = String(input.client_need || input.summary || '').slice(0, 400);
+  return { done: true, note: 'A "Chat with an agent" button opening our colleague\'s WhatsApp (with their message pre-typed) will be sent right after your reply. Tell them briefly that a colleague has been notified and to tap the button below. Do not paste any number or link yourself.' };
 }
 
 async function runTool(env, request, chat, block) {
@@ -257,8 +274,10 @@ export async function handleMessage(env, request, m) {
     break;
   }
   if (!reply) reply = `Thanks for your message. A colleague will get back to you shortly, or message us at ${HUMAN_WHATSAPP}.`;
+  const need = chat.agent_need; chat.agent_need = null;
   await saveChat(env, chat);
   await sendText(env, waId, reply);
+  if (need != null) await sendAgentButton(env, waId, chat, need);
   return { replied: true };
 }
 
@@ -321,7 +340,7 @@ async function handleMenu(env, request, m, waId, chat) {
   }
   if (pick === 'person') {
     await toolHandoff(env, chat, { summary: `Asked for a person from the WhatsApp menu.${chat.last_text ? ' Last message: ' + chat.last_text : ''}`, urgent: false });
-    await sendText(env, waId, `A colleague has been notified and will reach out to you. You can also chat with us directly on WhatsApp: ${HUMAN_WHATSAPP_LINK} (${HUMAN_WHATSAPP}). ${HOURS}`);
+    await sendAgentButton(env, waId, chat, chat.last_text || (chat.case_ref ? `my request ${chat.case_ref}` : ''));
     chat.menu_state = null; return done();
   }
   if (pick === 'track') {
@@ -358,7 +377,7 @@ async function handleMenu(env, request, m, waId, chat) {
     const details = /^(no|nope|none|nothing|n\/a|na)$/i.test(text) ? '' : `${chat.quote.label === 'Something else' ? 'Other service requested: ' : ''}${text}`;
     const res = await toolRequestQuote(env, request, chat, { ...chat.quote, details });
     chat.menu_state = null; chat.quote = null;
-    if (res.error) await sendText(env, waId, `Sorry, I couldn't save that just now. Please message a colleague on ${HUMAN_WHATSAPP} (${HUMAN_WHATSAPP_LINK}).`);
+    if (res.error) { await sendText(env, waId, 'Sorry, I couldn\'t save that just now.'); await sendAgentButton(env, waId, chat, `a quotation for ${chat.quote ? chat.quote.label : 'a service'}`); }
     else await sendText(env, waId, `Thank you. Your reference is *${res.reference}*. We'll email your itemised quotation within one working day.\n\nWant to send your details and documents now? Use your private application link: ${res.full_application_link}\n\nReply *menu* for other options.`);
     return done();
   }
