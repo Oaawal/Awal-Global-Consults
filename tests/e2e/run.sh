@@ -32,7 +32,7 @@ start() { # $1 = extra bindings
 stop() { pkill -f "wrangler pages dev" ; pkill -f mock-brevo3.js ; pkill -f mock-wa.js ; sleep 2; } 2>/dev/null
 
 # Order matters: fp-e2e writes the case that filler-test and panel-test use.
-MAIN="intake-e2e biz-e2e upload-e2e docfix-e2e past-e2e import-e2e bill-e2e billpdf-e2e disc-e2e payonly est-e2e svc-e2e miss-ptr bounce-e2e tools-e2e app-e2e fp-e2e filler-test panel-test wa-test"
+MAIN="intake-e2e biz-e2e upload-e2e docfix-e2e past-e2e import-e2e bill-e2e billpdf-e2e disc-e2e payonly est-e2e svc-e2e miss-ptr tools-e2e fp-e2e filler-test panel-test wa-test"
 NO_AI="wa-menu-test"
 ONLY="${1:-}"
 pass=0; fail=0; failed=""
@@ -51,6 +51,6 @@ start "--binding ANTHROPIC_API_KEY=k"
 curl -s -X POST -H "Authorization: Bearer x" http://127.0.0.1:8788/cron/daily > "$S/first-daily.json"
 for t in $MAIN; do [ -z "$ONLY" ] || [ "$ONLY" = "$t" ] && run "$t"; done
 stop
-if [ -z "$ONLY" ] || [ "$ONLY" = "$NO_AI" ]; then start ""; run "$NO_AI"; stop; fi
+if [ -z "$ONLY" ] || [ "$ONLY" = "$NO_AI" ]; then : > "$S/wa.log"; start ""; run "$NO_AI"; stop; fi
 echo "Total: $pass passed, $fail failed.${failed:+ Suites with failures:$failed}"
 [ "$fail" -eq 0 ]

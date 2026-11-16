@@ -31,15 +31,17 @@ Screenshots and outputs are left in the state folder.
 | upload-e2e, docfix-e2e, past-e2e, import-e2e | Client upload links, replace/remove with archive, past clients and their documents |
 | bill-e2e, billpdf-e2e, disc-e2e, payonly, pp-e2e, est-e2e | Quotations, invoices, receipts, letterhead PDFs, discounts, part payments |
 | svc-e2e, miss-ptr | Per-service progress, dependencies, client emails, "still needed" |
-| bounce-e2e, tools-e2e, app-e2e | Email bounces, free tools, dashboard app and notifications |
+| tools-e2e | The seven free tools |
 | fp-e2e | Filing pack, zip and photo shrinking, extension API keys, delivered documents, tracking page |
 | filler-test, panel-test | Filing assistant: page filler on a mock portal, extension loads and talks to the API |
 | wa-test, wa-menu-test | WhatsApp webhook: signatures, retries, AI tools, menu flow, agent button, failure logging |
 
-Not covered yet: drawing a signature on the form and the passport step in the browser. The old suites for these
-(`legacy/sig-e2e.js`, `legacy/people-e2e.js`, `legacy/pp-e2e.js`) follow the form's earlier step order and need
-updating for the "Start the full application" choice and the business-details step.
+Not covered yet (old suites kept in `tests/e2e/legacy/`, to be updated):
 
-Known quirks: `intake-e2e` "still one case" and `docfix-e2e` "non-document file refused" fail on wording/counting
-details of the test itself; tests sign in as `info@awalglobal.com.ng` (the default admin); a few older suites depend on
-data created earlier in the same run, so run the full list in order when in doubt.
+- Drawing a signature on the form and the passport step (`sig-e2e`, `people-e2e`, `pp-e2e`): written for the form's
+  earlier step order, before the "Start the full application" choice and the business-details step.
+- Email bounce alerts and phone notifications (`bounce-e2e`, `app-e2e`): need extra stand-ins for Brevo webhooks
+  and a push service.
+
+Tests sign in as `info@awalglobal.com.ng` (the default admin). Some suites use data created by earlier ones in the
+same run (`filler-test` and `panel-test` use the case `fp-e2e` makes), so run the full list in order when in doubt.

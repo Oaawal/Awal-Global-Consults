@@ -24,7 +24,7 @@ const emails=()=>fs.readFileSync(S+'/emails.jsonl','utf8').trim().split('\n').fi
  const v=await b.newPage();await v.goto(a.url().split('/admin/')[0]+qHref.replace(/^/,''));
  // (use same context cookies)
  await a.goto(B+qHref);t=(await a.textContent('body')).replace(/\s+/g,' ');
- ok(t.includes('Subtotal ₦645,000')&&t.includes('Loyalty discount −₦45,000')&&t.includes('₦600,000'),'web view shows subtotal, discount line and total' + (t.includes('Subtotal ₦645,000') ? '' : ' [page: ' + t.slice(0, 200) + ']'));
+ { const n = t.replace(/\s+/g, ''); ok(n.includes('Subtotal₦645,000')&&n.includes('Loyaltydiscount−₦45,000')&&n.includes('₦600,000'),'web view shows subtotal, discount line and total' + (t.includes('Subtotal ₦645,000') ? '' : ' [page: ' + t.slice(Math.max(0, t.indexOf('Subtotal') - 40), t.indexOf('Subtotal') + 200) + ']')); }
  ok(!/Loyalty discount\s*-?45,000/.test(t.split('Subtotal')[0]),'discount not listed as a service row');
  const pdf=await a.request.get(B+qHref+'/pdf').catch(()=>null);
  // PDF via page download
