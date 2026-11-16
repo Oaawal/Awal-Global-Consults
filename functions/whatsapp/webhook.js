@@ -23,7 +23,7 @@ export async function onRequestPost(context) {
   let payload;
   try { payload = JSON.parse(raw); } catch (e) { return plain('Bad JSON', 400); }
   const messages = incomingMessages(payload);
-  if (messages.length && env.DOCS && env.WHATSAPP_TOKEN && env.ANTHROPIC_API_KEY) {
+  if (messages.length && env.DOCS && env.WHATSAPP_TOKEN) {
     const work = (async () => {
       for (const m of messages) {
         try { await handleMessage(env, request, m); }

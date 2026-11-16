@@ -73,6 +73,16 @@ async function graph(env, path, body) {
 export const sendText = (env, to, text) => graph(env, `${phoneId(env)}/messages`, {
   messaging_product: 'whatsapp', recipient_type: 'individual', to, type: 'text', text: { body: String(text).slice(0, 4000), preview_url: true }
 });
+/** Up to 3 tap buttons (titles max 20 characters). */
+export const sendButtons = (env, to, text, buttons) => graph(env, `${phoneId(env)}/messages`, {
+  messaging_product: 'whatsapp', recipient_type: 'individual', to, type: 'interactive',
+  interactive: { type: 'button', body: { text: text.slice(0, 1024) }, action: { buttons: buttons.map(([id, title]) => ({ type: 'reply', reply: { id, title } })) } }
+});
+/** A pick-list of up to 10 rows (titles max 24 characters). */
+const sendList = (env, to, text, button, rows) => graph(env, `${phoneId(env)}/messages`, {
+  messaging_product: 'whatsapp', recipient_type: 'individual', to, type: 'interactive',
+  interactive: { type: 'list', body: { text }, action: { button, sections: [{ title: 'Services', rows: rows.map(([id, title, description]) => ({ id, title, description })) }] } }
+});
 /** Blue ticks plus "typing..." while the assistant thinks (best effort). */
 const markRead = (env, messageId) => graph(env, `${phoneId(env)}/messages`, {
   messaging_product: 'whatsapp', status: 'read', message_id: messageId, typing_indicator: { type: 'text' }
@@ -211,6 +221,8 @@ export async function handleMessage(env, request, m) {
   let chat = await loadChat(env, waId);
   const now = Date.now();
   if (chat && (chat.seen || []).includes(m.id)) return { skipped: 'duplicate' }; // Meta retries deliveries
+  // No AI key yet (or AI switched off): a free tap-button menu does the essentials
+  if (!env.ANTHROPIC_API_KEY || env.WA_AI_ENABLED === '0') return handleMenu(env, request, m, waId, chat);
   const fresh = !chat || now - new Date(chat.updated_at).getTime() > SESSION_GAP_MS || (chat.messages || []).length > MAX_TURN_MESSAGES;
   if (fresh) {
     chat = { wa_id: waId, name: m.profileName || (chat && chat.name) || '', started_at: new Date().toISOString(), messages: [],
@@ -264,4 +276,98 @@ export async function purgeOldChats(env, now = new Date()) {
     cursor = list.truncated ? list.cursor : null;
   } while (cursor);
   return removed;
+}
+
+
+// ── Menu mode (no AI): quotation, tracking, a person ───────────
+const MENU = [['quote', 'Get a quotation'], ['track', 'Track application'], ['person', 'Talk to a person']];
+const MENU_SERVICES = [
+  ['svc_bn', 'Business name', 'Register a business name with CAC', ['Business Name Registration']],
+  ['svc_ltd', 'Limited company', 'Register a private limited company', ['Limited Company Registration']],
+  ['svc_ngo', 'NGO / church / trustees', 'Incorporated trustees', ['Incorporated Trustees / NGO']],
+  ['svc_post', 'CAC changes & returns', 'Annual returns, directors, shares, name or address changes', ['Post-Incorporation Changes & Compliance']],
+  ['svc_tax', 'TIN, tax & VAT', 'TIN, tax filing, VAT, tax clearance', ['TIN Registration & Validation', 'Tax Clearance & VAT Filing']],
+  ['svc_scuml', 'SCUML', 'SCUML (AML) registration', ['SCUML Registration']],
+  ['svc_tm', 'Trademark', 'Protect your brand name or logo', ['Intellectual Property Registration']],
+  ['svc_ndpc', 'Data protection (NDPC)', 'NDPC registration or audit return', ['NDPC Registration (Data Controller / Processor)']],
+  ['svc_id', 'Passport or NIN', 'E-passport, NIN registration or correction', ['International Passport (E-passport)', 'NIN Registration & Correction']],
+  ['svc_other', 'Something else', 'Licences, legal documents, visas, other', ['Business Advisory']]
+];
+const HOURS = 'Office hours: Mon to Fri 10am to 4pm, Sat 10am to 1pm (Lagos).';
+
+async function showMenu(env, waId, chat, lead) {
+  chat.menu_state = null;
+  await sendButtons(env, waId, `${lead ? lead + '\n\n' : ''}How can we help? Tap an option below.\n\n${HOURS}\nFree 20-minute call: https://awalglobal.com.ng/book`, MENU);
+}
+
+async function handleMenu(env, request, m, waId, chat) {
+  const fresh = !chat || Date.now() - new Date(chat.updated_at).getTime() > SESSION_GAP_MS;
+  if (!chat) chat = { wa_id: waId, name: '', started_at: new Date().toISOString(), messages: [], seen: [] };
+  if (fresh) chat.menu_state = null;
+  chat.seen = [...(chat.seen || []), m.id].slice(-40);
+  if (m.profileName) chat.name = m.profileName;
+  markRead(env, m.id);
+  const pick = m.type === 'interactive' ? (m.interactive.button_reply || m.interactive.list_reply || {}).id
+    : m.type === 'button' ? m.button && m.button.payload : null;
+  const text = m.type === 'text' ? String(m.text && m.text.body || '').trim().slice(0, 500) : '';
+  const st = chat.menu_state;
+  const done = async () => { await saveChat(env, chat); return { replied: true, mode: 'menu' }; };
+
+  if (/^(menu|start|hi|hello|good (morning|afternoon|evening)|cancel)$/i.test(text) || (!st && !pick)) {
+    const intro = fresh ? `Hello${chat.name ? ' ' + chat.name.split(' ')[0] : ''}, welcome to *Awal Global Consults*: CAC registration, trademarks, tax, SCUML and compliance. This is our automated line; a person is available any time you need one. We handle your details under our privacy policy: awalglobal.com.ng/privacy-policy` : '';
+    if (!pick && m.type !== 'text') await sendText(env, waId, 'I can only read text messages here. To send documents, use the secure upload link we email you, or tap *Talk to a person*.');
+    await showMenu(env, waId, chat, intro);
+    return done();
+  }
+  if (pick === 'person') {
+    await toolHandoff(env, chat, { summary: `Asked for a person from the WhatsApp menu.${chat.last_text ? ' Last message: ' + chat.last_text : ''}`, urgent: false });
+    await sendText(env, waId, `A colleague has been notified and will reach out to you. You can also chat with us directly on WhatsApp: ${HUMAN_WHATSAPP_LINK} (${HUMAN_WHATSAPP}). ${HOURS}`);
+    chat.menu_state = null; return done();
+  }
+  if (pick === 'track') {
+    await sendText(env, waId, `Track your application any time at ${SITE_URL}/track with your reference (like AGC-2026-0012) and the email address you applied with. Reply *menu* for other options.`);
+    chat.menu_state = null; return done();
+  }
+  if (pick === 'quote') {
+    if (chat.case_ref) { await sendText(env, waId, `We already have your quotation request *${chat.case_ref}* and will email the itemised quote within one working day. Reply *menu* for other options.`); return done(); }
+    chat.menu_state = 'q_name'; chat.quote = {};
+    await sendText(env, waId, 'Great. What is your *full name*?');
+    return done();
+  }
+  if (st === 'q_name' && text) {
+    if (text.length < 3) { await sendText(env, waId, 'Please type your full name.'); return done(); }
+    chat.quote.full_name = text.slice(0, 120); chat.menu_state = 'q_email';
+    await sendText(env, waId, 'Thanks. What *email address* should we send the quotation to?');
+    return done();
+  }
+  if (st === 'q_email' && text) {
+    if (!validEmail(text)) { await sendText(env, waId, 'That email address doesn\'t look right. Please check and type it again.'); return done(); }
+    chat.quote.email = text.slice(0, 254); chat.menu_state = 'q_service';
+    await sendList(env, waId, 'Which service do you need?', 'Choose a service', MENU_SERVICES.map(([id, t, d]) => [id, t, d]));
+    return done();
+  }
+  if (st === 'q_service' && pick && pick.startsWith('svc_')) {
+    const svc = MENU_SERVICES.find(x => x[0] === pick);
+    chat.quote.services = svc[3]; chat.quote.label = svc[1]; chat.menu_state = 'q_details';
+    await sendText(env, waId, pick === 'svc_other'
+      ? 'Please describe briefly what you need (for example: NAFDAC registration, a tenancy agreement, a UK student visa).'
+      : 'Anything we should know for the quote? For example the business type, number of directors or a deadline. Or reply *no*.');
+    return done();
+  }
+  if (st === 'q_details' && text) {
+    const details = /^(no|nope|none|nothing|n\/a|na)$/i.test(text) ? '' : `${chat.quote.label === 'Something else' ? 'Other service requested: ' : ''}${text}`;
+    const res = await toolRequestQuote(env, request, chat, { ...chat.quote, details });
+    chat.menu_state = null; chat.quote = null;
+    if (res.error) await sendText(env, waId, `Sorry, I couldn't save that just now. Please message a colleague on ${HUMAN_WHATSAPP} (${HUMAN_WHATSAPP_LINK}).`);
+    else await sendText(env, waId, `Thank you. Your reference is *${res.reference}*. We'll email your itemised quotation within one working day.\n\nWant to send your details and documents now? Use your private application link: ${res.full_application_link}\n\nReply *menu* for other options.`);
+    return done();
+  }
+  if (st === 'q_service') {
+    await sendList(env, waId, 'Please tap *Choose a service* and pick one from the list.', 'Choose a service', MENU_SERVICES.map(([id, t, d]) => [id, t, d]));
+    return done();
+  }
+  // Anything else: remember it for the person who picks up, and show the options again
+  chat.last_text = text.slice(0, 300);
+  await showMenu(env, waId, chat, st ? 'Sorry, I didn\'t catch that.' : '');
+  return done();
 }
