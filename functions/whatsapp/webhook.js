@@ -10,11 +10,6 @@ const plain = (body, status = 200) => new Response(body, { status, headers: { 'C
 
 export async function onRequestGet({ request, env }) {
   const u = new URL(request.url);
-  // Set-up check: says which settings exist (never their values). Remove once connected.
-  if (u.searchParams.get('setup') === 'check') return plain(JSON.stringify({
-    token: !!env.WHATSAPP_TOKEN, app_secret: !!env.WHATSAPP_APP_SECRET, verify_token: !!env.WHATSAPP_VERIFY_TOKEN,
-    verify_length: (env.WHATSAPP_VERIFY_TOKEN || '').length, ai: !!env.ANTHROPIC_API_KEY, storage: !!env.DOCS
-  }));
   if (u.searchParams.get('hub.mode') === 'subscribe' && env.WHATSAPP_VERIFY_TOKEN && u.searchParams.get('hub.verify_token') === env.WHATSAPP_VERIFY_TOKEN) {
     return plain(u.searchParams.get('hub.challenge') || '');
   }
