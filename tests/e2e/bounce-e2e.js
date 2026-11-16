@@ -1,0 +1,26 @@
+const { chromium, request: pwreq } = require('playwright');const fs=require('fs');const S=process.argv[2];const B='http://127.0.0.1:8788';
+const rd=f=>fs.readFileSync(S+'/'+f,'utf8').trim().split('\n').filter(Boolean).map(JSON.parse);
+const ok=(c,m)=>console.log((c?'PASS ':'FAIL ')+m);
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:390,height:844}});
+ await p.addInitScript(()=>{try{localStorage.setItem('agc_consent','denied');localStorage.setItem('agc_app_panel','hide')}catch(e){}});
+ await p.goto(B+'/admin/login');await p.fill('#email','info@awalglobal.com.ng');await p.click('button[type=submit]');
+ const code=rd('emails.jsonl').filter(e=>e.subject.includes('login code')).at(-1).subject.match(/(\d{6})/)[1];await p.fill('#code',code);await p.click('button[type=submit]');await p.waitForURL(B+'/admin/');
+ await p.goto(B+'/admin/records');ok((await p.textContent('#security')).includes('Bounce alerts: on'),'Records shows bounce alerts on');
+ const hook=rd('emails-hooks.jsonl').at(-1);
+ const url=new URL(hook.url);const hookPath=B+url.pathname+url.search;
+ // a client with a case
+ const api=await pwreq.newContext();
+ let r=await api.post(B+'/submit-kyc',{multipart:{Full_Name:'Chi Eze',Phone:'08031234567',Email:'chi.eze@yahoo.com',Services_Requested:'TIN Registration & Validation',Declaration_Accurate:'Yes',Declaration_Consent:'Yes'}});
+ const ref=(await r.json()).reference;
+ const n0=rd('emails.jsonl').length, p0=rd('phone.jsonl').length;
+ r=await api.post(B+'/hooks/brevo?k=wrong',{data:{event:'hard_bounce',email:'chi.eze@yahoo.com'}});ok(r.status()===403,'forged request refused (403)');
+ r=await api.post(hookPath,{data:{event:'hard_bounce',email:'chi.eze@yahoo.com',reason:'550 5.1.1 user unknown',subject:"We've Received Your Request"}});ok(r.ok(),'Brevo bounce accepted');
+ await p.waitForTimeout(1500);
+ const mail=rd('emails.jsonl').slice(n0).find(e=>/Email bounced/.test(e.subject));ok(mail&&mail.subject.includes(ref),'admin alert email: '+(mail&&mail.subject));
+ const push=rd('phone.jsonl').slice(p0).find(x=>x.ok&&/bounced/.test(x.message.title));ok(!!push,'phone notification: '+(push&&push.message.title+' / '+push.message.body));
+ r=await api.post(hookPath,{data:{event:'soft_bounce',email:'chi.eze@yahoo.com'}});await p.waitForTimeout(800);
+ ok(rd('emails.jsonl').filter(e=>/Email bounced/.test(e.subject)).length===1,'soft bounce only logged, no alert');
+ const caseLink=push.message.url;await p.goto(B+caseLink+'?tab=activity');await p.waitForTimeout(500);
+ ok((await p.textContent('body')).includes('Email to the client bounced'),'bounce note on the case');
+ await p.screenshot({path:S+'/bounce-case.png',fullPage:true});
+ await b.close();})();

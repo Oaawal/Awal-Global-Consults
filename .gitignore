@@ -4,3 +4,4 @@
 node_modules/
 .wrangler/
 ops/grc-portfolio/out/
+tests/node_modules/

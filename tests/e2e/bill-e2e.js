@@ -1,0 +1,52 @@
+const { chromium, request: pwreq } = require('playwright');const fs=require('fs');const S=process.argv[2];const B='http://127.0.0.1:8788';
+const ok=(c,m)=>console.log((c?'PASS ':'FAIL ')+m);
+const emails=()=>fs.readFileSync(S+'/emails.jsonl','utf8').trim().split('\n').filter(Boolean).map(JSON.parse);
+(async()=>{const api=await pwreq.newContext();
+ let r=await api.post(B+'/submit-kyc',{multipart:{Full_Name:'Femi Bakare',Phone:'08031234567',Email:'femi@gmail.com',Business_Name:'Bakare Foods',Services_Requested:'SCUML Registration, GRC Review',Declaration_Accurate:'Yes',Declaration_Consent:'Yes',People_Count:'1',
+   Person_1_Full_Name:'Femi Bakare',Person_1_Role:'Director',Person_1_Nationality:'Nigerian',Person_1_NIN:'44444444444',Person_1_Date_of_Birth:'1980-01-01',Person_1_Gender:'Male',Person_1_Phone:'08031234567',Person_1_Email:'femi@gmail.com',Person_1_Occupation:'Trader',Person_1_Residential_Address:'7 Ogba Road, Ikeja'}});
+ const ref=(await r.json()).reference;const caseId=(await r.json()).uploadLink?.split('/upload/')[1]?.split('/')[0];
+ const b=await chromium.launch();const a=await b.newPage({viewport:{width:1280,height:900}});await a.addInitScript(()=>{try{localStorage.setItem('agc_app_panel','hide')}catch(e){}});
+ a.on('dialog',d=>d.accept());
+ await a.goto(B+'/admin/login');await a.fill('#email','info@awalglobal.com.ng');await a.click('button[type=submit]');
+ const code=emails().filter(e=>e.subject.includes('login code')).at(-1).subject.match(/(\d{6})/)[1];await a.fill('#code',code);await a.click('button[type=submit]');await a.waitForURL(B+'/admin/');
+ await a.goto(B+`/admin/case/${caseId}?tab=billing`);
+ ok(await a.inputValue('input[name=desc_0]')==='SCUML Registration'&&await a.inputValue('input[name=unit_0]')==='70000','quotation pre-filled from services and prices');
+ ok(await a.inputValue('input[name=name]')==='Bakare Foods','billed to the business name');
+ await a.fill('input[name=detail_0]','Registration with SCUML, certificate');await a.fill('input[name=timeline_0]','2–3 weeks');
+ await a.fill('input[name=desc_2]','SCUML portal charges');await a.fill('input[name=unit_2]','5000');await a.check('input[name=gov_2]');
+ let n0=emails().length;await a.click('button[name=send][value="1"]');await a.waitForLoadState();
+ ok((await a.textContent('body')).includes('Emailed to the client'),'quotation saved and emailed');
+ const qm=emails().slice(n0).find(e=>/quotation AGC-QT-/.test(e.subject));ok(!!qm,'client got: '+(qm&&qm.subject));
+ const qlink=qm.html.match(/http[^"]*\/billing\/[0-9a-f-]{36}\/[\w-]+/)[0].replace('https://awalglobal.com.ng',B);
+ const cp=await b.newPage({viewport:{width:900,height:1200}});await cp.goto(qlink);
+ const qt=(await cp.textContent('body')).replace(/\s+/g,' ');ok(qt.includes('Quotation')&&qt.includes('Estimated Total')&&qt.includes('₦325,000'),'client sees quotation, total ₦325,000 (no VAT)');
+ await cp.screenshot({path:S+'/quote.png',fullPage:true});
+ r=await cp.goto(qlink.slice(0,-2)+'xx');ok(r.status()===404,'tampered document link refused');
+ ok((await a.textContent('body')).includes('Quote sent'),'case moved to Quote sent');
+ // VAT on, then invoice from quote
+ await a.check('input[name=vat]');await a.click('form[action="/admin/billing-settings"] button');await a.waitForLoadState();
+ await a.click('text=Make invoice');await a.waitForLoadState();
+ ok(await a.inputValue('select[name=kind]')==='invoice'&&await a.inputValue('input[name=desc_0]')==='SCUML Registration','invoice pre-filled from the quotation');
+ n0=emails().length;await a.click('button[name=send][value="1"]');await a.waitForLoadState();
+ const im=emails().slice(n0).find(e=>/invoice AGC-INV-/.test(e.subject));ok(!!im,'invoice emailed: '+(im&&im.subject));
+ const ilink=im.html.match(/http[^"]*\/billing\/[0-9a-f-]{36}\/[\w-]+/)[0].replace('https://awalglobal.com.ng',B);
+ await cp.goto(ilink);const it=(await cp.textContent('body')).replace(/\s+/g,' ');
+ ok(it.includes('Tax Invoice')&&it.includes('VAT (7.5% on our fees)')&&it.includes('₦24,000')&&it.includes('₦349,000'),'VAT 7.5% only on fee lines (₦24,000), total ₦349,000');
+ ok(it.includes('Three Hundred and Forty-Nine Thousand Naira Only'),'amount in words');
+ await cp.screenshot({path:S+'/invoice.png',fullPage:true});
+ // payment
+ await a.click('text=Record payment and issue receipt');await a.fill('form[action$="/payment"] input[name=ref]','KUDA-123456');
+ n0=emails().length;await a.click('form[action$="/payment"] button[type=submit]');await a.waitForLoadState();
+ ok((await a.textContent('body')).includes('Payment recorded'),'payment recorded');
+ const rm=emails().slice(n0).find(e=>/receipt AGC-RCT-/.test(e.subject));ok(rm&&/engagement letter AGC-EL-/.test(rm.html),'receipt emailed with engagement letter link');
+ const rlink=rm.html.match(/http[^"]*\/billing\/[0-9a-f-]{36}\/[\w-]+/)[0].replace('https://awalglobal.com.ng',B);
+ await cp.goto(rlink);const rt=(await cp.textContent('body')).replace(/\s+/g,' ');ok(rt.includes('Receipt')&&rt.includes('KUDA-123456')&&/Balance.*0/.test(rt),'receipt shows reference and zero balance');
+ await cp.screenshot({path:S+'/receipt.png',fullPage:true});
+ const elink=rm.html.match(/http[^"]*\/billing\/[0-9a-f-]{36}\/[\w-]+/g)[1].replace('https://awalglobal.com.ng',B);
+ await cp.goto(elink);const et=(await cp.textContent('body')).replace(/\s+/g,' ');ok(et.includes('CONFIRMATION OF ENGAGEMENT')&&/Invoice No\. AGC-INV-/.test(et)&&/Receipt No\. AGC-RCT-/.test(et)&&/Quotation No\. AGC-QT-/.test(et),'engagement letter links quotation, invoice and receipt numbers');
+ await cp.screenshot({path:S+'/letter.png',fullPage:true});
+ await a.goto(B+`/admin/case/${caseId}?tab=billing`);const bt=(await a.textContent('body')).replace(/\s+/g,' ');
+ ok(bt.includes('Payment received')||/Paid/.test(bt),'invoice shows Paid; case at Payment received');
+ // VAT off again for later tests
+ await a.uncheck('input[name=vat]');await a.click('form[action="/admin/billing-settings"] button');
+ await b.close();})();

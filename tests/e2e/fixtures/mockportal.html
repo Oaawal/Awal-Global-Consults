@@ -1,0 +1,22 @@
+<!doctype html><html><body>
+<h2>Name reservation</h2>
+<div class="form-group"><label for="pn1">Proposed Name 1 *</label><input id="pn1" name="proposedName1"></div>
+<div class="form-group"><label for="pn2">Proposed Name 2</label><input id="pn2"></div>
+<div class="form-group"><label>Nature of Business</label><select id="cat"><option value="">--Select--</option><option value="12">Transportation</option><option value="44">Wholesale and Retail Trade; Repair of Motor Vehicles and Motorcycles</option></select></div>
+<div class="form-group"><label>Business Activity Description</label><textarea id="desc"></textarea></div>
+<div><span>Principal place of business address</span><input id="addr"></div>
+<div class="form-group"><label for="em">Email Address</label><input id="em" type="email"></div>
+<div class="form-group"><label for="cap">Enter captcha</label><input id="cap"></div>
+<h2>Proprietor</h2>
+<div class="form-group"><label for="sn">Surname</label><input id="sn"></div>
+<div class="form-group"><label for="fn">First Name</label><input id="fn"></div>
+<div class="form-group"><label for="on">Other Names</label><input id="on"></div>
+<div>Gender <label><input type="radio" name="g" value="M">Male</label><label><input type="radio" name="g" value="F">Female</label></div>
+<div class="form-group"><label for="dob">Date of Birth</label><input id="dob" type="date"></div>
+<div class="form-group"><label for="nin">NIN</label><input id="nin"></div>
+<div class="form-group"><label for="odd">Something unusual</label><input id="odd"></div>
+<div class="form-group"><label for="f1">Upload means of identification</label><input id="f1" type="file"></div>
+<div class="form-group"><label for="f2">Upload passport photograph</label><input id="f2" type="file"></div>
+<button type="submit" onclick="window.submitted=true">Submit</button>
+<script>window.changes=[];document.addEventListener('change',e=>changes.push(e.target.id||e.target.name));</script>
+</body></html>

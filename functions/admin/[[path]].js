@@ -27,6 +27,7 @@ import {
 import { statusesFor, statusInfo, retentionFor, documentContentType, autoFollowUp, isOpen } from '../_lib/cases.js';
 import { MANIFEST, SERVICE_WORKER, APP_SCRIPT, FILING_SCRIPT } from '../_lib/admin-app.js';
 import { filingPack } from '../_lib/filing-pack.js';
+import { dailyJobHealth } from '../_lib/job-health.js';
 import { handleExtensionApi, listKeys, createKey, revokeKey } from '../_lib/extension-api.js';
 import { vapidKeys, notifyAdmins } from '../_lib/webpush.js';
 import { bounceSettings, ensureBounceWebhook } from '../_lib/bounces.js';
@@ -486,6 +487,7 @@ async function handle(context) {
     const weekAhead = new Date(Date.now() + 7 * 86400000).toISOString();
     const base = 'SELECT c.id, c.reference, c.kind, c.services, c.status, c.created_at, c.status_changed_at, c.follow_up_at, c.follow_up_note, cl.full_name FROM cases c JOIN clients cl ON cl.id = c.client_id';
     const funnelP = funnelStats(env, 30); // its own trip, alongside the batch below
+    const jobP = dailyJobHealth(env, { alert: true }).catch(() => ({ late: false }));
     const [needs, follow, waiting, recent, counts, review, requests] = await env.DB.batch([
       env.DB.prepare(`${base} WHERE c.status = 'new' ORDER BY c.created_at LIMIT 6`),
       env.DB.prepare(`${base} WHERE c.follow_up_at IS NOT NULL AND c.follow_up_at <= ?1 ORDER BY c.follow_up_at LIMIT 6`).bind(weekAhead),
@@ -499,6 +501,8 @@ async function handle(context) {
     const s = (counts.results || [])[0] || {};
     const reviewN = review.results[0].n, requestN = requests.results[0].n;
     const alerts = [];
+    const job = await jobP;
+    if (job.late) alerts.push({ href: '/admin/records#security', tone: 'err', icon: 'alert', text: `The daily job has not run for ${Math.round(job.hours)} hours: no reminders, summaries or backups until it does. You have been emailed the fix.` });
     if (reviewN) alerts.push({ href: '/admin/records', tone: 'warn', icon: 'clock', text: `${reviewN} record${reviewN === 1 ? ' has' : 's have'} passed the retention period: review for erasure.` });
     if (requestN) alerts.push({ href: '/admin/records', tone: 'warn', icon: 'inbox', text: `${requestN} client data request${requestN === 1 ? ' is' : 's are'} open.` });
     return html(overviewPage({

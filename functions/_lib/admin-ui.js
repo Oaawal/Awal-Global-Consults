@@ -286,6 +286,7 @@ details.more[open] summary::before{content:'– '}
 .flash.err{background:var(--red-50);color:var(--red)}
 .note{display:flex;gap:10px;align-items:flex-start;background:#FBF8F2;border:1px solid var(--line-2);border-radius:12px;padding:12px 14px;font-size:14px;color:#3b4855}
 .note.warn{background:var(--amber-50);border-color:#f6dfb2;color:#6d4300}
+.note.err{background:var(--red-50);border-color:#f0c4c0;color:var(--red)}
 .note.danger{background:var(--red-50);border-color:#f3cbc7;color:#7d1b15}
 .empty{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:18px 16px 14px;color:var(--muted)}
 .empty-title{font-weight:600;color:var(--text)}

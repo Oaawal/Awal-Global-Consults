@@ -830,10 +830,16 @@ export const ACTIVITY_FILTERS = [
   { key: 'document', label: 'Documents', prefix: 'document.' },
   { key: 'login', label: 'Sign-ins', prefix: 'login.' },
   { key: 'client', label: 'Clients & requests', prefix: 'client.' },
-  { key: 'job', label: 'Daily job', prefix: 'job.' }
+  { key: 'job', label: 'Daily job', prefix: 'job.' },
+  { key: 'whatsapp', label: 'WhatsApp', prefix: 'whatsapp.' },
+  { key: 'extension', label: 'Filing assistant', prefix: 'extension.' }
 ];
 
 const ACTION_LABELS = {
+  'whatsapp.send_failed': 'WhatsApp message could not be answered or sent',
+  'extension.filing_viewed': 'Filing assistant opened a case', 'extension.document_fetched': 'Filing assistant fetched a document',
+  'extension.key_created': 'Filing assistant connected', 'extension.key_revoked': 'Filing assistant disconnected',
+  'document.delivered': 'Document given to the client',
   'case.created': 'New submission received', 'case.viewed': 'Case opened', 'case.status_changed': 'Status changed',
   'case.note_added': 'Note added', 'case.follow_up_set': 'Follow-up updated', 'case.reminder_sent': 'Automatic reminder sent',
   'case.tracked': 'Client checked status online', 'case.legal_hold': 'Legal hold changed', 'case.erased': 'Case erased',

@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "description": "Local end-to-end tests for awalglobal.com.ng. See tests/README.md.",
+  "devDependencies": {
+    "playwright": "1.63.0",
+    "wrangler": "4.40.0"
+  }
+}

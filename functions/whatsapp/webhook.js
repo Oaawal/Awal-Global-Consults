@@ -5,6 +5,14 @@
  */
 import { validSignature, incomingMessages, handleMessage, sendText } from '../_lib/wa-bot.js';
 import { HUMAN_WHATSAPP } from '../_lib/wa-knowledge.js';
+import { dailyJobHealth } from '../_lib/job-health.js';
+
+/** A message we could not handle or send is written to the audit log (Activity page, morning summary). */
+async function logFailure(env, m, err, stage) {
+  const to = String(m.from || '').replace(/\D/g, '');
+  await env.DB.prepare("INSERT INTO audit_log (at, actor, action, entity_type, entity_id, detail, ip) VALUES (?1, 'whatsapp', 'whatsapp.send_failed', 'whatsapp', ?2, ?3, NULL)")
+    .bind(new Date().toISOString(), to.slice(0, 5) + '…' + to.slice(-3), JSON.stringify({ stage, error: String(err && err.message || err).slice(0, 300) })).run().catch(() => {});
+}
 
 const plain = (body, status = 200) => new Response(body, { status, headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' } });
 
@@ -30,9 +38,12 @@ export async function onRequestPost(context) {
         catch (err) {
           console.error('whatsapp: message failed:', err && err.message);
           // Never leave a client unanswered: a plain apology with the human number
-          await sendText(env, m.from, `Sorry, I couldn't process that just now. Please try again in a moment, or message a colleague on ${HUMAN_WHATSAPP}.`).catch(() => {});
+          await logFailure(env, m, err, 'reply');
+          await sendText(env, m.from, `Sorry, I couldn't process that just now. Please try again in a moment, or message a colleague on ${HUMAN_WHATSAPP}.`)
+            .catch(err2 => logFailure(env, m, err2, 'apology'));
         }
       }
+      await dailyJobHealth(env, { alert: true }).catch(() => {});
     })();
     if (typeof context.waitUntil === 'function') context.waitUntil(work); else await work;
   }

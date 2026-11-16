@@ -268,8 +268,9 @@ export async function runDailyJob(env, request, { now = new Date() } = {}) {
   } catch (err) { console.error('daily job: agency check failed:', err && err.message); }
 
   const signIns24 = await recentSignIns(env, dayAgo, 50);
-  const security = { signIns: signIns24.filter(r => r.ok).length, failed: signIns24.filter(r => !r.ok).length };
-  const hasNews = atAgency.length || security.failed || consultations.length || digest || newCases.length || followUps.length || waiting.length || inProgress.length || remindersSent.length || retentionDue
+  const waFailed = ((await env.DB.prepare("SELECT COUNT(*) AS n FROM audit_log WHERE action = 'whatsapp.send_failed' AND at >= ?1").bind(dayAgo).first()) || {}).n || 0;
+  const security = { signIns: signIns24.filter(r => r.ok).length, failed: signIns24.filter(r => !r.ok).length, waFailed };
+  const hasNews = atAgency.length || security.failed || security.waFailed || consultations.length || digest || newCases.length || followUps.length || waiting.length || inProgress.length || remindersSent.length || retentionDue
     || counts.applications || counts.enquiries;
   let summarySent = false;
   if (hasNews) {

@@ -1,0 +1,20 @@
+const { chromium } = require('playwright');const fs=require('fs');const S=process.argv[2];const B='http://127.0.0.1:8788';
+const ok=(c,m)=>console.log((c?'PASS ':'FAIL ')+m);
+const emails=()=>fs.readFileSync(S+'/emails.jsonl','utf8').trim().split('\n').filter(Boolean).map(JSON.parse);
+(async()=>{const b=await chromium.launch();const a=await b.newPage({viewport:{width:390,height:844}});await a.addInitScript(()=>{try{localStorage.setItem('agc_app_panel','hide')}catch(e){}});
+ await a.goto(B+'/admin/login');await a.fill('#email','info@awalglobal.com.ng');await a.click('button[type=submit]');
+ const code=emails().filter(e=>/login code/.test(e.subject)).at(-1).subject.match(/(\d{6})/)[1];await a.fill('#code',code);await a.click('button[type=submit]');await a.waitForURL(B+'/admin/');
+ await a.goto(B+'/admin/import');
+ const stamp=Date.now()%100000;
+ await a.fill('#i-name','Musa Bello'+stamp);await a.fill('#i-name','Musa Bello');await a.fill('#i-phone','0803'+String(stamp).padStart(7,'0'));await a.fill('#i-service','Business Name Registration');await a.fill('#i-date','2026-03-0'+(1+stamp%8));
+ await a.setInputFiles('#i-files',[{name:'cac-cert.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.4\n%%EOF\n')},{name:'id.png',mimeType:'image/png',buffer:Buffer.from('not really a png at all')}]);
+ await a.click('form[action="/admin/import/one"] button[type=submit]');await a.waitForLoadState();
+ const body=(await a.textContent('body')).replace(/\s+/g,' ');
+ ok(/tab=documents/.test(a.url()),'opens on the Documents tab');
+ ok(body.includes('some files were not accepted'),'warns that the renamed file was refused');
+ ok(body.includes('added-by-office--cac-cert.pdf')&&!body.includes('added-by-office--id.png'),'genuine PDF attached, fake PNG not');
+ await a.goto(a.url().split('?')[0]+'?tab=activity');ok((await a.textContent('body')).includes('Added 1 document with the past-client record'),'activity log notes the document');
+ // no files: still works as before
+ await a.goto(B+'/admin/import');await a.fill('#i-name','Ada Obi');await a.fill('#i-phone','0809'+String(stamp+1).padStart(7,'0'));await a.fill('#i-service','TIN Registration');await a.fill('#i-date','2026-02-02');
+ await a.click('form[action="/admin/import/one"] button[type=submit]');await a.waitForLoadState();ok((await a.textContent('body')).includes('Past client added.'),'adding without files still works');
+ await b.close();})().catch(e=>{console.log('ERR',e.message.split('\n')[0]);process.exit(1)});

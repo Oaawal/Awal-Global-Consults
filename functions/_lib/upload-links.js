@@ -51,11 +51,26 @@ export async function detailsUrl(env, caseId, origin = SITE_URL) {
 }
 export const verifyDetailsLink = (env, caseId, sig) => matches(env, caseId, sig, 'details');
 
-/** Private download link for a finished document (certificate etc.) given to the client: /delivered/<docId>/<signature> */
-export async function deliveredUrl(env, docId, origin = SITE_URL) {
-  return `${origin}/delivered/${docId}/${await sign(env, docId, 'deliver')}`;
+/**
+ * Private download link for a finished document (certificate etc.) given to the client:
+ * /delivered/<docId>/<expiry>/<signature>. Valid for DELIVERED_LINK_DAYS; after that the
+ * client gets a fresh link from the tracking page (reference + email), which makes a new one.
+ */
+export const DELIVERED_LINK_DAYS = 30;
+export async function deliveredUrl(env, docId, origin = SITE_URL, now = Date.now()) {
+  const exp = Math.floor(now / 1000) + DELIVERED_LINK_DAYS * 86400;
+  return `${origin}/delivered/${docId}/${exp}/${await sign(env, `${docId}:${exp}`, 'deliver')}`;
 }
-export const verifyDeliveredLink = (env, docId, sig) => matches(env, docId, sig, 'deliver');
+/** 'ok' | 'expired' | 'bad'. The expiry is inside the signature, so it cannot be edited. */
+export async function checkDeliveredLink(env, docId, exp, sig, now = Date.now()) {
+  if (!/^[0-9a-f-]{36}$/.test(docId || '') || !/^\d{10}$/.test(exp || '') || !sig) return 'bad';
+  const want = await sign(env, `${docId}:${exp}`, 'deliver');
+  if (want.length !== sig.length) return 'bad';
+  let diff = 0;
+  for (let i = 0; i < want.length; i++) diff |= want.charCodeAt(i) ^ sig.charCodeAt(i);
+  if (diff !== 0) return 'bad';
+  return Number(exp) * 1000 < now ? 'expired' : 'ok';
+}
 
 export async function uploadUrl(env, caseId, origin = SITE_URL) {
   return `${origin}/upload/${caseId}/${await sign(env, caseId)}`;

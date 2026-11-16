@@ -1,0 +1,21 @@
+const { chromium, request: pwreq } = require('playwright');const fs=require('fs');const S=process.argv[2];const B='http://127.0.0.1:8788';
+const emails=()=>fs.readFileSync(S+'/emails.jsonl','utf8').trim().split('\n').filter(Boolean).map(JSON.parse);
+const phone=()=>fs.readFileSync(S+'/phone.jsonl','utf8').trim().split('\n').filter(Boolean).map(JSON.parse);
+const ok=(c,m)=>console.log((c?'PASS ':'FAIL ')+m);
+(async()=>{const b=await chromium.launch();const ctx=await b.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,userAgent:'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 Chrome/124 Mobile Safari/537.36'});
+ const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
+ await p.goto(B+'/admin/login');await p.fill('#email','info@awalglobal.com.ng');await p.click('button[type=submit]');
+ const code=emails().filter(e=>e.subject.includes('login code')).at(-1).subject.match(/(\d{6})/)[1];await p.fill('#code',code);await p.click('button[type=submit]');
+ await p.waitForURL(B+'/admin/');
+ ok(await p.$('link[rel=manifest]')!==null,'manifest linked');
+ const swOk=await p.evaluate(async()=>{const r=await navigator.serviceWorker.ready;return r.scope});ok(/\/admin\/$/.test(swOk),'service worker active, scope '+swOk);
+ await p.waitForTimeout(800);ok(await p.isVisible('#app-panel'),'banner offers: '+(await p.textContent('#app-panel')).replace(/\s+/g,' ').trim().slice(0,70));
+ await p.goto(B+'/admin/records');await p.waitForTimeout(800);ok((await p.textContent('#push-settings')).includes('Notifications on this device'),'Records shows: '+(await p.textContent('#push-settings')).replace(/\s+/g,' ').trim().slice(0,60));
+ await p.screenshot({path:S+'/admin-m.png'});
+ // register the fake phone as this admin's device through the real endpoint, then point it at the local receiver
+ const keys=JSON.parse(fs.readFileSync(S+'/phone-keys.json'));
+ let r=await p.evaluate(async(k)=>{const res=await fetch('/admin/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({endpoint:'https://push.example.test/abc',keys:k})});return res.status},keys);
+ ok(r===200,'subscribe endpoint accepts a device');
+ r=await (await pwreq.newContext()).post(B+'/admin/push/subscribe',{headers:{Origin:B,'Content-Type':'application/json'},data:{endpoint:'https://x',keys}});ok(r.status()!==200,'subscribe refused without sign-in ('+r.status()+')');
+ fs.writeFileSync(S+'/endpoint.txt','http://127.0.0.1:9912/push/abc');
+ await b.close();})();

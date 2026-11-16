@@ -115,12 +115,17 @@ export async function exportClient(env, clientId) {
 
 /** Nightly backup of the database to private storage; old backups are removed. */
 export async function backupDatabase(env, runDate) {
-  const tables = ['clients', 'cases', 'documents', 'case_events', 'data_requests', 'counters', 'job_runs', 'audit_log', 'subscribers', 'bookings', 'billing_docs'];
+  // app_settings holds the key that signs every client link (upload, application, download) and the
+  // billing settings; without it a restore would break every link already sent. Sign-in codes and
+  // sessions are left out on purpose (short-lived; everyone signs in again after a restore).
+  const tables = ['clients', 'cases', 'documents', 'case_events', 'data_requests', 'counters', 'job_runs', 'audit_log', 'subscribers', 'bookings', 'billing_docs', 'app_settings', 'push_subscriptions'];
   const results = await env.DB.batch(tables.map(t => env.DB.prepare(`SELECT * FROM ${t}`)));
   const dump = { createdAt: new Date().toISOString(), database: 'awal-cases', tables: {} };
   tables.forEach((t, i) => { dump.tables[t] = results[i].results || []; });
   const body = JSON.stringify(dump);
   await env.DOCS.put(`${BACKUP_PREFIX}${runDate}.json`, body, { httpMetadata: { contentType: 'application/json' } });
+  // A second copy in the separate backup bucket, so losing the main bucket does not lose the database too
+  if (env.DOCS_BACKUP) await env.DOCS_BACKUP.put(`${BACKUP_PREFIX}${runDate}.json`, body, { httpMetadata: { contentType: 'application/json' } });
 
   // Remove backups older than the keep window
   const cutoff = new Date(Date.now() - BACKUP_KEEP_DAYS * 86400000).toISOString().slice(0, 10);

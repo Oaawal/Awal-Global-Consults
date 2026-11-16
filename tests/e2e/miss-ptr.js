@@ -1,0 +1,18 @@
+const { chromium, request: pwreq } = require('playwright');const fs=require('fs');const S=process.argv[2];const B='http://127.0.0.1:8788';
+const ok=(c,m)=>console.log((c?'PASS ':'FAIL ')+m);
+const emails=()=>fs.readFileSync(S+'/emails.jsonl','utf8').trim().split('\n').filter(Boolean).map(JSON.parse);
+(async()=>{const b=await chromium.launch();const a=await b.newPage({viewport:{width:1280,height:900}});
+ await a.goto(B+'/admin/login');await a.fill('#email','info@awalglobal.com.ng');await a.click('button[type=submit]');
+ const code=emails().filter(e=>/login code/.test(e.subject)).at(-1).subject.match(/(\d{6})/)[1];await a.fill('#code',code);await a.click('button[type=submit]');await a.waitForURL(B+'/admin/');
+ await a.goto(B+'/admin/import');await a.fill('#i-name','Wale Musa');await a.fill('#i-phone','0809'+String(Date.now()%10000000).padStart(7,'0'));await a.fill('#i-service','Limited Company Registration');await a.fill('#i-date','2026-11-01');await a.selectOption('#i-status','awaiting_documents');
+ await a.click('form[action="/admin/import/one"] button[type=submit]');await a.waitForLoadState();
+ const url=a.url().split('?')[0];await a.goto(url);
+ const m=(await a.textContent('#missing').catch(()=>'')).replace(/\s+/g,' ');
+ ok(m.includes('Two proposed names')&&m.includes('Type them in below'),'WhatsApp client: Still needed lists names and links to the form');
+ await a.click('#missing a[href="#biz-details"]');await a.fill('[name=f_Proposed_Name_1]','Musa Foods Ltd');await a.fill('[name=f_Proposed_Name_2]','Musa Farms Ltd');
+ await a.selectOption('[name=f_Business_Category]',{label:'Manufacturing'});await a.fill('[name=f_Specific_Nature_Of_Business]','Food processing');await a.fill('[name=f_Business_Address]','2 Oba Akran Avenue, Ikeja');
+ await a.click('#biz-details button[type=submit]');await a.waitForLoadState();
+ const m2=(await a.textContent('#missing').catch(()=>'')).replace(/\s+/g,' ');
+ ok(!/Two proposed names|Nature of business|Business address in Nigeria/.test(m2),'filled items drop off Still needed');
+ await (await a.$('#biz-details')).screenshot({path:S+'/biz-edit.png'});
+ await b.close();})().catch(e=>{console.log('ERR',e.message.split('\n')[0]);process.exit(1)});
