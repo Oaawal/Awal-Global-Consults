@@ -3,7 +3,7 @@ title: "CAC Plans Free .ng Domains, Business Emails and Websites for Registered 
 seo_title: CAC Plans Free .ng Domains and Websites (2026)
 slug: cac-free-ng-domain-email-website-plan
 date: 2026-11-15
-draft: true
+draft: false
 topic: after-registration
 category: cac-registration
 description: CAC says it plans free .ng domains, business emails and websites for registered businesses. What was announced, what is not known yet, and what to do now.

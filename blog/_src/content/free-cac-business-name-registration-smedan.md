@@ -3,7 +3,7 @@ title: "Free CAC Business Name Registration Is Open Again: Who Qualifies and How
 seo_title: Free CAC Business Name Registration 2026 (SMEDAN)
 slug: free-cac-business-name-registration-smedan
 date: 2026-11-15
-draft: true
+draft: false
 topic: registering-with-cac
 category: cac-registration
 description: The FG and SMEDAN free CAC business name registration for 250,000 small businesses has reopened. Who qualifies, how to apply and what it does not cover.
