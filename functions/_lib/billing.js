@@ -238,6 +238,9 @@ export async function relatedDocs(env, doc) {
   return { invoice, quote, receipt };
 }
 
+/** "AGC-QT-2026-Nov-01 (Rev. 2)" once a quotation or invoice has been revised. */
+export const numberLabel = (doc, cl = JSON.parse(doc.client_json || '{}')) => cl.revision ? `${doc.number} (Rev. ${cl.revision})` : doc.number;
+
 export function renderDoc(doc, { invoice = null, receipt = null, quote = null, pdfUrl = '' } = {}) {
   const cl = JSON.parse(doc.client_json || '{}');
   const items = lineItems(JSON.parse(doc.items_json || '[]'));
@@ -246,7 +249,7 @@ export function renderDoc(doc, { invoice = null, receipt = null, quote = null, p
 
   if (doc.kind === 'quote') {
     kicker = 'Official price quotation'; badge = 'Valid 14 days';
-    body = `<div class="meta"><div><span>Quote No.</span><strong>${esc(doc.number)}</strong></div><div><span>Date issued</span><strong>${dayShort(doc.issued_at)}</strong></div><div><span>Valid until</span><strong>${dayShort(doc.valid_until)}</strong></div></div>
+    body = `<div class="meta"><div><span>Quote No.</span><strong>${esc(numberLabel(doc, cl))}</strong></div><div><span>${cl.revisedAt ? 'Revised on' : 'Date issued'}</span><strong>${dayShort(cl.revisedAt || doc.issued_at)}</strong></div><div><span>Valid until</span><strong>${dayShort(doc.valid_until)}</strong></div></div>
       <div class="parties">${clientBlock(cl, 'Prepared for')}<div><span>Service category</span><strong>${esc(doc.category || '')}</strong></div></div>
       <table><thead><tr><th>Service</th><th>What's included</th><th>Timeline</th><th class="num">Amount (₦)</th></tr></thead><tbody>
       ${items.map(i => `<tr><td><strong>${esc(i.description)}</strong>${i.qty > 1 ? `<small>Qty ${i.qty} × ${plain(i.unit)}</small>` : ''}${i.gov ? '<small>Government fee (no VAT)</small>' : ''}</td><td>${esc(i.detail)}</td><td>${esc(i.timeline || '')}</td><td class="num">${i.amount ? plain(i.amount) : '[Custom quote]'}</td></tr>`).join('')}
@@ -260,7 +263,7 @@ export function renderDoc(doc, { invoice = null, receipt = null, quote = null, p
     title = doc.vat_rate > 0 ? 'Tax Invoice' : 'Invoice';
     kicker = doc.vat_rate > 0 ? 'Tax invoice' : 'Invoice';
     badge = doc.status === 'paid' ? 'Paid' : doc.status === 'part_paid' ? 'Part paid' : 'Payment due';
-    body = `<div class="meta"><div><span>Invoice No.</span><strong>${esc(doc.number)}</strong></div><div><span>Date issued</span><strong>${dayShort(doc.issued_at)}</strong></div><div><span>Due date</span><strong>${dayShort(doc.due_at)}</strong></div></div>
+    body = `<div class="meta"><div><span>Invoice No.</span><strong>${esc(numberLabel(doc, cl))}</strong></div><div><span>${cl.revisedAt ? 'Revised on' : 'Date issued'}</span><strong>${dayShort(cl.revisedAt || doc.issued_at)}</strong></div><div><span>Due date</span><strong>${dayShort(doc.due_at)}</strong></div></div>
       <div class="parties">${clientBlock(cl, 'Billed to')}<div><span>Client tax details</span><div>Client TIN: ${esc(cl.tin || 'Not provided')}${quote ? `<br>Quotation: ${esc(quote.number)}` : ''}</div></div></div>
       <table><thead><tr><th>S/N</th><th>Description of service</th><th class="num">Qty</th><th class="num">Unit price (₦)</th><th class="num">Amount (₦)</th></tr></thead><tbody>
       ${items.map((i, n) => `<tr><td>${n + 1}</td><td>${esc(i.description)}${i.detail ? `<small>${esc(i.detail)}</small>` : ''}${i.gov ? '<small>Government fee paid on your behalf (no VAT)</small>' : ''}</td><td class="num">${i.qty}</td><td class="num">${plain(i.unit)}</td><td class="num">${plain(i.amount)}</td></tr>`).join('')}

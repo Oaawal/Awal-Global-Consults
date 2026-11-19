@@ -60,6 +60,10 @@ const FLASH = {
   erase_blocked: ['err', 'This case cannot be erased yet. See the reason below.'],
   erase_confirm: ['err', 'To erase, tick the confirmation box and type the case reference exactly.'],
   client_updated: ['ok', 'Client details updated.'],
+  bill_revised: ['ok', 'Changes saved. The document is marked Revised. Email it, or share the PDF on WhatsApp.'],
+  bill_revised_sent: ['ok', 'Changes saved and the revised document emailed to the client.'],
+  bill_not_editable: ['err', 'That document can no longer be changed (it is paid in full or void). Issue a new one instead.'],
+  bill_below_paid: ['err', 'The new total cannot be less than what the client has already paid.'],
   client_case_none: ['err', 'Pick at least one service, or type it under "Other".'],
   client_case_new: ['ok', 'New case opened for this returning client. Check the details below, then save or email the document.'],
   client_invalid: ['err', 'Please enter a name and a valid email address.'],
@@ -894,7 +898,7 @@ const ACTION_LABELS = {
   'case.note_added': 'Note added', 'case.follow_up_set': 'Follow-up updated', 'case.reminder_sent': 'Automatic reminder sent',
   'case.tracked': 'Client checked status online', 'case.legal_hold': 'Legal hold changed', 'case.erased': 'Case erased',
   'document.viewed': 'Document opened', 'document.added': 'Document added', 'case.service_progress': 'Service step updated', 'case.details_edited': 'Business details entered', 'case.details_requested': 'Full application form sent', 'case.details_completed': 'Client completed the full application', 'case.details_opened': 'Client opened the application form link', 'document.replaced': 'Document replaced', 'document.removed': 'Document removed', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
-  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'email.bounced': 'Email bounced', 'case.imported': 'Past client added', 'document.uploaded': 'Client uploaded documents', 'billing.issued': 'Billing document issued', 'billing.sent': 'Billing document emailed', 'billing.paid': 'Payment recorded', 'billing.void': 'Billing document voided', 'bounces.enabled': 'Turned on bounce alerts', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
+  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'email.bounced': 'Email bounced', 'case.imported': 'Past client added', 'document.uploaded': 'Client uploaded documents', 'billing.issued': 'Billing document issued', 'billing.sent': 'Billing document emailed', 'billing.paid': 'Payment recorded', 'billing.void': 'Billing document voided', 'billing.revised': 'Quotation or invoice revised', 'case.created_for_client': 'New service for a returning client', 'bounces.enabled': 'Turned on bounce alerts', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
   'client.viewed': 'Client opened', 'client.updated': 'Client details corrected', 'client.exported': 'Client data exported', 'client.erased': 'Client erased',
   'client.request_logged': 'Data request recorded', 'client.request_done': 'Data request completed', 'backup.downloaded': 'Backup downloaded'
 };
@@ -928,7 +932,17 @@ export function simplePage(title, text) {
 
 // ── Billing tab: quotations, invoices, receipts, engagement letters ──
 const BILL_STATUS = { issued: ['Saved', 'grey'], sent: ['Sent', 'blue'], paid: ['Paid', 'green'], part_paid: ['Part paid', 'amber'], void: ['Void', 'red'] };
-export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices, paymentMethods, money }) {
+const revOf = d => { try { return (JSON.parse(d.client_json || '{}') || {}).revision || 0; } catch (e) { return 0; } };
+
+export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices, paymentMethods, money, shareLinks = {} }) {
+  const wa = whatsappLink(c.phone);
+  const waShare = d => {
+    if (!wa || !shareLinks[d.id]) return '';
+    const what = kindLabel[d.kind].toLowerCase(), rev = revOf(d) && (d.kind === 'quote' || d.kind === 'invoice');
+    const first = String(c.full_name || '').split(/\s+/)[0];
+    const msg = `Hello ${first}, here is your ${rev ? 'revised ' : ''}${what} ${d.number}${rev ? ` (Rev. ${rev})` : ''} from Awal Global Consults${d.kind === 'receipt' ? '' : `: ${money(d.total)}`}.\n\nView and download it here: ${shareLinks[d.id]}`;
+    return `<a class="btn ghost sm" href="${esc(wa + (wa.includes('?') ? '&' : '?') + 'text=' + encodeURIComponent(msg))}" target="_blank" rel="noopener">WhatsApp</a>`;
+  };
   const byId = new Map(docs.map(d => [d.id, d]));
   // What each line means at a glance: a receipt is money received, an invoice shows what's paid and owed
   const billSummary = d => {
@@ -949,7 +963,8 @@ export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices,
     const [label, tone] = BILL_STATUS[d.status] || [d.status, 'grey'];
     const pdf = `<a class="btn ghost sm" href="/admin/billing/${esc(d.id)}/pdf">PDF</a>`;
     const actions = d.status === 'void' ? pdf : `${pdf}
-      <form method="post" action="/admin/billing/${esc(d.id)}/send" style="display:inline"><button class="btn ghost sm" type="submit">${d.sent_at ? 'Resend' : 'Email to client'}</button></form>
+      <form method="post" action="/admin/billing/${esc(d.id)}/send" style="display:inline"><button class="btn ghost sm" type="submit">${d.sent_at ? 'Resend' : 'Email to client'}</button></form>${waShare(d)}
+      ${(d.kind === 'quote' || d.kind === 'invoice') && ['issued', 'sent', 'part_paid'].includes(d.status) ? `<a class="btn ghost sm" href="/admin/case/${esc(c.id)}?tab=billing&edit=${esc(d.id)}#new">Edit</a>` : ''}
       ${d.kind === 'quote' ? `<a class="btn ghost sm" href="/admin/case/${esc(c.id)}?tab=billing&from=${esc(d.id)}#new">Make invoice</a>` : ''}
       ${d.kind !== 'receipt' && d.kind !== 'engagement' && d.status !== 'paid' ? `<form method="post" action="/admin/billing/${esc(d.id)}/void" style="display:inline" data-confirm="Void ${esc(d.number)}? It stays on record, marked VOID."><button class="btn ghost sm danger" type="submit">Void</button></form>` : ''}`;
     const pay = d.kind === 'invoice' && ['issued', 'sent', 'part_paid'].includes(d.status) ? `
@@ -969,7 +984,7 @@ export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices,
           <div class="btn-row"><button class="btn" type="submit">Save payment</button></div>
         </form></details>` : '';
     return `<div class="row bill-row"><span class="tl-dot">${icon('doc', 15)}</span>
-      <div class="row-main"><div class="row-title"><a href="/admin/billing/${esc(d.id)}" target="_blank" rel="noopener">${esc(kindLabel[d.kind])} ${esc(d.number)}</a></div>
+      <div class="row-main"><div class="row-title"><a href="/admin/billing/${esc(d.id)}" target="_blank" rel="noopener">${esc(kindLabel[d.kind])} ${esc(d.number)}${revOf(d) ? ` (Rev. ${revOf(d)})` : ''}</a></div>
       <div class="row-sub">${esc(fmtDay(d.issued_at))} · ${billSummary(d)}${d.sent_at ? ` · emailed ${esc(fmtDay(d.sent_at))}` : ''}</div></div>
       <div class="row-side">${pill(label, tone)}<div class="bill-actions">${actions}</div></div>
       ${pay}</div>`;
@@ -989,10 +1004,14 @@ export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices,
       <label class="bi-f"><span>Unit price (₦)</span><input name="unit_${i}" value="${it.unit ? esc(it.unit) : ''}" inputmode="numeric" placeholder="0"></label>
       <label class="check bi-gov"><input type="checkbox" name="gov_${i}" value="1"${it.gov ? ' checked' : ''}> Gov fee</label></div>`;
   }).join('');
-  const form = `<div class="card" id="new"><div class="card-head"><h2>${p.kind === 'invoice' ? 'New invoice' : 'New quotation'}</h2></div><div class="card-body">
+  const editing = !!p.edit;
+  const heading = editing ? `Edit ${p.kind === 'invoice' ? 'invoice' : 'quotation'} ${p.number}` : (p.kind === 'invoice' ? 'New invoice' : 'New quotation');
+  const form = `<div class="card" id="new"><div class="card-head"><h2>${esc(heading)}</h2>${editing ? `<a class="btn ghost sm" href="/admin/case/${esc(c.id)}?tab=billing">Cancel</a>` : ''}</div><div class="card-body">
+    ${editing ? `<div class="note" style="margin-bottom:12px">${icon('doc', 18)}<span>Change the prices or lines you agreed, then save. The number stays the same, the document is marked <strong>Revised</strong> with today&rsquo;s date, the ${p.kind === 'invoice' ? 'due date moves to 7 days from today' : 'quotation is valid for 14 days from today'}, and the earlier version is kept in the activity log.${p.paid ? ` ${esc(money(p.paid))} has already been paid, so the new total cannot be less than that.` : ''}</span></div>` : ''}
     <form method="post" action="/admin/case/${esc(c.id)}/billing/new" class="bill-form" data-vat="${settings.vatRegistered ? 7.5 : 0}">
       <input type="hidden" name="related" value="${esc(p.related || '')}">
-      <label>Document</label><select name="kind"><option value="quote"${p.kind === 'quote' ? ' selected' : ''}>Quotation (valid 14 days)</option><option value="invoice"${p.kind === 'invoice' ? ' selected' : ''}>Invoice (due in 7 days)</option></select>
+      ${editing ? `<input type="hidden" name="edit" value="${esc(p.edit)}"><input type="hidden" name="kind" value="${esc(p.kind)}">`
+        : `<label>Document</label><select name="kind"><option value="quote"${p.kind === 'quote' ? ' selected' : ''}>Quotation (valid 14 days)</option><option value="invoice"${p.kind === 'invoice' ? ' selected' : ''}>Invoice (due in 7 days)</option></select>`}
       <div class="grid grid-2" style="gap:12px">
         <div><label>Billed to (client or company name)</label><input name="name" required value="${esc(p.client.name)}"></div>
         <div><label>Client TIN (if any)</label><input name="tin" value="${esc(p.client.tin || '')}"></div>
@@ -1012,7 +1031,7 @@ export function billingTab({ c, docs, settings, prefill, kindLabel, startPrices,
       </details>
       <label>Note on the document (optional)</label><textarea name="notes" maxlength="600">${esc(p.notes || '')}</textarea>
       <p class="small muted">VAT is <strong>${settings.vatRegistered ? 'ON: 7.5% is added to your fee lines' : 'OFF: no VAT is added and invoices are titled “Invoice”'}</strong>. Change it at the bottom of this page.</p>
-      <div class="btn-row"><button class="btn ghost" type="submit" name="send" value="0">Save</button><button class="btn" type="submit" name="send" value="1"${c.email ? '' : ' disabled title="No email on file"'}>Save and email to client</button></div>
+      <div class="btn-row"><button class="btn ghost" type="submit" name="send" value="0">${editing ? 'Save changes' : 'Save'}</button><button class="btn" type="submit" name="send" value="1"${c.email ? '' : ' disabled title="No email on file"'}>${editing ? 'Save and re-send to client' : 'Save and email to client'}</button></div>
     </form></div></div>`;
 
   const vat = `<div class="card"><div class="card-head"><h2>VAT setting</h2></div><div class="card-body">

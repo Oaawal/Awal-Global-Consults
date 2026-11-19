@@ -222,7 +222,7 @@ export function missingInfoEmail({ fullName, reference, details = [], documents 
 
 
 // ── Quotation / invoice / receipt / engagement letter email ─────
-export function billingEmail({ kind, number, clientName, total = 0, dateLine = '', viewUrl, money, extraLinks = [], attached = false }) {
+export function billingEmail({ kind, number, clientName, total = 0, dateLine = '', viewUrl, money, extraLinks = [], attached = false, revised = false }) {
   const what = { quote: 'quotation', invoice: 'invoice', receipt: 'receipt', engagement: 'engagement letter' }[kind] || 'document';
   const intro = {
     quote: 'Thank you for your interest. Please find your quotation below. When you are happy to proceed, reply to this email and we will send your invoice.',
@@ -230,10 +230,11 @@ export function billingEmail({ kind, number, clientName, total = 0, dateLine = '
     receipt: 'Thank you for your payment. Please find your receipt below.',
     engagement: 'Please find your engagement letter below, confirming the terms of our work for you.'
   }[kind] || '';
+  const intro2 = revised ? `As discussed, we have updated your ${what}. This revised version replaces the one we sent earlier.${kind === 'quote' ? ' When you are happy to proceed, reply to this email and we will send your invoice.' : kind === 'invoice' ? ' Work begins as soon as payment is confirmed.' : ''}` : intro;
   const inner = `
-    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Your ${escapeHtml(what)} ${escapeHtml(number)}</h2>
+    <h2 style="font-family:Georgia,'Fraunces',serif;color:${NAVY};font-size:20px;margin:0 0 12px;">Your ${revised ? 'revised ' : ''}${escapeHtml(what)} ${escapeHtml(number)}</h2>
     <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">Dear ${escapeHtml(clientName || 'valued client')},</p>
-    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${escapeHtml(intro)}</p>
+    <p style="font-size:14px;line-height:1.7;color:${TEXT};margin:0 0 8px;">${escapeHtml(intro2)}</p>
     ${total ? `<div style="background:${BG};border:1px solid ${BORDER};border-radius:8px;padding:14px 16px;margin:16px 0;">
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:${GOLD};">${escapeHtml(number)}</div>
       <div style="font-size:20px;font-weight:700;color:${NAVY};margin-top:4px;">${escapeHtml(money(total))}</div>
@@ -242,7 +243,7 @@ export function billingEmail({ kind, number, clientName, total = 0, dateLine = '
     ${extraLinks.map(l => `<p style="margin:8px 0;"><a href="${escapeHtml(l.url)}" style="color:${NAVY};font-weight:700;">${escapeHtml(l.label)} →</a></p>`).join('')}
     ${attached ? `<p style="font-size:13px;line-height:1.6;color:${MUTED};margin:12px 0 0;">A PDF copy is attached to this email for your records.</p>` : ''}
     <p style="font-size:12.5px;line-height:1.6;color:${MUTED};margin:18px 0 0;">Questions? Reply to this email or chat with us on <a href="${WHATSAPP_LINK}" style="color:${NAVY};font-weight:600;">WhatsApp</a>, quoting ${escapeHtml(number)}.</p>`;
-  return shell(inner, { preheader: `Your ${what} ${number}` });
+  return shell(inner, { preheader: `Your ${revised ? 'revised ' : ''}${what} ${number}` });
 }
 
 // ── "Complete your application" email: private link to the full form ──

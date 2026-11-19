@@ -12,7 +12,7 @@
  * the fonts are embedded from pre-built data (no font parsing at request time), and images
  * are JPEG. The fonts have no naira sign, so ₦ is drawn as an N with two bars.
  */
-import { KIND_LABEL, PAYMENT_DETAILS, money, nairaWords, feesSentence, lineItems, discountOf, discountLabelOf } from './billing.js';
+import { KIND_LABEL, PAYMENT_DETAILS, money, nairaWords, feesSentence, lineItems, discountOf, discountLabelOf, numberLabel } from './billing.js';
 import * as A from './pdf-assets.js';
 
 const NAVY = [13, 35, 64], CREAM = [239, 231, 211], GOLD = [147, 112, 31], GREY = [74, 85, 104], LINE = [226, 232, 240], RED = [185, 28, 28];
@@ -293,7 +293,7 @@ export async function renderPdf(doc, { invoice = null, receipt = null, quote = n
 
   // ---- body per kind ----
   if (doc.kind === 'quote') {
-    meta([['Quote No.', doc.number], ['Date issued', dayShort(doc.issued_at)], ['Valid until', dayShort(doc.valid_until)]]);
+    meta([['Quote No.', numberLabel(doc, cl)], [cl.revisedAt ? 'Revised on' : 'Date issued', dayShort(cl.revisedAt || doc.issued_at)], ['Valid until', dayShort(doc.valid_until)]]);
     parties({ label: 'Prepared for', name: cl.name, lines: [cl.address, cl.phone, cl.email] }, { label: 'Service category', name: doc.category || '', lines: [] });
     table([{ label: 'Service', w: 0.3 }, { label: "What's included", w: 0.36 }, { label: 'Timeline', w: 0.14 }, { label: 'Amount (₦)', w: 0.2, align: 'right' }],
       items.map(i => [{ main: i.description, bold: true, subs: [i.qty > 1 ? `Qty ${i.qty} × ${plain(i.unit)}` : '', i.gov ? 'Government fee (no VAT)' : ''] }, i.detail || '', i.timeline || '', i.amount ? plain(i.amount) : '[Custom quote]']));
@@ -305,7 +305,7 @@ export async function renderPdf(doc, { invoice = null, receipt = null, quote = n
   }
 
   if (doc.kind === 'invoice') {
-    meta([['Invoice No.', doc.number], ['Date issued', dayShort(doc.issued_at)], ['Due date', dayShort(doc.due_at)]]);
+    meta([['Invoice No.', numberLabel(doc, cl)], [cl.revisedAt ? 'Revised on' : 'Date issued', dayShort(cl.revisedAt || doc.issued_at)], ['Due date', dayShort(doc.due_at)]]);
     parties({ label: 'Billed to', name: cl.name, lines: [cl.address, cl.phone, cl.email] }, { label: 'Client tax details', name: '', lines: [`Client TIN: ${cl.tin || 'Not provided'}`, quote ? `Quotation: ${quote.number}` : ''] });
     table([{ label: 'S/N', w: 0.07 }, { label: 'Description of service', w: 0.47 }, { label: 'Qty', w: 0.08, align: 'right' }, { label: 'Unit price (₦)', w: 0.19, align: 'right' }, { label: 'Amount (₦)', w: 0.19, align: 'right' }],
       items.map((i, n) => [String(n + 1), { main: i.description, subs: [i.detail, i.gov ? 'Government fee paid on your behalf (no VAT)' : ''] }, String(i.qty), plain(i.unit), plain(i.amount)]));

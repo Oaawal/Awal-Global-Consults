@@ -37,7 +37,7 @@ import { funnelStats, PERIODS } from '../_lib/funnel.js';
 import { serviceProgress, stepInfo, isStep } from '../_lib/service-progress.js';
 import { BUSINESS_FIELDS } from '../_lib/cac.js';
 import { missingForCase, DOC_REQUIREMENTS } from '../_lib/requirements.js';
-import { START_PRICES, PAYMENT_METHODS, KIND_LABEL, billingSettings, saveBillingSettings, nextNumber, totals, renderDoc, relatedDocs, docUrl, money, addDays, lineItems, discountOf, discountLabelOf } from '../_lib/billing.js';
+import { START_PRICES, PAYMENT_METHODS, KIND_LABEL, billingSettings, saveBillingSettings, nextNumber, totals, renderDoc, relatedDocs, docUrl, money, addDays, lineItems, discountOf, discountLabelOf, numberLabel } from '../_lib/billing.js';
 import { renderPdf, pdfFilename } from '../_lib/billing-pdf.js';
 import { bytesToBase64 } from '../_lib/brevo.js';
 import { fileMatchesName } from '../_lib/file-check.js';
@@ -136,8 +136,16 @@ async function navBadges(env) {
 }
 
 // ── Billing helpers ─────────────────────────────────────────────
-function billPrefill(c, docs, fromId, docKind = '') {
+/** Quotations and invoices can be revised after a negotiation until they are paid in full or voided. */
+const canRevise = d => (d.kind === 'quote' || d.kind === 'invoice') && ['issued', 'sent', 'part_paid'].includes(d.status);
+
+function billPrefill(c, docs, fromId, docKind = '', editId = '') {
   let f = {}; try { f = JSON.parse(c.form_data || '{}') || {}; } catch (e) {}
+  const editing = editId ? docs.find(d => d.id === editId && canRevise(d)) : null;
+  if (editing) {
+    return { kind: editing.kind, related: editing.related_id || '', edit: editing.id, number: numberLabel(editing), client: JSON.parse(editing.client_json), category: editing.category,
+      items: JSON.parse(editing.items_json), notes: editing.notes || '', paid: editing.amount_paid || 0 };
+  }
   const from = fromId ? docs.find(d => d.id === fromId) : null;
   if (from) {
     return { kind: 'invoice', related: from.kind === 'quote' ? from.id : '', client: JSON.parse(from.client_json), category: from.category,
@@ -176,10 +184,12 @@ async function sendBillingDoc(env, request, origin, actor, c, doc, extraDocs = [
     : doc.kind === 'quote' ? `Valid until ${new Date(doc.valid_until).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`
     : doc.kind === 'receipt' ? 'Paid, thank you' : '';
   const cl = JSON.parse(doc.client_json);
+  const revised = !!cl.revision && (doc.kind === 'quote' || doc.kind === 'invoice');
+  const shownNumber = numberLabel(doc, cl);
   await sendBrevoEmail(env, {
     to: { email: c.email, name: c.full_name },
-    subject: `Your ${KIND_LABEL[doc.kind].toLowerCase()} ${doc.number} from Awal Global Consults`,
-    html: billingEmail({ kind: doc.kind, number: doc.number, clientName: cl.name, total: doc.kind === 'receipt' ? doc.amount_paid : doc.total, dateLine, viewUrl, money, extraLinks, attached: attachments.length > 0 }),
+    subject: `Your ${revised ? 'revised ' : ''}${KIND_LABEL[doc.kind].toLowerCase()} ${shownNumber} from Awal Global Consults`,
+    html: billingEmail({ kind: doc.kind, number: shownNumber, clientName: cl.name, total: doc.kind === 'receipt' ? doc.amount_paid : doc.total, dateLine, viewUrl, money, extraLinks, attached: attachments.length > 0, revised }),
     replyTo: { email: 'info@awalglobal.com.ng', name: 'Awal Global Consults' },
     attachments
   });
@@ -575,7 +585,10 @@ async function handle(context) {
       ]);
       const missing = open && !pendingDetails ? missingForCase(c, docs.results || []) : null;
       const payment = inv ? { number: inv.number, total: inv.total, paid: inv.amount_paid || 0, balance: Math.max(0, inv.total - (inv.amount_paid || 0)), status: inv.status, money } : null;
-      const billing = bdocs ? { docs: bdocs.results || [], settings, prefill: billPrefill(c, bdocs.results || [], url.searchParams.get('from'), url.searchParams.get('doc')), kindLabel: KIND_LABEL, startPrices: START_PRICES, paymentMethods: PAYMENT_METHODS, money } : null;
+      // Client-facing links for the WhatsApp share button
+      const shareLinks = {};
+      if (bdocs) for (const d of bdocs.results || []) if (d.status !== 'void') shareLinks[d.id] = await docUrl(env, d.id, url.origin);
+      const billing = bdocs ? { docs: bdocs.results || [], settings, shareLinks, prefill: billPrefill(c, bdocs.results || [], url.searchParams.get('from'), url.searchParams.get('doc'), url.searchParams.get('edit')), kindLabel: KIND_LABEL, startPrices: START_PRICES, paymentMethods: PAYMENT_METHODS, money } : null;
       const archivedDocs = archived ? archived.results || [] : [];
       const pack = tab === 'filing' && !c.purged_at ? filingPack(c, docs.results || []) : null;
       return html(casePage({ admin, badges, c, tab, archivedDocs, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment, detailsLink, pack }));
@@ -707,13 +720,44 @@ async function handle(context) {
         qty: form.get(`qty_${i}`), unit: form.get(`unit_${i}`), gov: form.get(`gov_${i}`) === '1' }));
       const t = totals(raw.filter(r => r.description), settings.vatRegistered, {
         discount: form.get('discount'), target: form.get('discount_total'), label: form.get('discount_label') });
-      if (!t.items.length) return redirect(`/admin/case/${c.id}?tab=billing&done=bill_empty#new`);
+      const editId = String(form.get('edit') || '');
+      if (!t.items.length) return redirect(`/admin/case/${c.id}?tab=billing&done=bill_empty${editId ? `&edit=${encodeURIComponent(editId)}` : ''}#new`);
       const now = new Date().toISOString();
       const client = { name: String(form.get('name') || c.full_name).trim().slice(0, 160), address: String(form.get('address') || '').trim().slice(0, 300),
         tin: String(form.get('tin') || '').trim().slice(0, 40), phone: c.phone || '', email: c.email || '' };
+      const category = String(form.get('category') || '').trim().slice(0, 200), notes = String(form.get('notes') || '').trim().slice(0, 600);
+
+      // Revising after a negotiation: same number, marked "Rev. n", old version kept in the audit log
+      if (editId) {
+        const old = await env.DB.prepare('SELECT * FROM billing_docs WHERE id = ?1 AND case_id = ?2').bind(editId, c.id).first();
+        if (!old || !canRevise(old)) return redirect(`/admin/case/${c.id}?tab=billing&done=bill_not_editable`);
+        const paid = old.amount_paid || 0;
+        if (paid > t.total) return redirect(`/admin/case/${c.id}?tab=billing&done=bill_below_paid&edit=${encodeURIComponent(old.id)}#new`);
+        const prevClient = JSON.parse(old.client_json || '{}');
+        const revision = (prevClient.revision || 0) + 1;
+        const newClient = { ...client, revision, revisedAt: now };
+        const status = paid ? (paid >= t.total ? 'paid' : 'part_paid') : old.status;
+        await env.DB.batch([
+          env.DB.prepare(`UPDATE billing_docs SET client_json = ?2, items_json = ?3, subtotal = ?4, vat_amount = ?5, total = ?6, vat_rate = ?7, category = ?8, notes = ?9,
+              valid_until = ?10, due_at = ?11, status = ?12, paid_at = CASE WHEN ?12 = 'paid' THEN COALESCE(paid_at, ?13) ELSE paid_at END WHERE id = ?1`)
+            .bind(old.id, JSON.stringify(newClient), JSON.stringify(t.items), t.subtotal, t.vat, t.total, t.vatRate, category, notes,
+              old.kind === 'quote' ? addDays(now, 14) : null, old.kind === 'invoice' ? addDays(now, 7) : null, status, now),
+          env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'note', ?2, ?3, ?4)")
+            .bind(c.id, `${KIND_LABEL[old.kind]} ${old.number} revised (Rev. ${revision}): ${money(old.total)} → ${money(t.total)}`, actor, now),
+          // The earlier version, in full, so there is a record of what was first offered
+          auditStmt(env, request, actor, 'billing.revised', 'billing', old.id, { number: old.number, revision,
+            previous: { total: old.total, subtotal: old.subtotal, vat: old.vat_amount, items: JSON.parse(old.items_json || '[]'), client: prevClient, category: old.category, notes: old.notes } }, now)
+        ]);
+        if (form.get('send') === '1' && c.email) {
+          try { await sendBillingDoc(env, request, url.origin, actor, c, await env.DB.prepare('SELECT * FROM billing_docs WHERE id = ?1').bind(old.id).first()); }
+          catch (err) { console.error('billing send:', err && err.message); return redirect(`/admin/case/${c.id}?tab=billing&done=bill_send_failed`); }
+          return redirect(`/admin/case/${c.id}?tab=billing&done=bill_revised_sent`);
+        }
+        return redirect(`/admin/case/${c.id}?tab=billing&done=bill_revised`);
+      }
       const doc = await createBillingDoc(env, request, actor, c, {
         kind, client, items: t.items, subtotal: t.subtotal, vat: t.vat, total: t.total, vatRate: t.vatRate,
-        category: String(form.get('category') || '').trim().slice(0, 200), notes: String(form.get('notes') || '').trim().slice(0, 600),
+        category, notes,
         related: String(form.get('related') || '') || null,
         validUntil: kind === 'quote' ? addDays(now, 14) : null, dueAt: kind === 'invoice' ? addDays(now, 7) : null, issuedAt: now
       });
