@@ -196,6 +196,7 @@ official CAC service times or fees — say so wherever they are quoted.
   availability code is used on CAC's post-registration portal.
 - **Passport and NIN from abroad:** applicants must attend the embassy or an
   approved centre in person for biometrics — say so in #32 and #33.
+- **Cooperative societies (19 Nov 2026):** we do NOT offer cooperative registration yet (owner to confirm the procedure with staff first). Guides may explain cooperatives but must not offer to register one; offer the free 20-minute call instead. Incorporated trustees price stays from ₦150,000.
 - **NEPC service packages:** Basic (portal assistance) ₦15,000–₦25,000;
   Standard (full application support) ₦30,000–₦50,000; Comprehensive (export
   readiness) ₦60,000–₦100,000+. Separate from NEPC's own fee.
