@@ -3,7 +3,7 @@ title: "Clubs, Alumni Associations, Town Unions and Groups: Do You Need to Regis
 seo_title: Registering a Club or Association in Nigeria
 slug: register-club-association-alumni-nigeria
 date: 2026-11-19
-draft: true
+draft: false
 topic: ngos-and-trustees
 category: cac-registration
 description: Social clubs, sports clubs, alumni sets, town unions, professional and WhatsApp groups: when to stay informal, when to register as incorporated trustees, and when a cooperative or company fits better.

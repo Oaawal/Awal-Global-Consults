@@ -3,7 +3,7 @@ title: "Cooperative Society vs Incorporated Trustees: Which Does Your Group Need
 seo_title: Cooperative Society vs Incorporated Trustees (Nigeria)
 slug: cooperative-society-vs-incorporated-trustees-nigeria
 date: 2026-11-19
-draft: true
+draft: false
 topic: ngos-and-trustees
 category: business-advisory
 description: Cooperative or incorporated trustees? The two structures follow different laws, regulators and money rules. A side-by-side guide for Nigerian groups.

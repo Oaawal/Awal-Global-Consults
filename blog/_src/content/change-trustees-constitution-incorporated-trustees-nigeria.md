@@ -3,7 +3,7 @@ title: "Changing Trustees, Name or Constitution of Incorporated Trustees (CAMA 2
 seo_title: Change Trustees or Constitution: Incorporated Trustees
 slug: change-trustees-constitution-incorporated-trustees-nigeria
 date: 2026-11-19
-draft: true
+draft: false
 topic: ngos-and-trustees
 category: cac-registration
 description: How incorporated trustees replace trustees, change name or objects, or amend the constitution with CAC, and why skipped steps make it void.

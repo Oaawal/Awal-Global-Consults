@@ -3,7 +3,7 @@ title: "Incorporated Trustees After Registration: The CAMA 2020 Rules Every Chur
 seo_title: Incorporated Trustees Rules Under CAMA 2020
 slug: incorporated-trustees-rules-cama-2020
 date: 2026-11-19
-draft: true
+draft: false
 topic: ngos-and-trustees
 category: cac-registration
 description: Annual returns with audited accounts, records for six years, approvals for every change, no profit to members, dormant accounts and CAC's powers: the CAMA 2020 rules for incorporated trustees.

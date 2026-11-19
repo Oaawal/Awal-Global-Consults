@@ -3,7 +3,7 @@ title: "Registering a Church, Mosque or Ministry: Trustees, Constitution, Proper
 seo_title: Registering a Church or Mosque in Nigeria
 slug: register-church-mosque-incorporated-trustees-nigeria
 date: 2026-11-19
-draft: true
+draft: false
 topic: ngos-and-trustees
 category: cac-registration
 description: How churches, mosques and ministries register as incorporated trustees, pick trustees, write a dispute-proof constitution and protect property.

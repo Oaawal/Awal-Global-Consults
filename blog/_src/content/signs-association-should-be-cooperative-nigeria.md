@@ -3,7 +3,7 @@ title: "Red Flags: Signs Your Association Should Really Be a Cooperative"
 seo_title: Signs Your Association Should Be a Cooperative
 slug: signs-association-should-be-cooperative-nigeria
 date: 2026-11-19
-draft: true
+draft: false
 topic: ngos-and-trustees
 category: business-advisory
 description: Thrift, member loans, shared surplus, joint buying: the signs a group registered (or about to register) as incorporated trustees really needs to be a cooperative.

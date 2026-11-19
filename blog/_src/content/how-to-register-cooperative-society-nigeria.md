@@ -3,7 +3,7 @@ title: "How to Register a Cooperative Society in Nigeria (Lagos and Other States
 seo_title: How to Register a Cooperative Society in Nigeria
 slug: how-to-register-cooperative-society-nigeria
 date: 2026-11-19
-draft: true
+draft: false
 topic: ngos-and-trustees
 category: business-advisory
 description: Who registers cooperatives (not CAC), the minimum members, the name rules, the documents and the Lagos steps from inaugural meeting to certificate.

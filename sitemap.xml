@@ -210,7 +210,7 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/topic/ngos-and-trustees/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -317,26 +317,26 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://awalglobal.com.ng/blog/category/export-licensing/</loc>
+    <loc>https://awalglobal.com.ng/blog/category/business-advisory/</loc>
     <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/category/cac-registration/</loc>
-    <lastmod>2026-11-15</lastmod>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/category/export-licensing/</loc>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/category/regulatory-licensing/</loc>
     <lastmod>2026-11-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://awalglobal.com.ng/blog/category/business-advisory/</loc>
-    <lastmod>2026-11-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -383,7 +383,55 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://awalglobal.com.ng/blog/can-incorporated-trustees-run-a-cooperative-nigeria/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/change-trustees-constitution-incorporated-trustees-nigeria/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/cooperative-society-vs-incorporated-trustees-nigeria/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/how-to-register-cooperative-society-nigeria/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/incorporated-trustees-rules-cama-2020/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://awalglobal.com.ng/blog/national-single-window-exports-december-2026/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/register-church-mosque-incorporated-trustees-nigeria/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/register-club-association-alumni-nigeria/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://awalglobal.com.ng/blog/signs-association-should-be-cooperative-nigeria/</loc>
     <lastmod>2026-11-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

@@ -3,7 +3,7 @@ title: "Can Incorporated Trustees Run a Cooperative? What the Law Allows"
 seo_title: Can Incorporated Trustees Run a Cooperative?
 slug: can-incorporated-trustees-run-a-cooperative-nigeria
 date: 2026-11-19
-draft: true
+draft: false
 topic: ngos-and-trustees
 category: business-advisory
 description: An association registered with CAC cannot become or operate as a cooperative. Why the law says no, and the three lawful ways to do both.
