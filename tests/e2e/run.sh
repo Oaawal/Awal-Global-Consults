@@ -32,7 +32,7 @@ start() { # $1 = extra bindings
 stop() { pkill -f "wrangler pages dev" ; pkill -f mock-brevo3.js ; pkill -f mock-wa.js ; sleep 2; } 2>/dev/null
 
 # Order matters: fp-e2e writes the case that filler-test and panel-test use.
-MAIN="intake-e2e biz-e2e upload-e2e docfix-e2e past-e2e import-e2e bill-e2e billpdf-e2e disc-e2e payonly est-e2e svc-e2e miss-ptr tools-e2e fp-e2e filler-test panel-test wa-test"
+MAIN="intake-e2e biz-e2e upload-e2e docfix-e2e past-e2e import-e2e client-e2e bill-e2e billpdf-e2e disc-e2e payonly est-e2e svc-e2e miss-ptr tools-e2e fp-e2e filler-test panel-test wa-test"
 NO_AI="wa-menu-test"
 ONLY="${1:-}"
 pass=0; fail=0; failed=""

@@ -22,7 +22,7 @@ function addMonths(iso, months) {
 }
 
 /** Next yearly case reference, e.g. AGC-2026-0007. */
-async function nextReference(env, prefix) {
+export async function nextReference(env, prefix) {
   const name = `${prefix}-${new Date().getUTCFullYear()}`;
   const row = await env.DB
     .prepare('INSERT INTO counters (name, value) VALUES (?1, 1) ON CONFLICT(name) DO UPDATE SET value = value + 1 RETURNING value')

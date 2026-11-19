@@ -60,6 +60,8 @@ const FLASH = {
   erase_blocked: ['err', 'This case cannot be erased yet. See the reason below.'],
   erase_confirm: ['err', 'To erase, tick the confirmation box and type the case reference exactly.'],
   client_updated: ['ok', 'Client details updated.'],
+  client_case_none: ['err', 'Pick at least one service, or type it under "Other".'],
+  client_case_new: ['ok', 'New case opened for this returning client. Check the details below, then save or email the document.'],
   client_invalid: ['err', 'Please enter a name and a valid email address.'],
   request_logged: ['ok', 'Request recorded. It stays on the Records page until you mark it done.'],
   request_done: ['ok', 'Request marked as done.'],
@@ -252,7 +254,8 @@ function eventIcon(event) {
 
 function eventLabel(e, kind) {
   switch (e.event) {
-    case 'created': return e.note && e.note.startsWith('Added from') ? 'Added from earlier records' : 'Received from the website';
+    case 'created': return e.note && e.note.startsWith('Added from') ? 'Added from earlier records'
+      : e.note && e.note.startsWith('Returning client') ? `Opened for a returning client${(e.note.match(/by ([A-Za-z -]+)/) || [])[1] ? ` (asked by ${e.note.match(/by ([A-Za-z -]+)/)[1].trim()})` : ''}` : 'Received from the website';
     case 'status_changed': return e.from_status === e.to_status ? `Message sent at ${statusInfo(kind, e.to_status).label}` : `Moved to ${statusInfo(kind, e.to_status).label}`;
     case 'client_notified': return 'Client emailed about the update';
     case 'reminder_sent': return 'Automatic reminder emailed to the client';
@@ -617,7 +620,7 @@ export function clientsPage({ admin, badges, rows, q }) {
       <div class="row-side"><span class="small muted">${r.cases} case${r.cases === 1 ? '' : 's'}</span><span class="small muted">${esc(ago(r.last_activity))}</span></div></a>`).join('')}</div>`
     : `<div class="card-body">${emptyState('clients', q ? 'No clients match your search' : 'No clients yet')}</div>`;
   return shell({ title: 'Clients', active: 'clients', admin, badges, body: `
-    ${pageHead('Clients', 'Everyone who has applied or enquired, matched by email address', '<a class="btn ghost sm" href="/admin/extension">Filing assistant</a> <a class="btn sm" href="/admin/import">Add past clients</a>')}
+    ${pageHead('Clients', 'Everyone who has applied or enquired, matched by email address. Open a client to see everything on file or start a new service for them', '<a class="btn ghost sm" href="/admin/extension">Filing assistant</a> <a class="btn sm" href="/admin/import">Add past clients</a>')}
     <form class="toolbar" method="get" action="/admin/clients">
       <div class="search">${icon('search', 18)}<input name="q" type="search" placeholder="Search name, email or phone" value="${esc(q)}"></div>
       <button class="btn ghost" type="submit">Search</button>
@@ -627,7 +630,7 @@ export function clientsPage({ admin, badges, rows, q }) {
 
 const REQUEST_KINDS = { access: 'Access (copy of their data)', correction: 'Correction', erasure: 'Erasure (deletion)', objection: 'Objection / stop processing', other: 'Other' };
 
-export function clientPage({ admin, badges, client, cases, requests, eraseCheck, flash }) {
+export function clientPage({ admin, badges, client, cases, requests, docs = [], bills = [], profile = { fields: {}, from: {} }, serviceNames = [], eraseCheck, flash }) {
   const erased = !!client.anonymised_at;
   const caseList = cases.length ? `<div class="rows">${cases.map(c => `<a class="row" href="/admin/case/${esc(c.id)}">
       <span class="tl-dot">${icon('cases', 15)}</span>
@@ -675,6 +678,49 @@ export function clientPage({ admin, badges, client, cases, requests, eraseCheck,
             </form>`}
       </details>`;
 
+  // New service for a returning client: a case with their details on file, then the quotation or invoice
+  const newCase = erased ? '' : `<div class="card" id="new-service"><div class="card-head"><h2>New service for this client</h2></div><div class="card-body">
+    <p class="small muted" style="margin-top:0">For a returning client who asked on WhatsApp, by phone or email. Opens a new case with what is already on file and takes you straight to the quotation or invoice. The client does not need to fill the form again.</p>
+    <form method="post" action="/admin/client/${esc(client.id)}/new-case">
+      <label>Service(s) they want</label>
+      <div class="svc-pick">${serviceNames.map(n => `<label class="check"><input type="checkbox" name="services" value="${esc(n)}"> ${esc(n)}</label>`).join('')}</div>
+      <label for="nc-other">Other (not in the list)</label><input id="nc-other" name="other" maxlength="200" placeholder="e.g. Annual returns for 2025">
+      <label for="nc-note">What they asked for (optional)</label><textarea id="nc-note" name="note" maxlength="2000" rows="3" placeholder="Paste or summarise their WhatsApp message"></textarea>
+      <div class="grid grid-2" style="gap:12px">
+        <div><label for="nc-ch">They asked by</label><select id="nc-ch" name="channel">${['WhatsApp', 'Phone call', 'Email', 'Walk-in', 'Other'].map(x => `<option>${x}</option>`).join('')}</select></div>
+        <div><label for="nc-doc">Issue</label><select id="nc-doc" name="doc"><option value="quote">Quotation</option><option value="invoice">Invoice</option></select></div>
+      </div>
+      <label class="check"><input type="checkbox" name="same_business" value="1" checked> Bill the same name and address as last time</label>
+      <label class="check"><input type="checkbox" name="kind" value="enquiry"> Just an enquiry for now (not yet a job)</label>
+      <div class="btn-row"><button class="btn" type="submit">Open case and continue</button></div>
+    </form></div></div>`;
+
+  const paid = bills.filter(b => b.kind === 'receipt' && b.status !== 'void').reduce((t, b) => t + (b.amount_paid || 0), 0);
+  const owed = bills.filter(b => b.kind === 'invoice' && ['issued', 'sent', 'part_paid'].includes(b.status)).reduce((t, b) => t + Math.max(0, (b.total || 0) - (b.amount_paid || 0)), 0);
+  const naira = n => '₦' + Math.round(Number(n) || 0).toLocaleString('en-NG');
+  const billKind = { quote: 'Quotation', invoice: 'Invoice', receipt: 'Receipt', engagement: 'Engagement letter' };
+  const billList = bills.length ? `<div class="card-body" style="padding-bottom:0"><div class="small">Paid to date <strong>${esc(naira(paid))}</strong>${owed ? ` · Outstanding <strong>${esc(naira(owed))}</strong>` : ''}</div></div>
+    <div class="rows">${bills.slice(0, 30).map(b => { const [label, tone] = BILL_STATUS[b.status] || [b.status, 'grey']; return `<a class="row" href="/admin/case/${esc(b.case_id)}?tab=billing">
+      <span class="tl-dot">${icon('doc', 15)}</span>
+      <div class="row-main"><div class="row-title">${esc(billKind[b.kind] || b.kind)} ${esc(b.number)}</div><div class="row-sub">${esc(fmtDay(b.issued_at))} · ${esc(b.reference)}${b.kind === 'receipt' ? ` · ${esc(naira(b.amount_paid))}` : (b.total ? ` · ${esc(naira(b.total))}` : '')}</div></div>
+      <div class="row-side">${pill(label, tone)}</div></a>`; }).join('')}</div>` : `<div class="card-body">${emptyState('doc', 'No quotations or invoices yet')}</div>`;
+
+  const docList = docs.length ? `<div class="rows">${docs.slice(0, 40).map(d => `<a class="row" href="/admin/doc/${esc(d.id)}" target="_blank" rel="noopener">
+      <span class="tl-dot">${icon('doc', 15)}</span>
+      <div class="row-main"><div class="row-title">${esc(String(d.file_name).replace(/^[a-z-]+--/, ''))}</div><div class="row-sub">${esc(d.reference)} · ${esc(fmtDay(d.uploaded_at))} · ${esc(fmtSize(d.size_bytes))}</div></div></a>`).join('')}</div>`
+    : `<div class="card-body">${emptyState('doc', 'No documents on file')}</div>`;
+
+  // How they were last billed (name, address, TIN) sits with the other details
+  const lastBill = bills.find(b => (b.kind === 'quote' || b.kind === 'invoice') && b.status !== 'void' && b.client_json);
+  let billed = {}; try { billed = lastBill ? JSON.parse(lastBill.client_json) || {} : {}; } catch (e) {}
+  const fieldsAll = { ...profile.fields }, fromAll = { ...profile.from };
+  [['Billed as', billed.name], ['Billing address', billed.address], ['TIN', billed.tin]].forEach(([k, v]) => { if (v && !fieldsAll[k]) { fieldsAll[k] = v; fromAll[k] = lastBill.number; } });
+  profile = { fields: fieldsAll, from: fromAll };
+  const keys = Object.keys(profile.fields);
+  const profileCard = erased || !keys.length ? '' : `<div class="card"><div class="card-head"><h2>Details on file</h2></div><div class="card-body">
+    <p class="small muted" style="margin-top:0">Gathered from all their cases; the newest answer is shown.</p>
+    <dl class="kv">${keys.slice(0, 80).map(k => `<dt>${esc(k)}</dt><dd>${esc(profile.fields[k])} <span class="small muted">${esc(profile.from[k])}</span></dd>`).join('')}</dl></div></div>`;
+
   return shell({ title: client.full_name, active: 'clients', admin, badges, body: `
     <a class="crumb" href="/admin/clients">${icon('back', 16)}Clients</a>
     ${flashHtml(flash)}
@@ -682,11 +728,15 @@ export function clientPage({ admin, badges, client, cases, requests, eraseCheck,
       <h1>${esc(client.full_name)}</h1>
       <div class="muted small">${esc([client.email, client.phone].filter(Boolean).join(' · ') || 'No contact details')}</div>
       <div class="muted small">Client since ${esc(fmtDay(client.created_at))}</div></div></div>
-      ${erased ? '' : `<div class="case-actions">${whatsappLink(client.phone) ? `<a class="btn wa" href="${esc(whatsappLink(client.phone))}" target="_blank" rel="noopener">${icon('chat', 18)}WhatsApp</a>` : ''}${client.email ? `<a class="btn ghost" href="mailto:${esc(client.email)}">${icon('mail', 18)}Email</a>` : ''}</div>`}
+      ${erased ? '' : `<div class="case-actions"><a class="btn" href="#new-service">${icon('plus', 18)}New service</a>${whatsappLink(client.phone) ? `<a class="btn wa" href="${esc(whatsappLink(client.phone))}" target="_blank" rel="noopener">${icon('chat', 18)}WhatsApp</a>` : ''}${client.email ? `<a class="btn ghost" href="mailto:${esc(client.email)}">${icon('mail', 18)}Email</a>` : ''}</div>`}
     </div>
     <div class="grid grid-3">
       <div>
+        ${newCase}
         <div class="card"><div class="card-head"><h2>Cases</h2></div>${caseList}</div>
+        <div class="card"><div class="card-head"><h2>Billing</h2></div>${billList}</div>
+        ${profileCard}
+        <div class="card"><div class="card-head"><h2>Documents on file</h2></div>${docList}</div>
       </div>
       <div>
         <div class="card"><div class="card-head"><h2>Data rights</h2></div><div class="card-body">${rights}${editForm}</div></div>

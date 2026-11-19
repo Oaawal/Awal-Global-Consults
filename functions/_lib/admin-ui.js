@@ -69,6 +69,7 @@ const ICON_PATHS = {
   trash: '<path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/>',
   bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
   database: '<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
   inbox: '<path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M5 5h14l2 8v6H3v-6z"/>'
 };
 
@@ -230,6 +231,8 @@ input,select,textarea{font:inherit;width:100%;padding:10px 12px;border:1px solid
 input:focus,select:focus,textarea:focus{outline:2px solid #E9DCBF;border-color:var(--blue)}
 textarea{min-height:88px;resize:vertical}
 .check{display:flex;gap:10px;align-items:flex-start;font-weight:500;margin:14px 0 0;color:var(--text)}
+.svc-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:0 14px;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:2px 12px 12px;margin-top:6px}
+.svc-pick .check{margin-top:10px;font-size:14px}
 .check input{width:18px;height:18px;margin-top:2px;flex:none}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 14px var(--sans);padding:10px 16px;min-height:42px;border-radius:10px;border:1px solid transparent;background:var(--cta);color:var(--navy-900);text-decoration:none;cursor:pointer;white-space:nowrap}
 .btn:hover{filter:brightness(.96)}

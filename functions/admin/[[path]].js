@@ -32,17 +32,18 @@ import { handleExtensionApi, listKeys, createKey, revokeKey } from '../_lib/exte
 import { vapidKeys, notifyAdmins } from '../_lib/webpush.js';
 import { bounceSettings, ensureBounceWebhook } from '../_lib/bounces.js';
 import { uploadUrl, detailsUrl, deliveredUrl } from '../_lib/upload-links.js';
-import { awaitingDetails } from '../_lib/records.js';
+import { awaitingDetails, nextReference } from '../_lib/records.js';
 import { funnelStats, PERIODS } from '../_lib/funnel.js';
 import { serviceProgress, stepInfo, isStep } from '../_lib/service-progress.js';
 import { BUSINESS_FIELDS } from '../_lib/cac.js';
-import { missingForCase } from '../_lib/requirements.js';
+import { missingForCase, DOC_REQUIREMENTS } from '../_lib/requirements.js';
 import { START_PRICES, PAYMENT_METHODS, KIND_LABEL, billingSettings, saveBillingSettings, nextNumber, totals, renderDoc, relatedDocs, docUrl, money, addDays, lineItems, discountOf, discountLabelOf } from '../_lib/billing.js';
 import { renderPdf, pdfFilename } from '../_lib/billing-pdf.js';
 import { bytesToBase64 } from '../_lib/brevo.js';
 import { fileMatchesName } from '../_lib/file-check.js';
 import { CHANNELS, PAST_STATUSES, validatePast, savePast, importCsv, csvTemplate, dataSubjectCount } from '../_lib/past-records.js';
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
+import { clientProfile } from '../_lib/client-profile.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
 import { adminLoginCodeEmail, caseStatusEmail, missingInfoEmail, billingEmail, detailsFormEmail } from '../_lib/email-templates.js';
@@ -135,7 +136,7 @@ async function navBadges(env) {
 }
 
 // ── Billing helpers ─────────────────────────────────────────────
-function billPrefill(c, docs, fromId) {
+function billPrefill(c, docs, fromId, docKind = '') {
   let f = {}; try { f = JSON.parse(c.form_data || '{}') || {}; } catch (e) {}
   const from = fromId ? docs.find(d => d.id === fromId) : null;
   if (from) {
@@ -144,8 +145,8 @@ function billPrefill(c, docs, fromId) {
   }
   const services = String(c.services || '').split(',').map(x => x.trim()).filter(Boolean);
   return {
-    kind: 'quote', related: '',
-    client: { name: f['Business Name'] || f['Proposed Name 1'] || c.full_name, address: f['Business Address'] || f['Address'] || f['Passport Address'] || f['Person 1 Residential Address'] || '', tin: '', email: c.email, phone: c.phone },
+    kind: docKind === 'invoice' ? 'invoice' : 'quote', related: '',
+    client: { name: f['Bill to'] || f['Business Name'] || f['Proposed Name 1'] || c.full_name, address: f['Bill address'] || f['Business Address'] || f['Address'] || f['Passport Address'] || f['Person 1 Residential Address'] || '', tin: f['Bill TIN'] || '', email: c.email, phone: c.phone },
     category: services.join(', '),
     items: services.map(svc => ({ description: svc, qty: 1, unit: START_PRICES[svc] || '' })),
     notes: ''
@@ -574,7 +575,7 @@ async function handle(context) {
       ]);
       const missing = open && !pendingDetails ? missingForCase(c, docs.results || []) : null;
       const payment = inv ? { number: inv.number, total: inv.total, paid: inv.amount_paid || 0, balance: Math.max(0, inv.total - (inv.amount_paid || 0)), status: inv.status, money } : null;
-      const billing = bdocs ? { docs: bdocs.results || [], settings, prefill: billPrefill(c, bdocs.results || [], url.searchParams.get('from')), kindLabel: KIND_LABEL, startPrices: START_PRICES, paymentMethods: PAYMENT_METHODS, money } : null;
+      const billing = bdocs ? { docs: bdocs.results || [], settings, prefill: billPrefill(c, bdocs.results || [], url.searchParams.get('from'), url.searchParams.get('doc')), kindLabel: KIND_LABEL, startPrices: START_PRICES, paymentMethods: PAYMENT_METHODS, money } : null;
       const archivedDocs = archived ? archived.results || [] : [];
       const pack = tab === 'filing' && !c.purged_at ? filingPack(c, docs.results || []) : null;
       return html(casePage({ admin, badges, c, tab, archivedDocs, docs: docs.results || [], events: events.results || [], flash, uploadLink, missing, billing, payment, detailsLink, pack }));
@@ -932,9 +933,15 @@ async function handle(context) {
     const blockers = cases.map(c => { const b = eraseBlocker(c, now); return b && !c.purged_at ? `${c.reference}: ${b}` : null; }).filter(Boolean);
 
     if (parts.length === 2 && method === 'GET') {
-      const requests = (await env.DB.prepare('SELECT * FROM data_requests WHERE client_id = ?1 ORDER BY received_at DESC').bind(client.id).all()).results || [];
+      const [requests, docs, bills] = await Promise.all([
+        env.DB.prepare('SELECT * FROM data_requests WHERE client_id = ?1 ORDER BY received_at DESC').bind(client.id).all(),
+        env.DB.prepare(`SELECT d.id, d.case_id, d.file_name, d.size_bytes, d.uploaded_at, c.reference FROM documents d JOIN cases c ON c.id = d.case_id
+          WHERE c.client_id = ?1 AND d.deleted_at IS NULL ORDER BY d.uploaded_at DESC LIMIT 200`).bind(client.id).all(),
+        env.DB.prepare(`SELECT b.id, b.case_id, b.kind, b.number, b.status, b.issued_at, b.total, b.amount_paid, b.category, b.client_json, c.reference FROM billing_docs b JOIN cases c ON c.id = b.case_id
+          WHERE c.client_id = ?1 ORDER BY b.issued_at DESC LIMIT 200`).bind(client.id).all()
+      ]).then(r => r.map(x => x.results || []));
       await audit(env, request, actor, 'client.viewed', 'client', client.id, null);
-      return html(clientPage({ admin, badges: await navBadges(env), client, cases, requests, eraseCheck: { blockers }, flash }));
+      return html(clientPage({ admin, badges: await navBadges(env), client, cases, requests, docs, bills, profile: clientProfile(cases), serviceNames: Object.keys(DOC_REQUIREMENTS), eraseCheck: { blockers }, flash }));
     }
 
     if (parts[2] === 'export' && method === 'GET') {
@@ -968,6 +975,50 @@ async function handle(context) {
         auditStmt(env, request, actor, 'client.updated', 'client', client.id, { changed }, now)
       ]);
       return back('client_updated');
+    }
+
+    // A returning client asks for another service (usually on WhatsApp): open a new case with
+    // what is already on file, then go straight to the quotation or invoice
+    if (parts[2] === 'new-case' && !client.anonymised_at) {
+      const picked = form.getAll('services').map(x => String(x).trim()).filter(x => DOC_REQUIREMENTS[x]);
+      const other = String(form.get('other') || '').replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, 200);
+      const services = [...new Set([...picked, ...(other ? [other] : [])])].slice(0, 10);
+      if (!services.length) return back('client_case_none');
+      const channel = CHANNELS.includes(String(form.get('channel'))) ? String(form.get('channel')) : 'WhatsApp';
+      const note = String(form.get('note') || '').replace(/[\u0000-\u0008\u000b-\u001f]/g, ' ').trim().slice(0, 2000);
+      const kind = form.get('kind') === 'enquiry' ? 'enquiry' : 'application';
+      const doc = form.get('doc') === 'invoice' ? 'invoice' : 'quote';
+      const fields = { 'Added from': `${channel} (returning client)`, 'Requested on': now.slice(0, 10) };
+      if (note) fields['What they asked for'] = note;
+      // Carry the billing name and address over from the last quotation or invoice, else from the last form
+      const lastBill = await env.DB.prepare(`SELECT b.client_json FROM billing_docs b JOIN cases c ON c.id = b.case_id
+        WHERE c.client_id = ?1 AND b.kind IN ('quote', 'invoice') AND b.status != 'void' ORDER BY b.issued_at DESC LIMIT 1`).bind(client.id).first();
+      let billTo = {}; try { billTo = lastBill ? JSON.parse(lastBill.client_json) || {} : {}; } catch (e) {}
+      const prof = clientProfile(cases).fields;
+      if (form.get('same_business') === '1') {
+        const name = billTo.name || prof['Business Name'] || prof['Company Name'];
+        const address = billTo.address || prof['Business Address'] || prof['Address'];
+        if (name) fields['Bill to'] = String(name).slice(0, 200);
+        if (address) fields['Bill address'] = String(address).slice(0, 300);
+        if (billTo.tin) fields['Bill TIN'] = String(billTo.tin).slice(0, 40);
+      }
+      const prev = cases[0];
+      if (prev) fields['Earlier case'] = prev.reference;
+      const caseId = crypto.randomUUID();
+      const reference = await nextReference(env, kind === 'enquiry' ? 'ENQ' : 'AGC');
+      const status = 'new';
+      const ret = retentionFor(kind, status, now);
+      await env.DB.batch([
+        env.DB.prepare(`INSERT INTO cases (id, reference, client_id, kind, services, status, form_data, consent_accuracy, consent_processing, source_page,
+                          created_at, updated_at, status_changed_at, retention_class, closed_at, retain_until)
+          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, 0, 0, ?8, ?9, ?9, ?9, ?4, ?10, ?11)`)
+          .bind(caseId, reference, client.id, kind, services.join(', '), status, JSON.stringify(fields), `manual:${channel}`, now, ret.closedAt, ret.retainUntil),
+        env.DB.prepare("INSERT INTO case_events (case_id, event, to_status, note, actor, created_at) VALUES (?1, 'created', ?2, ?3, ?4, ?5)")
+          .bind(caseId, status, `Returning client: new request by ${channel}${prev ? ` (earlier case ${prev.reference})` : ''}`, actor, now),
+        env.DB.prepare('UPDATE clients SET updated_at = ?2 WHERE id = ?1').bind(client.id, now),
+        auditStmt(env, request, actor, 'case.created_for_client', 'case', caseId, { reference, client: client.id, channel, services: services.length }, now)
+      ]);
+      return redirect(`/admin/case/${caseId}?tab=billing&done=client_case_new${doc === 'invoice' ? '&doc=invoice' : ''}#new`);
     }
 
     if (parts[2] === 'request') {
