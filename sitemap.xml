@@ -180,7 +180,7 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/</loc>
-    <lastmod>2026-11-15</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -216,7 +216,7 @@
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/topic/licences-and-permits/</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -317,6 +317,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://awalglobal.com.ng/blog/category/export-licensing/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://awalglobal.com.ng/blog/category/cac-registration/</loc>
     <lastmod>2026-11-15</lastmod>
     <changefreq>weekly</changefreq>
@@ -371,16 +377,16 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://awalglobal.com.ng/blog/category/export-licensing/</loc>
+    <loc>https://awalglobal.com.ng/blog/category/identity-documents/</loc>
     <lastmod>2026-10-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://awalglobal.com.ng/blog/category/identity-documents/</loc>
-    <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://awalglobal.com.ng/blog/national-single-window-exports-december-2026/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://awalglobal.com.ng/blog/cac-free-ng-domain-email-website-plan/</loc>

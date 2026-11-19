@@ -3,7 +3,7 @@ title: "Exporters Move to the National Single Window on 14 December: What Change
 seo_title: National Single Window for Exports: 14 Dec 2026
 slug: national-single-window-exports-december-2026
 date: 2026-11-19
-draft: true
+draft: false
 topic: licences-and-permits
 category: export-licensing
 description: Nigeria's National Single Window goes live for exports on 14 December 2026. Which agencies come first, what moves online and how exporters should prepare.
