@@ -4,3 +4,7 @@ Used by ../billing-pdf.js to attach PDF copies of quotations, invoices, receipts
 
 postal-mime 2.4.4 (MIT-0, Andris Reinman) - https://github.com/postalsys/postal-mime
 Unmodified src/ folder in postal-mime/. Reads incoming email (MIME) for the dashboard mailbox (../mail.js).
+
+qrcode-generator 1.4.4 (MIT, Kazuhiko Arase) - https://github.com/kazuhikoarase/qrcode-generator
+qrcode/qrcode.js is the package's qrcode.js with one line added at the end ("export default qrcode;").
+Draws the QR code for setting up an authenticator app (../totp.js).

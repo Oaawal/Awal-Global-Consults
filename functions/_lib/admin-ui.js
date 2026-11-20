@@ -243,6 +243,16 @@ textarea{min-height:88px;resize:vertical}
 .mail-att.risky{border-color:#C0392B;background:#FDF0EE}.mail-att.caution{border-color:#D4A72C;background:#FBF6E6}.mail-att details{flex-basis:100%}
 .auth{display:inline-flex;gap:4px;align-items:center;font-size:12.5px;font-weight:600}.auth.ok{color:#1E7B4A}.auth.bad{color:#B23A2B}.auth.mid{color:#8A6A12}
 .mail-compose textarea{font:inherit}
+.ticks{font-weight:700;letter-spacing:-2px;color:#8A97A5}.ticks .tick-label{letter-spacing:0;font-weight:500}.tick-read,.ticks.tick-read{color:#1D9BF0}.tick-delivered{color:#8A97A5}
+.box-tag{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:0 4px}.mail-boxes{margin-bottom:10px}
+.draft-label{color:#B23A2B;font-weight:700}.sig-preview{white-space:pre-wrap;margin:6px 0 0;padding:8px 10px;border-left:3px solid #D4A72C;background:#FBF8F1;font-family:inherit}
+.draft-atts{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.att-chip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:999px;padding:3px 4px 3px 10px;font-size:13px;background:#fff}
+.att-remove{border:0;background:var(--line);border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:15px;line-height:1}
+.receipts{margin:0 0 8px}.qr{max-width:220px;margin:10px 0;background:#fff;padding:6px;border-radius:8px}.qr svg{width:100%;height:auto;display:block}
+.recovery{background:#FBF8F1;border:1px dashed #D4A72C;border-radius:10px;padding:12px;font-size:16px;letter-spacing:1px;columns:2}
+.id-box{border:1px solid var(--line);border-radius:10px;padding:10px 14px 14px;margin:0 0 14px}.id-box legend{font-weight:700;padding:0 6px}.sig-sample{margin-top:10px;padding:10px;border:1px dashed var(--line);border-radius:8px;background:#fff;overflow-x:auto}
+.steps-list{padding-left:20px}.chips{display:flex;flex-wrap:wrap;gap:6px}.chips a{padding:5px 10px;border:1px solid var(--line);border-radius:999px;font-size:13px;text-decoration:none;color:var(--text);background:#fff}.chips a.on{background:var(--navy,#0A2C48);color:#fff;border-color:transparent}
+.top-settings{display:inline-flex;align-items:center;gap:6px;color:inherit;text-decoration:none;font-size:14px;margin-right:6px}
 .svc-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:0 14px;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:2px 12px 12px;margin-top:6px}
 .svc-pick .check{margin-top:10px;font-size:14px}
 .check input{width:18px;height:18px;margin-top:2px;flex:none}
@@ -427,6 +437,7 @@ function brand() {
 export function shell({ title, active, body, admin, badges = {} }) {
   const navLinks = NAV.map(n => `<a href="${n.href}" class="${n.key === active ? 'on' : ''}">${icon(n.icon)}<span>${n.label}</span>${badges[n.key] ? `<span class="count">${badges[n.key]}</span>` : ''}</a>`).join('');
   const logout = '<form method="post" action="/admin/logout"><button type="submit">' + icon('logout', 18) + '<span>Log out</span></button></form>';
+  const settings = `<a class="top-settings" href="/admin/settings" aria-label="Settings">${icon('lock', 18)}<span>Settings</span></a>`;
   return htmlDocument(title, `
 <div class="app">
   <aside class="side">
@@ -434,11 +445,12 @@ export function shell({ title, active, body, admin, badges = {} }) {
     <nav class="nav">${navLinks}</nav>
     <div class="side-foot">
       <div class="who">${avatar(admin)}<span>${esc(admin)}</span></div>
+      ${settings}
       ${logout}
     </div>
   </aside>
   <div class="main">
-    <div class="topbar">${brand()}${logout}</div>
+    <div class="topbar">${brand()}<span style="display:flex;align-items:center">${settings}${logout}</span></div>
     <main class="content"><div id="app-panel" class="app-panel" hidden></div>${body}</main>
   </div>
 </div>

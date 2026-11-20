@@ -17,14 +17,58 @@
 import PostalMime from './vendor/postal-mime/postal-mime.js';
 
 export const OUR_DOMAIN = 'awalglobal.com.ng';
-export const MAIL_FOLDERS = { inbox: 'Inbox', starred: 'Starred', sent: 'Sent', archive: 'Archive', spam: 'Spam', trash: 'Trash' };
+export const MAIL_FOLDERS = { inbox: 'Inbox', starred: 'Starred', drafts: 'Drafts', sent: 'Sent', archive: 'Archive', spam: 'Spam', trash: 'Trash' };
 export const TRASH_DAYS = 30;
 export const SEND_LIMIT_PER_HOUR = 60;
 export const ATTACH_MAX_TOTAL = 10 * 1024 * 1024;
 const INLINE_IMAGE_MAX = 400 * 1024;
 
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-export const mailFrom = env => ({ name: 'Awal Global Consults', email: env.MAIL_FROM || `info@${OUR_DOMAIN}` });
+// ── Sending addresses and their signatures ──────────────────────
+// Defaults; the names, titles and signature lines can be changed on the Settings page
+// (stored in app_settings 'mail_identities'). Every address must be on our own domain.
+export const DEFAULT_IDENTITIES = [
+  { email: `info@${OUR_DOMAIN}`, name: 'Awal Global Consults', title: 'Client Services', lines: ['Awal Global Consults Limited', 'RC 9282103', 'WhatsApp +234 703 833 6596'] },
+  { email: `contact@${OUR_DOMAIN}`, name: 'Awal Global Consults', title: 'Enquiries', lines: ['Awal Global Consults Limited', 'RC 9282103', 'WhatsApp +234 703 833 6596'] },
+  { email: `abdullateef@${OUR_DOMAIN}`, name: 'Abdullateef Olamilekan Abdulwaheed', title: 'Founder; Governance, Risk and Compliance', lines: ['Awal Global Consults Limited', 'RC 9282103', 'WhatsApp +234 703 833 6596'] }
+];
+export async function mailIdentities(env) {
+  let saved = null;
+  try { const r = await env.DB.prepare("SELECT value FROM app_settings WHERE key = 'mail_identities'").first(); saved = r ? JSON.parse(r.value) : null; } catch (e) {}
+  const list = DEFAULT_IDENTITIES.map(d => ({ ...d, ...((saved || []).find(x => x.email === d.email) || {}), email: d.email }));
+  // Extra addresses added on the Settings page (still on our domain)
+  for (const x of saved || []) if (!list.some(l => l.email === x.email) && String(x.email).endsWith('@' + OUR_DOMAIN)) list.push(x);
+  return list;
+}
+export async function saveIdentities(env, list) {
+  await env.DB.prepare("INSERT INTO app_settings (key, value, updated_at) VALUES ('mail_identities', ?1, ?2) ON CONFLICT(key) DO UPDATE SET value = ?1, updated_at = ?2")
+    .bind(JSON.stringify(list), new Date().toISOString()).run();
+}
+/** The sender for an address (falls back to info@). */
+export const mailFrom = (env, address = null, identities = DEFAULT_IDENTITIES) => {
+  const id = identities.find(i => i.email === String(address || '').toLowerCase()) || identities.find(i => i.email === (env.MAIL_FROM || `info@${OUR_DOMAIN}`)) || identities[0];
+  return { name: id.name, email: id.email };
+};
+/** Which of our addresses a message was sent to (to reply from the same one). */
+export function ourAddressIn(addrs, identities = DEFAULT_IDENTITIES) {
+  const list = String(addrs || '').toLowerCase().split(/[,\s]+/);
+  return (identities.find(i => list.includes(i.email)) || identities[0]).email;
+}
+const NAVY = '#0A2C48', GOLD = '#D4A72C', MUTED = '#5B6B7B';
+/** The designed HTML signature for one sender (and a plain-text copy). */
+export function signatureFor(identity) {
+  const lines = (identity.lines || []).filter(Boolean);
+  const html = `<table cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;font-family:Arial,Helvetica,sans-serif;border-collapse:collapse">
+<tr><td style="padding:0 14px 0 0;vertical-align:top;border-right:3px solid ${GOLD}"><img src="https://${OUR_DOMAIN}/assets/images/logo-mark.png" width="56" height="49" alt="Awal Global Consults" style="display:block;border:0"></td>
+<td style="padding:0 0 0 14px;vertical-align:top">
+<div style="font-size:15px;font-weight:bold;color:${NAVY}">${esc(identity.name)}</div>
+${identity.title ? `<div style="font-size:12.5px;color:${GOLD};font-weight:bold;margin-top:1px">${esc(identity.title)}</div>` : ''}
+${lines.map(l => `<div style="font-size:12.5px;color:${MUTED};margin-top:2px">${esc(l)}</div>`).join('')}
+<div style="font-size:12.5px;margin-top:4px"><a href="mailto:${esc(identity.email)}" style="color:${NAVY};text-decoration:none">${esc(identity.email)}</a> &middot; <a href="https://${OUR_DOMAIN}" style="color:${NAVY};text-decoration:none">${OUR_DOMAIN}</a></div>
+</td></tr></table>`;
+  const text = [identity.name, identity.title, ...lines, `${identity.email} · ${OUR_DOMAIN}`].filter(Boolean).join('\n');
+  return { html, text };
+}
 export const validEmail = s => /^[^\s@<>(),;:"\\]+@[^\s@<>(),;:"\\]+\.[A-Za-z]{2,}$/.test(String(s || ''));
 
 // ── Attachments ──────────────────────────────────────────────────
@@ -56,18 +100,18 @@ const baseDomain = d => { const p = d.split('.'); return p.length > 2 && /^(com|
 export function securityWarnings({ auth = {}, from = {}, replyTo = [], html = '', text = '', attachments = [] }) {
   const w = [];
   const addr = String(from.address || '').toLowerCase(), dom = domainOf(addr), name = String(from.name || '');
-  if (auth.dmarc === 'fail') w.push({ level: 'danger', text: 'The sender could not be verified (DMARC failed). This email may be forged.' });
+  if (auth.dmarc === 'fail') w.push({ level: 'danger', code: 'forged', text: 'The sender could not be verified (DMARC failed). This email may be forged.' });
   else if (auth.spf === 'fail' && auth.dkim !== 'pass') w.push({ level: 'danger', text: 'The sender could not be verified (SPF failed and no valid signature).' });
   else if (auth.dmarc !== 'pass' && auth.dkim !== 'pass' && auth.spf !== 'pass') w.push({ level: 'caution', text: 'The sender\'s domain is not verified. Be careful with links, attachments and payment requests.' });
 
   const ourBase = OUR_DOMAIN.split('.')[0];
   if (dom === OUR_DOMAIN || dom.endsWith('.' + OUR_DOMAIN)) {
-    if (auth.dmarc !== 'pass') w.push({ level: 'danger', text: `This claims to come from ${OUR_DOMAIN} but did not pass verification. We did not send it.` });
+    if (auth.dmarc !== 'pass') w.push({ level: 'danger', code: 'forged', text: `This claims to come from ${OUR_DOMAIN} but did not pass verification. We did not send it.` });
   } else if (dom) {
     const label = baseDomain(dom).split('.')[0];
     if (label !== ourBase && (lev(label, ourBase) <= 2 || label.includes(ourBase) || lev(dom, OUR_DOMAIN) <= 3))
-      w.push({ level: 'danger', text: `The sender's domain (${dom}) looks like ours but is not. This is a common trick.` });
-    if (/awal/i.test(name) || name.toLowerCase().includes(OUR_DOMAIN)) w.push({ level: 'danger', text: `The sender's name says "${name}" but the email is from ${dom}, not ${OUR_DOMAIN}.` });
+      w.push({ level: 'danger', code: 'lookalike', text: `The sender's domain (${dom}) looks like ours but is not. This is a common trick.` });
+    if (/awal/i.test(name) || name.toLowerCase().includes(OUR_DOMAIN)) w.push({ level: 'danger', code: 'fake_name', text: `The sender's name says "${name}" but the email is from ${dom}, not ${OUR_DOMAIN}.` });
     const nameAddr = (name.match(/[^\s@<>"]+@[^\s@<>"]+\.[a-z]{2,}/i) || [])[0];
     if (nameAddr && nameAddr.toLowerCase() !== addr) w.push({ level: 'caution', text: `The sender's name shows ${nameAddr} but the email really came from ${addr}.` });
   }
@@ -126,6 +170,11 @@ export async function readIncoming(env, row) {
   await env.DOCS.put(parsedKey(row.id), JSON.stringify(parsed), { httpMetadata: { contentType: 'application/json' } });
   const visible = atts.filter(a => !a.inline);
   const fromName = String((m.from && m.from.name) || '').slice(0, 120);
+  // Straight to Spam: senders you blocked, and forged or impersonating mail
+  const blocked = await blockedSenders(env);
+  const fromLc = String(row.from_addr || '').toLowerCase();
+  const toSpam = row.folder === 'inbox' && (blocked.includes(fromLc) || blocked.includes('@' + fromLc.split('@')[1]) || warnings.some(w => SPAM_CODES.includes(w.code)));
+  if (toSpam) { await env.DB.prepare("UPDATE mail_messages SET folder = 'spam' WHERE id = ?1").bind(row.id).run(); row.folder = 'spam'; }
   await env.DB.prepare(`UPDATE mail_messages SET subject = ?2, from_name = ?3, reply_to = ?4, to_addrs = ?5, cc_addrs = ?6, snippet = ?7, attachments = ?8,
       warnings = ?9, parsed_at = ?10 WHERE id = ?1`).bind(row.id, String(m.subject || row.subject || '').slice(0, 300), fromName,
     ((m.replyTo || [])[0] || {}).address || null, addrList(m.to).join(', ').slice(0, 1000) || row.to_addrs, addrList(m.cc).join(', ').slice(0, 1000),
@@ -183,22 +232,28 @@ export function bodyDocument(parsed, { images = false } = {}) {
 }
 
 // ── Sending ──────────────────────────────────────────────────────
-export function composeHtml(body, { signature = '', quote = null } = {}) {
+export function composeHtml(body, { signature = '', signatureHtml = '', quote = null } = {}) {
   const para = s => esc(s).replace(/\r?\n/g, '<br>');
-  const parts = String(body || '').split(/\n{2,}/).map(p => `<p style="margin:0 0 12px">${para(p)}</p>`).join('');
-  const sig = signature ? `<p style="margin:16px 0 0;color:#455463">${para(signature)}</p>` : '';
-  const q = quote ? `<div style="margin-top:18px;color:#677585">${esc(quote.header)}</div><blockquote style="margin:6px 0 0;padding:0 0 0 12px;border-left:3px solid #E6DECD;color:#455463">${para(quote.text)}</blockquote>` : '';
-  return `<div style="font:14px/1.6 -apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#1C2733">${parts}${sig}${q}</div>`;
+  // Quoted lines ("> ...") from a reply are shown as a quote block
+  const blocks = String(body || '').split(/\n{2,}/).map(p => /^(>.*(\n|$))+$/.test(p.trim() + '\n')
+    ? `<blockquote style="margin:6px 0 12px;padding:0 0 0 12px;border-left:3px solid #E6DECD;color:#455463">${para(p.replace(/^> ?/gm, ''))}</blockquote>`
+    : `<p style="margin:0 0 12px">${para(p)}</p>`);
+  const quoteAt = blocks.findIndex(b => b.startsWith('<blockquote'));
+  const mainParts = quoteAt > 0 ? blocks.slice(0, quoteAt - (/wrote:|Forwarded message/.test(blocks[quoteAt - 1]) ? 1 : 0)) : quoteAt === 0 ? [] : blocks;
+  const rest = blocks.slice(mainParts.length).join('');
+  const sig = signatureHtml || (signature ? `<p style="margin:16px 0 0;color:#455463">${para(signature)}</p>` : '');
+  return `<div style="font:14px/1.6 -apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#1C2733">${mainParts.join('')}${sig}${rest ? `<div style="margin-top:18px">${rest}</div>` : ''}</div>`;
 }
-export const DEFAULT_SIGNATURE = 'Awal Global Consults Limited\nRC 9282103\nawalglobal.com.ng · WhatsApp +234 703 833 6596';
-
 /**
  * Send through Brevo. to/cc: arrays of addresses. attachments: [{ name, content (ArrayBuffer), type }].
  * Returns the Brevo message id (used as the Message-ID, so replies thread back here).
  */
-export async function sendViaBrevo(env, { to, cc = [], subject, html, text, inReplyTo = null, references = [], attachments = [] }) {
+export async function sendViaBrevo(env, { from, to, cc = [], bcc = [], subject, html, text, inReplyTo = null, references = [], attachments = [] }) {
   if (!env.BREVO_API_KEY) throw new Error('Sending is not set up (no Brevo key)');
-  const body = { sender: mailFrom(env), replyTo: mailFrom(env), to: to.map(email => ({ email })), subject, htmlContent: html, textContent: text };
+  const sender = from || mailFrom(env);
+  if (!String(sender.email).endsWith('@' + OUR_DOMAIN)) throw new Error('Sender must be on our domain');
+  const body = { sender, replyTo: sender, to: to.map(email => ({ email })), subject, htmlContent: html, textContent: text, tags: ['dashboard-mail'] };
+  if (bcc.length) body.bcc = bcc.map(email => ({ email }));
   if (cc.length) body.cc = cc.map(email => ({ email }));
   if (attachments.length) body.attachment = attachments.map(a => ({ name: a.name, content: toB64(a.content) }));
   const headers = {};
@@ -248,4 +303,71 @@ export async function eraseClientMail(env, clientId) {
   }
   await env.DB.prepare('DELETE FROM mail_messages WHERE client_id = ?1').bind(clientId).run();
   return rows.length;
+}
+
+// ── Spam and blocked senders ─────────────────────────────────────
+export const SPAM_CODES = ['forged', 'lookalike', 'fake_name'];
+export async function blockedSenders(env) {
+  try { const r = await env.DB.prepare("SELECT value FROM app_settings WHERE key = 'mail_blocked'").first(); return r ? JSON.parse(r.value) : []; } catch (e) { return []; }
+}
+export async function saveBlocked(env, list) {
+  await env.DB.prepare("INSERT INTO app_settings (key, value, updated_at) VALUES ('mail_blocked', ?1, ?2) ON CONFLICT(key) DO UPDATE SET value = ?1, updated_at = ?2")
+    .bind(JSON.stringify([...new Set(list)].slice(0, 500)), new Date().toISOString()).run();
+}
+
+// ── Delivered and read ticks (Brevo events) ──────────────────────
+// Brevo reports "delivered" when the recipient's server accepts the email and "opened" when the
+// email's pictures load. Opens are a good sign, not proof: some apps load pictures automatically
+// (Apple Mail Privacy Protection, reported by Brevo as a "proxy open", which we do not count as read)
+// and some people block pictures, so a read email can stay grey.
+export const RECEIPT_EVENTS = ['delivered', 'opened', 'unique_opened', 'click'];
+export async function mailWebhookSettings(env) {
+  const r = await env.DB.prepare("SELECT value FROM app_settings WHERE key = 'brevo_mail_webhook'").first();
+  return r ? JSON.parse(r.value) : null;
+}
+/** Create the Brevo webhook for delivered/opened events once (from the first send, or the daily job). */
+export async function ensureMailWebhook(env, origin = `https://${OUR_DOMAIN}`) {
+  const existing = await mailWebhookSettings(env);
+  if (existing && existing.id) return existing;
+  if (!env.BREVO_API_KEY) return null;
+  const token = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(24)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const res = await fetch(`${env.BREVO_API_BASE || 'https://api.brevo.com'}/v3/webhooks`, {
+    method: 'POST', headers: { 'api-key': env.BREVO_API_KEY, 'content-type': 'application/json', accept: 'application/json' },
+    body: JSON.stringify({ url: `${origin}/hooks/brevo?k=${token}`, description: 'Awal dashboard mail: delivered and read', events: ['delivered', 'opened', 'uniqueOpened', 'click'], type: 'transactional' })
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.id) throw new Error(`Brevo refused the mail webhook (${res.status})`);
+  const settings = { id: data.id, token, createdAt: new Date().toISOString() };
+  await env.DB.prepare("INSERT INTO app_settings (key, value, updated_at) VALUES ('brevo_mail_webhook', ?1, ?2) ON CONFLICT(key) DO UPDATE SET value = ?1, updated_at = ?2")
+    .bind(JSON.stringify(settings), settings.createdAt).run();
+  return settings;
+}
+/** Record one Brevo delivered/opened event on the sent email it belongs to. */
+export async function handleMailEvent(env, ev) {
+  const kind = String(ev.event || '');
+  if (!RECEIPT_EVENTS.includes(kind)) return { ignored: true };
+  const mid = String(ev['message-id'] || ev.messageId || '').trim();
+  const email = String(ev.email || '').trim().toLowerCase();
+  if (!mid || !email) return { ignored: true };
+  let row;
+  try { row = await env.DB.prepare("SELECT id, to_addrs, cc_addrs, receipts, delivered_at, opened_at FROM mail_messages WHERE provider_id = ?1 AND direction = 'out'").bind(mid).first(); } catch (e) { return { ignored: true }; }
+  if (!row) return { ignored: true };
+  const at = ev.date ? new Date(String(ev.date).replace(' ', 'T') + (/[zZ]|[+-]\d\d:?\d\d$/.test(ev.date) ? '' : '+01:00')).toISOString() : new Date().toISOString();
+  const r = JSON.parse(row.receipts || '{}');
+  const cur = r[email] || {};
+  if (kind === 'delivered') cur.delivered = cur.delivered || at;
+  else { cur.delivered = cur.delivered || at; cur.opened = cur.opened || at; }
+  r[email] = cur;
+  const all = [...String(row.to_addrs).split(','), ...String(row.cc_addrs).split(',')].map(x => x.trim()).filter(Boolean);
+  const deliveredAll = all.length && all.every(a => r[a] && r[a].delivered);
+  await env.DB.prepare('UPDATE mail_messages SET receipts = ?2, delivered_at = COALESCE(delivered_at, ?3), opened_at = COALESCE(opened_at, ?4) WHERE id = ?1')
+    .bind(row.id, JSON.stringify(r), deliveredAll ? at : null, cur.opened || null).run();
+  return { updated: row.id };
+}
+/** sent ✓ · delivered ✓✓ (grey) · read ✓✓ (blue) */
+export function receiptState(row) {
+  if (row.direction !== 'out' || row.folder === 'drafts') return null;
+  if (row.opened_at) return { state: 'read', at: row.opened_at };
+  if (row.delivered_at) return { state: 'delivered', at: row.delivered_at };
+  return { state: 'sent', at: row.received_at };
 }

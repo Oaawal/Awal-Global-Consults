@@ -231,7 +231,8 @@ CREATE INDEX IF NOT EXISTS idx_billing_case ON billing_docs(case_id);
 CREATE TABLE IF NOT EXISTS mail_messages (
   id              TEXT PRIMARY KEY,
   direction       TEXT NOT NULL CHECK (direction IN ('in', 'out')),
-  folder          TEXT NOT NULL DEFAULT 'inbox',   -- inbox | sent | archive | spam | trash
+  folder          TEXT NOT NULL DEFAULT 'inbox',   -- inbox | sent | drafts | archive | spam | trash
+  mailbox         TEXT,                            -- which of our addresses: info@, contact@, abdullateef@ ...
   message_id      TEXT,                            -- RFC 5322 Message-ID
   in_reply_to     TEXT,
   thread_id       TEXT NOT NULL,                   -- Message-ID of the first message in the conversation
@@ -254,6 +255,10 @@ CREATE TABLE IF NOT EXISTS mail_messages (
   starred         INTEGER NOT NULL DEFAULT 0,
   sent_by         TEXT,                            -- admin who sent it (outgoing)
   provider_id     TEXT,                            -- Brevo message id (outgoing)
+  receipts        TEXT,                            -- JSON per recipient: { "a@b.com": { delivered, opened } } from Brevo events
+  delivered_at    TEXT,                            -- every recipient's server accepted it
+  opened_at       TEXT,                            -- first recipient opened it (pictures loaded)
+  draft           TEXT,                            -- JSON of the unsent form (folder = drafts)
   received_at     TEXT NOT NULL,
   trashed_at      TEXT
 );
@@ -261,3 +266,4 @@ CREATE INDEX IF NOT EXISTS idx_mail_folder ON mail_messages(folder, received_at)
 CREATE INDEX IF NOT EXISTS idx_mail_thread ON mail_messages(thread_id, received_at);
 CREATE INDEX IF NOT EXISTS idx_mail_client ON mail_messages(client_id);
 CREATE INDEX IF NOT EXISTS idx_mail_msgid ON mail_messages(message_id);
+CREATE INDEX IF NOT EXISTS idx_mail_provider ON mail_messages(provider_id);

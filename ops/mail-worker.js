@@ -1,5 +1,5 @@
 /**
- * "awal-mail": receives email sent to info@awalglobal.com.ng for the dashboard mailbox.
+ * "awal-mail": receives email sent to info@, contact@ and abdullateef@awalglobal.com.ng for the dashboard mailbox.
  *
  * Set up (Cloudflare dashboard, once):
  *  1. Workers & Pages > Create > Worker named "awal-mail"; paste this file and deploy.
@@ -8,8 +8,8 @@
  *  3. Its Settings > Variables: secret CRON_SECRET (same value as the website's) and
  *     text variable FORWARD_TO = the inbox info@ forwards to today, so a copy still
  *     arrives there exactly as before.
- *  4. Email > Email Routing > Routing rules: edit info@awalglobal.com.ng and set its action to
- *     "Send to a Worker" > awal-mail.
+ *  4. Email > Email Routing > Routing rules: for each address (info@, contact@, abdullateef@), set the
+ *     action to "Send to a Worker" > awal-mail. A copy still goes to FORWARD_TO.
  *
  * What it does with each email, in this order:
  *  - forwards it to FORWARD_TO, so your usual inbox keeps working even if anything below fails;
@@ -59,10 +59,10 @@ export default {
       const client = await env.DB.prepare('SELECT id FROM clients WHERE lower(email) = ?1 AND anonymised_at IS NULL LIMIT 1').bind(fromAddr).first();
 
       await env.DB.prepare(
-        `INSERT INTO mail_messages (id, direction, folder, message_id, in_reply_to, thread_id, from_addr, to_addrs, subject, size_bytes, auth, raw_key, client_id, received_at)
-         VALUES (?1, 'in', 'inbox', ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)`
+        `INSERT INTO mail_messages (id, direction, folder, mailbox, message_id, in_reply_to, thread_id, from_addr, to_addrs, subject, size_bytes, auth, raw_key, client_id, received_at)
+         VALUES (?1, 'in', 'inbox', ?13, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)`
       ).bind(id, messageId, inReplyTo, threadId, fromAddr, String(message.to || '').toLowerCase().slice(0, 500), h('subject').slice(0, 300),
-        message.rawSize || raw.byteLength, JSON.stringify(auth), key, client ? client.id : null, now).run();
+        message.rawSize || raw.byteLength, JSON.stringify(auth), key, client ? client.id : null, now, String(message.to || '').toLowerCase().slice(0, 254)).run();
 
       // The website reads the message, runs the security checks and sends the phone notification
       if (env.CRON_SECRET) {

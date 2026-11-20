@@ -93,7 +93,22 @@ function caseRowMobile(r) {
 
 // ── Sign-in ─────────────────────────────────────────────────────
 export function loginPage({ step = 'email', email = '', next = '/admin/', error = '' } = {}) {
-  const form = step === 'code'
+  const appLink = `<p class="small muted" style="margin-top:12px"><a href="/admin/login?app=1&next=${encodeURIComponent(next)}${email ? `&email=${encodeURIComponent(email)}` : ''}">${icon('lock', 14)} Use your authenticator app instead</a></p>`;
+  const form = step === 'app'
+    ? `<h1>Authenticator app</h1>
+       <p class="muted">Enter your email and the 6-digit code from your authenticator app. Lost your phone? Enter one of your recovery codes instead.</p>
+       ${error ? flashHtml(['err', error]) : ''}
+       <form method="post" action="/admin/login">
+         <input type="hidden" name="action" value="app">
+         <input type="hidden" name="next" value="${esc(next)}">
+         <label for="email">Email address</label>
+         <input id="email" name="email" type="email" autocomplete="username" required value="${esc(email)}"${email ? '' : ' autofocus'}>
+         <label for="code">Code from the app</label>
+         <input id="code" class="code-input" name="code" autocomplete="one-time-code" maxlength="9" required${email ? ' autofocus' : ''}>
+         <div class="btn-row"><button class="btn block" type="submit">Sign in</button></div>
+       </form>
+       <p class="small muted" style="margin-top:16px"><a href="/admin/login?next=${encodeURIComponent(next)}">Email me a code instead</a></p>`
+    : step === 'code'
     ? `<h1>Check your email</h1>
        <p class="muted">If <strong>${esc(email)}</strong> is an authorised address, we've sent it a 6-digit code. It expires in 10 minutes.</p>
        ${error ? flashHtml(['err', error]) : ''}
@@ -105,7 +120,7 @@ export function loginPage({ step = 'email', email = '', next = '/admin/', error 
          <input id="code" class="code-input" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="7" required autofocus>
          <div class="btn-row"><button class="btn block" type="submit">Sign in</button></div>
        </form>
-       <p class="small muted" style="margin-top:16px"><a href="/admin/login?next=${encodeURIComponent(next)}">Use a different email or get a new code</a></p>`
+       <p class="small muted" style="margin-top:16px"><a href="/admin/login?next=${encodeURIComponent(next)}">Use a different email or get a new code</a></p>${appLink}`
     : `<h1>Sign in</h1>
        <p class="muted">We'll email you a one-time code. No password needed.</p>
        ${error ? flashHtml(['err', error]) : ''}
@@ -115,7 +130,7 @@ export function loginPage({ step = 'email', email = '', next = '/admin/', error 
          <label for="email">Email address</label>
          <input id="email" name="email" type="email" autocomplete="email" required autofocus value="${esc(email)}">
          <div class="btn-row"><button class="btn block" type="submit">Email me a code ${icon('arrow', 18)}</button></div>
-       </form>`;
+       </form>${appLink}`;
   return htmlDocument('Sign in', `
   <div class="login-wrap"><div class="login">
     <div class="card">

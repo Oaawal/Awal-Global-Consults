@@ -67,6 +67,82 @@ export const APP_SCRIPT = `
 (function () {
   document.querySelectorAll('form[data-confirm]').forEach(f => f.addEventListener('submit', e => { if (!confirm(f.dataset.confirm)) e.preventDefault(); }));
   document.querySelectorAll('a[data-confirm]').forEach(a => a.addEventListener('click', e => { if (!confirm(a.dataset.confirm)) e.preventDefault(); }));
+  document.querySelectorAll('button[data-confirm-btn]').forEach(b => b.addEventListener('click', e => { if (!confirm('Delete this conversation for good? This cannot be undone.')) e.preventDefault(); }));
+
+  // Email compose: saves to Drafts as you type (so it can be finished on another device),
+  // uploads attachments into the draft straight away, and switches the signature with the sender.
+  document.querySelectorAll('form.mail-compose[data-autosave]').forEach(form => {
+    const status = document.querySelector('.draft-status');
+    const draftInput = form.querySelector('input[name=draft]');
+    const fileInput = form.querySelector('input[type=file][name=files]');
+    const chips = form.querySelector('.draft-atts');
+    const sigs = JSON.parse(form.dataset.signatures || '{}');
+    const fromSel = form.querySelector('select[name=from]'), sigBox = form.querySelector('.sig-preview');
+    const localKey = 'agc_mail_draft_' + (draftInput.value || 'new');
+    let timer = null, saving = null, dirty = false, sending = false;
+    const say = t => { if (status) status.textContent = t; };
+    const fields = () => { const fd = new FormData(form); fd.delete('files'); return fd; };
+    const remember = () => { try { const o = {}; fields().forEach((v, k) => { o[k] = v; }); localStorage.setItem(localKey, JSON.stringify(o)); } catch (e) {} };
+    const forget = () => { try { localStorage.removeItem(localKey); localStorage.removeItem('agc_mail_draft_new'); } catch (e) {} };
+    async function save(keepalive) {
+      if (sending) return;
+      if (saving) { dirty = true; return saving; }
+      dirty = false; say('Saving…');
+      const url = '/admin/mail/draft' + (draftInput.value ? '/' + draftInput.value : '');
+      saving = fetch(url, { method: 'POST', body: fields(), credentials: 'same-origin', keepalive: !!keepalive }).then(r => r.ok ? r.json() : Promise.reject(r.status)).then(j => {
+        if (j.id && !draftInput.value) { draftInput.value = j.id; try { history.replaceState(null, '', '/admin/mail/new?draft=' + j.id); } catch (e) {} }
+        forget();
+        say('Saved in Drafts ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      }).catch(() => { remember(); say('Offline: kept on this device, will save when you are back online'); }).finally(() => { saving = null; if (dirty) save(); });
+      return saving;
+    }
+    const later = () => { clearTimeout(timer); timer = setTimeout(save, 1200); };
+    form.addEventListener('input', e => { if (e.target !== fileInput) later(); });
+    form.addEventListener('change', e => { if (e.target !== fileInput) later(); });
+    window.addEventListener('online', () => save());
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && timer) { clearTimeout(timer); timer = null; save(true); } });
+    form.addEventListener('submit', () => { sending = true; clearTimeout(timer); forget(); });
+    // A draft kept on this device while offline is restored into an empty form
+    try {
+      const kept = JSON.parse(localStorage.getItem(localKey) || 'null');
+      if (kept && !form.querySelector('[name=body]').value.trim() && kept.body) {
+        Object.keys(kept).forEach(k => { const el = form.querySelector('[name="' + k + '"]'); if (el && el.type !== 'hidden' && el.type !== 'checkbox') el.value = kept[k]; });
+        say('Restored from this device'); later();
+      }
+    } catch (e) {}
+    if (fromSel && sigBox) fromSel.addEventListener('change', () => { sigBox.textContent = sigs[fromSel.value] || ''; });
+
+    function renderChips(atts) {
+      chips.textContent = '';
+      atts.forEach(a => {
+        const chip = document.createElement('span'); chip.className = 'att-chip';
+        chip.appendChild(document.createTextNode(a.name + ' (' + Math.max(1, Math.round(a.size / 1024)) + ' KB) '));
+        const x = document.createElement('button'); x.type = 'button'; x.className = 'att-remove'; x.textContent = '×'; x.setAttribute('aria-label', 'Remove ' + a.name); x.dataset.n = a.n;
+        chip.appendChild(x); chips.appendChild(chip);
+      });
+    }
+    chips.addEventListener('click', async e => {
+      const b = e.target.closest('.att-remove'); if (!b || !draftInput.value) return;
+      const r = await fetch('/admin/mail/draft/' + draftInput.value + '/att/' + b.dataset.n + '/remove', { method: 'POST', body: new FormData(), credentials: 'same-origin' });
+      if (r.ok) renderChips((await r.json()).atts || []);
+    });
+    if (fileInput) fileInput.addEventListener('change', async () => {
+      const files = Array.from(fileInput.files || []);
+      if (!files.length) return;
+      if (!draftInput.value) await save();
+      if (!draftInput.value) return; // offline: the files go with the form when it is sent
+      for (const f of files) {
+        say('Uploading ' + f.name + '…');
+        const fd = new FormData(); fd.append('file', f);
+        const r = await fetch('/admin/mail/draft/' + draftInput.value + '/att', { method: 'POST', body: fd, credentials: 'same-origin' });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok) { alert(j.error || 'That file could not be attached.'); continue; }
+        renderChips(j.atts || []);
+      }
+      fileInput.value = '';
+      say('Saved in Drafts');
+    });
+  });
 
   // Quotation / invoice form: live totals with the discount (same rules as the server)
   document.querySelectorAll('form.bill-form').forEach(form => {

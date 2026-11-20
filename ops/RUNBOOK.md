@@ -86,7 +86,7 @@ In short: contain (rotate the affected secret, roll back, pause the bot), record
 assess risk, notify the NDPC within 72 hours where the breach is likely to risk people's rights, and tell affected
 clients without undue delay where the risk is high.
 
-## 10. Dashboard mailbox (info@awalglobal.com.ng)
+## 10. Dashboard mailbox (info@, contact@, abdullateef@)
 
 How it works: Cloudflare Email Routing hands every email for info@ to the **awal-mail** Worker
 (`ops/mail-worker.js`). The Worker first forwards it to your usual inbox (FORWARD_TO), then keeps
@@ -100,7 +100,8 @@ Set up once:
 3. awal-mail > Settings > Bindings: D1 `DB` (the website's database) and R2 `DOCS` (awal-documents).
 4. awal-mail > Settings > Variables: secret `CRON_SECRET` (same value as the website's) and
    text `FORWARD_TO` = the address info@ forwards to today (must be a verified destination).
-5. Email > Email Routing > Routing rules: edit info@awalglobal.com.ng, action **Send to a Worker** > awal-mail.
+5. Email > Email Routing > Routing rules: for info@, contact@ and abdullateef@awalglobal.com.ng (create the
+   rule if the address is new), set the action to **Send to a Worker** > awal-mail.
 6. Send a test email to info@ from your phone: it should arrive in your usual inbox and on /admin/mail.
 
 If something goes wrong: set the info@ rule back to **Send to an email** (your usual inbox). Mail
@@ -114,3 +115,26 @@ attachments only download as files; program files cannot be sent; 60 emails an h
 send, download and move is in Activity > Mail. Trash empties itself after 30 days. Erasing a client
 erases their emails; a client export includes them.
 
+Sending addresses: info@, contact@ and abdullateef@ (founder) can all send; each has its own designed
+signature, edited on Settings > "Sending addresses and signatures" (stored in app_settings
+'mail_identities'). Replies go out from the address the client wrote to.
+
+Drafts: the compose page saves to Drafts about a second after you stop typing (and attachments as soon
+as they are chosen), so a draft started on the phone opens on the web. Offline, it is kept on the device
+and saved when the connection returns.
+
+Spam: forged mail, lookalike domains and fake "Awal" names go straight to Spam, as do blocked senders
+(Block on an email; unblock in Settings).
+
+Ticks: ✓ sent, grey ✓✓ delivered, blue ✓✓ opened, from a second Brevo webhook ('brevo_mail_webhook',
+created on the first send or by the morning job, posting to /hooks/brevo). "Opened" means pictures
+loaded, so it is a strong hint, not proof.
+
+## 11. Authenticator app sign-in
+
+Settings > Authenticator app: scan the QR code with Google Authenticator, Microsoft Authenticator or
+Authy, confirm a code, and save the ten recovery codes. Then the sign-in page's "Use your authenticator
+app instead" works without email. Each code and recovery code works once; 8 wrong codes in 15 minutes
+locks app sign-in for that address; a recovery-code sign-in alerts all admins. Secrets are encrypted with
+a key derived from TOTP_KEY (or CRON_SECRET if TOTP_KEY is not set): if you change that secret, every
+admin must link their app again (sign in with an emailed code first).

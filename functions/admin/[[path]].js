@@ -44,8 +44,9 @@ import { fileMatchesName } from '../_lib/file-check.js';
 import { CHANNELS, PAST_STATUSES, validatePast, savePast, importCsv, csvTemplate, dataSubjectCount } from '../_lib/past-records.js';
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { clientProfile } from '../_lib/client-profile.js';
-import { MAIL_FOLDERS, OUR_DOMAIN, SEND_LIMIT_PER_HOUR, ATTACH_MAX_TOTAL, mailFrom, readIncoming, loadParsed, attachmentBytes, attachmentRisk, bodyDocument, bodyCsp, composeHtml, sendViaBrevo, parseRecipients, eraseClientMail } from '../_lib/mail.js';
-import { MAIL_FLASH, mailListPage, mailThreadPage, composePage, mailSetupPage } from '../_lib/admin-mail-views.js';
+import { totpStatus, startTotpSetup, pendingSetup, confirmTotpSetup, disableTotp, verifyTotpLogin } from '../_lib/totp.js';
+import { MAIL_FOLDERS, OUR_DOMAIN, SEND_LIMIT_PER_HOUR, ATTACH_MAX_TOTAL, mailFrom, mailIdentities, saveIdentities, signatureFor, ourAddressIn, readIncoming, loadParsed, attachmentBytes, attachmentRisk, bodyDocument, bodyCsp, composeHtml, sendViaBrevo, parseRecipients, eraseClientMail, blockedSenders, saveBlocked, ensureMailWebhook, mailWebhookSettings } from '../_lib/mail.js';
+import { MAIL_FLASH, mailListPage, mailThreadPage, composePage, mailSetupPage, settingsPage } from '../_lib/admin-mail-views.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
 import { adminLoginCodeEmail, caseStatusEmail, missingInfoEmail, billingEmail, detailsFormEmail } from '../_lib/email-templates.js';
@@ -132,6 +133,7 @@ async function loadCase(env, id) {
 async function mailReady(env) {
   try { await env.DB.prepare('SELECT 1 FROM mail_messages LIMIT 1').first(); return true; } catch (e) { return false; }
 }
+const parseJson = s => { try { return JSON.parse(s || 'null'); } catch (e) { return null; } };
 const fmtDateLong = iso => new Date(iso).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Africa/Lagos' });
 
 /** Counts shown as badges on the navigation. */
@@ -272,12 +274,33 @@ async function handle(context) {
   if (route === '/login') {
     if (method === 'GET') {
       if (await currentAdmin(env, request)) return redirect(safeNext(url.searchParams.get('next')));
-      return html(loginPage({ next: safeNext(url.searchParams.get('next')) }));
+      const prefill = String(url.searchParams.get('email') || '').trim().toLowerCase().slice(0, 254);
+      return html(loginPage({ step: url.searchParams.get('app') === '1' ? 'app' : 'email', email: /^[^\s@]+@[^\s@]+$/.test(prefill) ? prefill : '', next: safeNext(url.searchParams.get('next')) }));
     }
     if (method === 'POST') {
       const form = await request.formData();
       const email = String(form.get('email') || '').trim().toLowerCase().slice(0, 254);
       const next = safeNext(String(form.get('next') || ''));
+
+      // Authenticator app (or a one-time recovery code)
+      if (form.get('action') === 'app') {
+        const since = new Date(Date.now() - 15 * 60000).toISOString();
+        const fails = isAdminEmail(env, email) ? await env.DB.prepare("SELECT COUNT(*) AS n FROM audit_log WHERE actor = ?1 AND action = 'login.failed' AND at > ?2").bind(`admin:${email}`, since).first() : null;
+        if (fails && fails.n >= 8) return html(loginPage({ step: 'app', email, next, error: 'Too many wrong codes. Wait 15 minutes, or sign in with an emailed code.' }), 429);
+        const how = isAdminEmail(env, email) ? await verifyTotpLogin(env, email, form.get('code')) : null;
+        if (how) {
+          const fresh = await isNewDevice(env, email, request);
+          const cookie = await createSession(env, request, email);
+          await audit(env, request, `admin:${email}`, how === 'recovery' ? 'login.success_recovery' : 'login.success_app', 'admin', email, signInDetail(request));
+          if (fresh || how === 'recovery') await alertNewSignIn(env, email, request);
+          return redirect(how === 'recovery' ? '/admin/settings?done=recovery_used' : next, { 'Set-Cookie': cookie });
+        }
+        if (isAdminEmail(env, email)) {
+          await audit(env, request, `admin:${email}`, 'login.failed', 'admin', email, { ...signInDetail(request), method: 'app' });
+          await noteFailedCode(env, email, request);
+        }
+        return html(loginPage({ step: 'app', email, next, error: 'That code is not right. Check the time on your phone is set automatically, or use a recovery code.' }), 401);
+      }
 
       if (form.get('action') === 'verify') {
         if (await verifyLoginCode(env, email, form.get('code'))) {
@@ -961,47 +984,118 @@ async function handle(context) {
     });
   }
 
-  // ── Mail (info@ mailbox) ─────────────────────────────────────
+  // ── Settings: authenticator app, senders and signatures, blocked senders ──
+  if (parts[0] === 'settings') {
+    const ready = await mailReady(env);
+    const sflash = MAIL_FLASH[url.searchParams.get('done')] || flash;
+    const page = async (extra = {}, status = 200) => html(settingsPage({ admin, badges: await navBadges(env), flash: sflash, totp: await totpStatus(env, admin), setup: await pendingSetup(env, admin),
+      identities: ready ? await mailIdentities(env) : [], blocked: ready ? await blockedSenders(env) : [], mailReady: ready, webhook: ready ? await mailWebhookSettings(env).catch(() => null) : null, recoveryCodes: null, ...extra }), status);
+    if (parts.length === 1 && method === 'GET') return page();
+    if (method !== 'POST') return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
+    const fd = await request.formData();
+    if (parts[1] === 'totp' && parts[2] === 'start') {
+      try { await startTotpSetup(env, admin); } catch (err) { console.error('totp start:', err && err.message); return html(simplePage('Not available', 'The authenticator app needs the TOTP_KEY (or CRON_SECRET) secret to be set on the website.'), 503); }
+      await audit(env, request, actor, 'security.totp_setup_started', 'admin', admin, null);
+      return redirect('/admin/settings#security');
+    }
+    if (parts[1] === 'totp' && parts[2] === 'confirm') {
+      const codes = await confirmTotpSetup(env, admin, fd.get('code'));
+      if (!codes) return redirect('/admin/settings?done=totp_bad#security');
+      await audit(env, request, actor, 'security.totp_enabled', 'admin', admin, signInDetail(request));
+      return page({ recoveryCodes: codes, setup: null, flash: MAIL_FLASH.totp_on });
+    }
+    if (parts[1] === 'totp' && parts[2] === 'off') {
+      await disableTotp(env, admin);
+      await audit(env, request, actor, 'security.totp_disabled', 'admin', admin, signInDetail(request));
+      return redirect('/admin/settings?done=totp_off#security');
+    }
+    if (ready && parts[1] === 'identities') {
+      const cur = await mailIdentities(env);
+      const list = cur.map((i, n) => fd.get(`email_${n}`) === i.email ? {
+        email: i.email, name: String(fd.get(`name_${n}`) || i.name).replace(/[\r\n<>"]/g, ' ').trim().slice(0, 80) || i.name,
+        title: String(fd.get(`title_${n}`) || '').replace(/[\r\n<>]/g, ' ').trim().slice(0, 100),
+        lines: String(fd.get(`lines_${n}`) || '').split(/\r?\n/).map(l => l.replace(/[<>]/g, '').trim()).filter(Boolean).slice(0, 6).map(l => l.slice(0, 100))
+      } : i);
+      await saveIdentities(env, list);
+      await audit(env, request, actor, 'mail.identities_saved', 'settings', 'mail_identities', null);
+      return redirect('/admin/settings?done=ids_saved#mail');
+    }
+    if (ready && parts[1] === 'unblock') {
+      const addr = String(fd.get('addr') || '').toLowerCase();
+      await saveBlocked(env, (await blockedSenders(env)).filter(b => b !== addr));
+      await audit(env, request, actor, 'mail.unblocked', 'mail', null, { sender: addr });
+      return redirect('/admin/settings?done=unblocked');
+    }
+    return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
+  }
+
+  // ── Mail (info@, contact@, abdullateef@ ...) ─────────────────
   if (parts[0] === 'mail') {
     if (!(await mailReady(env))) return html(mailSetupPage({ admin, badges: await navBadges(env) }));
     const mflash = MAIL_FLASH[url.searchParams.get('done')] || flash;
     const now = new Date().toISOString();
+    const identities = await mailIdentities(env);
     const casesFor = async clientId => clientId ? ((await env.DB.prepare('SELECT id, reference, services FROM cases WHERE client_id = ?1 AND purged_at IS NULL ORDER BY created_at DESC LIMIT 30').bind(clientId).all()).results || []) : [];
+    const json = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { ...SECURITY_HEADERS, 'Content-Type': 'application/json' } });
+    const draftOf = r => parseJson(r && r.draft) || {};
+    const removeFiles = async (id, n) => { const keys = [`mail/parsed/${id}.json`]; for (let i = 0; i < (n || 0); i++) keys.push(`mail/out/${id}/${i}`); await env.DOCS.delete(keys); };
 
     // List
     if (parts.length === 1 && method === 'GET') {
       const folder = MAIL_FOLDERS[url.searchParams.get('f')] ? url.searchParams.get('f') : 'inbox';
       const q = (url.searchParams.get('q') || '').trim().slice(0, 100);
+      const box = identities.some(i => i.email === url.searchParams.get('box')) ? url.searchParams.get('box') : '';
       const before = url.searchParams.get('before') || '9999';
-      const where = folder === 'starred' ? "m.starred = 1 AND m.folder != 'trash'" : 'm.folder = ?2';
-      const binds = [before]; if (folder !== 'starred') binds.push(folder);
+      const binds = [before];
+      let where = folder === 'starred' ? "m.starred = 1 AND m.folder NOT IN ('trash', 'drafts')" : (binds.push(folder), `m.folder = ?${binds.length}`);
+      if (box) { binds.push(box); where += ` AND m.mailbox = ?${binds.length}`; }
       let search = '';
       if (q) { binds.push(likePattern(q)); const n = binds.length; search = ` AND (m.subject LIKE ?${n} ESCAPE '\\' OR m.from_addr LIKE ?${n} ESCAPE '\\' OR m.from_name LIKE ?${n} ESCAPE '\\' OR m.to_addrs LIKE ?${n} ESCAPE '\\' OR m.snippet LIKE ?${n} ESCAPE '\\')`; }
-      // One row per conversation: its newest message in this folder
+      // One row per conversation: its newest message in this view (drafts are listed one by one)
+      const oneEach = folder === 'drafts' ? '' : ` AND m.received_at = (SELECT MAX(x.received_at) FROM mail_messages x WHERE x.thread_id = m.thread_id AND ${where.replace(/m\./g, 'x.')})`;
       const rows = (await env.DB.prepare(
-        `SELECT m.*, (SELECT COUNT(*) FROM mail_messages t WHERE t.thread_id = m.thread_id) AS thread_count FROM mail_messages m
-         WHERE ${where}${search} AND m.received_at < ?1 AND m.received_at = (SELECT MAX(x.received_at) FROM mail_messages x WHERE x.thread_id = m.thread_id AND ${where.replace(/m\./g, 'x.')})
-         ORDER BY m.received_at DESC LIMIT 50`).bind(...binds).all()).results || [];
-      const c = await env.DB.prepare("SELECT SUM(CASE WHEN folder = 'inbox' AND direction = 'in' AND read_at IS NULL THEN 1 ELSE 0 END) AS unread, SUM(CASE WHEN folder = 'spam' THEN 1 ELSE 0 END) AS spam FROM mail_messages").first();
-      return html(mailListPage({ admin, badges: await navBadges(env), folder, rows, q, counts: { unread: c?.unread || 0, spam: c?.spam || 0 }, flash: mflash }));
+        `SELECT m.*, (SELECT COUNT(*) FROM mail_messages t WHERE t.thread_id = m.thread_id AND t.folder != 'drafts') AS thread_count FROM mail_messages m
+         WHERE ${where}${search} AND m.received_at < ?1${oneEach} ORDER BY m.received_at DESC LIMIT 50`).bind(...binds).all()).results || [];
+      const c = await env.DB.prepare(`SELECT SUM(CASE WHEN folder = 'inbox' AND direction = 'in' AND read_at IS NULL THEN 1 ELSE 0 END) AS unread,
+          SUM(CASE WHEN folder = 'spam' AND read_at IS NULL THEN 1 ELSE 0 END) AS spam, SUM(CASE WHEN folder = 'drafts' THEN 1 ELSE 0 END) AS drafts FROM mail_messages`).first();
+      return html(mailListPage({ admin, badges: await navBadges(env), folder, rows, q, box, identities, counts: { unread: c?.unread || 0, spam: c?.spam || 0, drafts: c?.drafts || 0 }, flash: mflash }));
     }
 
-    // Compose (new, reply, forward)
+    if (parts[1] === 'read-all' && method === 'POST') {
+      await env.DB.prepare("UPDATE mail_messages SET read_at = ?1 WHERE folder = 'inbox' AND direction = 'in' AND read_at IS NULL").bind(now).run();
+      return redirect('/admin/mail?done=mail_all_read');
+    }
+
+    // Compose (new, reply, forward, or an existing draft)
     if (parts[1] === 'new' && method === 'GET') {
-      const form = { to: (url.searchParams.get('to') || '').slice(0, 300), case_id: url.searchParams.get('case') || '', subject: (url.searchParams.get('subject') || '').slice(0, 200) };
-      let replyRow = null, clientId = null;
-      const replyId = url.searchParams.get('reply'), fwdId = url.searchParams.get('fwd');
+      const form = { to: (url.searchParams.get('to') || '').slice(0, 300), case_id: url.searchParams.get('case') || '', subject: (url.searchParams.get('subject') || '').slice(0, 200),
+        from: identities.some(i => i.email === url.searchParams.get('from')) ? url.searchParams.get('from') : identities[0].email };
+      let replyRow = null, clientId = null, draftAtts = [];
+      const draftId = url.searchParams.get('draft');
+      if (draftId) {
+        const d = await env.DB.prepare("SELECT * FROM mail_messages WHERE id = ?1 AND folder = 'drafts'").bind(draftId).first();
+        if (!d) return redirect('/admin/mail?f=drafts');
+        const f = draftOf(d);
+        Object.assign(form, { draft: d.id, from: f.from || form.from, to: f.to || '', cc: f.cc || '', bcc: f.bcc || '', subject: f.subject || '', body: f.body || '', sig: f.sig, reply: f.reply || '', fwd: f.fwd || '', case_id: f.case_id || '', fwd_atts: f.fwd_atts });
+        draftAtts = f.atts || [];
+        clientId = d.client_id;
+        if (form.fwd) { const src = await env.DB.prepare('SELECT * FROM mail_messages WHERE id = ?1').bind(form.fwd).first(); const p = src ? await loadParsed(env, src).catch(() => null) : null; form.fwdAtts = ((p && p.attachments) || []).filter(a => !a.inline && a.risk !== 'danger'); }
+        if (form.reply) replyRow = await env.DB.prepare('SELECT id FROM mail_messages WHERE id = ?1').bind(form.reply).first();
+      }
+      const replyId = !draftId && url.searchParams.get('reply'), fwdId = !draftId && url.searchParams.get('fwd');
       if (replyId || fwdId) {
         const src = await env.DB.prepare('SELECT * FROM mail_messages WHERE id = ?1').bind(replyId || fwdId).first();
         if (src) {
           const parsed = await loadParsed(env, src).catch(() => null);
           const text = String((parsed && parsed.text) || src.snippet || '').slice(0, 20000);
-          const header = `On ${fmtDateLong(src.received_at)}, ${src.direction === 'out' ? 'Awal Global Consults' : (src.from_name || src.from_addr)} <${src.from_addr}> wrote:`;
+          const header = `On ${fmtDateLong(src.received_at)}, ${src.from_name || src.from_addr} <${src.from_addr}> wrote:`;
           clientId = src.client_id; form.case_id = form.case_id || src.case_id || '';
+          // Answer from the address it was sent to
+          form.from = src.direction === 'in' ? (src.mailbox && identities.some(i => i.email === src.mailbox) ? src.mailbox : ourAddressIn(`${src.to_addrs},${src.cc_addrs}`, identities)) : src.from_addr;
           if (replyId) {
             replyRow = src; form.reply = src.id;
             form.to = src.direction === 'out' ? src.to_addrs : (src.reply_to || src.from_addr);
-            if (url.searchParams.get('all') === '1') form.cc = [...String(src.to_addrs).split(','), ...String(src.cc_addrs).split(',')].map(s => s.trim()).filter(a => a && a !== mailFrom(env).email && a !== form.to).join(', ');
+            if (url.searchParams.get('all') === '1') form.cc = [...String(src.to_addrs).split(','), ...String(src.cc_addrs).split(',')].map(s => s.trim()).filter(a => a && !identities.some(i => i.email === a) && a !== form.to).join(', ');
             form.subject = /^re:/i.test(src.subject || '') ? src.subject : `Re: ${src.subject || ''}`;
             form.body = `\n\n\n${header}\n${text.split('\n').map(l => '> ' + l).join('\n')}`;
           } else {
@@ -1011,39 +1105,91 @@ async function handle(context) {
             form.fwdAtts = ((parsed && parsed.attachments) || []).filter(a => !a.inline && a.risk !== 'danger');
           }
         }
-      } else if (form.to) {
+      } else if (form.to && !draftId) {
         const cl = await env.DB.prepare('SELECT id FROM clients WHERE lower(email) = ?1 AND anonymised_at IS NULL LIMIT 1').bind(form.to.toLowerCase()).first();
         clientId = cl && cl.id;
       }
-      return html(composePage({ admin, badges: await navBadges(env), form, replyRow, cases: await casesFor(clientId), flash: mflash }));
+      return html(composePage({ admin, badges: await navBadges(env), form, identities, replyRow, draftAtts, cases: await casesFor(clientId), flash: mflash }));
+    }
+
+    // Drafts: saved automatically while typing (any device), with their attachments
+    if (parts[1] === 'draft' && method === 'POST') {
+      const fd = await request.formData();
+      const g = (k, n) => String(fd.get(k) || '').slice(0, n);
+      let row = parts[2] ? await env.DB.prepare("SELECT * FROM mail_messages WHERE id = ?1 AND folder = 'drafts'").bind(parts[2]).first() : null;
+      if (parts[2] && !row) return json({ error: 'gone' }, 404);
+      if (parts[3] === 'discard') {
+        if (row) { await removeFiles(row.id, (draftOf(row).atts || []).reduce((m, a) => Math.max(m, a.n + 1), 0)); await env.DB.prepare('DELETE FROM mail_messages WHERE id = ?1').bind(row.id).run(); }
+        return redirect('/admin/mail?f=drafts&done=draft_discarded');
+      }
+      if (parts[3] === 'att' && row) {
+        const f = draftOf(row); f.atts = f.atts || [];
+        if (parts[4] && parts[5] === 'remove') {
+          const n = Number(parts[4]); f.atts = f.atts.filter(a => a.n !== n);
+          await env.DOCS.delete(`mail/out/${row.id}/${n}`);
+        } else {
+          const file = fd.get('file');
+          if (!file || typeof file === 'string' || !file.size) return json({ error: 'No file' }, 400);
+          const name = String(file.name || 'file').replace(/[\\/\r\n\0"<>|:*?]/g, '_').slice(0, 120);
+          if (attachmentRisk(name) === 'danger' || (attachmentRisk(name) === 'caution' && !/\.zip$/i.test(name))) return json({ error: `"${name}" is a file type that can carry malware, so it can't be sent from here.` }, 400);
+          if (f.atts.length >= 10 || f.atts.reduce((t, a) => t + a.size, 0) + file.size > ATTACH_MAX_TOTAL) return json({ error: 'Attachments are limited to 10 files and 10MB in total.' }, 400);
+          const n = f.atts.reduce((m, a) => Math.max(m, a.n + 1), 0);
+          await env.DOCS.put(`mail/out/${row.id}/${n}`, await file.arrayBuffer(), { httpMetadata: { contentType: file.type || 'application/octet-stream' }, customMetadata: { filename: name } });
+          f.atts.push({ n, name, size: file.size, type: file.type || 'application/octet-stream' });
+        }
+        await env.DB.prepare('UPDATE mail_messages SET draft = ?2, attachments = ?3, received_at = ?4 WHERE id = ?1').bind(row.id, JSON.stringify(f), f.atts.length, now).run();
+        return json({ id: row.id, atts: f.atts });
+      }
+      if (parts[3]) return json({ error: 'unknown' }, 404);
+      const prev = draftOf(row);
+      const f = { from: identities.some(i => i.email === fd.get('from')) ? String(fd.get('from')) : identities[0].email, to: g('to', 1000), cc: g('cc', 1000), bcc: g('bcc', 1000),
+        subject: g('subject', 200).replace(/[\r\n]+/g, ' '), body: g('body', 20000), sig: fd.get('sig') === '1' ? '1' : '0', reply: g('reply', 40), fwd: g('fwd', 40), case_id: g('case_id', 40),
+        fwd_atts: fd.get('fwd_atts') === '1' ? '1' : '0', atts: prev.atts || [] };
+      const parent = f.reply ? await env.DB.prepare('SELECT thread_id, client_id FROM mail_messages WHERE id = ?1').bind(f.reply).first() : null;
+      const snippet = f.body.replace(/\s+/g, ' ').trim().slice(0, 180);
+      if (row) {
+        await env.DB.prepare('UPDATE mail_messages SET draft = ?2, from_addr = ?3, mailbox = ?3, to_addrs = ?4, cc_addrs = ?5, subject = ?6, snippet = ?7, received_at = ?8 WHERE id = ?1')
+          .bind(row.id, JSON.stringify(f), f.from, f.to, f.cc, f.subject, snippet, now).run();
+      } else {
+        const id = crypto.randomUUID();
+        await env.DB.prepare(`INSERT INTO mail_messages (id, direction, folder, mailbox, thread_id, from_addr, from_name, to_addrs, cc_addrs, subject, snippet, client_id, read_at, sent_by, received_at, draft)
+          VALUES (?1, 'out', 'drafts', ?2, ?3, ?2, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?10, ?12)`).bind(id, f.from, parent ? parent.thread_id : `<draft-${id}>`, mailFrom(env, f.from, identities).name,
+          f.to, f.cc, f.subject, snippet, parent ? parent.client_id : null, now, admin, JSON.stringify(f)).run();
+        row = { id };
+      }
+      return json({ id: row.id, savedAt: now });
     }
 
     // Send
     if (parts[1] === 'send' && method === 'POST') {
       const fd = await request.formData();
       const get = k => String(fd.get(k) || '');
-      const form = { to: get('to').slice(0, 1000), cc: get('cc').slice(0, 1000), subject: get('subject').replace(/[\r\n]+/g, ' ').trim().slice(0, 200), body: get('body').slice(0, 20000),
-        signature: get('signature').slice(0, 500), reply: get('reply'), fwd: get('fwd'), case_id: get('case_id') };
-      const again = async (error, status = 400) => html(composePage({ admin, badges: await navBadges(env), form, error, cases: [] }), status);
-      const to = parseRecipients(form.to), cc = parseRecipients(form.cc);
-      if (to.bad.length || cc.bad.length) return again(`These addresses don't look right: ${[...to.bad, ...cc.bad].join(', ')}`);
+      const form = { draft: get('draft'), from: get('from'), to: get('to').slice(0, 1000), cc: get('cc').slice(0, 1000), bcc: get('bcc').slice(0, 1000), subject: get('subject').replace(/[\r\n]+/g, ' ').trim().slice(0, 200),
+        body: get('body').slice(0, 20000), sig: fd.get('sig') === '1' ? '1' : '0', reply: get('reply'), fwd: get('fwd'), case_id: get('case_id'), fwd_atts: fd.get('fwd_atts') === '1' ? '1' : '0' };
+      const draftRow = form.draft ? await env.DB.prepare("SELECT * FROM mail_messages WHERE id = ?1 AND folder = 'drafts'").bind(form.draft).first() : null;
+      const draftAtts = draftOf(draftRow).atts || [];
+      const again = async (error, status = 400) => html(composePage({ admin, badges: await navBadges(env), form, identities, error, cases: [], draftAtts }), status);
+      const identity = identities.find(i => i.email === form.from);
+      if (!identity) return again('Choose who the email is from.');
+      const to = parseRecipients(form.to), cc = parseRecipients(form.cc), bcc = parseRecipients(form.bcc);
+      if (to.bad.length || cc.bad.length || bcc.bad.length) return again(`These addresses don't look right: ${[...to.bad, ...cc.bad, ...bcc.bad].join(', ')}`);
       if (!to.list.length) return again('Add at least one recipient.');
-      if (to.list.length + cc.list.length > 20) return again('Up to 20 recipients per email.');
+      if (to.list.length + cc.list.length + bcc.list.length > 20) return again('Up to 20 recipients per email.');
       if (!form.subject || !form.body.trim()) return again('Add a subject and a message.');
-      const hour = await env.DB.prepare("SELECT COUNT(*) AS n FROM mail_messages WHERE direction = 'out' AND received_at > ?1").bind(new Date(Date.now() - 3600000).toISOString()).first();
+      const hour = await env.DB.prepare("SELECT COUNT(*) AS n FROM mail_messages WHERE direction = 'out' AND folder != 'drafts' AND received_at > ?1").bind(new Date(Date.now() - 3600000).toISOString()).first();
       if ((hour?.n || 0) >= SEND_LIMIT_PER_HOUR) { await audit(env, request, actor, 'mail.limit', 'mail', null, { to: to.list.length }); return again(MAIL_FLASH.mail_limit[1], 429); }
 
-      // Attachments: uploaded files, plus the original's when forwarding
+      // Attachments: files added to the draft, files chosen without the auto-save, and the original's when forwarding
       const atts = []; let total = 0;
+      for (const a of draftAtts) { const o = await env.DOCS.get(`mail/out/${draftRow.id}/${a.n}`); if (o) { const content = await o.arrayBuffer(); total += content.byteLength; atts.push({ name: a.name, content, type: a.type }); } }
       for (const f of fd.getAll('files')) {
         if (typeof f === 'string' || !f.size) continue;
         const name = String(f.name || 'file').replace(/[\\/\r\n\0"<>|:*?]/g, '_').slice(0, 120);
-        if (attachmentRisk(name) !== 'ok' && !/\.(zip)$/i.test(name)) return again(`"${name}" is a file type that can carry malware, so it can't be sent from here.`);
+        if (attachmentRisk(name) === 'danger' || (attachmentRisk(name) === 'caution' && !/\.zip$/i.test(name))) return again(`"${name}" is a file type that can carry malware, so it can't be sent from here.`);
         total += f.size; atts.push({ name, content: await f.arrayBuffer(), type: f.type || 'application/octet-stream' });
       }
-      let parent = null;
-      if (form.reply) parent = await env.DB.prepare('SELECT * FROM mail_messages WHERE id = ?1').bind(form.reply).first();
-      if (form.fwd && fd.get('fwd_atts') === '1') {
+      const parent = form.reply ? await env.DB.prepare('SELECT * FROM mail_messages WHERE id = ?1').bind(form.reply).first() : null;
+      if (form.fwd && form.fwd_atts === '1') {
         const src = await env.DB.prepare('SELECT * FROM mail_messages WHERE id = ?1').bind(form.fwd).first();
         const parsed = src ? await loadParsed(env, src).catch(() => null) : null;
         for (const a of ((parsed && parsed.attachments) || []).filter(a => !a.inline && a.risk !== 'danger')) {
@@ -1053,17 +1199,23 @@ async function handle(context) {
       }
       if (atts.length > 10 || total > ATTACH_MAX_TOTAL) return again('Attachments are limited to 10 files and 10MB in total.');
 
-      const html_ = composeHtml(form.body.trim(), { signature: form.signature.trim() });
-      const text = `${form.body.trim()}${form.signature.trim() ? `\n\n${form.signature.trim()}` : ''}`;
+      const sig = form.sig === '1' ? signatureFor(identity) : null;
+      const html_ = composeHtml(form.body.trim(), { signatureHtml: sig ? sig.html : '' });
+      const text = `${form.body.trim()}${sig ? `\n\n--\n${sig.text}` : ''}`;
       let providerId;
       try {
-        providerId = await sendViaBrevo(env, { to: to.list, cc: cc.list, subject: form.subject, html: html_, text, attachments: atts,
-          inReplyTo: parent ? parent.message_id : null, references: parent ? [parent.thread_id, parent.in_reply_to].filter(Boolean) : [] });
+        providerId = await sendViaBrevo(env, { from: mailFrom(env, identity.email, identities), to: to.list, cc: cc.list, bcc: bcc.list, subject: form.subject, html: html_, text, attachments: atts,
+          inReplyTo: parent ? parent.message_id : null, references: parent ? [parent.thread_id, parent.in_reply_to].filter(x => x && !/^<draft-/.test(x)) : [] });
       } catch (err) {
         console.error('mail send failed:', err && err.message);
         await audit(env, request, actor, 'mail.send_failed', 'mail', null, { to: to.list.length });
         return again(MAIL_FLASH.mail_failed[1], 502);
       }
+      // Brevo now reports delivered and opened events for the ticks (set up once)
+      const later = BACKGROUND.get(request);
+      const hook = ensureMailWebhook(env, url.origin).catch(err => console.error('mail webhook:', err && err.message));
+      if (later) later(hook); else await hook;
+
       const id = crypto.randomUUID();
       const messageId = providerId && /^<.+>$/.test(providerId) ? providerId : `<${id}@${OUR_DOMAIN}>`;
       const client = await env.DB.prepare(`SELECT id FROM clients WHERE lower(email) IN (${to.list.map((_, i) => `?${i + 1}`).join(',')}) AND anonymised_at IS NULL LIMIT 1`).bind(...to.list).first();
@@ -1072,25 +1224,29 @@ async function handle(context) {
       if (form.case_id) { const c = await env.DB.prepare('SELECT id FROM cases WHERE id = ?1').bind(form.case_id).first(); caseId = c ? c.id : null; }
       for (let i = 0; i < atts.length; i++) await env.DOCS.put(`mail/out/${id}/${i}`, atts[i].content, { httpMetadata: { contentType: atts[i].type }, customMetadata: { filename: atts[i].name } });
       await env.DOCS.put(`mail/parsed/${id}.json`, JSON.stringify({ html: html_, text, attachments: atts.map((a, i) => ({ i, filename: a.name, mimeType: a.type, size: a.content.byteLength, risk: 'ok', inline: false })) }), { httpMetadata: { contentType: 'application/json' } });
+      const threadId = parent && !/^<draft-/.test(parent.thread_id) ? parent.thread_id : messageId;
       const stmts = [
-        env.DB.prepare(`INSERT INTO mail_messages (id, direction, folder, message_id, in_reply_to, thread_id, from_addr, from_name, to_addrs, cc_addrs, subject, snippet, size_bytes, attachments,
-            parsed_at, client_id, case_id, read_at, sent_by, provider_id, received_at) VALUES (?1, 'out', 'sent', ?2, ?3, ?4, ?5, 'Awal Global Consults', ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?12, ?15, ?16, ?12)`)
-          .bind(id, messageId, parent ? parent.message_id : null, parent ? parent.thread_id : messageId, mailFrom(env).email, to.list.join(', '), cc.list.join(', '), form.subject,
-            text.replace(/\s+/g, ' ').slice(0, 180), html_.length + total, atts.length, now, clientId, caseId, admin, providerId),
-        auditStmt(env, request, actor, 'mail.sent', 'mail', id, { to: to.list.length, cc: cc.list.length, attachments: atts.length, reply: !!parent }, now)
+        env.DB.prepare(`INSERT INTO mail_messages (id, direction, folder, mailbox, message_id, in_reply_to, thread_id, from_addr, from_name, to_addrs, cc_addrs, subject, snippet, size_bytes, attachments,
+            parsed_at, client_id, case_id, read_at, sent_by, provider_id, received_at) VALUES (?1, 'out', 'sent', ?5, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?13, ?16, ?17, ?13)`)
+          .bind(id, messageId, parent ? parent.message_id : null, threadId, identity.email, identity.name, to.list.join(', '), cc.list.join(', '), form.subject,
+            form.body.replace(/\s+/g, ' ').trim().slice(0, 180), html_.length + total, atts.length, now, clientId, caseId, admin, providerId),
+        auditStmt(env, request, actor, 'mail.sent', 'mail', id, { from: identity.email, to: to.list.length, cc: cc.list.length, bcc: bcc.list.length, attachments: atts.length, reply: !!parent }, now)
       ];
       if (parent && parent.direction === 'in' && !parent.read_at) stmts.push(env.DB.prepare('UPDATE mail_messages SET read_at = ?2 WHERE id = ?1').bind(parent.id, now));
-      if (caseId) stmts.push(env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'note', ?2, ?3, ?4)").bind(caseId, `Email sent: "${form.subject}"`, actor, now));
+      if (caseId) stmts.push(env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'note', ?2, ?3, ?4)").bind(caseId, `Email sent from ${identity.email}: "${form.subject}"`, actor, now));
+      if (draftRow) stmts.push(env.DB.prepare('DELETE FROM mail_messages WHERE id = ?1').bind(draftRow.id));
       await env.DB.batch(stmts);
+      if (draftRow) await removeFiles(draftRow.id, draftAtts.reduce((m, a) => Math.max(m, a.n + 1), 0));
       return redirect(`/admin/mail/${parent ? parent.id : id}?done=mail_sent`);
     }
 
     // One message (and its conversation)
     const row = parts[1] ? await env.DB.prepare('SELECT * FROM mail_messages WHERE id = ?1').bind(parts[1]).first() : null;
     if (!row) return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
+    if (row.folder === 'drafts' && parts.length === 2 && method === 'GET') return redirect(`/admin/mail/new?draft=${row.id}`);
 
     if (parts.length === 2 && method === 'GET') {
-      const thread = (await env.DB.prepare("SELECT * FROM mail_messages WHERE thread_id = ?1 AND (folder != 'trash' OR id = ?2) ORDER BY received_at LIMIT 50").bind(row.thread_id, row.id).all()).results || [row];
+      const thread = (await env.DB.prepare("SELECT * FROM mail_messages WHERE thread_id = ?1 AND folder != 'drafts' AND (folder != 'trash' OR id = ?2 OR ?3 = 'trash') ORDER BY received_at LIMIT 50").bind(row.thread_id, row.id, row.folder).all()).results || [row];
       const parsedById = {};
       for (const r of thread) { try { parsedById[r.id] = r.direction === 'in' ? await readIncoming(env, r) : await loadParsed(env, r); } catch (err) { console.error('mail read failed:', r.id, err && err.message); } }
       const unread = thread.filter(r => r.direction === 'in' && !r.read_at);
@@ -1106,7 +1262,7 @@ async function handle(context) {
     if (parts[2] === 'body' && method === 'GET') {
       const parsed = row.direction === 'in' ? await readIncoming(env, row) : await loadParsed(env, row);
       if (!parsed) return new Response('Not available', { status: 404 });
-      const images = url.searchParams.get('images') === '1';
+      const images = url.searchParams.get('images') === '1' || row.direction === 'out';
       return new Response(bodyDocument(parsed, { images }), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff',
         'X-Frame-Options': 'SAMEORIGIN', 'Referrer-Policy': 'no-referrer', 'X-Robots-Tag': 'noindex', 'Content-Security-Policy': bodyCsp(images) } });
     }
@@ -1119,7 +1275,7 @@ async function handle(context) {
       if (parts.length === 4 && method === 'GET') {
         await audit(env, request, actor, 'mail.attachment_downloaded', 'mail', row.id, { file: a.filename, risk: attachmentRisk(a.filename) });
         return new Response(a.content, { headers: { ...SECURITY_HEADERS, 'Content-Type': 'application/octet-stream',
-          'Content-Disposition': `attachment; filename="${a.filename.replace(/[^\x20-\x7e]/g, '_')}"; filename*=UTF-8''${encodeURIComponent(a.filename)}` } });
+          'Content-Disposition': `attachment; filename="${a.filename.replace(/[^\x20-\x7e]/g, '_').replace(/"/g, '')}"; filename*=UTF-8''${encodeURIComponent(a.filename)}` } });
       }
       if (parts[4] === 'to-case' && method === 'POST') {
         const fd = await request.formData();
@@ -1136,11 +1292,11 @@ async function handle(context) {
       }
     }
 
-    // Move, star, read state, link to a case
+    // Move, star, read state, block, delete for good, link to a case
     if (parts[2] === 'action' && method === 'POST') {
       const fd = await request.formData();
       const act = String(fd.get('do') || '');
-      const set = (sql, ...b) => env.DB.prepare(`UPDATE mail_messages SET ${sql} WHERE thread_id = ?1`).bind(row.thread_id, ...b);
+      const set = (sql, ...b) => env.DB.prepare(`UPDATE mail_messages SET ${sql} WHERE thread_id = ?1 AND folder != 'drafts'`).bind(row.thread_id, ...b);
       const moves = {
         archive: () => set("folder = CASE WHEN direction = 'out' THEN folder ELSE 'archive' END"),
         inbox: () => set("folder = CASE WHEN direction = 'out' THEN 'sent' ELSE 'inbox' END, trashed_at = NULL"),
@@ -1154,9 +1310,24 @@ async function handle(context) {
       };
       if (act === 'link') {
         const cid = String(fd.get('case_id') || '');
-        const c = cid ? await env.DB.prepare('SELECT id, client_id FROM cases WHERE id = ?1').bind(cid).first() : null;
+        const c = cid ? await env.DB.prepare('SELECT id FROM cases WHERE id = ?1').bind(cid).first() : null;
         await env.DB.batch([set('case_id = ?2', c ? c.id : null), auditStmt(env, request, actor, 'mail.linked', 'mail', row.id, { case: c ? c.id : null }, now)]);
         return redirect(`/admin/mail/${row.id}?done=mail_linked`);
+      }
+      if (act === 'block') {
+        const sender = (await env.DB.prepare("SELECT from_addr FROM mail_messages WHERE thread_id = ?1 AND direction = 'in' ORDER BY received_at DESC LIMIT 1").bind(row.thread_id).first())?.from_addr;
+        if (sender) {
+          await saveBlocked(env, [...(await blockedSenders(env)), sender.toLowerCase()]);
+          await env.DB.batch([env.DB.prepare("UPDATE mail_messages SET folder = 'spam' WHERE direction = 'in' AND lower(from_addr) = ?1 AND folder IN ('inbox', 'archive')").bind(sender.toLowerCase()),
+            auditStmt(env, request, actor, 'mail.blocked', 'mail', row.id, { sender }, now)]);
+        }
+        return redirect('/admin/mail?done=mail_blocked');
+      }
+      if (act === 'purge' && row.folder === 'trash') {
+        const rows = (await env.DB.prepare("SELECT id, raw_key, direction, attachments FROM mail_messages WHERE thread_id = ?1 AND folder = 'trash'").bind(row.thread_id).all()).results || [];
+        for (const r of rows) { const keys = [`mail/parsed/${r.id}.json`]; if (r.raw_key) keys.push(r.raw_key); if (r.direction === 'out') for (let i = 0; i < (r.attachments || 0); i++) keys.push(`mail/out/${r.id}/${i}`); await env.DOCS.delete(keys); }
+        await env.DB.batch([env.DB.prepare("DELETE FROM mail_messages WHERE thread_id = ?1 AND folder = 'trash'").bind(row.thread_id), auditStmt(env, request, actor, 'mail.purged', 'mail', row.id, { messages: rows.length }, now)]);
+        return redirect('/admin/mail?f=trash&done=mail_purged');
       }
       if (!moves[act]) return redirect(`/admin/mail/${row.id}`);
       await env.DB.batch([moves[act](), auditStmt(env, request, actor, `mail.${act}`, 'mail', row.id, null, now)]);
