@@ -253,6 +253,7 @@ textarea{min-height:88px;resize:vertical}
 .id-box{border:1px solid var(--line);border-radius:10px;padding:10px 14px 14px;margin:0 0 14px}.id-box legend{font-weight:700;padding:0 6px}.sig-sample{margin-top:10px;padding:10px;border:1px dashed var(--line);border-radius:8px;background:#fff;overflow-x:auto}
 .steps-list{padding-left:20px}.chips{display:flex;flex-wrap:wrap;gap:6px}.chips a{padding:5px 10px;border:1px solid var(--line);border-radius:999px;font-size:13px;text-decoration:none;color:var(--text);background:#fff}.chips a.on{background:var(--navy,#0A2C48);color:#fff;border-color:transparent}
 .top-settings{display:inline-flex;align-items:center;gap:6px;color:inherit;text-decoration:none;font-size:14px;margin-right:6px}
+.imp-bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:12px}.imp-bar span{display:block;height:100%;width:0;background:#1B4F78;transition:width .3s}
 .svc-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:0 14px;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:2px 12px 12px;margin-top:6px}
 .svc-pick .check{margin-top:10px;font-size:14px}
 .check input{width:18px;height:18px;margin-top:2px;flex:none}

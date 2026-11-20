@@ -64,7 +64,7 @@ export function mailListPage({ admin, badges, folder, rows, q, counts, flash, bo
     : `<div class="card-body">${emptyState('mail', q ? 'No emails match your search' : folder === 'inbox' ? 'No emails yet' : `Nothing in ${MAIL_FOLDERS[folder]}`, folder === 'trash' ? `Emails in Trash are deleted for good after ${TRASH_DAYS} days.` : folder === 'drafts' ? 'Anything you start writing is saved here automatically, on your phone and on the web.' : folder === 'spam' ? 'Forged, lookalike and blocked senders land here.' : '')}</div>`;
   const boxes = identities.length > 1 ? `<div class="chips mail-boxes"><a class="${!box ? 'on' : ''}" href="/admin/mail?f=${esc(folder)}">All addresses</a>${identities.map(i => `<a class="${box === i.email ? 'on' : ''}" href="/admin/mail?f=${esc(folder)}&box=${encodeURIComponent(i.email)}">${esc(shortBox(i.email))}@</a>`).join('')}</div>` : '';
   return shell({ title: 'Mail', active: 'mail', admin, badges, body: `
-    ${pageHead('Mail', counts.unread ? `${counts.unread} unread` : 'All read', `<a class="btn ghost sm" href="/admin/settings#mail">Settings</a> <a class="btn sm" href="/admin/mail/new${box ? `?from=${encodeURIComponent(box)}` : ''}">${icon('plus', 16)}New email</a>`)}
+    ${pageHead('Mail', counts.unread ? `${counts.unread} unread` : 'All read', `<a class="btn ghost sm" href="/admin/mail/import">Import</a> <a class="btn ghost sm" href="/admin/settings#mail">Settings</a> <a class="btn sm" href="/admin/mail/new${box ? `?from=${encodeURIComponent(box)}` : ''}">${icon('plus', 16)}New email</a>`)}
     ${flashHtml(flash)}
     ${boxes}
     ${folderTabs(folder, { inbox: counts.unread, drafts: counts.drafts, spam: counts.spam }, box)}
@@ -223,4 +223,23 @@ export function settingsPage({ admin, badges, flash, totp, setup, recoveryCodes,
       </div>
       <div><div class="card" id="mail"><div class="card-head"><h2>Sending addresses and signatures</h2></div><div class="card-body">${ids}</div></div></div>
     </div>` });
+}
+
+export function mailImportPage({ admin, badges }) {
+  return shell({ title: 'Import emails', active: 'mail', admin, badges, body: `
+    <a class="crumb" href="/admin/mail">${icon('back', 16)}Mail</a>
+    ${pageHead('Import emails', 'Bring past emails from Gmail into the dashboard, so you can reply in the same conversation')}
+    <div class="grid grid-2">
+      <div class="card"><div class="card-head"><h2>One email</h2></div><div class="card-body small">
+        <ol class="steps-list"><li>Open Gmail on a computer and open the email.</li><li>Click the three dots (⋮) at the top right of the email, then <strong>Download message</strong>.</li><li>Choose the downloaded <code>.eml</code> file below.</li></ol></div></div>
+      <div class="card"><div class="card-head"><h2>Everything</h2></div><div class="card-body small">
+        <ol class="steps-list"><li>Go to <a href="https://takeout.google.com" target="_blank" rel="noopener">takeout.google.com</a> signed in to the Gmail your domain forwards to.</li><li>Click <strong>Deselect all</strong>, tick only <strong>Mail</strong>, then create the export. Google emails you a download link (it can take a few hours).</li><li>Unzip it and choose the <code>.mbox</code> file below.</li></ol></div></div>
+    </div>
+    <div class="card"><div class="card-body">
+      <div class="mail-import">
+        <label for="imp-files">Choose .eml or .mbox files</label>
+        <input id="imp-files" type="file" multiple accept=".eml,.mbox,message/rfc822,application/mbox">
+        <p class="small muted">Only emails to or from @awalglobal.com.ng are kept; personal Gmail mail is skipped. Emails already in the dashboard are skipped too, so you can run it again safely. Keep this page open until it finishes.</p>
+        <div class="imp-progress" aria-live="polite" hidden><div class="imp-bar"><span></span></div><p class="imp-text small"></p></div>
+      </div></div></div>` });
 }

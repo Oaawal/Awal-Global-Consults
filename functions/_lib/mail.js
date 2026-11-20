@@ -153,9 +153,9 @@ async function parseRaw(env, row) {
 }
 
 /** Parse an incoming message once: cache its readable parts in R2 and update the list row. */
-export async function readIncoming(env, row) {
-  if (row.parsed_at) return loadParsed(env, row);
-  const m = await parseRaw(env, row);
+export async function readIncoming(env, row, preParsed = null) {
+  if (row.parsed_at && !preParsed) return loadParsed(env, row);
+  const m = preParsed || await parseRaw(env, row);
   if (!m) return null;
   let auth = {}; try { auth = JSON.parse(row.auth || '{}'); } catch (e) {}
   const atts = (m.attachments || []).map((a, i) => ({ i, filename: safeName(a.filename || (a.mimeType === 'message/rfc822' ? 'forwarded-message.eml' : `attachment-${i + 1}`)),
@@ -198,7 +198,7 @@ export { loadParsed };
 
 /** One attachment's bytes (incoming: re-read from the original message; outgoing: stored copy). */
 export async function attachmentBytes(env, row, i) {
-  if (row.direction === 'out') {
+  if (row.direction === 'out' && !row.raw_key) {
     const o = await env.DOCS.get(`mail/out/${row.id}/${i}`);
     return o ? { content: await o.arrayBuffer(), filename: o.customMetadata?.filename || `attachment-${i + 1}`, mimeType: o.httpMetadata?.contentType || 'application/octet-stream' } : null;
   }
@@ -376,4 +376,65 @@ export function receiptState(row) {
   if (row.opened_at) return { state: 'read', at: row.opened_at };
   if (row.delivered_at) return { state: 'delivered', at: row.delivered_at };
   return { state: 'sent', at: row.received_at };
+}
+
+// ── Importing past mail (Gmail "Download message" .eml, or a Google Takeout .mbox) ──
+const msgIds = v => String(v || '').match(/<[^<>\s]+>/g) || [];
+/** The verdict Google or Cloudflare recorded when the email first arrived (the first such header only). */
+function importedAuth(headers) {
+  const ar = headers.filter(h => h.key === 'authentication-results').map(h => String(h.value));
+  const first = ar.find(v => /^\s*(mx\.google\.com|mx\.cloudflare\.net)\s*;/i.test(v));
+  if (!first) return { spf: 'unknown', dkim: 'unknown', dmarc: 'unknown' };
+  const out = {};
+  for (const k of ['spf', 'dkim', 'dmarc']) { const m = first.match(new RegExp(`\\b${k}=(\\w+)`, 'i')); out[k] = m ? m[1].toLowerCase() : 'none'; }
+  return out;
+}
+/**
+ * Import one raw message. Keeps only mail to or from our domain (or a Gmail-sent reply in a
+ * conversation already here). Returns { status: 'added'|'duplicate'|'skipped'|'failed', reason?, id? }.
+ */
+export async function importMessage(env, bytes, { identities, now = new Date().toISOString() }) {
+  let u8 = new Uint8Array(bytes);
+  // mbox: drop the "From " separator line; unescape ">From " lines (mboxrd)
+  if (u8[0] === 70 && u8[1] === 114 && u8[2] === 111 && u8[3] === 109 && u8[4] === 32) { const nl = u8.indexOf(10); u8 = u8.subarray(nl + 1); }
+  if (!u8.length) return { status: 'skipped', reason: 'empty' };
+  if (u8.length > 25 * 1024 * 1024) return { status: 'skipped', reason: 'larger than 25MB' };
+  let m;
+  try { m = await PostalMime.parse(u8.slice().buffer, { attachmentEncoding: 'arraybuffer' }); } catch (e) { return { status: 'failed', reason: 'unreadable' }; }
+  const hv = k => (m.headers.find(h => h.key === k) || {}).value || '';
+  const labels = hv('x-gmail-labels').toLowerCase();
+  if (/(^|,)\s*trash\s*(,|$)/.test(labels)) return { status: 'skipped', reason: 'in Gmail Trash' };
+  const ours = a => String(a || '').toLowerCase().endsWith('@' + OUR_DOMAIN);
+  const from = String((m.from && m.from.address) || '').toLowerCase();
+  const rcpts = [...addrList(m.to), ...addrList(m.cc), ...['delivered-to', 'x-forwarded-to', 'x-original-to'].flatMap(k => m.headers.filter(h => h.key === k).map(h => String(h.value).toLowerCase().replace(/[<>\s]/g, '')))];
+  const messageId = msgIds(hv('message-id'))[0] || null;
+  const inReplyTo = msgIds(hv('in-reply-to'))[0] || null;
+  const refs = msgIds(hv('references'));
+  if (messageId && await env.DB.prepare('SELECT 1 FROM mail_messages WHERE message_id = ?1 LIMIT 1').bind(messageId).first()) return { status: 'duplicate' };
+  const parentIds = [inReplyTo, ...[...refs].reverse()].filter(Boolean).slice(0, 10);
+  const parent = parentIds.length ? await env.DB.prepare(`SELECT thread_id, client_id, mailbox FROM mail_messages WHERE message_id IN (${parentIds.map((_, i) => `?${i + 1}`).join(',')}) LIMIT 1`).bind(...parentIds).first() : null;
+  const sentByUs = ours(from) || /(^|,)\s*sent\s*(,|$)/.test(labels);
+  if (!ours(from) && !rcpts.some(ours) && !(sentByUs && parent)) return { status: 'skipped', reason: 'not to or from your domain' };
+  const direction = sentByUs ? 'out' : 'in';
+  const mailbox = direction === 'out' && ours(from) ? from : (rcpts.find(ours) || (parent && parent.mailbox) || null);
+  let date = new Date(m.date || hv('date') || now); if (isNaN(date.getTime()) || date > new Date(Date.now() + 86400000)) date = new Date(now);
+  const receivedAt = date.toISOString();
+  const threadId = parent ? parent.thread_id : (refs[0] || inReplyTo || messageId || `<import-${crypto.randomUUID()}@${OUR_DOMAIN}>`);
+  const other = direction === 'out' ? addrList(m.to)[0] : from;
+  const client = parent && parent.client_id ? { id: parent.client_id } : (other ? await env.DB.prepare('SELECT id FROM clients WHERE lower(email) = ?1 AND anonymised_at IS NULL LIMIT 1').bind(other).first() : null);
+  const isSpam = /(^|,)\s*spam\s*(,|$)/.test(labels);
+  const id = crypto.randomUUID();
+  const key = `mail/in/${receivedAt.slice(0, 7)}/${id}.eml`;
+  await env.DOCS.put(key, u8, { httpMetadata: { contentType: 'message/rfc822' } });
+  const folder = direction === 'out' ? 'sent' : isSpam ? 'spam' : (/(^|,)\s*inbox\s*(,|$)/.test(labels) || !labels ? 'inbox' : 'archive');
+  const row = { id, direction, folder, mailbox, message_id: messageId || `<import-${id}@${OUR_DOMAIN}>`, in_reply_to: inReplyTo, thread_id: threadId, from_addr: from || 'unknown',
+    to_addrs: addrList(m.to).join(', ').slice(0, 1000), subject: String(m.subject || '').slice(0, 300), size_bytes: u8.length, auth: JSON.stringify(direction === 'in' ? importedAuth(m.headers) : {}),
+    raw_key: key, client_id: client ? client.id : null, received_at: receivedAt };
+  await env.DB.prepare(`INSERT INTO mail_messages (id, direction, folder, mailbox, message_id, in_reply_to, thread_id, from_addr, to_addrs, subject, size_bytes, auth, raw_key, client_id, read_at, received_at, sent_by)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17)`)
+    .bind(row.id, row.direction, row.folder, row.mailbox, row.message_id, row.in_reply_to, row.thread_id, row.from_addr, row.to_addrs, row.subject, row.size_bytes, row.auth,
+      row.raw_key, row.client_id, now, row.received_at, direction === 'out' ? 'imported from Gmail' : null).run();
+  // Read it now (warnings, snippet, attachments); old mail arrives already read
+  try { await readIncoming(env, { ...row, parsed_at: null, folder: direction === 'out' ? 'sent' : row.folder }, m); } catch (e) { /* read on first open instead */ }
+  return { status: 'added', id };
 }

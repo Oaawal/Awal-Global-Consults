@@ -58,8 +58,8 @@ export default {
       const messageId = ids(h('message-id'))[0] || `<${id}@in.awalglobal.com.ng>`;
       const inReplyTo = ids(h('in-reply-to'))[0] || null;
       const refs = ids(h('references'));
-      let threadId = messageId;
-      const parentIds = [inReplyTo, ...refs.reverse()].filter(Boolean).slice(0, 10);
+      let threadId = refs[0] || inReplyTo || messageId;
+      const parentIds = [inReplyTo, ...[...refs].reverse()].filter(Boolean).slice(0, 10);
       if (parentIds.length) {
         const parent = await env.DB.prepare(`SELECT thread_id FROM mail_messages WHERE message_id IN (${parentIds.map((_, i) => `?${i + 1}`).join(',')}) LIMIT 1`).bind(...parentIds).first();
         if (parent) threadId = parent.thread_id;

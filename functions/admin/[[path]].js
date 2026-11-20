@@ -45,8 +45,8 @@ import { CHANNELS, PAST_STATUSES, validatePast, savePast, importCsv, csvTemplate
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { clientProfile } from '../_lib/client-profile.js';
 import { totpStatus, startTotpSetup, pendingSetup, confirmTotpSetup, disableTotp, verifyTotpLogin } from '../_lib/totp.js';
-import { MAIL_FOLDERS, OUR_DOMAIN, SEND_LIMIT_PER_HOUR, ATTACH_MAX_TOTAL, mailFrom, mailIdentities, saveIdentities, signatureFor, ourAddressIn, readIncoming, loadParsed, attachmentBytes, attachmentRisk, bodyDocument, bodyCsp, composeHtml, sendViaBrevo, parseRecipients, eraseClientMail, blockedSenders, saveBlocked, ensureMailWebhook, mailWebhookSettings } from '../_lib/mail.js';
-import { MAIL_FLASH, mailListPage, mailThreadPage, composePage, mailSetupPage, settingsPage } from '../_lib/admin-mail-views.js';
+import { MAIL_FOLDERS, OUR_DOMAIN, SEND_LIMIT_PER_HOUR, ATTACH_MAX_TOTAL, mailFrom, mailIdentities, saveIdentities, signatureFor, ourAddressIn, readIncoming, loadParsed, attachmentBytes, attachmentRisk, bodyDocument, bodyCsp, composeHtml, sendViaBrevo, parseRecipients, eraseClientMail, importMessage, blockedSenders, saveBlocked, ensureMailWebhook, mailWebhookSettings } from '../_lib/mail.js';
+import { MAIL_FLASH, mailListPage, mailThreadPage, composePage, mailSetupPage, settingsPage, mailImportPage } from '../_lib/admin-mail-views.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
 import { adminLoginCodeEmail, caseStatusEmail, missingInfoEmail, billingEmail, detailsFormEmail } from '../_lib/email-templates.js';
@@ -1238,6 +1238,18 @@ async function handle(context) {
       await env.DB.batch(stmts);
       if (draftRow) await removeFiles(draftRow.id, draftAtts.reduce((m, a) => Math.max(m, a.n + 1), 0));
       return redirect(`/admin/mail/${parent ? parent.id : id}?done=mail_sent`);
+    }
+
+    // Import past mail: one email per request (the page splits a Takeout .mbox in the browser)
+    if (parts[1] === 'import') {
+      if (method === 'GET') return html(mailImportPage({ admin, badges: await navBadges(env) }));
+      if (method === 'POST') {
+        const len = Number(request.headers.get('Content-Length') || 0);
+        if (len > 26 * 1024 * 1024) return json({ status: 'skipped', reason: 'larger than 25MB' });
+        const result = await importMessage(env, await request.arrayBuffer(), { identities, now }).catch(err => { console.error('mail import:', err && err.message); return { status: 'failed', reason: 'could not be saved' }; });
+        if (result.status === 'added') await audit(env, request, actor, 'mail.imported', 'mail', result.id, null);
+        return json(result);
+      }
     }
 
     // One message (and its conversation)

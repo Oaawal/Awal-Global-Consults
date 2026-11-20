@@ -69,6 +69,74 @@ export const APP_SCRIPT = `
   document.querySelectorAll('a[data-confirm]').forEach(a => a.addEventListener('click', e => { if (!confirm(a.dataset.confirm)) e.preventDefault(); }));
   document.querySelectorAll('button[data-confirm-btn]').forEach(b => b.addEventListener('click', e => { if (!confirm('Delete this conversation for good? This cannot be undone.')) e.preventDefault(); }));
 
+  // Import emails: a .eml is sent as it is; an .mbox (Google Takeout) is split here in the browser
+  // into single emails (a new email starts at a line beginning "From "), and each is sent on its own.
+  // Emails Gmail marked as Sent go last, so replies join conversations already imported.
+  document.querySelectorAll('.mail-import').forEach(box => {
+    const input = box.querySelector('input[type=file]');
+    const prog = box.querySelector('.imp-progress'), bar = box.querySelector('.imp-bar span'), text = box.querySelector('.imp-text');
+    const counts = { added: 0, duplicate: 0, skipped: 0, failed: 0 };
+    let total = 0, done = 0;
+    const show = extra => {
+      bar.style.width = (total ? Math.round(done * 100 / total) : 0) + '%';
+      text.textContent = done + ' of ' + total + ' read · ' + counts.added + ' imported · ' + counts.duplicate + ' already here · ' + counts.skipped + ' not for your domain' + (counts.failed ? ' · ' + counts.failed + ' failed' : '') + (extra ? ' · ' + extra : '');
+    };
+    async function boundaries(file) {
+      // Offsets where each email starts: byte 0, and after every newline followed by "From "
+      const starts = [0], CH = 8 * 1024 * 1024, pat = [10, 70, 114, 111, 109, 32];
+      for (let pos = 0; pos < file.size; pos += CH) {
+        const buf = new Uint8Array(await file.slice(pos, Math.min(file.size, pos + CH + 5)).arrayBuffer());
+        for (let i = 0; i < Math.min(buf.length - 5, CH); i++) {
+          if (buf[i] === 10 && buf[i + 1] === 70 && buf[i + 2] === 114 && buf[i + 3] === 111 && buf[i + 4] === 109 && buf[i + 5] === 32) starts.push(pos + i + 1);
+        }
+        text.textContent = 'Reading the file… ' + Math.round(Math.min(1, (pos + CH) / file.size) * 100) + '%';
+      }
+      return starts;
+    }
+    async function isSent(blob) {
+      const head = new TextDecoder('latin1').decode(await blob.slice(0, 16384).arrayBuffer());
+      const m = head.match(/^X-Gmail-Labels: *(.*)$/im);
+      return !!(m && /(^|,) *Sent *(,|$)/i.test(m[1]));
+    }
+    async function send(blob) {
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const r = await fetch('/admin/mail/import', { method: 'POST', body: blob, headers: { 'Content-Type': 'message/rfc822' }, credentials: 'same-origin' });
+          if (r.status === 401 || r.redirected) { alert('You were signed out. Sign in again and run the import again: emails already imported are skipped.'); throw new Error('signed out'); }
+          const j = await r.json();
+          counts[j.status in counts ? j.status : 'failed']++;
+          return;
+        } catch (e) { if (e.message === 'signed out') throw e; await new Promise(res => setTimeout(res, 1500)); }
+      }
+      counts.failed++;
+    }
+    input.addEventListener('change', async () => {
+      const files = Array.from(input.files || []);
+      if (!files.length) return;
+      input.disabled = true; prog.hidden = false;
+      Object.keys(counts).forEach(k => { counts[k] = 0; }); total = 0; done = 0;
+      const later = [], first = [];
+      try {
+        for (const f of files) {
+          if (/[.]mbox$/i.test(f.name) || f.type === 'application/mbox') {
+            const st = await boundaries(f);
+            for (let i = 0; i < st.length; i++) first.push(f.slice(st[i], i + 1 < st.length ? st[i + 1] : f.size));
+          } else first.push(f);
+        }
+        total = first.length; show('sorting');
+        const queue = [];
+        for (const b of first) { if (await isSent(b)) later.push(b); else queue.push(b); }
+        const all = queue.concat(later);
+        let next = 0;
+        const worker = async () => { while (next < all.length) { const b = all[next++]; if (b.size > 0) await send(b); done++; show(); } };
+        await Promise.all([worker(), worker(), worker()]);
+        show('finished');
+        const a = document.createElement('a'); a.href = '/admin/mail'; a.textContent = ' Open the inbox'; text.appendChild(a);
+      } catch (e) { show('stopped'); }
+      input.disabled = false; input.value = '';
+    });
+  });
+
   // Email compose: saves to Drafts as you type (so it can be finished on another device),
   // uploads attachments into the draft straight away, and switches the signature with the sender.
   document.querySelectorAll('form.mail-compose[data-autosave]').forEach(form => {

