@@ -20,7 +20,7 @@ function eml({from,subject,msgid,inReplyTo,auth,html,text,atts=[],replyTo}){
 const deliver=async(from,raw)=>{const r=await fetch(`${W}/cdn-cgi/handler/email?from=${encodeURIComponent(from)}&to=info@awalglobal.com.ng`,{method:'POST',body:raw});return r.status};
 (async()=>{
  // The mail Worker, sharing the local database and storage with the site
- fs.writeFileSync(S+'/mailw.toml',`name="awal-mail"\nmain="${process.cwd()}/ops/mail-worker.js"\ncompatibility_date="2025-09-01"\n[[d1_databases]]\nbinding="DB"\ndatabase_name="local-test"\ndatabase_id="local-test"\n[[r2_buckets]]\nbinding="DOCS"\nbucket_name="awal-documents"\n[vars]\nSITE_URL="${B}"\nCRON_SECRET="x"\n`);
+ fs.writeFileSync(S+'/mailw.toml',`name="awal-mail"\nmain="${process.cwd()}/ops/mail-worker.js"\ncompatibility_date="2025-09-01"\n[[d1_databases]]\nbinding="DB"\ndatabase_name="local-test"\ndatabase_id="local-test"\n[[r2_buckets]]\nbinding="DOCS"\nbucket_name="awal-documents"\n[vars]\nSITE_URL="${B}"\n`);
  const w=spawn(process.cwd()+'/tests/node_modules/.bin/wrangler',['dev','-c',S+'/mailw.toml','--port','8799','--ip','127.0.0.1','--persist-to',S+'/wrstate'],{stdio:['ignore',fs.openSync(S+'/mailw.log','w'),fs.openSync(S+'/mailw.log','a')]});
  for(let i=0;i<60;i++){try{if((await fetch(W)).ok)break}catch(e){}await sleep(1000)}
  const b=await chromium.launch();const a=await b.newPage({viewport:{width:390,height:844}});await a.addInitScript(()=>{try{localStorage.setItem('agc_app_panel','hide')}catch(e){}});

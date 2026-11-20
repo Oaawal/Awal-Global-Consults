@@ -1,6 +1,7 @@
 /**
  * POST /cron/mail-in — called by the awal-mail Worker (ops/mail-worker.js) right after it stores a
- * new email. Reads it, runs the security checks and notifies admin phones. Uses CRON_SECRET.
+ * new email. Reads it, runs the security checks and notifies admin phones. The Worker proves itself with
+ * a random key both read from the database (created by the Worker on first use).
  * If this call never arrives, the dashboard reads the email the first time it is opened.
  */
 import { readIncoming } from '../_lib/mail.js';
@@ -17,9 +18,13 @@ async function sameSecret(a, b) {
 }
 
 export async function onRequestPost({ request, env, waitUntil }) {
-  if (!env.CRON_SECRET || !env.DB || !env.DOCS) return json({ error: 'Not configured' }, 503);
+  if (!env.DB || !env.DOCS) return json({ error: 'Not configured' }, 503);
   const auth = request.headers.get('Authorization') || '';
-  if (!auth.startsWith('Bearer ') || !(await sameSecret(auth.slice(7), env.CRON_SECRET))) return json({ error: 'Unauthorized' }, 401);
+  const given = auth.startsWith('Bearer ') ? auth.slice(7) : '';
+  // The Worker sends the shared key kept in the database (app_settings 'mail_in_token'), or CRON_SECRET
+  const stored = await env.DB.prepare("SELECT value FROM app_settings WHERE key = 'mail_in_token'").first().catch(() => null);
+  const okKey = given && ((stored && await sameSecret(given, stored.value)) || (env.CRON_SECRET && await sameSecret(given, env.CRON_SECRET)));
+  if (!okKey) return json({ error: 'Unauthorized' }, 401);
   const { id } = await request.json().catch(() => ({}));
   if (!/^[0-9a-f-]{36}$/.test(String(id || ''))) return json({ error: 'Bad id' }, 400);
   const row = await env.DB.prepare("SELECT * FROM mail_messages WHERE id = ?1 AND direction = 'in'").bind(id).first();

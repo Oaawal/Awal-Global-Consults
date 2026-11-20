@@ -5,9 +5,9 @@
  *  1. Workers & Pages > Create > Worker named "awal-mail"; paste this file and deploy.
  *  2. Its Settings > Bindings: D1 database "DB" (the website's database) and
  *     R2 bucket "DOCS" (awal-documents), the same ones the website uses.
- *  3. Its Settings > Variables: secret CRON_SECRET (same value as the website's) and
- *     text variable FORWARD_TO = the inbox info@ forwards to today, so a copy still
- *     arrives there exactly as before.
+ *  3. Its Settings > Variables: text variable FORWARD_TO = the inbox your addresses forward to
+ *     today, so a copy still arrives there exactly as before. (No shared secret is needed: the
+ *     Worker and the website share a random key kept in the database.)
  *  4. Email > Email Routing > Routing rules: for each address (info@, contact@, abdullateef@), set the
  *     action to "Send to a Worker" > awal-mail. A copy still goes to FORWARD_TO.
  *
@@ -18,6 +18,15 @@
  * It never rejects or drops mail.
  */
 const MAX_BYTES = 25 * 1024 * 1024;
+
+/** The key this Worker shows the website: random, kept in the shared database, created on first use. */
+async function mailInKey(env) {
+  const row = await env.DB.prepare("SELECT value FROM app_settings WHERE key = 'mail_in_token'").first();
+  if (row) return row.value;
+  const token = [...crypto.getRandomValues(new Uint8Array(32))].map(b => b.toString(16).padStart(2, '0')).join('');
+  await env.DB.prepare("INSERT INTO app_settings (key, value, updated_at) VALUES ('mail_in_token', ?1, ?2) ON CONFLICT(key) DO NOTHING").bind(token, new Date().toISOString()).run();
+  return (await env.DB.prepare("SELECT value FROM app_settings WHERE key = 'mail_in_token'").first()).value;
+}
 
 export default {
   async email(message, env, ctx) {
@@ -65,9 +74,10 @@ export default {
         message.rawSize || raw.byteLength, JSON.stringify(auth), key, client ? client.id : null, now, String(message.to || '').toLowerCase().slice(0, 254)).run();
 
       // The website reads the message, runs the security checks and sends the phone notification
-      if (env.CRON_SECRET) {
+      const siteKey = env.CRON_SECRET || await mailInKey(env);
+      if (siteKey) {
         ctx.waitUntil(fetch(`${env.SITE_URL || 'https://awalglobal.com.ng'}/cron/mail-in`, {
-          method: 'POST', headers: { Authorization: `Bearer ${env.CRON_SECRET}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ id })
+          method: 'POST', headers: { Authorization: `Bearer ${siteKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ id })
         }).then(r => { if (!r.ok) console.error('mail: website check returned', r.status); }).catch(err => console.error('mail: website check failed', err && err.message)));
       }
     } catch (err) {
