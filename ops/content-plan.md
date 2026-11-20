@@ -197,6 +197,7 @@ official CAC service times or fees — say so wherever they are quoted.
 - **Passport and NIN from abroad:** applicants must attend the embassy or an
   approved centre in person for biometrics — say so in #32 and #33.
 - **Cooperative societies (19 Nov 2026):** we do NOT offer cooperative registration yet (owner to confirm the procedure with staff first). Guides may explain cooperatives but must not offer to register one; offer the free 20-minute call instead. Incorporated trustees price stays from ₦150,000.
+- **Only what we do ourselves (20 Nov 2026):** offer a service only if Awal can carry it out or file it itself. Anything that needs a foreign licence or a partner to file (UK Companies House or HMRC filings, US trademarks, Australian companies and tax, SOC 2 reports, ISO certificates) is NOT offered; at most, offer to source a qualified adviser for the client on request. Advice on structure (for example a UK company alongside a Nigerian one) is fine.
 - **NEPC service packages:** Basic (portal assistance) ₦15,000–₦25,000;
   Standard (full application support) ₦30,000–₦50,000; Comprehensive (export
   readiness) ₦60,000–₦100,000+. Separate from NEPC's own fee.
