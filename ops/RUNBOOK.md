@@ -85,3 +85,32 @@ Follow the breach procedure in the Data Protection Pack (Claude Docs, "Awal Glob
 In short: contain (rotate the affected secret, roll back, pause the bot), record what happened in the breach log,
 assess risk, notify the NDPC within 72 hours where the breach is likely to risk people's rights, and tell affected
 clients without undue delay where the risk is high.
+
+## 10. Dashboard mailbox (info@awalglobal.com.ng)
+
+How it works: Cloudflare Email Routing hands every email for info@ to the **awal-mail** Worker
+(`ops/mail-worker.js`). The Worker first forwards it to your usual inbox (FORWARD_TO), then keeps
+the original in R2 (`mail/in/...`) and lists it in the `mail_messages` table. The website
+(`/cron/mail-in`) reads it, runs the security checks and sends the phone notification.
+Sending from the dashboard goes through Brevo as info@ (domain already authenticated there).
+
+Set up once:
+1. Add the table: run `db/migrations/0007_mail.sql` on the live database.
+2. Cloudflare > Workers & Pages > Create Worker **awal-mail**, paste `ops/mail-worker.js`, deploy.
+3. awal-mail > Settings > Bindings: D1 `DB` (the website's database) and R2 `DOCS` (awal-documents).
+4. awal-mail > Settings > Variables: secret `CRON_SECRET` (same value as the website's) and
+   text `FORWARD_TO` = the address info@ forwards to today (must be a verified destination).
+5. Email > Email Routing > Routing rules: edit info@awalglobal.com.ng, action **Send to a Worker** > awal-mail.
+6. Send a test email to info@ from your phone: it should arrive in your usual inbox and on /admin/mail.
+
+If something goes wrong: set the info@ rule back to **Send to an email** (your usual inbox). Mail
+already received stays in the dashboard. Optional: `MAIL_FROM` on the Pages project changes the
+sending address (default info@awalglobal.com.ng).
+
+Security: only Cloudflare's own SPF/DKIM/DMARC result is trusted; lookalike domains, fake "Awal"
+names, other Reply-To addresses, deceptive links, bank-detail changes and program attachments are
+flagged; email content shows in a sandboxed frame with no scripts and no remote pictures unless asked;
+attachments only download as files; program files cannot be sent; 60 emails an hour at most; every
+send, download and move is in Activity > Mail. Trash empties itself after 30 days. Erasing a client
+erases their emails; a client export includes them.
+

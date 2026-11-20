@@ -20,6 +20,7 @@ import { CONSULT_TYPES, MODES, fmtLagos, feeText } from './booking.js';
 import { statusInfo, SITE_URL } from './cases.js';
 import { serviceProgress, overdueAtAgency } from './service-progress.js';
 import { purgeOldChats } from './wa-bot.js';
+import { purgeTrash } from './mail.js';
 import { backupDatabase } from './compliance.js';
 import { backupDocuments, verifyBackups, recentSignIns } from './security.js';
 import { securityAlertEmail } from './email-templates.js';
@@ -300,6 +301,8 @@ export async function runDailyJob(env, request, { now = new Date() } = {}) {
 
   // WhatsApp assistant chats idle for 30 days are deleted
   try { await purgeOldChats(env, now); } catch (err) { console.error('daily job: chat purge failed:', err && err.message); }
+  // Emails left in the dashboard Trash for 30 days are deleted for good (no-op until the mailbox is set up)
+  try { await purgeTrash(env, now); } catch (err) { if (!/no such table/i.test(err && err.message)) console.error('daily job: mail trash purge failed:', err && err.message); }
 
   // Bounce alerts: make sure Brevo is set up to tell us about undeliverable emails
   try { await ensureBounceWebhook(env); } catch (err) { console.error('daily job: bounce webhook not set up:', err && err.message); }

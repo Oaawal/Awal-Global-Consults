@@ -44,6 +44,8 @@ import { fileMatchesName } from '../_lib/file-check.js';
 import { CHANNELS, PAST_STATUSES, validatePast, savePast, importCsv, csvTemplate, dataSubjectCount } from '../_lib/past-records.js';
 import { isNewDevice, signInDetail, alertNewSignIn, noteFailedCode, revokeAllSessions, recentSignIns } from '../_lib/security.js';
 import { clientProfile } from '../_lib/client-profile.js';
+import { MAIL_FOLDERS, OUR_DOMAIN, SEND_LIMIT_PER_HOUR, ATTACH_MAX_TOTAL, mailFrom, readIncoming, loadParsed, attachmentBytes, attachmentRisk, bodyDocument, bodyCsp, composeHtml, sendViaBrevo, parseRecipients, eraseClientMail } from '../_lib/mail.js';
+import { MAIL_FLASH, mailListPage, mailThreadPage, composePage, mailSetupPage } from '../_lib/admin-mail-views.js';
 import { EARLY_ERASE_REASONS, eraseBlocker, eraseCase, exportClient, listBackups, isBackupKey } from '../_lib/compliance.js';
 import { sendBrevoEmail } from '../_lib/brevo.js';
 import { adminLoginCodeEmail, caseStatusEmail, missingInfoEmail, billingEmail, detailsFormEmail } from '../_lib/email-templates.js';
@@ -126,13 +128,21 @@ async function loadCase(env, id) {
   ).bind(id).first();
 }
 
+/** Whether the mailbox table exists yet (it is added by db/migrations/0007_mail.sql). */
+async function mailReady(env) {
+  try { await env.DB.prepare('SELECT 1 FROM mail_messages LIMIT 1').first(); return true; } catch (e) { return false; }
+}
+const fmtDateLong = iso => new Date(iso).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Africa/Lagos' });
+
 /** Counts shown as badges on the navigation. */
 async function navBadges(env) {
   const row = await env.DB.prepare(
     `SELECT (SELECT COUNT(*) FROM cases WHERE status = 'new') AS cases,
             (SELECT COUNT(*) FROM cases c WHERE ${REVIEW_SQL}) + (SELECT COUNT(*) FROM data_requests WHERE completed_at IS NULL) AS records`
   ).bind(new Date().toISOString()).first();
-  return { cases: row?.cases || 0, records: row?.records || 0 };
+  let mail = 0;
+  try { mail = (await env.DB.prepare("SELECT COUNT(*) AS n FROM mail_messages WHERE folder = 'inbox' AND direction = 'in' AND read_at IS NULL").first())?.n || 0; } catch (e) { /* mailbox not set up yet */ }
+  return { cases: row?.cases || 0, records: row?.records || 0, mail };
 }
 
 // ── Billing helpers ─────────────────────────────────────────────
@@ -951,6 +961,210 @@ async function handle(context) {
     });
   }
 
+  // ── Mail (info@ mailbox) ─────────────────────────────────────
+  if (parts[0] === 'mail') {
+    if (!(await mailReady(env))) return html(mailSetupPage({ admin, badges: await navBadges(env) }));
+    const mflash = MAIL_FLASH[url.searchParams.get('done')] || flash;
+    const now = new Date().toISOString();
+    const casesFor = async clientId => clientId ? ((await env.DB.prepare('SELECT id, reference, services FROM cases WHERE client_id = ?1 AND purged_at IS NULL ORDER BY created_at DESC LIMIT 30').bind(clientId).all()).results || []) : [];
+
+    // List
+    if (parts.length === 1 && method === 'GET') {
+      const folder = MAIL_FOLDERS[url.searchParams.get('f')] ? url.searchParams.get('f') : 'inbox';
+      const q = (url.searchParams.get('q') || '').trim().slice(0, 100);
+      const before = url.searchParams.get('before') || '9999';
+      const where = folder === 'starred' ? "m.starred = 1 AND m.folder != 'trash'" : 'm.folder = ?2';
+      const binds = [before]; if (folder !== 'starred') binds.push(folder);
+      let search = '';
+      if (q) { binds.push(likePattern(q)); const n = binds.length; search = ` AND (m.subject LIKE ?${n} ESCAPE '\\' OR m.from_addr LIKE ?${n} ESCAPE '\\' OR m.from_name LIKE ?${n} ESCAPE '\\' OR m.to_addrs LIKE ?${n} ESCAPE '\\' OR m.snippet LIKE ?${n} ESCAPE '\\')`; }
+      // One row per conversation: its newest message in this folder
+      const rows = (await env.DB.prepare(
+        `SELECT m.*, (SELECT COUNT(*) FROM mail_messages t WHERE t.thread_id = m.thread_id) AS thread_count FROM mail_messages m
+         WHERE ${where}${search} AND m.received_at < ?1 AND m.received_at = (SELECT MAX(x.received_at) FROM mail_messages x WHERE x.thread_id = m.thread_id AND ${where.replace(/m\./g, 'x.')})
+         ORDER BY m.received_at DESC LIMIT 50`).bind(...binds).all()).results || [];
+      const c = await env.DB.prepare("SELECT SUM(CASE WHEN folder = 'inbox' AND direction = 'in' AND read_at IS NULL THEN 1 ELSE 0 END) AS unread, SUM(CASE WHEN folder = 'spam' THEN 1 ELSE 0 END) AS spam FROM mail_messages").first();
+      return html(mailListPage({ admin, badges: await navBadges(env), folder, rows, q, counts: { unread: c?.unread || 0, spam: c?.spam || 0 }, flash: mflash }));
+    }
+
+    // Compose (new, reply, forward)
+    if (parts[1] === 'new' && method === 'GET') {
+      const form = { to: (url.searchParams.get('to') || '').slice(0, 300), case_id: url.searchParams.get('case') || '', subject: (url.searchParams.get('subject') || '').slice(0, 200) };
+      let replyRow = null, clientId = null;
+      const replyId = url.searchParams.get('reply'), fwdId = url.searchParams.get('fwd');
+      if (replyId || fwdId) {
+        const src = await env.DB.prepare('SELECT * FROM mail_messages WHERE id = ?1').bind(replyId || fwdId).first();
+        if (src) {
+          const parsed = await loadParsed(env, src).catch(() => null);
+          const text = String((parsed && parsed.text) || src.snippet || '').slice(0, 20000);
+          const header = `On ${fmtDateLong(src.received_at)}, ${src.direction === 'out' ? 'Awal Global Consults' : (src.from_name || src.from_addr)} <${src.from_addr}> wrote:`;
+          clientId = src.client_id; form.case_id = form.case_id || src.case_id || '';
+          if (replyId) {
+            replyRow = src; form.reply = src.id;
+            form.to = src.direction === 'out' ? src.to_addrs : (src.reply_to || src.from_addr);
+            if (url.searchParams.get('all') === '1') form.cc = [...String(src.to_addrs).split(','), ...String(src.cc_addrs).split(',')].map(s => s.trim()).filter(a => a && a !== mailFrom(env).email && a !== form.to).join(', ');
+            form.subject = /^re:/i.test(src.subject || '') ? src.subject : `Re: ${src.subject || ''}`;
+            form.body = `\n\n\n${header}\n${text.split('\n').map(l => '> ' + l).join('\n')}`;
+          } else {
+            form.fwd = src.id; form.to = '';
+            form.subject = /^fwd?:/i.test(src.subject || '') ? src.subject : `Fwd: ${src.subject || ''}`;
+            form.body = `\n\n---------- Forwarded message ----------\nFrom: ${src.from_name ? `${src.from_name} ` : ''}<${src.from_addr}>\nDate: ${fmtDateLong(src.received_at)}\nSubject: ${src.subject || ''}\nTo: ${src.to_addrs}\n\n${text}`;
+            form.fwdAtts = ((parsed && parsed.attachments) || []).filter(a => !a.inline && a.risk !== 'danger');
+          }
+        }
+      } else if (form.to) {
+        const cl = await env.DB.prepare('SELECT id FROM clients WHERE lower(email) = ?1 AND anonymised_at IS NULL LIMIT 1').bind(form.to.toLowerCase()).first();
+        clientId = cl && cl.id;
+      }
+      return html(composePage({ admin, badges: await navBadges(env), form, replyRow, cases: await casesFor(clientId), flash: mflash }));
+    }
+
+    // Send
+    if (parts[1] === 'send' && method === 'POST') {
+      const fd = await request.formData();
+      const get = k => String(fd.get(k) || '');
+      const form = { to: get('to').slice(0, 1000), cc: get('cc').slice(0, 1000), subject: get('subject').replace(/[\r\n]+/g, ' ').trim().slice(0, 200), body: get('body').slice(0, 20000),
+        signature: get('signature').slice(0, 500), reply: get('reply'), fwd: get('fwd'), case_id: get('case_id') };
+      const again = async (error, status = 400) => html(composePage({ admin, badges: await navBadges(env), form, error, cases: [] }), status);
+      const to = parseRecipients(form.to), cc = parseRecipients(form.cc);
+      if (to.bad.length || cc.bad.length) return again(`These addresses don't look right: ${[...to.bad, ...cc.bad].join(', ')}`);
+      if (!to.list.length) return again('Add at least one recipient.');
+      if (to.list.length + cc.list.length > 20) return again('Up to 20 recipients per email.');
+      if (!form.subject || !form.body.trim()) return again('Add a subject and a message.');
+      const hour = await env.DB.prepare("SELECT COUNT(*) AS n FROM mail_messages WHERE direction = 'out' AND received_at > ?1").bind(new Date(Date.now() - 3600000).toISOString()).first();
+      if ((hour?.n || 0) >= SEND_LIMIT_PER_HOUR) { await audit(env, request, actor, 'mail.limit', 'mail', null, { to: to.list.length }); return again(MAIL_FLASH.mail_limit[1], 429); }
+
+      // Attachments: uploaded files, plus the original's when forwarding
+      const atts = []; let total = 0;
+      for (const f of fd.getAll('files')) {
+        if (typeof f === 'string' || !f.size) continue;
+        const name = String(f.name || 'file').replace(/[\\/\r\n\0"<>|:*?]/g, '_').slice(0, 120);
+        if (attachmentRisk(name) !== 'ok' && !/\.(zip)$/i.test(name)) return again(`"${name}" is a file type that can carry malware, so it can't be sent from here.`);
+        total += f.size; atts.push({ name, content: await f.arrayBuffer(), type: f.type || 'application/octet-stream' });
+      }
+      let parent = null;
+      if (form.reply) parent = await env.DB.prepare('SELECT * FROM mail_messages WHERE id = ?1').bind(form.reply).first();
+      if (form.fwd && fd.get('fwd_atts') === '1') {
+        const src = await env.DB.prepare('SELECT * FROM mail_messages WHERE id = ?1').bind(form.fwd).first();
+        const parsed = src ? await loadParsed(env, src).catch(() => null) : null;
+        for (const a of ((parsed && parsed.attachments) || []).filter(a => !a.inline && a.risk !== 'danger')) {
+          const b = await attachmentBytes(env, src, a.i); if (!b) continue;
+          total += b.content.byteLength; atts.push({ name: b.filename, content: b.content, type: b.mimeType });
+        }
+      }
+      if (atts.length > 10 || total > ATTACH_MAX_TOTAL) return again('Attachments are limited to 10 files and 10MB in total.');
+
+      const html_ = composeHtml(form.body.trim(), { signature: form.signature.trim() });
+      const text = `${form.body.trim()}${form.signature.trim() ? `\n\n${form.signature.trim()}` : ''}`;
+      let providerId;
+      try {
+        providerId = await sendViaBrevo(env, { to: to.list, cc: cc.list, subject: form.subject, html: html_, text, attachments: atts,
+          inReplyTo: parent ? parent.message_id : null, references: parent ? [parent.thread_id, parent.in_reply_to].filter(Boolean) : [] });
+      } catch (err) {
+        console.error('mail send failed:', err && err.message);
+        await audit(env, request, actor, 'mail.send_failed', 'mail', null, { to: to.list.length });
+        return again(MAIL_FLASH.mail_failed[1], 502);
+      }
+      const id = crypto.randomUUID();
+      const messageId = providerId && /^<.+>$/.test(providerId) ? providerId : `<${id}@${OUR_DOMAIN}>`;
+      const client = await env.DB.prepare(`SELECT id FROM clients WHERE lower(email) IN (${to.list.map((_, i) => `?${i + 1}`).join(',')}) AND anonymised_at IS NULL LIMIT 1`).bind(...to.list).first();
+      const clientId = (parent && parent.client_id) || (client && client.id) || null;
+      let caseId = null;
+      if (form.case_id) { const c = await env.DB.prepare('SELECT id FROM cases WHERE id = ?1').bind(form.case_id).first(); caseId = c ? c.id : null; }
+      for (let i = 0; i < atts.length; i++) await env.DOCS.put(`mail/out/${id}/${i}`, atts[i].content, { httpMetadata: { contentType: atts[i].type }, customMetadata: { filename: atts[i].name } });
+      await env.DOCS.put(`mail/parsed/${id}.json`, JSON.stringify({ html: html_, text, attachments: atts.map((a, i) => ({ i, filename: a.name, mimeType: a.type, size: a.content.byteLength, risk: 'ok', inline: false })) }), { httpMetadata: { contentType: 'application/json' } });
+      const stmts = [
+        env.DB.prepare(`INSERT INTO mail_messages (id, direction, folder, message_id, in_reply_to, thread_id, from_addr, from_name, to_addrs, cc_addrs, subject, snippet, size_bytes, attachments,
+            parsed_at, client_id, case_id, read_at, sent_by, provider_id, received_at) VALUES (?1, 'out', 'sent', ?2, ?3, ?4, ?5, 'Awal Global Consults', ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?12, ?15, ?16, ?12)`)
+          .bind(id, messageId, parent ? parent.message_id : null, parent ? parent.thread_id : messageId, mailFrom(env).email, to.list.join(', '), cc.list.join(', '), form.subject,
+            text.replace(/\s+/g, ' ').slice(0, 180), html_.length + total, atts.length, now, clientId, caseId, admin, providerId),
+        auditStmt(env, request, actor, 'mail.sent', 'mail', id, { to: to.list.length, cc: cc.list.length, attachments: atts.length, reply: !!parent }, now)
+      ];
+      if (parent && parent.direction === 'in' && !parent.read_at) stmts.push(env.DB.prepare('UPDATE mail_messages SET read_at = ?2 WHERE id = ?1').bind(parent.id, now));
+      if (caseId) stmts.push(env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'note', ?2, ?3, ?4)").bind(caseId, `Email sent: "${form.subject}"`, actor, now));
+      await env.DB.batch(stmts);
+      return redirect(`/admin/mail/${parent ? parent.id : id}?done=mail_sent`);
+    }
+
+    // One message (and its conversation)
+    const row = parts[1] ? await env.DB.prepare('SELECT * FROM mail_messages WHERE id = ?1').bind(parts[1]).first() : null;
+    if (!row) return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
+
+    if (parts.length === 2 && method === 'GET') {
+      const thread = (await env.DB.prepare("SELECT * FROM mail_messages WHERE thread_id = ?1 AND (folder != 'trash' OR id = ?2) ORDER BY received_at LIMIT 50").bind(row.thread_id, row.id).all()).results || [row];
+      const parsedById = {};
+      for (const r of thread) { try { parsedById[r.id] = r.direction === 'in' ? await readIncoming(env, r) : await loadParsed(env, r); } catch (err) { console.error('mail read failed:', r.id, err && err.message); } }
+      const unread = thread.filter(r => r.direction === 'in' && !r.read_at);
+      if (unread.length) await env.DB.prepare(`UPDATE mail_messages SET read_at = ?1 WHERE id IN (${unread.map((_, i) => `?${i + 2}`).join(',')})`).bind(now, ...unread.map(r => r.id)).run();
+      const clientId = thread.map(r => r.client_id).find(Boolean);
+      const client = clientId ? await env.DB.prepare('SELECT id, full_name FROM clients WHERE id = ?1').bind(clientId).first() : null;
+      await audit(env, request, actor, 'mail.viewed', 'mail', row.id, null);
+      return html(mailThreadPage({ admin, badges: await navBadges(env), row, thread, parsedById, images: url.searchParams.get('images') === '1', cases: await casesFor(clientId), flash: mflash, client }),
+        200, { 'Content-Security-Policy': SECURITY_HEADERS['Content-Security-Policy'] + "; frame-src 'self'" });
+    }
+
+    // The email's own content, for the sandboxed frame only
+    if (parts[2] === 'body' && method === 'GET') {
+      const parsed = row.direction === 'in' ? await readIncoming(env, row) : await loadParsed(env, row);
+      if (!parsed) return new Response('Not available', { status: 404 });
+      const images = url.searchParams.get('images') === '1';
+      return new Response(bodyDocument(parsed, { images }), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff',
+        'X-Frame-Options': 'SAMEORIGIN', 'Referrer-Policy': 'no-referrer', 'X-Robots-Tag': 'noindex', 'Content-Security-Policy': bodyCsp(images) } });
+    }
+
+    // Attachments: always downloaded as a file, never opened in the dashboard
+    if (parts[2] === 'att' && /^\d{1,3}$/.test(parts[3] || '')) {
+      const i = Number(parts[3]);
+      const a = await attachmentBytes(env, row, i);
+      if (!a) return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
+      if (parts.length === 4 && method === 'GET') {
+        await audit(env, request, actor, 'mail.attachment_downloaded', 'mail', row.id, { file: a.filename, risk: attachmentRisk(a.filename) });
+        return new Response(a.content, { headers: { ...SECURITY_HEADERS, 'Content-Type': 'application/octet-stream',
+          'Content-Disposition': `attachment; filename="${a.filename.replace(/[^\x20-\x7e]/g, '_')}"; filename*=UTF-8''${encodeURIComponent(a.filename)}` } });
+      }
+      if (parts[4] === 'to-case' && method === 'POST') {
+        const fd = await request.formData();
+        const c = await env.DB.prepare('SELECT id, purged_at FROM cases WHERE id = ?1').bind(String(fd.get('case_id') || '')).first();
+        const name = `from-email--${a.filename}`.slice(0, 120);
+        const file = new File([a.content], name);
+        if (!c || c.purged_at || !DOC_EXT.test(name) || file.size > DOC_MAX || !(await fileMatchesName(name, file))) return redirect(`/admin/mail/${row.id}?done=mail_doc_bad`);
+        const doc = await storeCaseDocument(env, c.id, name, file);
+        await env.DB.batch([doc.stmt,
+          env.DB.prepare("INSERT INTO case_events (case_id, event, note, actor, created_at) VALUES (?1, 'documents_added', ?2, ?3, ?4)").bind(c.id, `Added ${a.filename} from an email`, actor, now),
+          env.DB.prepare('UPDATE mail_messages SET case_id = COALESCE(case_id, ?2) WHERE id = ?1').bind(row.id, c.id),
+          auditStmt(env, request, actor, 'document.added', 'document', doc.id, { file: name, from: 'email' }, now)]);
+        return redirect(`/admin/mail/${row.id}?done=mail_saved_doc`);
+      }
+    }
+
+    // Move, star, read state, link to a case
+    if (parts[2] === 'action' && method === 'POST') {
+      const fd = await request.formData();
+      const act = String(fd.get('do') || '');
+      const set = (sql, ...b) => env.DB.prepare(`UPDATE mail_messages SET ${sql} WHERE thread_id = ?1`).bind(row.thread_id, ...b);
+      const moves = {
+        archive: () => set("folder = CASE WHEN direction = 'out' THEN folder ELSE 'archive' END"),
+        inbox: () => set("folder = CASE WHEN direction = 'out' THEN 'sent' ELSE 'inbox' END, trashed_at = NULL"),
+        spam: () => set("folder = CASE WHEN direction = 'out' THEN folder ELSE 'spam' END"),
+        notspam: () => set("folder = CASE WHEN direction = 'out' THEN folder ELSE 'inbox' END"),
+        trash: () => set("folder = 'trash', trashed_at = ?2", now),
+        restore: () => set("folder = CASE WHEN direction = 'out' THEN 'sent' ELSE 'inbox' END, trashed_at = NULL"),
+        star: () => env.DB.prepare('UPDATE mail_messages SET starred = 1 WHERE id = ?1').bind(row.id),
+        unstar: () => set('starred = 0'),
+        unread: () => env.DB.prepare('UPDATE mail_messages SET read_at = NULL WHERE id = (SELECT id FROM mail_messages WHERE thread_id = ?1 AND direction = \'in\' ORDER BY received_at DESC LIMIT 1)').bind(row.thread_id)
+      };
+      if (act === 'link') {
+        const cid = String(fd.get('case_id') || '');
+        const c = cid ? await env.DB.prepare('SELECT id, client_id FROM cases WHERE id = ?1').bind(cid).first() : null;
+        await env.DB.batch([set('case_id = ?2', c ? c.id : null), auditStmt(env, request, actor, 'mail.linked', 'mail', row.id, { case: c ? c.id : null }, now)]);
+        return redirect(`/admin/mail/${row.id}?done=mail_linked`);
+      }
+      if (!moves[act]) return redirect(`/admin/mail/${row.id}`);
+      await env.DB.batch([moves[act](), auditStmt(env, request, actor, `mail.${act}`, 'mail', row.id, null, now)]);
+      return redirect(['trash', 'archive', 'spam', 'unread'].includes(act) ? `/admin/mail?f=${row.folder === 'sent' ? 'sent' : 'inbox'}&done=mail_moved` : `/admin/mail/${row.id}?done=mail_moved`);
+    }
+    return html(notFoundPage({ admin, badges: await navBadges(env) }), 404);
+  }
+
   // ── Clients ─────────────────────────────────────────────────
   if (route === '/clients' && method === 'GET') {
     const q = (url.searchParams.get('q') || '').trim().slice(0, 100);
@@ -990,6 +1204,7 @@ async function handle(context) {
 
     if (parts[2] === 'export' && method === 'GET') {
       const data = await exportClient(env, client.id);
+      if (await mailReady(env)) data.emails = (await env.DB.prepare('SELECT direction, from_addr, to_addrs, cc_addrs, subject, snippet, received_at FROM mail_messages WHERE client_id = ?1 ORDER BY received_at').bind(client.id).all()).results || [];
       const openAccess = await env.DB.prepare("SELECT id FROM data_requests WHERE client_id = ?1 AND kind = 'access' AND completed_at IS NULL ORDER BY received_at LIMIT 1").bind(client.id).first();
       await env.DB.batch([
         auditStmt(env, request, actor, 'client.exported', 'client', client.id, { cases: cases.length }, now),
@@ -1086,6 +1301,8 @@ async function handle(context) {
       for (const c of cases.filter(c => !c.purged_at)) {
         files += await eraseCase(env, c, { actor, reason: 'Client erasure request', ip });
       }
+      // Emails to and from the client go too
+      if (await mailReady(env)) files += await eraseClientMail(env, client.id);
       const openErasure = await env.DB.prepare("SELECT id FROM data_requests WHERE client_id = ?1 AND kind = 'erasure' AND completed_at IS NULL ORDER BY received_at LIMIT 1").bind(client.id).first();
       await env.DB.batch([
         // Covers clients whose cases were all erased earlier (eraseCase anonymises the client on the last case)

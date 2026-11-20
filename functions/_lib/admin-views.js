@@ -885,6 +885,7 @@ export const ACTIVITY_FILTERS = [
   { key: 'login', label: 'Sign-ins', prefix: 'login.' },
   { key: 'client', label: 'Clients & requests', prefix: 'client.' },
   { key: 'job', label: 'Daily job', prefix: 'job.' },
+  { key: 'mail', label: 'Mail', prefix: 'mail.' },
   { key: 'whatsapp', label: 'WhatsApp', prefix: 'whatsapp.' },
   { key: 'extension', label: 'Filing assistant', prefix: 'extension.' }
 ];
@@ -898,7 +899,7 @@ const ACTION_LABELS = {
   'case.note_added': 'Note added', 'case.follow_up_set': 'Follow-up updated', 'case.reminder_sent': 'Automatic reminder sent',
   'case.tracked': 'Client checked status online', 'case.legal_hold': 'Legal hold changed', 'case.erased': 'Case erased',
   'document.viewed': 'Document opened', 'document.added': 'Document added', 'case.service_progress': 'Service step updated', 'case.details_edited': 'Business details entered', 'case.details_requested': 'Full application form sent', 'case.details_completed': 'Client completed the full application', 'case.details_opened': 'Client opened the application form link', 'document.replaced': 'Document replaced', 'document.removed': 'Document removed', 'login.success': 'Signed in', 'login.failed': 'Wrong login code',
-  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'email.bounced': 'Email bounced', 'case.imported': 'Past client added', 'document.uploaded': 'Client uploaded documents', 'billing.issued': 'Billing document issued', 'billing.sent': 'Billing document emailed', 'billing.paid': 'Payment recorded', 'billing.void': 'Billing document voided', 'billing.revised': 'Quotation or invoice revised', 'case.created_for_client': 'New service for a returning client', 'bounces.enabled': 'Turned on bounce alerts', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
+  'login.code_sent': 'Login code sent', 'logout': 'Signed out', 'logout.all': 'Signed out all devices', 'push.enabled': 'Turned on app notifications', 'email.bounced': 'Email bounced', 'case.imported': 'Past client added', 'document.uploaded': 'Client uploaded documents', 'billing.issued': 'Billing document issued', 'billing.sent': 'Billing document emailed', 'billing.paid': 'Payment recorded', 'billing.void': 'Billing document voided', 'billing.revised': 'Quotation or invoice revised', 'case.created_for_client': 'New service for a returning client', 'mail.sent': 'Email sent from the mailbox', 'mail.send_failed': 'Email could not be sent', 'mail.limit': 'Email sending limit reached', 'mail.viewed': 'Email opened', 'mail.attachment_downloaded': 'Email attachment downloaded', 'mail.trash': 'Email deleted', 'mail.archive': 'Email archived', 'mail.spam': 'Email marked as spam', 'mail.linked': 'Email linked to a case', 'bounces.enabled': 'Turned on bounce alerts', 'push.disabled': 'Turned off app notifications', 'job.daily': 'Morning job ran', 'track.failed': 'Failed status lookup',
   'client.viewed': 'Client opened', 'client.updated': 'Client details corrected', 'client.exported': 'Client data exported', 'client.erased': 'Client erased',
   'client.request_logged': 'Data request recorded', 'client.request_done': 'Data request completed', 'backup.downloaded': 'Backup downloaded'
 };

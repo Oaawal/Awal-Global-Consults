@@ -231,6 +231,18 @@ input,select,textarea{font:inherit;width:100%;padding:10px 12px;border:1px solid
 input:focus,select:focus,textarea:focus{outline:2px solid #E9DCBF;border-color:var(--blue)}
 textarea{min-height:88px;resize:vertical}
 .check{display:flex;gap:10px;align-items:flex-start;font-weight:500;margin:14px 0 0;color:var(--text)}
+.mail-row.unread .row-title{font-weight:800}.mail-row .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#1B4F78;margin-right:6px;vertical-align:1px}
+.mail-row .row-side>span:last-child{display:flex;gap:4px;align-items:center}
+.mail-tabs{overflow-x:auto;white-space:nowrap}.count-in{font-size:11px;background:var(--line);border-radius:9px;padding:1px 6px}
+.mail-subject{font-size:20px;margin:0 0 6px}
+.mail-msg>summary{list-style:none;cursor:pointer;padding:14px 16px}.mail-msg>summary::-webkit-details-marker{display:none}
+.mail-head{display:flex;gap:12px;align-items:flex-start;min-width:0}.mail-head .row-main{min-width:0}.mail-head .row-title,.mail-head .row-sub{white-space:normal;word-break:break-word}
+.mail-frame{width:100%;height:60vh;min-height:320px;border:1px solid var(--line);border-radius:10px;background:#fff;display:block}
+.mail-imgnote{margin-top:6px}.mail-warn .note{margin-bottom:8px}
+.mail-atts{margin-top:12px;display:grid;gap:8px}.mail-att{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.mail-att.risky{border-color:#C0392B;background:#FDF0EE}.mail-att.caution{border-color:#D4A72C;background:#FBF6E6}.mail-att details{flex-basis:100%}
+.auth{display:inline-flex;gap:4px;align-items:center;font-size:12.5px;font-weight:600}.auth.ok{color:#1E7B4A}.auth.bad{color:#B23A2B}.auth.mid{color:#8A6A12}
+.mail-compose textarea{font:inherit}
 .svc-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:0 14px;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:2px 12px 12px;margin-top:6px}
 .svc-pick .check{margin-top:10px;font-size:14px}
 .check input{width:18px;height:18px;margin-top:2px;flex:none}
@@ -366,8 +378,8 @@ details.more[open] summary::before{content:'– '}
   .topbar button{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:0;color:#E4DBC9;border-radius:9px;padding:7px 10px;font:600 13px var(--sans)}
   .content{padding:18px 14px 96px}
   .page-head h1{font-size:22px}
-  .bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
-  .bottom-nav a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;padding:4px 0;position:relative}
+  .bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(6,1fr);padding:6px 2px calc(6px + env(safe-area-inset-bottom))}
+  .bottom-nav a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;min-width:0;font-weight:600;color:var(--muted);text-decoration:none;padding:4px 0;position:relative}
   .bottom-nav a.on{color:var(--blue)}
   .bottom-nav .count{position:absolute;top:0;left:calc(50% + 6px);background:var(--red);color:#fff;font-size:10px;border-radius:999px;padding:0 5px}
   .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -394,6 +406,7 @@ export const NAV = [
   { key: 'overview', label: 'Overview', href: '/admin/', icon: 'home' },
   { key: 'cases', label: 'Cases', href: '/admin/cases', icon: 'cases' },
   { key: 'clients', label: 'Clients', href: '/admin/clients', icon: 'clients' },
+  { key: 'mail', label: 'Mail', href: '/admin/mail', icon: 'mail' },
   { key: 'records', label: 'Records', href: '/admin/records', icon: 'shield' },
   { key: 'activity', label: 'Activity', href: '/admin/activity', icon: 'activity' }
 ];

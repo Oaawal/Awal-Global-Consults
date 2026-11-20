@@ -66,6 +66,7 @@ self.addEventListener('notificationclick', e => {
 export const APP_SCRIPT = `
 (function () {
   document.querySelectorAll('form[data-confirm]').forEach(f => f.addEventListener('submit', e => { if (!confirm(f.dataset.confirm)) e.preventDefault(); }));
+  document.querySelectorAll('a[data-confirm]').forEach(a => a.addEventListener('click', e => { if (!confirm(a.dataset.confirm)) e.preventDefault(); }));
 
   // Quotation / invoice form: live totals with the discount (same rules as the server)
   document.querySelectorAll('form.bill-form').forEach(form => {

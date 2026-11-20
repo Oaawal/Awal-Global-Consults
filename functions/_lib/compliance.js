@@ -119,6 +119,8 @@ export async function backupDatabase(env, runDate) {
   // billing settings; without it a restore would break every link already sent. Sign-in codes and
   // sessions are left out on purpose (short-lived; everyone signs in again after a restore).
   const tables = ['clients', 'cases', 'documents', 'case_events', 'data_requests', 'counters', 'job_runs', 'audit_log', 'subscribers', 'bookings', 'billing_docs', 'app_settings', 'push_subscriptions'];
+  // The mailbox list (message files themselves stay in R2) once its table exists
+  try { await env.DB.prepare('SELECT 1 FROM mail_messages LIMIT 1').first(); tables.push('mail_messages'); } catch (e) { /* not set up yet */ }
   const results = await env.DB.batch(tables.map(t => env.DB.prepare(`SELECT * FROM ${t}`)));
   const dump = { createdAt: new Date().toISOString(), database: 'awal-cases', tables: {} };
   tables.forEach((t, i) => { dump.tables[t] = results[i].results || []; });
