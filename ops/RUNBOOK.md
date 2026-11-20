@@ -94,6 +94,10 @@ the original in R2 (`mail/in/...`) and lists it in the `mail_messages` table. Th
 (`/cron/mail-in`) reads it, runs the security checks and sends the phone notification.
 Sending from the dashboard goes through Brevo as info@ (domain already authenticated there).
 
+Status (20 Nov 2026): live. The table is on the live database; awal-mail is deployed (bindings DB and DOCS,
+FORWARD_TO = the Gmail inbox the domain already forwarded to); routing rules send info@, contact@ and abdullateef@
+to it; the catch-all still forwards every other address. Redeploy after editing ops/mail-worker.js.
+
 Set up once:
 1. Add the table: run `db/migrations/0007_mail.sql` on the live database.
 2. Cloudflare > Workers & Pages > Create Worker **awal-mail**, paste `ops/mail-worker.js`, deploy.

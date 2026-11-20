@@ -64,7 +64,11 @@ export default {
         const parent = await env.DB.prepare(`SELECT thread_id FROM mail_messages WHERE message_id IN (${parentIds.map((_, i) => `?${i + 1}`).join(',')}) LIMIT 1`).bind(...parentIds).first();
         if (parent) threadId = parent.thread_id;
       }
-      const fromAddr = String(message.from || '').toLowerCase().slice(0, 254);
+      // The address in the From header (what people see; DMARC checks it), not the bounce
+      // address services like Brevo or Mailchimp use on the envelope
+      const fromHeader = h('from');
+      const fromMatch = fromHeader.match(/<([^<>\s]+@[^<>\s]+)>/) || fromHeader.match(/([^\s<>"',;]+@[^\s<>"',;]+)/);
+      const fromAddr = String((fromMatch && fromMatch[1]) || message.from || '').toLowerCase().slice(0, 254);
       const client = await env.DB.prepare('SELECT id FROM clients WHERE lower(email) = ?1 AND anonymised_at IS NULL LIMIT 1').bind(fromAddr).first();
 
       await env.DB.prepare(

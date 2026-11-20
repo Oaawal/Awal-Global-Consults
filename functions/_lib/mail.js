@@ -172,13 +172,19 @@ export async function readIncoming(env, row) {
   const fromName = String((m.from && m.from.name) || '').slice(0, 120);
   // Straight to Spam: senders you blocked, and forged or impersonating mail
   const blocked = await blockedSenders(env);
-  const fromLc = String(row.from_addr || '').toLowerCase();
+  const fromLc = String((m.from && m.from.address) || row.from_addr || '').toLowerCase();
   const toSpam = row.folder === 'inbox' && (blocked.includes(fromLc) || blocked.includes('@' + fromLc.split('@')[1]) || warnings.some(w => SPAM_CODES.includes(w.code)));
   if (toSpam) { await env.DB.prepare("UPDATE mail_messages SET folder = 'spam' WHERE id = ?1").bind(row.id).run(); row.folder = 'spam'; }
+  // The From header address (the Worker's first guess may be a bulk sender's bounce address)
+  const headerFrom = String((m.from && m.from.address) || '').toLowerCase().slice(0, 254);
+  if (headerFrom && headerFrom !== row.from_addr) {
+    row.from_addr = headerFrom;
+    if (!row.client_id) { const cl = await env.DB.prepare('SELECT id FROM clients WHERE lower(email) = ?1 AND anonymised_at IS NULL LIMIT 1').bind(headerFrom).first(); if (cl) row.client_id = cl.id; }
+  }
   await env.DB.prepare(`UPDATE mail_messages SET subject = ?2, from_name = ?3, reply_to = ?4, to_addrs = ?5, cc_addrs = ?6, snippet = ?7, attachments = ?8,
-      warnings = ?9, parsed_at = ?10 WHERE id = ?1`).bind(row.id, String(m.subject || row.subject || '').slice(0, 300), fromName,
+      warnings = ?9, parsed_at = ?10, from_addr = ?11, client_id = ?12 WHERE id = ?1`).bind(row.id, String(m.subject || row.subject || '').slice(0, 300), fromName,
     ((m.replyTo || [])[0] || {}).address || null, addrList(m.to).join(', ').slice(0, 1000) || row.to_addrs, addrList(m.cc).join(', ').slice(0, 1000),
-    text.replace(/\s+/g, ' ').trim().slice(0, 180), visible.length, JSON.stringify(warnings), new Date().toISOString()).run();
+    text.replace(/\s+/g, ' ').trim().slice(0, 180), visible.length, JSON.stringify(warnings), new Date().toISOString(), row.from_addr, row.client_id || null).run();
   Object.assign(row, { subject: m.subject || row.subject, from_name: fromName, attachments: visible.length, warnings: JSON.stringify(warnings), parsed_at: 'now' });
   return parsed;
 }
